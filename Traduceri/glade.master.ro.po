@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=glade&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2017-06-28 17:33+0000\n"
-"PO-Revision-Date: 2017-09-01 03:04+0300\n"
+"PO-Revision-Date: 2017-09-12 17:13+0300\n"
 "Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -45,7 +45,7 @@ msgstr ""
 
 #: ../data/glade.desktop.in.in.h:5
 msgid "GUI designer;user interface;ui builder;"
-msgstr ""
+msgstr "Designer GUI;interfață utilizator;constructor ui;"
 
 #. To translators: AppData description first paragraph
 #: ../data/glade.appdata.xml.in.h:4
@@ -53,6 +53,9 @@ msgid ""
 "Glade is a RAD tool to enable quick &amp; easy development of user "
 "interfaces for the GTK+ 3 toolkit and the GNOME desktop environment."
 msgstr ""
+"Glade este un instrument RAD pentru activarea rapidă și dezvoltarea ușoară a "
+"interfețelor utilizator pentru setul de instrumente GTK+ 3 și mediul de "
+"lucru GNOME."
 
 #. To translators: AppData description second paragraph
 #: ../data/glade.appdata.xml.in.h:6
@@ -62,6 +65,10 @@ msgid ""
 "directly to define a new GtkWidget derived object class using GTK+ new "
 "template feature."
 msgstr ""
+"Interfețele utilizator proiectate în Glade sunt salvate ca XML și acestea "
+"pot fi încărcate de aplicații dinamic, după cum este necesar, folosind "
+"GtkBuilder sau folosite direct pentru a defini o nouă clasă de obiecte "
+"derivate GtkWidget folosind caracteristica de șablon nou din GTK+."
 
 #. To translators: AppData description third paragraph
 #: ../data/glade.appdata.xml.in.h:8
@@ -69,6 +76,9 @@ msgid ""
 "By using GtkBuilder, Glade XML files can be used in numerous programming "
 "languages including C, C++, C#, Vala, Java, Perl, Python, and others."
 msgstr ""
+"Folosind GtkBuilder, fișierele Glade XML pot fi folosite în numeroase "
+"limbaje de programare, inclusiv C, C ++, C #, Vala, Java, Perl, Python și "
+"altele."
 
 #: ../src/glade-window.c:56
 msgid "[Read Only]"
@@ -146,7 +156,7 @@ msgstr "Proiectul %s încă se încarcă."
 
 #: ../src/glade-window.c:1179
 msgid "Failed to backup existing file, continue saving?"
-msgstr ""
+msgstr "Nu a-ți reușit să copiați fișierul existent, continuați să salvați?"
 
 #: ../src/glade-window.c:1201
 #, c-format
@@ -221,16 +231,12 @@ msgstr "Închide _fără a salva"
 #: ../gladeui/glade-editor-property.c:3266
 #: ../gladeui/glade-editor-property.c:3586 ../gladeui/glade-utils.c:483
 #: ../plugins/gtk+/glade-accels.c:525 ../plugins/gtk+/glade-attributes.c:1062
-#, fuzzy
-#| msgid "Cancel"
 msgid "_Cancel"
-msgstr "Anulează"
+msgstr "_Anulează"
 
 #: ../src/glade-window.c:1481 ../gladeui/glade-utils.c:486
-#, fuzzy
-#| msgid "Save"
 msgid "_Save"
-msgstr "Salvează"
+msgstr "_Salvează"
 
 #: ../src/glade-window.c:1509
 msgid "Save…"
@@ -295,20 +301,24 @@ msgid ""
 "We are conducting a user survey\n"
 " would you like to take it now?"
 msgstr ""
+"Facem un sondaj de utilizator\n"
+" v-ar plăcea să-l faceți acum?"
 
 #. translators: Secondary text of a dialog used to notify the user about the survey
 #: ../src/glade-window.c:3519
 msgid "If not, you can always find it in the Help menu."
-msgstr ""
+msgstr "Dacă nu, îl puteți găsi întotdeauna în meniul Ajutor."
 
 #: ../src/glade-window.c:3521
 msgid "_Do not show this dialog again"
-msgstr ""
+msgstr "Nu mai arăta acest _dialog din nou"
 
 #. translators: Text to show in the statusbar if the user did not completed the survey and choose not to show the notification dialog again
 #: ../src/glade-window.c:3542
 msgid "Go to Help -> Registration & User Survey and complete our survey!"
 msgstr ""
+"Mergeți la Ajutor -> Anchetă și înregistrare utilizator și completați "
+"sondajul nostru!"
 
 #: ../src/main.c:51
 msgid "Output version information and exit"
@@ -362,6 +372,9 @@ msgid ""
 "Copyright © 2001-2006 Joaquin Cuenca Abela, Paolo Borelli, et al.\n"
 "Copyright © 2004-2015 Tristan Van Berkom, Juan Pablo Ugarte, et al."
 msgstr ""
+"Drepturi de autor © 2001-2006 Ximian, Inc.\n"
+"Drepturi de autor © 2001-2006 Joaquin Cuenca Abela, Paolo Borelli, etc.\n"
+"Drepturi de autor © 2004-2015 Tristan Van Berkom, Juan Pablo Ugarte, etc."
 
 #: ../src/glade.glade.h:4
 msgid "A user interface designer for GTK+ and GNOME."
@@ -372,21 +385,6 @@ msgid "Visit Glade web site"
 msgstr "Vizitați siteul web Glade"
 
 #: ../src/glade.glade.h:6
-#, fuzzy
-#| msgid ""
-#| "Glade is free software; you can redistribute it and/or modify it under "
-#| "the terms of the GNU General Public License as published by the Free "
-#| "Software Foundation; either version 2 of the License, or (at your option) "
-#| "any later version.\n"
-#| "\n"
-#| "Glade is distributed in the hope that it will be useful, but WITHOUT ANY "
-#| "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-#| "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-#| "details.\n"
-#| "\n"
-#| "You should have received a copy of the GNU General Public License along "
-#| "with Glade; if not, write to the Free Software Foundation, Inc., 51 "
-#| "Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgid ""
 "Glade is free software; you can redistribute it and/or modify\n"
 "it under the terms of the GNU General Public License as \n"
@@ -414,7 +412,7 @@ msgstr ""
 "\n"
 "Ar fi trebuit să fi primit o copie a licenței GNU General Public License "
 "împreună Glade; dacă nu, scrieți către Free Software Foundation, Inc., 51 "
-"Franklin St, Fifth Floor, Boston, MA 0110-1301, USA"
+"Franklin St, Fifth Floor, Boston, MA 0110-1301, USA."
 
 #: ../src/glade.glade.h:20
 msgid "translator-credits"
@@ -438,21 +436,19 @@ msgstr "Trage și redimensionează widget-uri în spațiul de lucru"
 
 #: ../src/glade.glade.h:25
 msgid "Margin Edit"
-msgstr ""
+msgstr "Editare margini"
 
 #: ../src/glade.glade.h:26
 msgid "Edit widget margins"
-msgstr ""
+msgstr "Editare marginile widgeturilor"
 
 #: ../src/glade.glade.h:27
-#, fuzzy
-#| msgid "Alignment"
 msgid "Alignment Edit"
-msgstr "Aliniere"
+msgstr "Editare aliniere"
 
 #: ../src/glade.glade.h:28
 msgid "Edit widget alignment"
-msgstr ""
+msgstr "Editare aliniere widget"
 
 #. GtkFileChooserAction enumeration value
 #: ../src/glade.glade.h:29 ../plugins/gtk+/gtk+.xml.in.h:628
@@ -464,10 +460,8 @@ msgid "Save the current project"
 msgstr "Salvează proiectul curent"
 
 #: ../src/glade.glade.h:31
-#, fuzzy
-#| msgid "Save _As…"
 msgid "Save _As"
-msgstr "Salvează c_a…"
+msgstr "Salvează c_a"
 
 #: ../src/glade.glade.h:32
 msgid "Save the current project with a different name"
@@ -487,28 +481,22 @@ msgid "Close the current project"
 msgstr "Închide proiectul curent"
 
 #: ../src/glade.glade.h:37
-#, fuzzy
-#| msgid "_Undo"
 msgid "Undo"
-msgstr "_Anulează"
+msgstr "Anulează"
 
 #: ../src/glade.glade.h:38
 msgid "Undo the last action"
 msgstr "Anulează ultima acțiune"
 
 #: ../src/glade.glade.h:39
-#, fuzzy
-#| msgid "_Redo"
 msgid "Redo"
-msgstr "_Refă"
+msgstr "Refă"
 
 #: ../src/glade.glade.h:40
 msgid "Redo the last action"
 msgstr "Refă ultima acțiune"
 
 #: ../src/glade.glade.h:41
-#, fuzzy
-#| msgid "Out"
 msgid "Cut"
 msgstr "Micșorează"
 
@@ -517,30 +505,24 @@ msgid "Cut the selection"
 msgstr "Taie selecția"
 
 #: ../src/glade.glade.h:43
-#, fuzzy
-#| msgid "Copy %s"
 msgid "Copy"
-msgstr "Copiază %s"
+msgstr "Copiază"
 
 #: ../src/glade.glade.h:44
 msgid "Copy the selection"
 msgstr "Copiază selecția"
 
 #: ../src/glade.glade.h:45
-#, fuzzy
-#| msgid "Paste %s"
 msgid "Paste"
-msgstr "Lipește %s"
+msgstr "Lipește"
 
 #: ../src/glade.glade.h:46
 msgid "Paste the clipboard"
 msgstr "Lipește ce este în clipboard"
 
 #: ../src/glade.glade.h:47 ../gladeui/glade-object-stub.c:99
-#, fuzzy
-#| msgid "Delete %s"
 msgid "Delete"
-msgstr "Șterge %s"
+msgstr "Șterge"
 
 #: ../src/glade.glade.h:48
 msgid "Delete the selection"
@@ -644,20 +626,16 @@ msgid "Display items as text only"
 msgstr "Afișează elementele ca text"
 
 #: ../src/glade.glade.h:73
-#, fuzzy
-#| msgid "Group Header"
 msgid "_Editor Header"
-msgstr "Antetul grupului"
+msgstr "Ant_etul grupului"
 
 #: ../src/glade.glade.h:74
 msgid "Show the header in the property editor"
-msgstr ""
+msgstr "Arată antetul în editorul de proprietăți"
 
 #: ../src/glade.glade.h:75
-#, fuzzy
-#| msgid "_New"
 msgid "New"
-msgstr "_Nou"
+msgstr "Nou"
 
 #: ../src/glade.glade.h:76
 msgid "Create a new project"
@@ -701,10 +679,8 @@ msgid "Preferences"
 msgstr "Preferințe"
 
 #: ../src/glade.glade.h:86
-#, fuzzy
-#| msgid "Edit label appearance"
 msgid "Edit Glade preferences"
-msgstr "Editează apariția etichetei"
+msgstr "Editați preferințele Glade"
 
 #: ../src/glade.glade.h:87
 msgid "Open _Recent"
@@ -712,11 +688,13 @@ msgstr "Deschide _recent"
 
 #: ../src/glade.glade.h:88
 msgid "Registration & User Survey"
-msgstr ""
+msgstr "Înregistrare și sondaj utilizator"
 
 #: ../src/glade.glade.h:89
 msgid "Help us improve Glade by registering and completing the user survey!"
 msgstr ""
+"Ajutați-ne să îmbunătățim Glade prin înregistrarea și completarea sondajului "
+"utilizatorului!"
 
 #: ../src/glade.glade.h:90 ../plugins/gtk+/glade-gtk-menu-bar.c:115
 msgid "_File"
@@ -747,22 +725,24 @@ msgid "Glade Preferences"
 msgstr "Preferințe Glade"
 
 #: ../src/glade-preferences.glade.h:2
-#, fuzzy
-#| msgid "Create a %s"
 msgid "Create backups"
-msgstr "Creează un %s"
+msgstr "Creați copii de rezervă"
 
 #: ../src/glade-preferences.glade.h:3
 msgid ""
 "Create a backup of the last version of the project every time the project is "
 "saved"
 msgstr ""
+"Creați o copie de rezervă a ultimei versiuni a proiectului de fiecare dată "
+"când proiectul este salvat"
 
 #: ../src/glade-preferences.glade.h:4
 msgid ""
 "Automatically save the project to an alternate file whenever\n"
 "the project is modified and the specified timeout elapses"
 msgstr ""
+"Salvați automat proiectul într-un fișier alternativ ori de câte ori\n"
+"proiectul este modificat și expiră intervalul de timp specificat"
 
 #: ../src/glade-preferences.glade.h:6
 msgid "seconds"
@@ -770,7 +750,7 @@ msgstr "secunde"
 
 #: ../src/glade-preferences.glade.h:7
 msgid "Automatically save project after"
-msgstr ""
+msgstr "Salvați automat proiectul după"
 
 #: ../src/glade-preferences.glade.h:8
 msgid "Load and Save"
@@ -778,13 +758,16 @@ msgstr "Încarca și salvează"
 
 #: ../src/glade-preferences.glade.h:9
 msgid "Versioning errors"
-msgstr ""
+msgstr "Eroare de versiune"
 
 #: ../src/glade-preferences.glade.h:10
 msgid ""
 "Prompt the user at save time if the project uses any widgets, properties\n"
 "or signals which are not available in the project's target version"
 msgstr ""
+"Avertizați utilizatorul la momentul salvări dacă proiectul utilizează orice "
+"widget-uri, proprietăți\n"
+"sau semnale care nu sunt disponibile în versiunea țintă a proiectului"
 
 #: ../src/glade-preferences.glade.h:12
 msgid "Deprecation warnings"
@@ -798,46 +781,44 @@ msgstr ""
 
 #: ../src/glade-preferences.glade.h:15
 msgid "Unrecognized types"
-msgstr ""
+msgstr "Tipuri nerecunoscute"
 
 #: ../src/glade-preferences.glade.h:16
 msgid ""
 "Prompt the user at save time if the project\n"
 "contains any unrecognized types"
 msgstr ""
+"Avertizați utilizatorul la momentul salvări în cazul în care proiectul\n"
+"conține orice tipuri nerecunoscute"
 
 #: ../src/glade-preferences.glade.h:18
 msgid "Show warnings when saving"
-msgstr ""
+msgstr "Arată avertismente la salvare"
 
 #: ../src/glade-preferences.glade.h:19
-#, fuzzy
-#| msgid "Column"
 msgid "column"
-msgstr "Coloană"
+msgstr "coloană"
 
 #: ../src/glade-preferences.glade.h:20
 msgid "Remove the selected catalog search path"
-msgstr ""
+msgstr "Eliminați calea de căutare selectată în catalog"
 
 #: ../src/glade-preferences.glade.h:21
 msgid "Add a new catalog search path"
-msgstr ""
+msgstr "Adăugați o nouă cale de căutare a catalogului"
 
 #: ../src/glade-preferences.glade.h:22
 msgid "Extra catalog paths"
-msgstr ""
+msgstr "Extra căi de catalog"
 
 #: ../src/glade-preferences.glade.h:23
-#, fuzzy
-#| msgid "Select a color"
 msgid "Select a catalog search path"
-msgstr "Alegeți o culoare"
+msgstr "Selectați o cale de căutare a catalogului"
 
 #. translators: Email subject sent to the user after completing the survey
 #: ../src/glade-registration.c:32 ../src/glade-registration.glade.h:26
 msgid "Glade User Survey"
-msgstr ""
+msgstr "Glade sondaj de utilizator"
 
 #. translators: Email body sent to the user after completing the survey
 #: ../src/glade-registration.c:34
@@ -857,6 +838,22 @@ msgid ""
 "\n"
 "\tThe Glade team\n"
 msgstr ""
+"Vă mulțumim pentru că ați luat parte la sondajul privind utilizatorii Glade, "
+"apreciem!\n"
+"\n"
+"Pentru a valida această adresă de e-mail deschideți linkul următor\n"
+"\n"
+"https://people.gnome.org/~jpu/glade/registration.php?email="
+"$email&validation_token=$new_validation_token\n"
+"\n"
+"În cazul în care doriți să schimbați sau să actualizați sondajul, jetonul "
+"actual de actualizare este:\n"
+"$new_token\n"
+"\n"
+"Noroc\n"
+"\n"
+"\tEchipa Glade\n"
+"\n"
 
 #. translators: Email subject sent to the user after updating the survey
 #: ../src/glade-registration.c:37
@@ -882,22 +879,19 @@ msgid "Connecting to %s"
 msgstr "Se conectează la %s"
 
 #: ../src/glade-registration.c:309
-#, fuzzy, c-format
-#| msgid "Renaming %s to %s"
+#, c-format
 msgid "Sending data to %s"
-msgstr "Se redenumește %s la %s"
+msgstr "Se trimit date la %s"
 
 #: ../src/glade-registration.c:312
-#, fuzzy, c-format
-#| msgid "Creating %s for %s of %s"
+#, c-format
 msgid "Waiting for %s"
-msgstr "Se crează %s pentru %s a %s"
+msgstr "Se așteaptă pentru %s"
 
 #: ../src/glade-registration.c:315
-#, fuzzy, c-format
-#| msgid "Removing parent of %s"
+#, c-format
 msgid "Receiving data from %s"
-msgstr "Se elimină părintele lui %s"
+msgstr "Se primesc date de la %s"
 
 #: ../src/glade-registration.c:347
 msgid "Sorry, automatic subscription to Glade Users mailing list failed"
@@ -1072,27 +1066,27 @@ msgstr "C++"
 
 #: ../src/glade-registration.glade.h:35
 msgid "C#"
-msgstr ""
+msgstr "C#"
 
 #: ../src/glade-registration.glade.h:36
 msgid "Java"
-msgstr ""
+msgstr "Java"
 
 #: ../src/glade-registration.glade.h:37
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #: ../src/glade-registration.glade.h:38
 msgid "JavaScript"
-msgstr ""
+msgstr "JavaScript"
 
 #: ../src/glade-registration.glade.h:39
 msgid "Vala"
-msgstr ""
+msgstr "Vala"
 
 #: ../src/glade-registration.glade.h:40
 msgid "Perl"
-msgstr ""
+msgstr "Perl"
 
 #. GtkCellRendererAccelMode enumeration value
 #: ../src/glade-registration.glade.h:41
@@ -1134,54 +1128,52 @@ msgid "On what operating systems?"
 msgstr ""
 
 #: ../src/glade-registration.glade.h:50
-#, fuzzy
-#| msgid "Position"
 msgid "distribution"
-msgstr "Poziție"
+msgstr "Distribuție"
 
 #: ../src/glade-registration.glade.h:51
 msgid "Arch Linux"
-msgstr ""
+msgstr "Arch Linux"
 
 #: ../src/glade-registration.glade.h:52
 msgid "Debian"
-msgstr ""
+msgstr "Debian"
 
 #: ../src/glade-registration.glade.h:53
 msgid "openSUSE"
-msgstr ""
+msgstr "openSUSE"
 
 #: ../src/glade-registration.glade.h:54
 msgid "Fedora"
-msgstr ""
+msgstr "Fedora"
 
 #: ../src/glade-registration.glade.h:55
 msgid "Gentoo"
-msgstr ""
+msgstr "Gentoo"
 
 #: ../src/glade-registration.glade.h:56
 msgid "Mandriva"
-msgstr ""
+msgstr "Mandriva"
 
 #: ../src/glade-registration.glade.h:57
 msgid "Red Hat"
-msgstr ""
+msgstr "Red Hat"
 
 #: ../src/glade-registration.glade.h:58
 msgid "Turbolinux"
-msgstr ""
+msgstr "Turbolinux"
 
 #: ../src/glade-registration.glade.h:59
 msgid "Ubuntu"
-msgstr ""
+msgstr "Ubuntu"
 
 #: ../src/glade-registration.glade.h:60
 msgid "Xandros"
-msgstr ""
+msgstr "Xandros"
 
 #: ../src/glade-registration.glade.h:61
 msgid "Oracle"
-msgstr ""
+msgstr "Oracle"
 
 #: ../src/glade-registration.glade.h:62
 #, fuzzy
@@ -1192,93 +1184,91 @@ msgstr "Variantă"
 
 #: ../src/glade-registration.glade.h:63
 msgid "FreeBSD"
-msgstr ""
+msgstr "FreeBSD"
 
 #: ../src/glade-registration.glade.h:64
-#, fuzzy
-#| msgid "Open"
 msgid "OpenBSD"
-msgstr "Deschide"
+msgstr "OpenBSD"
 
 #: ../src/glade-registration.glade.h:65
 msgid "NetBSD"
-msgstr ""
+msgstr "NetBSD"
 
 #: ../src/glade-registration.glade.h:66
 msgid "Oracle Solaris"
-msgstr ""
+msgstr "Oracle Solaris"
 
 #: ../src/glade-registration.glade.h:67
 msgid "OpenSolaris"
-msgstr ""
+msgstr "OpenSolaris"
 
 #: ../src/glade-registration.glade.h:68
 msgid "illumos"
-msgstr ""
+msgstr "illumos"
 
 #: ../src/glade-registration.glade.h:69
 msgid "version"
-msgstr ""
+msgstr "versiune"
 
 #: ../src/glade-registration.glade.h:70
 msgid "2000"
-msgstr ""
+msgstr "2000"
 
 #: ../src/glade-registration.glade.h:71
 msgid "XP"
-msgstr ""
+msgstr "XP"
 
 #: ../src/glade-registration.glade.h:72
 msgid "2003"
-msgstr ""
+msgstr "2003"
 
 #: ../src/glade-registration.glade.h:73
 msgid "Vista"
-msgstr ""
+msgstr "Vista"
 
 #: ../src/glade-registration.glade.h:74
 msgid "2008"
-msgstr ""
+msgstr "2008"
 
 #: ../src/glade-registration.glade.h:75
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: ../src/glade-registration.glade.h:76
 msgid "8"
-msgstr ""
+msgstr "8"
 
 #: ../src/glade-registration.glade.h:77
 msgid "2012"
-msgstr ""
+msgstr "2012"
 
 #: ../src/glade-registration.glade.h:78
 msgid "Tiger"
-msgstr ""
+msgstr "Tiger"
 
 #: ../src/glade-registration.glade.h:79
 msgid "Leopard"
-msgstr ""
+msgstr "Leopard"
 
 #: ../src/glade-registration.glade.h:80
 msgid "Snow Leopard"
-msgstr ""
+msgstr "Snow Leopard"
 
 #: ../src/glade-registration.glade.h:81
 msgid "Lion"
-msgstr ""
+msgstr "Lion"
 
 #: ../src/glade-registration.glade.h:82
 msgid "Mountain Lion"
-msgstr ""
+msgstr "Mountain Lion"
 
 #: ../src/glade-registration.glade.h:83
 msgid "Mavericks"
-msgstr ""
+msgstr "Mavericks"
 
 #: ../src/glade-registration.glade.h:84
 msgid "GNU/Linux"
-msgstr ""
+msgstr "GNU/Linux"
 
 #. GtkLicense enumeration value
 #: ../src/glade-registration.glade.h:85 ../plugins/gtk+/gtk+.xml.in.h:817
@@ -1291,7 +1281,7 @@ msgstr "Windows"
 
 #: ../src/glade-registration.glade.h:87
 msgid "Mac OS X"
-msgstr ""
+msgstr "Mac OS X"
 
 #: ../src/glade-registration.glade.h:88
 msgid "Solaris"
@@ -1307,55 +1297,49 @@ msgstr "Zilnic"
 
 #: ../src/glade-registration.glade.h:91
 msgid "Few days a week"
-msgstr ""
+msgstr "Câteva zile pe săptămână"
 
 #: ../src/glade-registration.glade.h:92
 msgid "Every week"
-msgstr ""
+msgstr "În fiecare săptămână"
 
 #: ../src/glade-registration.glade.h:93
 msgid "A few times a month"
-msgstr ""
+msgstr "De câteva ori pe lună"
 
 #: ../src/glade-registration.glade.h:94
 msgid "Once a month"
-msgstr ""
+msgstr "O dată pe lună"
 
 #: ../src/glade-registration.glade.h:95
 msgid "A few times a year"
-msgstr ""
+msgstr "De câteva ori pe an"
 
 #: ../src/glade-registration.glade.h:96
 msgid "What level of Glade user would you say you are?"
-msgstr ""
+msgstr "Ce nivel de utilizator, Glade, ați spune că sunteți?"
 
 #: ../src/glade-registration.glade.h:97
-#, fuzzy
-#| msgid "Spinner"
 msgid "Beginner"
-msgstr "Spinner"
+msgstr "Începător"
 
 #: ../src/glade-registration.glade.h:98
-#, fuzzy
-#| msgid "Immediate"
 msgid "Intermediate"
-msgstr "Instantaneu"
+msgstr "Intermediar"
 
 #: ../src/glade-registration.glade.h:99
 msgid "Advanced"
-msgstr ""
+msgstr "Avansat"
 
 #: ../src/glade-registration.glade.h:100
 msgid ""
 "Under what kind of license(s) do you release the software you used Glade to "
 "create?"
-msgstr ""
+msgstr "Ce fel de licență eliberați pentru software-ul creat cu  Glade?"
 
 #: ../src/glade-registration.glade.h:101
-#, fuzzy
-#| msgid "Tree Store"
 msgid "Free software"
-msgstr "Depozitare arborescentă"
+msgstr "Software liber"
 
 #: ../src/glade-registration.glade.h:102
 msgid "Open source software"
@@ -1376,7 +1360,7 @@ msgstr ""
 
 #: ../src/glade-registration.glade.h:106
 msgid "Academic"
-msgstr ""
+msgstr "Academic"
 
 #: ../src/glade-registration.glade.h:107
 #, fuzzy
@@ -1396,23 +1380,19 @@ msgstr "Aplicații"
 
 #: ../src/glade-registration.glade.h:110
 msgid "Educational"
-msgstr ""
+msgstr "Educațional"
 
 #: ../src/glade-registration.glade.h:111
-#, fuzzy
-#| msgid "Vertical"
 msgid "Medical"
-msgstr "Vertical"
+msgstr "Medical"
 
 #: ../src/glade-registration.glade.h:112
-#, fuzzy
-#| msgid "About this application"
 msgid "Industrial applications"
-msgstr "Despre această aplicație"
+msgstr "Aplicații industriale"
 
 #: ../src/glade-registration.glade.h:113
 msgid "Scientific"
-msgstr ""
+msgstr "Ștințific"
 
 #: ../src/glade-registration.glade.h:114
 msgid "What aspect of the software needs the most improvement?"
@@ -1471,14 +1451,12 @@ msgid "Why not?"
 msgstr ""
 
 #: ../src/glade-registration.glade.h:127
-#, fuzzy
-#| msgid "Comment"
 msgid "Comments:"
-msgstr "Comentariu"
+msgstr "Comentarii:"
 
 #: ../src/glade-registration.glade.h:128
 msgid "Privacy Note:"
-msgstr ""
+msgstr "Notă confidențială:"
 
 #: ../src/glade-registration.glade.h:129
 msgid ""
@@ -1788,10 +1766,9 @@ msgid "Paste %s"
 msgstr "Lipește %s"
 
 #: ../gladeui/glade-command.c:2017
-#, fuzzy, c-format
-#| msgid "Drag and Drop"
+#, c-format
 msgid "Drag %s and Drop to %s"
-msgstr "Trage și mută"
+msgstr "Trage %s și mută la %s"
 
 #: ../gladeui/glade-command.c:2020
 msgid "root"
@@ -1895,8 +1872,7 @@ msgstr "Arată informații"
 
 #: ../gladeui/glade-editor.c:229
 msgid "Whether to show an informational button for the loaded widget"
-msgstr ""
-"Specifică dacă se afișează un buton informațional pentru widget-ul încărcat"
+msgstr "Specifică dacă arată un buton informațional pentru widget-ul încărcat"
 
 #: ../gladeui/glade-editor.c:236 ../plugins/gtk+/gtk+.xml.in.h:1
 msgid "Widget"
@@ -2042,10 +2018,8 @@ msgstr ""
 
 #: ../gladeui/glade-editor-property.c:746 ../gladeui/glade-property-label.c:152
 #: ../gladeui/glade-property-shell.c:137
-#, fuzzy
-#| msgid "Custom"
 msgid "Custom Text"
-msgstr "Personalizat"
+msgstr "Text personalizat"
 
 #: ../gladeui/glade-editor-property.c:747 ../gladeui/glade-property-shell.c:138
 msgid "Custom Text to display in the property label"
@@ -2056,10 +2030,8 @@ msgid "Select Fields"
 msgstr "Alegere câmpuri"
 
 #: ../gladeui/glade-editor-property.c:1323
-#, fuzzy
-#| msgid "Close"
 msgid "_Close"
-msgstr "Închide"
+msgstr "În_chide"
 
 #: ../gladeui/glade-editor-property.c:1336
 msgid "_Select individual fields:"
@@ -2109,10 +2081,8 @@ msgid "Select a file from the project resource directory"
 msgstr "Alegeți un fișier din dosarul de resurse al proiectului"
 
 #: ../gladeui/glade-editor-property.c:2197 ../gladeui/glade-utils.c:486
-#, fuzzy
-#| msgid "Open"
 msgid "_Open"
-msgstr "Deschide"
+msgstr "_Deschide"
 
 #. GtkInputPurpose enumeration value
 #: ../gladeui/glade-editor-property.c:3057
@@ -2175,20 +2145,16 @@ msgid "Objects:"
 msgstr "Obiecte:"
 
 #: ../gladeui/glade-editor-table.c:121
-#, fuzzy
-#| msgid "Page Set"
 msgid "Page Type"
-msgstr "Set de pagini"
+msgstr "Tip pagini"
 
 #: ../gladeui/glade-editor-table.c:122
 msgid "The editor page type to create this GladeEditorTable for"
 msgstr ""
 
 #: ../gladeui/glade-editor-table.c:305
-#, fuzzy
-#| msgid "Name:"
 msgid "Class Name:"
-msgstr "Nume:"
+msgstr "Nume clasă:"
 
 #: ../gladeui/glade-editor-table.c:575
 msgid "The object's unique identifier"
@@ -2257,10 +2223,8 @@ msgid "Could not create directory: %s"
 msgstr "Nu s-a putut crea dosarul: %s"
 
 #: ../gladeui/glade-object-stub.c:101
-#, fuzzy
-#| msgid "_Select All"
 msgid "Delete All"
-msgstr "_Selectează tot"
+msgstr "Șterge tot"
 
 #: ../gladeui/glade-palette.c:639
 msgid "Widget selector"
@@ -2280,26 +2244,20 @@ msgstr "_Alege"
 
 #: ../gladeui/glade-popup.c:398
 msgid "Cu_t"
-msgstr ""
+msgstr "_Taie"
 
 #: ../gladeui/glade-popup.c:400
-#, fuzzy
-#| msgid "Copy %s"
 msgid "_Copy"
-msgstr "Copiază %s"
+msgstr "_Copiază"
 
 #: ../gladeui/glade-popup.c:407 ../gladeui/glade-popup.c:410
 #: ../gladeui/glade-popup.c:413
-#, fuzzy
-#| msgid "Paste %s"
 msgid "_Paste"
-msgstr "Lipește %s"
+msgstr "Li_pește"
 
 #: ../gladeui/glade-popup.c:417
-#, fuzzy
-#| msgid "Delete %s"
 msgid "_Delete"
-msgstr "Șterge %s"
+msgstr "Ște_rge"
 
 #: ../gladeui/glade-popup.c:549 ../gladeui/glade-popup.c:624
 msgid "Read _documentation"
@@ -2558,10 +2516,9 @@ msgid "(%s child)"
 msgstr "(copil %s)"
 
 #: ../gladeui/glade-project.c:1133
-#, fuzzy, c-format
-#| msgid "Template"
+#, c-format
 msgid "(template)"
-msgstr "Șablon"
+msgstr "(șablon)"
 
 #. translators: refers to a property named '%s' of widget '%s'
 #: ../gladeui/glade-project.c:1141
@@ -2678,19 +2635,14 @@ msgstr ""
 "introdusă în %s %d.%d\n"
 
 #: ../gladeui/glade-project.c:2938
-#, fuzzy
-#| msgid "This widget is deprecated"
 msgid "This property is deprecated"
-msgstr "Acest widget este învechit"
+msgstr "Acestă proprietate este învechită"
 
 #. translators: refers to a property '%s' of widget '[%s]'
 #: ../gladeui/glade-project.c:2941
-#, fuzzy, c-format
-#| msgid "[%s] Property '%s' of object class '%s' was introduced in %s %d.%d\n"
+#, c-format
 msgid "[%s] Property '%s' of object class '%s' is deprecated"
-msgstr ""
-"[%s] Proprietatea „%s” a clasei de obiecte „%s” a fost introdusă în %s %d."
-"%d\n"
+msgstr "[%s] Proprietatea „%s” a clasei de obiecte „%s” este învechită"
 
 #. translators: refers to a signal in toolkit version '%s %d.%d'
 #. * and a project targeting toolkit version '%s %d.%d'
@@ -2709,18 +2661,14 @@ msgstr ""
 "[%s] Semnalul „%s” al clasei de obiecte „%s” a fost introdus în %s %d.%d\n"
 
 #: ../gladeui/glade-project.c:2952
-#, fuzzy
-#| msgid "This widget is deprecated"
 msgid "This signal is deprecated"
-msgstr "Acest widget este învechit"
+msgstr "Acest semnal este învechit"
 
 #. translators: refers to a signal '%s' of widget '[%s]'
 #: ../gladeui/glade-project.c:2955
-#, fuzzy, c-format
-#| msgid "[%s] Signal '%s' of object class '%s' was introduced in %s %d.%d\n"
+#, c-format
 msgid "[%s] Signal '%s' of object class '%s' is deprecated"
-msgstr ""
-"[%s] Semnalul „%s” al clasei de obiecte „%s” a fost introdus în %s %d.%d\n"
+msgstr "[%s] Semnalul „%s” al clasei de obiecte „%s” este învechit"
 
 #: ../gladeui/glade-project.c:3251
 msgid "Details"
@@ -3424,13 +3372,11 @@ msgstr ""
 #: ../gladeui/glade-project-properties.ui.h:16
 #: ../plugins/gtk+/glade-about-dialog-editor.ui.h:3
 msgid "License:"
-msgstr ""
+msgstr "Licență:"
 
 #: ../gladeui/glade-project-properties.ui.h:17
-#, fuzzy
-#| msgid "Description For"
 msgid "Description:"
-msgstr "Descriere pentru"
+msgstr "Descriere:"
 
 #: ../gladeui/glade-project-properties.ui.h:18
 msgid "program or library short description"
@@ -3438,19 +3384,19 @@ msgstr ""
 
 #: ../gladeui/glade-project-properties.ui.h:20
 msgid "GNU GPL version 2"
-msgstr ""
+msgstr "GNU GPL versiunea 2"
 
 #: ../gladeui/glade-project-properties.ui.h:21
 msgid "GNU GPL version 3"
-msgstr ""
+msgstr "GNU GPL versiunea 3"
 
 #: ../gladeui/glade-project-properties.ui.h:22
 msgid "GNU LGPL version 2.1"
-msgstr ""
+msgstr "GNU LGPL versiunea 2.1"
 
 #: ../gladeui/glade-project-properties.ui.h:23
 msgid "GNU LGPL version 3"
-msgstr ""
+msgstr "GNU LGPL versiunea 3"
 
 #: ../gladeui/glade-project-properties.ui.h:24
 msgid "BSD 2-clause"
@@ -3462,17 +3408,15 @@ msgstr ""
 
 #: ../gladeui/glade-project-properties.ui.h:26
 msgid "Apache 2"
-msgstr ""
+msgstr "Apache 2"
 
 #: ../gladeui/glade-project-properties.ui.h:27
-#, fuzzy
-#| msgid "MIT X11"
 msgid "MIT"
-msgstr "MIT X11"
+msgstr "MIT"
 
 #: ../gladeui/glade-project-properties.ui.h:28
 msgid "GNU All permissive"
-msgstr ""
+msgstr "GNU toate permisiunile"
 
 #: ../gladeui/glade-project-properties.ui.h:30
 msgid ""
@@ -4738,7 +4682,7 @@ msgstr "În fereastra panoului"
 
 #: ../plugins/gtk+/gtk+.xml.in.h:18
 msgid "Stack"
-msgstr ""
+msgstr "Stivă"
 
 #: ../plugins/gtk+/gtk+.xml.in.h:19
 msgid "Add to Size Group"
@@ -4751,10 +4695,8 @@ msgid "Clear properties"
 msgstr "Proprietăți"
 
 #: ../plugins/gtk+/gtk+.xml.in.h:21
-#, fuzzy
-#| msgid "Read _documentation"
 msgid "Read documentation"
-msgstr "Consultă _documentația"
+msgstr "Citește documentația"
 
 #: ../plugins/gtk+/gtk+.xml.in.h:22
 msgid "Style Classes"
@@ -4945,14 +4887,12 @@ msgstr "Tastă accelerator"
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:94
 msgid "Alert"
-msgstr ""
+msgstr "Alertă"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:96
-#, fuzzy
-#| msgid "Authentication"
 msgid "Animation"
-msgstr "Autentificare"
+msgstr "Animație"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:98
@@ -5047,10 +4987,8 @@ msgstr "Zonă de desenat"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:128
-#, fuzzy
-#| msgid "File Chooser Button"
 msgid "File Chooser"
-msgstr "Buton alegere fișiere"
+msgstr "Alegere fișiere"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:130
@@ -5073,25 +5011,19 @@ msgstr ""
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:136
-#, fuzzy
-#| msgid "Container"
 msgid "HTML Container"
-msgstr "Container"
+msgstr "Container HTML"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:138
 #: ../plugins/gtk+/glade-about-dialog-editor.ui.h:6
-#, fuzzy
-#| msgid "Icon Name"
 msgid "Icon"
-msgstr "Nume iconiță"
+msgstr "Iconiță"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:142
-#, fuzzy
-#| msgid "Internal name"
 msgid "Internal Frame"
-msgstr "Nume intern"
+msgstr "Fereastră internă"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:146
@@ -5101,7 +5033,7 @@ msgstr ""
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:148
 msgid "List"
-msgstr ""
+msgstr "Listă"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:150
@@ -5134,10 +5066,8 @@ msgstr ""
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:164
-#, fuzzy
-#| msgid "Paned"
 msgid "Panel"
-msgstr "În fereastra panoului"
+msgstr "Panou"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:166
@@ -5228,10 +5158,8 @@ msgstr "Tabel"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:198
-#, fuzzy
-#| msgid "Table"
 msgid "Table Cell"
-msgstr "Tabel"
+msgstr "Celulă tabel"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:200
@@ -5243,7 +5171,7 @@ msgstr "Element de meniu separator"
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:202
 msgid "Terminal"
-msgstr ""
+msgstr "Terminal"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:206
@@ -5288,10 +5216,8 @@ msgstr "Fereastră"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:220
-#, fuzzy
-#| msgid "Group Header"
 msgid "Header"
-msgstr "Antetul grupului"
+msgstr "Antet"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:222
@@ -5301,7 +5227,7 @@ msgstr ""
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:224
 msgid "Paragraph"
-msgstr ""
+msgstr "Paragraf"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:226
@@ -5310,29 +5236,23 @@ msgstr ""
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:228
-#, fuzzy
-#| msgid "Applications"
 msgid "Application"
-msgstr "Aplicații"
+msgstr "Aplicație"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:230
 msgid "Autocomplete"
-msgstr ""
+msgstr "Autocompletare"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:232
-#, fuzzy
-#| msgid "_Edit"
 msgid "Editbar"
-msgstr "_Editare"
+msgstr "Editare"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:234
-#, fuzzy
-#| msgid "Embedded By"
 msgid "Embedded"
-msgstr "Încorporat de"
+msgstr "Încorporat"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:236 ../plugins/gtk+/glade-entry-editor.ui.h:1
@@ -5391,12 +5311,12 @@ msgstr ""
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:252
 msgid "Form"
-msgstr ""
+msgstr "Formă"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:254
 msgid "Link"
-msgstr ""
+msgstr "Legătură"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:256
@@ -5432,17 +5352,17 @@ msgstr "Consultă _documentația"
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:266
 msgid "Document Text"
-msgstr ""
+msgstr "Document text"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:268
 msgid "Document Web"
-msgstr ""
+msgstr "Document web"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:270
 msgid "Document Email"
-msgstr ""
+msgstr "Document email"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:274
@@ -5507,14 +5427,12 @@ msgstr "Video"
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:294
 msgid "Definition"
-msgstr ""
+msgstr "Definiție"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:296
-#, fuzzy
-#| msgid "Artistic"
 msgid "Article"
-msgstr "Artistic"
+msgstr "Articol"
 
 #. AtkRole enumeration value
 #: ../plugins/gtk+/gtk+.xml.in.h:298
@@ -8876,55 +8794,45 @@ msgid ""
 msgstr ""
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:1
-#, fuzzy
-#| msgid "Attributes"
 msgid "Window Attributes"
-msgstr "Atribute"
+msgstr "Atributele ferestrei"
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:2
 msgid "Transient For:"
-msgstr ""
+msgstr "Transient pentru:"
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:3
 msgid "Attached To:"
-msgstr ""
+msgstr "Atașat la:"
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:5
-#, fuzzy
-#| msgid "Icon Size"
 msgid "Icon File"
-msgstr "Mărime iconiță"
+msgstr "Fișier iconiță"
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:7
-#, fuzzy
-#| msgid "Window"
 msgid "Window Flags"
-msgstr "Fereastră"
+msgstr "Steaguri pentru ferestre"
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:9
 msgid "Hint:"
-msgstr ""
+msgstr "Pont:"
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:11
-#, fuzzy
-#| msgctxt "textattr"
-#| msgid "Gravity"
 msgid "Gravity:"
-msgstr "Gravitate"
+msgstr "Gravitate:"
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:12
-#, fuzzy
-#| msgid "Title"
 msgid "Title:"
-msgstr "Titlu"
+msgstr "Titlu:"
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:13
 msgid "Client side window decorations"
-msgstr ""
+msgstr "Decoratiuni pentru ferestre din partea clientului"
 
 #: ../plugins/gtk+/glade-window-editor.ui.h:14
 msgid "Whether this window should include a custom titlebar."
 msgstr ""
+"Dacă această fereastră ar trebui să includă o bara de titlu personalizată."
 
 #, fuzzy
 #~| msgid "Preview"
