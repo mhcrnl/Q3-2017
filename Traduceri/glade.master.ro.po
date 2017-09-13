@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=glade&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2017-06-28 17:33+0000\n"
-"PO-Revision-Date: 2017-09-12 17:13+0300\n"
+"PO-Revision-Date: 2017-09-13 16:03+0300\n"
 "Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -896,22 +896,24 @@ msgstr "Se primesc date de la %s"
 #: ../src/glade-registration.c:347
 msgid "Sorry, automatic subscription to Glade Users mailing list failed"
 msgstr ""
+"Ne pare rău, abonamentul automat la lista de emailuri a utilizatorilor Glade "
+"a eșuat"
 
 #: ../src/glade-registration.c:350
 msgid "Open Glade Users Website"
-msgstr ""
+msgstr "Deschideți siteul utilizatorilor Glade"
 
 #: ../src/glade-registration.c:402
 msgid "Internal server error"
-msgstr ""
+msgstr "Eroare interna a serverului"
 
 #: ../src/glade-registration.c:426
 msgid "Thank you for taking the time to complete the survey, we appreciate it!"
-msgstr ""
+msgstr "Vă mulțumim că va-ți făcut timp pentru a finaliza sondajul, apreciem!"
 
 #: ../src/glade-registration.c:434
 msgid "Name and Email fields are required"
-msgstr ""
+msgstr "Sunt necesare câmpurile nume și email"
 
 #: ../src/glade-registration.c:437
 msgid ""
@@ -919,25 +921,28 @@ msgid ""
 "To update information you need to provide the token that was sent to your "
 "inbox."
 msgstr ""
+"Hopa! Adresa de email este deja în uz!\n"
+"Pentru a actualiza informațiile, trebuie să furnizați jetonul care a fost "
+"trimis în căsuța de e-mail."
 
 #: ../src/glade-registration.c:440
 #, c-format
 msgid "Oops! Error saving user information: %s"
-msgstr ""
+msgstr "Hopa! Eroare la salvarea informațiilor despre utilizator: %s"
 
 #: ../src/glade-registration.c:443
 #, c-format
 msgid "Oops! Error saving survey data: %s"
-msgstr ""
+msgstr "Hopa! Eroare la salvarea datelor sondajului: %s"
 
 #: ../src/glade-registration.c:446
 #, c-format
 msgid "Oops! Error accessing DB: %s"
-msgstr ""
+msgstr "Hopa! Eroare la accesarea DB: %s"
 
 #: ../src/glade-registration.glade.h:1
 msgid "Glade Registration & User Survey"
-msgstr ""
+msgstr "Înregistrare Glade și sondaj utilizator"
 
 #. GtkButtonsType enumeration value
 #: ../src/glade-registration.glade.h:2 ../plugins/gtk+/gtk+.xml.in.h:599
@@ -954,11 +959,11 @@ msgstr "Informațiile vor fi trimise la https://people.gnome.org/~jpu"
 
 #: ../src/glade-registration.glade.h:5
 msgid "User Information"
-msgstr ""
+msgstr "Informație utilizator"
 
 #: ../src/glade-registration.glade.h:6
 msgid "<Your name or nickname is required>"
-msgstr ""
+msgstr "<Numele sau porecla dumneavoastră sunt obligatorii>"
 
 #: ../src/glade-registration.glade.h:8
 msgid "Email:"
@@ -969,10 +974,12 @@ msgid ""
 "Tokens are processed manually in batches.\n"
 "Please be patient."
 msgstr ""
+"Jetoanele sunt procesate manual în loturi.\n"
+"Te rog fii rabdator."
 
 #: ../src/glade-registration.glade.h:11
 msgid "<Required to send back registration token>"
-msgstr ""
+msgstr "<Necesită trimiterea jetonului de înregistrare>"
 
 #: ../src/glade-registration.glade.h:12
 msgid "Country:"
@@ -1000,41 +1007,45 @@ msgstr "Site web"
 
 #: ../src/glade-registration.glade.h:18
 msgid "Subscribe me to the mailing list"
-msgstr ""
+msgstr "Abonați-mă la lista de discuții"
 
 #: ../src/glade-registration.glade.h:19
 msgid ""
 "Subscribe to Glade Users mailing list.\n"
 "You will be sent email requesting confirmation!"
 msgstr ""
+"Abonați-vă la lista de discuții pentru utilizatorii Glade.\n"
+"Veți primi un e-mail care solicită confirmarea!"
 
 #: ../src/glade-registration.glade.h:21
-#, fuzzy
-#| msgid "Close document"
 msgid "Choose your country"
-msgstr "Închide documentul"
+msgstr "Alege-ți țara"
 
 #: ../src/glade-registration.glade.h:22
 msgid "We care about privacy!"
-msgstr ""
+msgstr "Ne pasă de intimitate!"
 
 #: ../src/glade-registration.glade.h:23
 msgid ""
 "All the data will be stored in a private location and will not be shared "
 "with the public or any third party."
 msgstr ""
+"Toate datele vor fi stocate într-o locație privată și nu vor fi partajate cu "
+"publicul sau cu niciun terț."
 
 #: ../src/glade-registration.glade.h:24
 msgid "Update Info"
-msgstr ""
+msgstr "Actualizare informație"
 
 #: ../src/glade-registration.glade.h:25
 msgid "<Insert update token, if you want to update previously sent data>"
 msgstr ""
+"<Inserați jetonul de actualizare, dacă doriți să actualizați date trimise "
+"anterior>"
 
 #: ../src/glade-registration.glade.h:27
 msgid "How long have you been programming?"
-msgstr ""
+msgstr "De cât timp programați?"
 
 #: ../src/glade-registration.glade.h:28
 msgid "0"
@@ -1097,7 +1108,7 @@ msgstr "Alta"
 
 #: ../src/glade-registration.glade.h:42
 msgid "When did you start using Glade?"
-msgstr ""
+msgstr "Când ați început să folosiți Glade?"
 
 #: ../src/glade-registration.glade.h:43
 msgid "ago"
@@ -1105,27 +1116,27 @@ msgstr "în urmă"
 
 #: ../src/glade-registration.glade.h:44
 msgid "Which version do you normally use?"
-msgstr ""
+msgstr "Ce versiune folosiți în mod normal?"
 
 #: ../src/glade-registration.glade.h:45
 msgid "What is available in my OS"
-msgstr ""
+msgstr "Ce este disponibil în sistemul meu de operare"
 
 #: ../src/glade-registration.glade.h:46
 msgid "Latest stable from sources"
-msgstr ""
+msgstr "Ultimele surse stabile"
 
 #: ../src/glade-registration.glade.h:47
 msgid "3.8 for GTK+ 2"
-msgstr ""
+msgstr "3.8 pentru GTK+ 2"
 
 #: ../src/glade-registration.glade.h:48
 msgid "Master"
-msgstr ""
+msgstr "Master"
 
 #: ../src/glade-registration.glade.h:49
 msgid "On what operating systems?"
-msgstr ""
+msgstr "Pe ce sisteme de operare?"
 
 #: ../src/glade-registration.glade.h:50
 msgid "distribution"
@@ -1176,11 +1187,8 @@ msgid "Oracle"
 msgstr "Oracle"
 
 #: ../src/glade-registration.glade.h:62
-#, fuzzy
-#| msgctxt "textattr"
-#| msgid "Variant"
 msgid "variant"
-msgstr "Variantă"
+msgstr "variantă"
 
 #: ../src/glade-registration.glade.h:63
 msgid "FreeBSD"
@@ -1343,40 +1351,36 @@ msgstr "Software liber"
 
 #: ../src/glade-registration.glade.h:102
 msgid "Open source software"
-msgstr ""
+msgstr "Software sursă deschisă"
 
 #: ../src/glade-registration.glade.h:103
 msgid "Commercial/Closed software"
-msgstr ""
+msgstr "Software comercial/închis"
 
 #: ../src/glade-registration.glade.h:104
 msgid "None - distributed internally"
-msgstr ""
+msgstr "Niciuna - distribuită intern"
 
 #: ../src/glade-registration.glade.h:105
 msgid ""
 "In what field(s) is the software you used Glade to create generally used?"
-msgstr ""
+msgstr "În ce domeniu este folosit software-ul creat de Glade în general?"
 
 #: ../src/glade-registration.glade.h:106
 msgid "Academic"
 msgstr "Academic"
 
 #: ../src/glade-registration.glade.h:107
-#, fuzzy
-#| msgid "Applications"
 msgid "Embedded applications"
-msgstr "Aplicații"
+msgstr "Aplicații încorporate"
 
 #: ../src/glade-registration.glade.h:108
 msgid "Accounting"
-msgstr ""
+msgstr "Contabilitate"
 
 #: ../src/glade-registration.glade.h:109
-#, fuzzy
-#| msgid "Applications"
 msgid "Desktop applications"
-msgstr "Aplicații"
+msgstr "Aplicații desktop"
 
 #: ../src/glade-registration.glade.h:110
 msgid "Educational"
@@ -1396,37 +1400,37 @@ msgstr "Ștințific"
 
 #: ../src/glade-registration.glade.h:114
 msgid "What aspect of the software needs the most improvement?"
-msgstr ""
+msgstr "Ce aspect al software-ului are cea mai mare nevoie de imbunatatire?"
 
 #: ../src/glade-registration.glade.h:115
 msgid "In your opinion what is the biggest problem with Glade?"
-msgstr ""
+msgstr "În opinia dumneavoastră, care este cea mai mare problemă cu Glade?"
 
 #: ../src/glade-registration.glade.h:116
-#, fuzzy
-#| msgid "Read _documentation"
 msgid "Lack of documentation"
-msgstr "Consultă _documentația"
+msgstr "Lipsa documentației"
 
 #: ../src/glade-registration.glade.h:117
 msgid "Lack of professional support"
-msgstr ""
+msgstr "Lipsa suportului profesional"
 
 #: ../src/glade-registration.glade.h:118
 msgid "Lack of professional training"
-msgstr ""
+msgstr "Lipsa formării profesionale"
 
 #: ../src/glade-registration.glade.h:119
 msgid "Lack of publicity/exposure"
-msgstr ""
+msgstr "Lipsa de publicitate/expunere"
 
 #: ../src/glade-registration.glade.h:120
 msgid "Lack of official binary releases for other OS (Windows, Mac OS X)"
 msgstr ""
+"Lipsa de versiuni binare oficiale pentru alte sisteme de operare (Windows, "
+"Mac OS X)"
 
 #: ../src/glade-registration.glade.h:121
 msgid "Have you ever encountered a bug?"
-msgstr ""
+msgstr "Ai întâlnit vreodată un bug?"
 
 #. GtkResponseType enumeration value
 #: ../src/glade-registration.glade.h:122 ../plugins/gtk+/gtk+.xml.in.h:603
@@ -1440,15 +1444,15 @@ msgstr "Nu"
 
 #: ../src/glade-registration.glade.h:124
 msgid "If so, did you file a bug report?"
-msgstr ""
+msgstr "Dacă da, ați depus un raport de eroare?"
 
 #: ../src/glade-registration.glade.h:125
 msgid "Have you ever thought about contributing?"
-msgstr ""
+msgstr "Te-ai gândit vreodată să contribui?"
 
 #: ../src/glade-registration.glade.h:126
 msgid "Why not?"
-msgstr ""
+msgstr "De ce nu?"
 
 #: ../src/glade-registration.glade.h:127
 msgid "Comments:"
@@ -1468,6 +1472,16 @@ msgid ""
 "Individual data will be stored in a private database and it will not be "
 "shared with the public or any other third party."
 msgstr ""
+"Singurul scop al acestui studiu este de a cunoaște mai bine baza noastră de "
+"utilizatori.\n"
+"Adresa dumneavoastră de e-mail va fi utilizată pentru a vă identifica în mod "
+"unic ca utilizator Glade și pentru a vă trimite un cod de modificare în "
+"cazul în care doriți să modificați ceva sau să adăugați comentarii "
+"suplimentare.\n"
+"Numai statisticile compilate din întregul set de date vor fi distribuite "
+"public.\n"
+"Datele individuale vor fi stocate într-o bază de date privată și nu vor fi "
+"partajate cu publicul sau cu orice altă terță parte."
 
 #: ../gladeui/glade-app.c:535
 #, c-format
@@ -1581,7 +1595,7 @@ msgstr "Tip"
 #: ../gladeui/glade-base-editor.c:2033 ../gladeui/glade-editor-table.c:305
 #: ../gladeui/glade-editor-table.c:578
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #. Type
 #: ../gladeui/glade-base-editor.c:2053
@@ -1691,15 +1705,14 @@ msgid "An entry"
 msgstr "O intrare"
 
 #: ../gladeui/glade-command.c:455 ../gladeui/glade-command.c:511
-#, fuzzy, c-format
-#| msgid "Locking %s by widget %s"
+#, c-format
 msgid "Enabling property %s on widget %s"
-msgstr "Se blochează %s de către widget-ul %s"
+msgstr "Activarea proprietății %s pe widgetul %s"
 
 #: ../gladeui/glade-command.c:460 ../gladeui/glade-command.c:516
 #, c-format
 msgid "Disabling property %s on widget %s"
-msgstr ""
+msgstr "Dezactivează proprietatea %s pe widgetul %s"
 
 #: ../gladeui/glade-command.c:801
 #, c-format
@@ -1772,7 +1785,7 @@ msgstr "Trage %s și mută la %s"
 
 #: ../gladeui/glade-command.c:2020
 msgid "root"
-msgstr ""
+msgstr "rădăcină"
 
 #: ../gladeui/glade-command.c:2144
 #, c-format
@@ -1805,10 +1818,9 @@ msgid "Unlocking %s"
 msgstr "Se deblochează %s"
 
 #: ../gladeui/glade-command.c:2643 ../gladeui/glade-command.c:2686
-#, fuzzy, c-format
-#| msgid "Setting %s of %s to %s"
+#, c-format
 msgid "Setting target version of '%s' to %d.%d"
-msgstr "Se stabilește %s din %s la %s"
+msgstr "Setarea versiunii țintă a „%s\" la %d.%d"
 
 #: ../gladeui/glade-command.c:2839
 #, c-format
@@ -1816,30 +1828,28 @@ msgid "Setting project's %s property"
 msgstr "Se stabilește proprietatea %s a proiectului"
 
 #: ../gladeui/glade-command.c:2942
-#, fuzzy, c-format
-#| msgid "Setting %s of %s to %s"
+#, c-format
 msgid "Setting resource path to '%s'"
-msgstr "Se stabilește %s din %s la %s"
+msgstr "Setați calea pentru resurse la „%s”"
 
 #: ../gladeui/glade-command.c:2973
-#, fuzzy, c-format
-#| msgid "Setting %s of %s to %s"
+#, c-format
 msgid "Setting translation domain to '%s'"
-msgstr "Se stabilește %s din %s la %s"
+msgstr "Setarea domeniului de traducere la ”%s”"
 
 #: ../gladeui/glade-command.c:3008
 #, c-format
 msgid "Unsetting widget '%s' as template"
-msgstr ""
+msgstr "Dezactivați widgetul „%s\" ca șablon"
 
 #: ../gladeui/glade-command.c:3011
 #, c-format
 msgid "Setting widget '%s' as template"
-msgstr ""
+msgstr "Setați widgetul „%s\" ca șablon"
 
 #: ../gladeui/glade-command.c:3014
 msgid "Unsetting template"
-msgstr ""
+msgstr "Dezactivarea șablonului"
 
 #: ../gladeui/glade-cursor.c:186
 #, c-format
@@ -1847,24 +1857,22 @@ msgid "Unable to load image (%s)"
 msgstr "Nu s-a putut încărca imaginea (%s)"
 
 #: ../gladeui/glade-design-layout.c:663
-#, fuzzy, c-format
-#| msgid "Adding parent %s for %s"
+#, c-format
 msgid "Editing alignments of %s"
-msgstr "Se adaugă părintele %s lui %s"
+msgstr "Editarea alinierilor pentru %s"
 
 #: ../gladeui/glade-design-layout.c:735
-#, fuzzy, c-format
-#| msgid "Setting %s of %s"
+#, c-format
 msgid "Editing margins of %s"
-msgstr "Se stabilește %s din %s"
+msgstr "Editarea marginilor %s"
 
 #: ../gladeui/glade-design-layout.c:2042
 msgid "Design View"
-msgstr ""
+msgstr "Vizualizare design"
 
 #: ../gladeui/glade-design-layout.c:2043
 msgid "The GladeDesignView that contains this layout"
-msgstr ""
+msgstr "GladeDesignView conține acest aspect"
 
 #: ../gladeui/glade-editor.c:228
 msgid "Show info"
@@ -1884,21 +1892,19 @@ msgstr "Widget-ul încărcat curent în acest editor"
 
 #: ../gladeui/glade-editor.c:243
 msgid "Show Class Field"
-msgstr ""
+msgstr "Afișați câmpul de clasă"
 
 #: ../gladeui/glade-editor.c:244
 msgid "Whether to show the class field at the top"
-msgstr ""
+msgstr "Dacă doriți să afișați câmpul de clasă în partea de sus"
 
 #: ../gladeui/glade-editor.c:250
-#, fuzzy
-#| msgid "Class"
 msgid "Class Field"
-msgstr "Clasă"
+msgstr "Câmpul de clasă"
 
 #: ../gladeui/glade-editor.c:251
 msgid "The class field string"
-msgstr ""
+msgstr "Șirul de câmp de clasă"
 
 #. translators: %s(Class Title) Properties - %s (ClassName) [%s(WidgetName)]
 #. * example: Window Properties - GtkWindow [window1]
@@ -1912,10 +1918,9 @@ msgstr "Proprietăți %s - %s [%s]"
 #. * example: Window Properties - GtkWindow
 #.
 #: ../gladeui/glade-editor.c:321
-#, fuzzy, c-format
-#| msgid "%s Properties - %s [%s]"
+#, c-format
 msgid "%s Properties - %s"
-msgstr "Proprietăți %s - %s [%s]"
+msgstr "%s Proprietăți - %s"
 
 #: ../gladeui/glade-editor.c:761
 #, c-format
@@ -1963,7 +1968,7 @@ msgstr "Resetează proprietățile widget-ului"
 #: ../gladeui/glade-editor-property.c:3587 ../plugins/gtk+/glade-accels.c:526
 #: ../plugins/gtk+/glade-attributes.c:1063
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #. Checklist
 #: ../gladeui/glade-editor.c:1134
