@@ -1,0 +1,168 @@
+!SESSION Thu Sep 14 16:13:35 EEST 2017 -----------------------------------------
+!ENTRY org.eclipse.equinox.launcher 4 0 2017-09-14 16:13:36.287
+!MESSAGE Could not find extension: org.eclipse.wst.jsdt.nashorn.extension
+!SESSION 2017-09-14 16:13:30.505 -----------------------------------------------
+eclipse.buildId=4.6.3.v20170306-1705
+java.version=1.8.0_144
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.osgi 4 0 2017-09-14 16:13:57.352
+!MESSAGE Bundle org.eclipse.wst.jsdt.nashorn.extension not found.
+
+!ENTRY org.eclipse.e4.ui.workbench 4 0 2017-09-14 16:29:52.705
+!MESSAGE FrameworkEvent ERROR
+!STACK 0
+org.eclipse.e4.core.di.InjectionException: java.util.concurrent.TimeoutException: Timed out waiting for  [STOPPING] to reach a terminal state. Current state: STOPPING
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:65)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.processAnnotated(InjectorImpl.java:966)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.disposed(InjectorImpl.java:426)
+	at org.eclipse.e4.core.internal.di.Requestor.disposed(Requestor.java:154)
+	at org.eclipse.e4.core.internal.contexts.ContextObjectSupplier$ContextInjectionListener.update(ContextObjectSupplier.java:78)
+	at org.eclipse.e4.core.internal.contexts.TrackableComputationExt.update(TrackableComputationExt.java:111)
+	at org.eclipse.e4.core.internal.contexts.TrackableComputationExt.handleInvalid(TrackableComputationExt.java:74)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.dispose(EclipseContext.java:176)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.dispose(EclipseContext.java:161)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.dispose(EclipseContext.java:161)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.dispose(EclipseContext.java:161)
+	at org.eclipse.e4.core.internal.contexts.osgi.EclipseContextOSGi.dispose(EclipseContextOSGi.java:106)
+	at org.eclipse.e4.core.internal.contexts.osgi.EclipseContextOSGi.bundleChanged(EclipseContextOSGi.java:139)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl.dispatchEvent(BundleContextImpl.java:903)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:230)
+	at org.eclipse.osgi.framework.eventmgr.ListenerQueue.dispatchEventSynchronous(ListenerQueue.java:148)
+	at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.publishBundleEventPrivileged(EquinoxEventPublisher.java:213)
+	at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.publishBundleEvent(EquinoxEventPublisher.java:120)
+	at org.eclipse.osgi.internal.framework.EquinoxEventPublisher.publishBundleEvent(EquinoxEventPublisher.java:112)
+	at org.eclipse.osgi.internal.framework.EquinoxContainerAdaptor.publishModuleEvent(EquinoxContainerAdaptor.java:156)
+	at org.eclipse.osgi.container.Module.publishEvent(Module.java:476)
+	at org.eclipse.osgi.container.Module.doStop(Module.java:634)
+	at org.eclipse.osgi.container.Module.stop(Module.java:498)
+	at org.eclipse.osgi.container.SystemModule.stop(SystemModule.java:202)
+	at org.eclipse.osgi.internal.framework.EquinoxBundle$SystemBundle$EquinoxSystemModule$1.run(EquinoxBundle.java:165)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.util.concurrent.TimeoutException: Timed out waiting for  [STOPPING] to reach a terminal state. Current state: STOPPING
+	at com.google.common.util.concurrent.AbstractService.awaitTerminated(AbstractService.java:274)
+	at com.google.common.util.concurrent.AbstractIdleService.awaitTerminated(AbstractIdleService.java:172)
+	at org.eclipse.epp.internal.logging.aeri.ide.server.mars.ServerConnection.diStop(ServerConnection.java:402)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:55)
+	... 25 more
+!SESSION Thu Sep 14 16:30:35 EEST 2017 -----------------------------------------
+!ENTRY org.eclipse.equinox.launcher 4 0 2017-09-14 16:30:36.054
+!MESSAGE Could not find extension: org.eclipse.wst.jsdt.nashorn.extension
+!SESSION 2017-09-14 16:30:34.305 -----------------------------------------------
+eclipse.buildId=4.6.3.v20170306-1705
+java.version=1.8.0_144
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -data file:/home/mhcrnl/Q3/ -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.osgi 4 0 2017-09-14 16:31:01.543
+!MESSAGE Bundle org.eclipse.wst.jsdt.nashorn.extension not found.
+
+!ENTRY org.eclipse.ui.navigator 4 0 2017-09-14 16:37:22.234
+!MESSAGE Cannot find navigator content extension (using triggerPoints) for object "<null>" parent path: "src [in salut01]
+  <default> (...)
+  salut01 (not open)".  Check that you have an expression for this object in a navigatorContent triggerPoints or enablement.
+
+!ENTRY org.eclipse.equinox.http.servlet 4 0 2017-09-14 17:03:46.439
+!MESSAGE FrameworkEvent ERROR
+!STACK 0
+java.lang.NoClassDefFoundError: javax/el/ELContext
+	at org.apache.jasper.servlet.JspServlet.destroy(JspServlet.java:411)
+	at org.eclipse.equinox.jsp.jasper.JspServlet.destroy(JspServlet.java:139)
+	at org.eclipse.equinox.http.registry.internal.ServletManager$ServletWrapper.destroyDelegate(ServletManager.java:207)
+	at org.eclipse.equinox.http.registry.internal.ServletManager$ServletWrapper.destroy(ServletManager.java:188)
+	at org.eclipse.equinox.http.servlet.internal.HttpServiceRuntimeImpl$LegacyServlet.destroy(HttpServiceRuntimeImpl.java:1231)
+	at org.eclipse.equinox.http.servlet.internal.registration.EndpointRegistration.destroy(EndpointRegistration.java:62)
+	at org.eclipse.equinox.http.servlet.internal.customizer.ContextServletTrackerCustomizer.removedService(ContextServletTrackerCustomizer.java:88)
+	at org.eclipse.equinox.http.servlet.internal.customizer.ContextServletTrackerCustomizer.removedService(ContextServletTrackerCustomizer.java:1)
+	at org.osgi.util.tracker.ServiceTracker$Tracked.customizerRemoved(ServiceTracker.java:967)
+	at org.osgi.util.tracker.ServiceTracker$Tracked.customizerRemoved(ServiceTracker.java:1)
+	at org.osgi.util.tracker.AbstractTracked.untrack(AbstractTracked.java:341)
+	at org.osgi.util.tracker.ServiceTracker$Tracked.serviceChanged(ServiceTracker.java:909)
+	at org.eclipse.osgi.internal.serviceregistry.FilteredServiceListener.serviceChanged(FilteredServiceListener.java:109)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl.dispatchEvent(BundleContextImpl.java:915)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:230)
+	at org.eclipse.osgi.framework.eventmgr.ListenerQueue.dispatchEventSynchronous(ListenerQueue.java:148)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.publishServiceEventPrivileged(ServiceRegistry.java:862)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.publishServiceEvent(ServiceRegistry.java:801)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistrationImpl.unregister(ServiceRegistrationImpl.java:222)
+	at org.eclipse.equinox.http.servlet.internal.HttpServiceRuntimeImpl.unregisterHttpServiceAlias(HttpServiceRuntimeImpl.java:784)
+	at org.eclipse.equinox.http.servlet.internal.HttpServiceImpl.unregister(HttpServiceImpl.java:162)
+	at org.eclipse.equinox.http.registry.internal.HttpRegistryManager.unregister(HttpRegistryManager.java:283)
+	at org.eclipse.equinox.http.registry.internal.HttpRegistryManager.removeContribution(HttpRegistryManager.java:148)
+	at org.eclipse.equinox.http.registry.internal.ServletManager.removed(ServletManager.java:147)
+	at org.eclipse.equinox.http.registry.internal.ExtensionPointTracker.close(ExtensionPointTracker.java:92)
+	at org.eclipse.equinox.http.registry.internal.ServletManager.stop(ServletManager.java:66)
+	at org.eclipse.equinox.http.registry.internal.HttpRegistryManager.stop(HttpRegistryManager.java:112)
+	at org.eclipse.equinox.http.registry.internal.HttpServiceTracker.removedService(HttpServiceTracker.java:71)
+	at org.osgi.util.tracker.ServiceTracker$Tracked.customizerRemoved(ServiceTracker.java:967)
+	at org.osgi.util.tracker.ServiceTracker$Tracked.customizerRemoved(ServiceTracker.java:1)
+	at org.osgi.util.tracker.AbstractTracked.untrack(AbstractTracked.java:341)
+	at org.osgi.util.tracker.ServiceTracker$Tracked.serviceChanged(ServiceTracker.java:909)
+	at org.eclipse.osgi.internal.serviceregistry.FilteredServiceListener.serviceChanged(FilteredServiceListener.java:109)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl.dispatchEvent(BundleContextImpl.java:915)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:230)
+	at org.eclipse.osgi.framework.eventmgr.ListenerQueue.dispatchEventSynchronous(ListenerQueue.java:148)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.publishServiceEventPrivileged(ServiceRegistry.java:862)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.publishServiceEvent(ServiceRegistry.java:801)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistrationImpl.unregister(ServiceRegistrationImpl.java:222)
+	at org.eclipse.equinox.http.servlet.internal.util.HttpTuple.destroy(HttpTuple.java:38)
+	at org.eclipse.equinox.http.servlet.internal.Activator.removedService(Activator.java:200)
+	at org.eclipse.equinox.http.servlet.internal.Activator.removedService(Activator.java:1)
+	at org.osgi.util.tracker.ServiceTracker$Tracked.customizerRemoved(ServiceTracker.java:967)
+	at org.osgi.util.tracker.ServiceTracker$Tracked.customizerRemoved(ServiceTracker.java:1)
+	at org.osgi.util.tracker.AbstractTracked.untrack(AbstractTracked.java:341)
+	at org.osgi.util.tracker.ServiceTracker$Tracked.serviceChanged(ServiceTracker.java:909)
+	at org.eclipse.osgi.internal.serviceregistry.FilteredServiceListener.serviceChanged(FilteredServiceListener.java:109)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl.dispatchEvent(BundleContextImpl.java:915)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:230)
+	at org.eclipse.osgi.framework.eventmgr.ListenerQueue.dispatchEventSynchronous(ListenerQueue.java:148)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.publishServiceEventPrivileged(ServiceRegistry.java:862)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.publishServiceEvent(ServiceRegistry.java:801)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistrationImpl.unregister(ServiceRegistrationImpl.java:222)
+	at org.eclipse.equinox.http.servlet.internal.Activator.unregisterHttpService(Activator.java:72)
+	at org.eclipse.equinox.http.servlet.internal.servlet.ProxyServlet.destroy(ProxyServlet.java:47)
+	at org.eclipse.equinox.http.jetty.internal.HttpServerManager$InternalHttpServiceServlet.destroy(HttpServerManager.java:297)
+	at org.eclipse.jetty.servlet.ServletHolder.destroyInstance(ServletHolder.java:477)
+	at org.eclipse.jetty.servlet.ServletHolder.doStop(ServletHolder.java:448)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:89)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.stop(ContainerLifeCycle.java:142)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.doStop(ContainerLifeCycle.java:160)
+	at org.eclipse.jetty.server.handler.AbstractHandler.doStop(AbstractHandler.java:124)
+	at org.eclipse.jetty.servlet.ServletHandler.doStop(ServletHandler.java:223)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:89)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.stop(ContainerLifeCycle.java:142)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.doStop(ContainerLifeCycle.java:160)
+	at org.eclipse.jetty.server.handler.AbstractHandler.doStop(AbstractHandler.java:124)
+	at org.eclipse.jetty.server.session.SessionHandler.doStop(SessionHandler.java:519)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:89)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.stop(ContainerLifeCycle.java:142)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.doStop(ContainerLifeCycle.java:160)
+	at org.eclipse.jetty.server.handler.AbstractHandler.doStop(AbstractHandler.java:124)
+	at org.eclipse.jetty.server.handler.ContextHandler.stopContext(ContextHandler.java:863)
+	at org.eclipse.jetty.servlet.ServletContextHandler.stopContext(ServletContextHandler.java:355)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStop(ContextHandler.java:927)
+	at org.eclipse.jetty.servlet.ServletContextHandler.doStop(ServletContextHandler.java:271)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:89)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.stop(ContainerLifeCycle.java:142)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.doStop(ContainerLifeCycle.java:160)
+	at org.eclipse.jetty.server.handler.AbstractHandler.doStop(AbstractHandler.java:124)
+	at org.eclipse.jetty.server.Server.doStop(Server.java:523)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:89)
+	at org.eclipse.equinox.http.jetty.internal.HttpServerManager.deleted(HttpServerManager.java:56)
+	at org.eclipse.equinox.http.jetty.internal.Activator.stopServer(Activator.java:224)
+	at org.eclipse.equinox.http.jetty.JettyConfigurator.stopServer(JettyConfigurator.java:55)
+	at org.eclipse.help.internal.server.JettyHelpServer$StopServerThread.run(JettyHelpServer.java:98)
+Caused by: java.lang.ClassNotFoundException: javax.el.ELContext cannot be found by org.glassfish.web.javax.servlet.jsp_2.3.3.b02
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:410)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:372)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:364)
+	at org.eclipse.osgi.internal.loader.ModuleClassLoader.loadClass(ModuleClassLoader.java:161)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	... 86 more

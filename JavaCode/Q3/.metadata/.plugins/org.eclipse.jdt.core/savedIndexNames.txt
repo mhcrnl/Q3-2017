@@ -1,0 +1,16 @@
+INDEX VERSION 1.130+/home/mhcrnl/Q3/.metadata/.plugins/org.eclipse.jdt.core
+3050803415.index
+1747355868.index
+1611310696.index
+1871183478.index
+66609834.index
+3620889748.index
+2250212733.index
+967143158.index
+2449359518.index
+4214040084.index
+1293121033.index
+2543393845.index
+637434774.index
+2329503484.index
+4283101111.index

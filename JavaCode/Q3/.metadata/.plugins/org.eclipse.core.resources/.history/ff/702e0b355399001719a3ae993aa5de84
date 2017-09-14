@@ -1,0 +1,9 @@
+package salut01;
+
+import java.io.*;
+
+public class salut {
+	public static void main(String args[]){
+		System.out.println("Primul program java");
+	}
+}
