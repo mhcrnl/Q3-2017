@@ -3,8 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//package texttable;
-
+package texttable;
 
 //**************************************
 // Name: Save Data in Text File
@@ -25,7 +24,6 @@
 //
 //Side Effects:None
 //**************************************
-
 // Save Data in Text File
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -41,8 +39,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+class AddressDialog extends JDialog {
 
-    class AddressDialog extends JDialog {
     private JLabel label1 = new JLabel("Address");
     private JLabel label2 = new JLabel("City");
     private JLabel label3 = new JLabel("State");
@@ -54,136 +52,114 @@ import javax.swing.JTextField;
     private JButton buttonOk = new JButton("Ok");
     String[] address = new String[4];
 
-
-        public AddressDialog(Frame owner, boolean modal) {
+    public AddressDialog(Frame owner, boolean modal) {
         super(owner, modal);
 
+        ActionListener actionListener = new ActionListener() {
 
-            ActionListener actionListener = new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                FileWriter writer;
+                //writer = new FileWriter("MyData.txt");
+                String addr = addressField.getText();
+                String city = cityField.getText();
+                String state = stateField.getText();
+                String zip = zipCodeField.getText();
 
+                try {
+                    writer = new FileWriter("MyData.txt");
+                    if ((!addr.equals(""))
+                            & (!city.equals(""))
+                            & (!state.equals(""))
+                            & (!zip.equals(""))) {
+                        writer.write("Address: " + addr + System.getProperty("line.separator"));
+                        writer.write("City :" + city + System.getProperty("line.separator"));
+                        writer.write("State: " + state + System.getProperty("line.separator"));
+                        writer.write("Zip: " + zip + System.getProperty("line.separator"));
+                        writer.flush();
+                        writer.close();
+                    } else {
+                        writer.close();
+                        JOptionPane.showMessageDialog(null, "Some text box is empty!",
+                                "Error!", JOptionPane.WARNING_MESSAGE);
+                    };
 
-                	public void actionPerformed(ActionEvent ev) {
-                	FileWriter writer;
-                	//writer = new FileWriter("MyData.txt");
-                	String addr = addressField.getText();
-                	String city = cityField.getText();
-                	String state = stateField.getText();
-                	String zip = zipCodeField.getText();
-
-
-                    	try {
-                    		writer = new FileWriter("MyData.txt");
-                    		if (
-                    			(!addr.equals("")) & 
-                    			(!city.equals("")) & 
-                    			(!state.equals("")) & 
-                    			(!zip.equals(""))
-
-
-                        		) {
-                        		writer.write("Address: " + addr + System.getProperty("line.separator"));
-                        		writer.write("City :" + city + System.getProperty("line.separator"));
-                        		writer.write("State: " + state + System.getProperty("line.separator"));
-                        		writer.write("Zip: " + zip + System.getProperty("line.separator"));
-                        		writer.flush();
-                        		writer.close();
-                        		}
-                        		else { 
-                        		writer.close(); 
-                        		JOptionPane.showMessageDialog(null, "Some text box is empty!", 
-                        			"Error!", JOptionPane.WARNING_MESSAGE);
-                        		};
-
-
-                            	} catch (IOException ex) {
-                            		ex.printStackTrace();
-                            	}
-                            	}
-                        };
-                        buttonOk.addActionListener(actionListener);
-                        init();
-                    }
-
-
-                        private void init() {
-                        this.setTitle("Address Dialog");
-                        this.setLayout(new GridLayout(5, 2));
-                        this.add(label1);
-                        this.add(addressField);
-                        this.add(label2);
-                        this.add(cityField);
-                        this.add(label3);
-                        this.add(stateField);
-                        this.add(label4);
-                        this.add(zipCodeField);
-                        this.add(buttonOk);
-                    }
-
-
-                        public String[] getAddress() {
-                        address[0] = addressField.getText();
-                        address[1] = cityField.getText();
-                        address[2] = stateField.getText();
-                        address[3] = zipCodeField.getText();
-                        return address;
-                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
+            }
+        };
+        buttonOk.addActionListener(actionListener);
+        init();
+    }
+
+    private void init() {
+        this.setTitle("Address Dialog");
+        this.setLayout(new GridLayout(5, 2));
+        this.add(label1);
+        this.add(addressField);
+        this.add(label2);
+        this.add(cityField);
+        this.add(label3);
+        this.add(stateField);
+        this.add(label4);
+        this.add(zipCodeField);
+        this.add(buttonOk);
+    }
+
+    public String[] getAddress() {
+        address[0] = addressField.getText();
+        address[1] = cityField.getText();
+        address[2] = stateField.getText();
+        address[3] = zipCodeField.getText();
+        return address;
+    }
+}
                 //********************************************************
 
+class TextTable extends JFrame {
 
-                    class JDialogTest extends JFrame {
-                    AddressDialog dialog = new AddressDialog(this, false);
+    AddressDialog dialog = new AddressDialog(this, false);
 
+    public TextTable(String title) {
+        super(title);
+        init();
+    }
 
-                        public JDialogTest(String title) {
-                        super(title);
-                        init();
-                    }
+    public TextTable() {
+        super();
+        init();
+    }
 
+    private void init() {
+        this.getContentPane().setLayout(new FlowLayout());
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        final AddressDialog dialog = new AddressDialog(this, false);
+        JButton button = new JButton("Show Dialog");
 
-                        public JDialogTest() {
-                        super();
-                        init();
-                    }
+        button.addActionListener(new ActionListener() {
 
+            public void actionPerformed(ActionEvent ae) {
+                dialog.setSize(250, 120);
+                dialog.setVisible(true);
+            }
+        });
+        this.getContentPane().add(button);
+        JButton button2 = new JButton("Exit");
 
-                        private void init() {
-                        this.getContentPane().setLayout(new FlowLayout());
-                        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        final AddressDialog dialog = new AddressDialog(this, false);
-                        JButton button = new JButton("Show Dialog");
+        button2.addActionListener(new ActionListener() {
 
+            public void actionPerformed(ActionEvent ae) {
+                System.exit(0);
+            }
+        });
+        this.getContentPane().add(button2);
+    }
 
-                            button.addActionListener(new ActionListener() {
-
-
-                                public void actionPerformed(ActionEvent ae) {
-                                dialog.setSize(250, 120);
-                                dialog.setVisible(true);
-                            }
-                        });
-                        this.getContentPane().add(button);
-                        JButton button2 = new JButton("Exit");
-
-
-                            button2.addActionListener(new ActionListener() {
-
-
-                                public void actionPerformed(ActionEvent ae) {
-                                System.exit(0);
-                            }
-                        });
-                        this.getContentPane().add(button2);
-                    }
-
-
-                        public static void main(String[] args) {
-                        JFrame.setDefaultLookAndFeelDecorated(true);
-                        JDialog.setDefaultLookAndFeelDecorated(true);
-                        JDialogTest frame = new JDialogTest();
-                        frame.pack();
-                        frame.setVisible(true);
-                    }
-                }
-
-		
+    public static void main(String[] args) {
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        JDialog.setDefaultLookAndFeelDecorated(true);
+        TextTable frame = new TextTable();
+        frame.pack();
+        frame.setVisible(true);
+    }
+}
