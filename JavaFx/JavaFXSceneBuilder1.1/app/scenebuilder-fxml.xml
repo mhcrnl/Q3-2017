@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="application/fxml">
+    <comment>FXML file (JavaFX Markup Language)</comment>
+      <glob pattern="*.fxml"/>
+  </mime-type>
+</mime-info>
