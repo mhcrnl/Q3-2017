@@ -1,0 +1,30 @@
+#macro ( showTrackback $trackback)
+	<div id="trackback">
+	<table border="0" width="100%" cellpadding="1" cellspacing="1" bgcolor="#F0F0F0" class="trackback">
+	<tr bgcolor="#F0F0F0">
+		<td width="100%" >
+			<b>TrackBack from: <a href="$trackback.url">$trackback.referedBlogName</a> Title: <i>$trackback.title</i></b>
+			&nbsp;&nbsp;&nbsp;
+			#if ($user && ($user.isAdministrator()))
+				<a href="$base/deleteTrackbackConfirm.secureaction?id=$trackback.id">#i18n("DELETE")</a>
+			#end
+		</td>
+	</tr>				
+	<tr bgcolor="#F0F0F0"><td width="100%" >
+    		#i18n("POSTED_AT") $utils.formatDateTime($!trackback.date)
+	</td></tr>	
+	<tr><td>
+			$trackback.trackbackContent
+	</td></tr>
+	</table>
+	</div>	
+#end
+
+<table border="0" width="100%" cellpadding="2" cellspacing="2">
+	#if($entry.trackbackAllowed)
+		
+		#foreach($tb in $entry.incomingTrackbacks)
+				<tr><td>#showTrackback( $tb )</td></tr>
+		#end
+	#end
+</table>	

@@ -1,0 +1,24 @@
+<br/>
+<span style="font-size: 24px; margin-left: 10px; border-bottom: 1px solid #A3A3A3;">XML Feeds for $blog.urlName</span><br/>
+
+<br/><br/>
+	<table border="0" width="100%" cellpadding="2" cellspacing="2">
+		<tr>
+			<td width="50%">Feeds for all categories</td>
+			<td>
+				<a href="$base/blogs/$blog.urlName/feeds/atom_0.3"><img src="$base/images/atom03.gif" border="0"></a>
+				<a href="$base/blogs/$blog.urlName/feeds/rss_2.0"><img src="$base/images/rss2.gif" border="0"></a>
+			</td>
+		</tr>
+		#foreach ($category in $categories)
+		<tr>
+			<td width="50%">
+				Feeds for category <i>$category.name</i>
+			</td>
+			<td>
+				<a href="$base/blogs/$blog.urlName/feeds/atom_0.3/$category.id"><img src="$base/images/atom03.gif" border="0"></a>
+				<a href="$base/blogs/$blog.urlName/feeds/rss_2.0/$category.id"><img src="$base/images/rss2.gif" border="0"></a>
+			</td>
+		</tr>	
+		#end	
+	</table>

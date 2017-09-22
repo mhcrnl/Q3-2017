@@ -1,0 +1,15 @@
+<br/>
+<span style="font-size: 24px; margin-left: 10px; border-bottom: 1px solid #A3A3A3;">$utils.formatDay($request, $requestedDay.time)</span><br/>
+<span style="margin-left: 20px; ">Found $entries.size() entries</span>
+<br/><br/>
+
+#if( $entries.size() == 0 )
+	#i18n("NO_ENTRIES_FOUND_FOR") $utils.formatDay($request, $requestedDay.time)!
+#else
+
+	#foreach( $entry in $entries)
+		#template ( "entryShortView.theme" )
+		<br>
+	#end	
+	
+#end

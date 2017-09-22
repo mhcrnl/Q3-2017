@@ -1,0 +1,10 @@
+<div id="entryBox">
+	
+	#template ( "entryFullView.theme" )
+	
+	<br>	
+	<a name="commentForm">&nbsp;</a>
+	#template ( "commentFormView.theme" )
+	
+</div>
+

@@ -1,0 +1,58 @@
+<div id="formLayer">
+	<form method="post" action="$base/blogs/${entry.blog.urlName}${entry.permalink}?mode=cpost">
+	<table border="0" cellpadding="2" cellspacing="2">
+	<tbody>
+		<tr>
+			<td>Author</td>
+			<td>
+				#if ($user)
+					$utils.renderUser($user, $request)
+				#else
+					anonymous
+				#end	
+			</td>
+			<td>&nbsp;</td>
+		</tr>
+
+		#if ($user)
+		<tr>
+			<td valign="middle">Userpic</td>
+			<td valign="middle" height="90">
+			<SELECT size="1" name="userpicId" onChange="toggleImage(this)" onmousemove="toggleImage(this)" onblur="toggleImage(this)">
+				<OPTION value="" >--- no userpic ---</OPTION>
+				#foreach( $pic in $userpics )
+					<OPTION value="$pic.id|$pic.url">$pic.name</OPTION>
+				#end	
+			</SELECT>
+			<img name="userpic">
+			</td>
+			<td>&nbsp;</td>
+		</tr>		
+		#end
+		
+		<tr>
+			<td>Title</td>
+			<td><input name="title" value="$!comment.rawTitle" size="25" maxlength="50"/></td>			
+			<td>	
+				<font color="red">$utils.showErrors($errors, "title")</font>
+			</td>
+		</tr>
+		<tr>
+			<td>Comment</td>
+			<td><textarea name="comment" cols="40" rows="20">$!comment.rawBody</textarea></td>			
+			<td>	
+				<font color="red">$utils.showErrors($errors, "comment")</font>
+			</td>
+		</tr>		
+		<tr>
+			<td colspan="2" align="center">
+				#if( $commentId )
+					<input type="hidden" name="commentId" value="$commentId">					
+				#end
+				<input type="submit" name="post comment" value="post comment">
+			</td>			
+		</tr>		
+	</tbody>		
+	</table>
+	</form>
+</div>		

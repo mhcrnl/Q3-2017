@@ -1,0 +1,33 @@
+#if( $entries.size() == 0 )
+	#i18n("NO_ENTRIES_FOUND_FOR") $utils.formatMonth($request, $requestedMonth.time)!
+#else
+	<div class="boxTitle">$utils.formatMonth($request, $requestedMonth.time)</div>
+	Found $entries.size() entries
+
+
+	
+	<table border="0" width="100%" cellspacing="2" cellpadding="2">
+	<tbody>
+	#set( $day= "" )	
+	#foreach( $entry in $entries)
+		<tr>
+		#set( $actualDay = $utils.formatDayShort($entry.createTime) )
+		#if ( $day !=  $actualDay)
+			#set ( $day = $actualDay )
+			<td valign="top">
+				<div class="dayTitle">
+					<a href="$base/blogs/${blog.urlName}${utils.formatDayLink($entry.createTime)}">$day</a>
+				</div>
+			</td>
+		#else
+			<td valign="top">&nbsp;</td>
+		#end	
+		
+			<td width="100%">#template ( "entryTitleView.theme" )</td>			
+		</tr>
+	#end
+	</tbody>	
+	</table>	
+	
+#end
+

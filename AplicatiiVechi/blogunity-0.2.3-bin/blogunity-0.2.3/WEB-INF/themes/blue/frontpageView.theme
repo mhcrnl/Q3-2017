@@ -1,0 +1,9 @@
+#if( $entries.size() == 0 )
+	#i18n("NO_ENTRIES_FOUND_FOR") <i>$blog.fullName</i>
+#else
+
+	#foreach( $entry in $entries)
+		#template ( "entryShortView.theme" )
+	#end	
+	
+#end

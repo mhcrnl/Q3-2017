@@ -1,0 +1,169 @@
+#macro( template $name)
+	#parse( "blogs/$blog.urlName/theme/$name" )
+#end
+	
+#macro( i18n $key )$i18n.getMessage($key, $request)#end
+
+#macro ( calendarBox )
+	<div id="calendarBox">
+		<div class="boxTitle">#i18n("CALENDAR_BOX")</div>	
+		$utils.drawCalendar($request, $response)
+	</div>
+#end
+
+#macro ( recentEntriesBox )
+	<div id="recentEntriesBox">
+		<div class="boxTitle">#i18n("RECENT_ENTRIES_BOX")</div>	
+		#if( $recentEntries.size() > 0)
+        	#foreach ($entry in $recentEntries)
+				$utils.renderEntry($entry, $request)<br/>
+			#end
+		#else
+			#i18n("NO_RECENT_ENTRIES_FOUND")
+		#end
+	</div>	
+#end
+
+#macro ( recentCommentsBox )
+	<div id="recentCommentsBox">
+		<div class="boxTitle">#i18n("RECENT_COMMENTS_BOX")</div>	
+		#if( $recentComments.size() > 0)
+        	#foreach ($comment in $recentComments)
+				$utils.renderComment($comment, $request)<br/>
+			#end
+		#else
+			#i18n("NO_RECENT_COMMENTS_FOUND")
+		#end
+	</div>	
+#end
+
+#macro ( archivesBox )
+	<div id="archivesBox">
+		<div class="boxTitle">#i18n("ARCHIVES_BOX")</div>
+		#if ($archives.size() > 0)
+        	#foreach ($archive in $archives)
+        		$archive.asHtmlLink($request, $blog)<br/>
+			#end
+		#else
+			#i18n("NO_ARCHIVES_FOUND")
+		#end	
+	</div>
+#end
+
+#macro ( searchBox )
+	<div id="searchBox">
+		<div class="boxTitle">#i18n("SEARCH_BOX")</div>
+		<form method="post" action="$base/blogs/$blog.urlName/search">
+			<input type="text" name="query" size="15" maxlength="255" value="$!query"/>
+			<input type="submit" name="search" value="#i18n("SEARCH")" />
+		</form>	
+	</div>
+#end
+
+
+#macro ( categoryBox )
+	<div id="categoryBox">
+		<div class="boxTitle">#i18n("CATEGORIES_BOX")</div>
+    		#if( $blog.categories.size() > 0)
+    			  #foreach( $category in $blog.categories)
+					$utils.renderCategory($blog, $category, $request)<br/>
+				  #end
+    		#else
+   				#i18n("NO_CATEGORIES_FOUND")
+    		#end
+
+	</div>
+#end
+
+#macro ( feedsBox )
+	<div id="feedsBox">
+		<div class="boxTitle">#i18n("FEEDS_BOX")</div>
+		<a href="$base/blogs/$blog.urlName/feeds">
+			<img src="$ctx/images/xmlfeeds.gif" border="0">
+		</a>
+	</div>
+
+#end
+
+#macro ( usersBox )
+	<div id="usersBox">
+		<div class="boxTitle">#i18n("USERS_BOX")</div>
+		#i18n("FOUNDER")<br/>
+		$utils.renderUser($blog.founder, $request)<br/>
+		<br/>
+		
+		#if( $blog.contributors.size() > 0)	
+			#i18n("CONTRIBUTORS")<br />
+			#foreach( $contributor in $blog.contributors)
+				$utils.renderUser($contributor, $request)<br/>
+			#end
+		#end
+	</div>
+#end
+
+#macro ( statisticsBox )
+    <div id="statisticsBox">
+        <div class="boxTitle">#i18n("STATISTICS_BOX")</div>
+
+    </div>
+#end
+
+#macro ( linksBox )
+	#if( $blog.links.size() > 0)
+	<div id="linksBox">	
+		<div class="boxTitle">#i18n("LINKS_BOX")</div>
+		  #foreach( $link in $blog.links)
+		    <a href="$link.url">$link.name</a><br/>
+		  #end
+	</div>		
+	#end
+#end
+
+#macro ( referersBox )
+	#if( $referers.size() > 0)
+	<div id="referersBox">	
+		<div class="boxTitle">#i18n("REFERERS_BOX")</div>
+		  #foreach( $referer in $referers)
+				$referer <br/>
+		  #end
+	</div>		
+	#end
+#end
+
+#macro ( visitedPagesBox )
+	#if( $visitedPages.size() > 0)
+	<div id="visitedPagesBox">	
+		<div class="boxTitle">#i18n("VISITED_PAGES_BOX")</div>
+		  #foreach( $page in $visitedPages)
+			$page <br/>
+		  #end
+	</div>		
+	#end
+#end
+
+#macro ( systemBox )
+	
+	<div id="systemBox">
+		<div class="boxTitle">#i18n("SYSTEM_BOX")</div>
+		<a href="$base/">#i18n("MAIN_PAGE")</a><br/>
+		#if (!$user)
+			<form method="post" action="$base/exec/login">
+			<input type="text" name="name" size="20" maxlength="30" /><br/>
+			<input type="password" name="password" size="20" maxlength="30" /><br/>
+			<input type="submit" name="login" value="#i18n("LOGIN")" />
+			</form>
+		#else
+			<a href="$base/exec/logout">#i18n("LOGOUT")</a><br/>
+			#if( $user.canPostToBlog($blog) )
+				<a href="$base/createBlogEntryForm.secureaction?id=$blog.id">#i18n("POST_NEW_ENTRY")</a><br/>
+			#end
+			#if( $user.id == $blog.founder.id || $user.isAdministrator())			
+				<a href="$base/editBlogForm.secureaction?id=$blog.id">#i18n("EDIT_BLOG_TITLE")</a><br/>
+				<a href="$base/editBlogThemeForm.secureaction?id=$blog.id">#i18n("EDIT_THEME_TITLE")</a><br/>
+				<a href="$base/listLogs.secureaction?id=$blog.id">#i18n("ACCESS_LOGS")</a><br/>
+			#end	
+		#end	
+	
+	</div>
+	
+#end

@@ -1,0 +1,11 @@
+<div id="entryBox">
+
+	#template ( "entryFullView.theme" )
+
+	<br>	
+	<a name="commentList">&nbsp;</a>
+	#template ( "commentsView.theme" )
+	<a name="trackbackList">&nbsp;</a>
+	#template ( "trackbackView.theme" )	
+</div>
+

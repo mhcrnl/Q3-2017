@@ -1,0 +1,87 @@
+#macro ( showComment $comment)
+	<div id="comment">
+	<a name="$comment.id">&nbsp;</a>	
+	<table border="0" width="100%" cellpadding="0" cellspacing="0">
+	
+	<tr>
+		<td rowspan="2">
+			#set( $width = $comment.level*30 )
+			<img src="$base/images/1px.gif" height="1" width="$width">
+		</td>
+		
+		<td>
+			#if( $comment.userpic )
+				<img src="${base}${comment.userpic.url}">
+			#else
+				<img src="$base/images/1px.gif" height="1" width="1">
+			#end	
+		</td>
+		
+		<td width="100%" bgcolor="#E2E2E2">
+			<div class="entryTitle">$comment.title</div>
+			
+			<span style="margin-left: 10px; ">
+			#if ($comment.author)		
+				#i18n("POSTED_BY") $utils.renderUser($comment.author, $request) #i18n("POSTED_AT") $utils.formatDateTime($!comment.createTime)
+			#else
+				#i18n("POSTED_BY") <i>anonymous</i> #i18n("POSTED_AT") $utils.formatDateTime($!comment.createTime)
+			#end
+			</span>
+			
+			<br/>
+			<span style="margin-left: 10px; ">
+			#if ($user || (!$user && $entry.anonymousCommentingAllowed))<a href="$base/blogs/${entry.blog.urlName}${entry.permalink}?mode=comment&commentId=$comment.id#commentsForm">#i18n("ENTRY_COMMENT_ANSWER")</a>#end
+			#if ($user && ($user.isAdministrator() || $user.id == $comment.author.id || $user.id == $comment.commentedEntry.author.id || $user.id == $comment.commentedEntry.blog.founder.id ))
+			&nbsp;|&nbsp;<a href="$base/editCommentForm.secureaction?id=$comment.id">#i18n("EDIT")</a>
+			#end
+			#if ($user && ($user.isAdministrator() || $user.id == $comment.author.id || $user.id == $comment.commentedEntry.author.id || $user.id == $comment.commentedEntry.blog.founder.id ))
+			&nbsp;|&nbsp;<a href="$base/deleteCommentConfirm.secureaction?id=$comment.id">#i18n("DELETE")</a>
+			#end
+			</span>
+		</td>				
+	</tr>
+			
+	<tr>	
+		<td colspan="2">
+		<span style="margin-left: 10px; margin-bottom: 10px;">$comment.body</span>
+		</td>
+	</tr>
+	
+	</table>
+	</div>
+#end
+
+#macro( showCommentsBranch $answers)
+	
+	#foreach($comment in $answers)
+		#showComment( $comment)
+		
+		#if ( $comment.answers.size() > 0)
+			#showCommentsBranch($comment.answers)
+		#end	
+	#end
+
+#end
+
+
+<table border="0" width="100%" cellpadding="2" cellspacing="2">
+	#if ($entry.commentingAllowed)
+		<tr><td align="center">
+		#if ($user || (!$user && $entry.anonymousCommentingAllowed))
+			<a href="$base/blogs/${entry.blog.urlName}${entry.permalink}?mode=comment#commentForm">#i18n("ENTRY_ADD_COMMENT")</a>
+		#else
+			<i>anonymous commenting is not allowed. please login first.</i>
+    	#end
+		</td></tr>
+		
+    	#if ($entry.firstLevelComments.size() > 0)
+			<tr><td>
+					#showCommentsBranch($entry.firstLevelComments)
+			</td></tr>
+    	#else
+    		<tr><td align="center">no comments found.</td></tr>
+    	#end
+	#else
+		<tr><td align="center">commenting this message is not allowed.</td></tr>
+	#end
+</table>		

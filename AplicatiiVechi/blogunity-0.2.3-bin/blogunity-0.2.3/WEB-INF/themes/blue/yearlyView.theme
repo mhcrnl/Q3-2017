@@ -1,0 +1,15 @@
+#if( $entries.size() == 0 )
+	#i18n("NO_ENTRIES_FOUND_FOR") $utils.formatYear($request, $requestedYear.time)!
+#else
+	
+	<div class="boxTitle">$utils.formatYear($request, $requestedYear.time)</div>
+	<br>
+	#if ($months.size() > 0)
+
+		#foreach ($month in $months)
+			$month.toHtml($request, $blog)
+			$month.numberOfMessages entries.
+		#end
+
+	#end
+#end

@@ -1,0 +1,15 @@
+<br/>
+<span style="font-size: 24px; margin-left: 10px; border-bottom: 1px solid #A3A3A3;">Category <i>$requestedCategory.name</i></span><br/>
+#if ($!requestedCategory.description)
+	<span style="margin-left: 0px; ">$requestedCategory.description</span>
+#end
+<span style="margin-left: 20px; ">Found $entries.size() entries</span>
+<br/><br/>
+
+#if( $entries.size() > 0)
+    #foreach( $entry in $entries)
+    	#template ( "entryTitleView.theme" )
+    #end	
+#else
+	#i18n("NO_ENTRIES_FOUND_FOR") <i>$requestedCategory.name</i>
+#end

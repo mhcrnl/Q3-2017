@@ -1,0 +1,265 @@
+body {
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+/*  LAYERS   */
+#mainLayer {
+	font-family: Arial;
+	font-size: 11px;
+	color: #000000;
+	top: 0px;
+	margin-top: 10px;	
+	margin-bottom: 10px;	
+}
+
+#headerLayer {
+	color: #8D8D8D;
+	border: 1px solid #000000;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+	padding-top: 2px;
+	height: 95px;
+	position: relative;
+	left: 10%;
+	right: 10%;
+	width: 80%;	
+}
+
+#centerLayer {
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+	padding-top: 2px;
+	position: relative;
+	left: 10%;
+	right: 10%;
+	width: 80%;	
+	
+}
+
+#menuLayer {
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	height: 20px;
+	border-bottom: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #000000;
+}
+
+#dropmenudiv{
+	position:absolute;
+	border:1px solid black;
+	font-family: Arial;
+	font-size: 11px;
+	padding-left: 5px;
+	z-index:100;
+	line-height: 2;	
+}
+
+#naviLayer{
+	margin-bottom: 3px;
+	margin-left: 5px;
+	margin-right: 0px;
+	margin-top: 3px;
+	
+}
+
+#contentLayer {
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	text-align: justify;
+}
+
+#footerLayer {
+	background-color: #679ACC;
+	border: 1px solid #000000;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 0px;
+	padding-top: 2px;
+	height: 15px;
+	position: relative;
+	left: 10%;
+	right: 10%;
+	width: 80%;
+	text-align: center;
+	font-size: 90%;
+	color: #FFFFFF;
+}
+
+
+#loginformLayer{
+	float: right;
+	position: relative;
+	margin-right: 30px;
+	margin-bottom: 0px;
+	margin-top: 0px;
+	width: 100px;
+	padding: 0px 0px 0px 0px;
+}
+
+#loginformLayer input {
+	border-right: 0px dotted #888888;
+	border-left: 0px solid #679ACC;
+	border-top: 1px dotted #888888;
+	border-bottom: 1px dotted #888888;
+	height: 17px;
+	background-color: #F0F0F0;
+	margin-left: 2px;
+	margin-top: 3px;
+	margin-bottom: 0px;
+	font-size: 11px;
+	font-family: Arial;
+	padding-bottom: 0px;
+	padding-top: 0px;
+	padding-left: 3px;
+}
+
+#controlPanel{
+	width: 180px;
+}
+
+#contentPanel{
+	text-align: justify;
+}
+
+#entry{
+	border: 1px dotted #000000;
+	padding: 5px 5px 5px 5px;
+	margin: 5px 5px 5px 5px;
+}
+
+#comment{
+
+}
+
+.boxTitle{
+	padding-left: 0px;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 16px;
+	color: #515151;
+	border-bottom: 1px dotted #888888;
+	margin-left: 0px;
+	margin-top: 10px;	
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+.dayTitle{
+	font-family: arial;
+	font-weight: normal;
+	font-size: 20px;
+	color: #515151;
+	margin-left: 0px;
+	margin-top: 10px;
+	margin-bottom: 1px;
+}
+
+.monthTitle{
+	font-family: arial;
+	font-weight: normal;
+	font-size: 20px;
+	color: #515151;
+	margin-left: 0px;
+	margin-top: 10px;
+	margin-bottom: 1px;
+}
+
+
+.entryTitle{
+	padding-left: 0px;
+	font-family: arial;
+	font-weight: normal;
+	font-size: 24px;
+	color: #515151;
+	border-bottom: 1px dotted #888888;
+	margin-left: 0px;
+	margin-bottom: 10px;
+	width: 100%;
+	text-align: left;
+}
+
+.entryInfo{
+	font-family: arial;
+	font-weight: normal;
+	font-size: 11px;
+	color: #707070;
+	background-color: #F0F0F0;
+	margin-left: 5px;
+	margin-left: 5px;
+	margin-top: 1px;
+	margin-bottom: 10px;
+	text-align: right;
+}
+
+.entryControl{
+	font-family: arial;
+	font-weight: normal;
+	font-size: 11px;
+	color: #000000;
+	background-color: #FFFFFF;
+	margin-left: 5px;
+	margin-left: 5px;
+	margin-top: 1px;
+	margin-bottom: 10px;
+	text-align: right;
+}
+
+.entryExcerpt{
+	font-family: arial;
+	font-weight: bold;
+	font-size: 11px;
+	color: #000000;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 1px;
+	margin-bottom: 10px;
+	text-align: justify;
+}
+
+.entryBody{
+	font-family: arial;
+	font-weight: normal;
+	font-size: 11px;
+	color: #000000;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 1px;
+	margin-bottom: 10px;
+	text-align: justify;
+}
+
+a,a:link {
+	color: #679ACC;
+	text-decoration: none;
+}
+
+a:visisted {
+	color: #679ACC;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #679ACC;
+	text-decoration: underline;
+}
+
+li{
+	text-align: left;
+	margin-left: -15px;
+	padding-bottom: 5px;
+}
+.trackback{
+	border: 1px dotted #000000;
+}

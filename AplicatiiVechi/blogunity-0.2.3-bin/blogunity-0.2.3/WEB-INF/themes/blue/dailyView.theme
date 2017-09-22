@@ -1,0 +1,15 @@
+#if( $entries.size() == 0 )
+	#i18n("NO_ENTRIES_FOUND_FOR") $utils.formatDay($request, $requestedDay.time)!
+#else
+	
+	<div class="boxTitle">$utils.formatDay($request, $requestedDay.time)</div>
+
+	Found $entries.size() entries<br />
+
+	
+	#foreach( $entry in $entries)
+		#template ( "entryShortView.theme" )
+		<br>
+	#end	
+	
+#end

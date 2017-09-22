@@ -1,0 +1,18 @@
+<span style="font-size: 24px; margin-left: 10px; border-bottom: 1px solid #A3A3A3;">Some error occures</span><br/>
+<span style="margin-left: 20px; ">
+	Sorry, but there has been a problem - if this problem persists, please <a href="http://www.j2biz.com/jira">raise an issue</a>
+</span>
+<br/><br/><br/>
+
+
+<span style="font-size: 20px; margin-left: 10px; font-weight: bold; color: red;">$!errorMsg</span>
+#if ($errorStack)
+	<span style="margin-left: 20px; ">		
+		<br/>
+		<div style="border-top: 1px solid #A3A3A3; margin-left: 10px; font-size: 10px; font-family: courier;" />
+		<pre>$errorStack</pre>
+		</div>
+	</span>	
+#end
+	
+	

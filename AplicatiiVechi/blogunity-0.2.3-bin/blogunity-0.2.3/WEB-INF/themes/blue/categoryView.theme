@@ -1,0 +1,15 @@
+#if( $entries.size() == 0 )
+	#i18n("NO_ENTRIES_FOUND_FOR") <i>$requestedCategory.name</i>
+#else
+	<div class="boxTitle">Category <i>$requestedCategory.name</i></div>
+
+	#if ($!requestedCategory.description)
+		$requestedCategory.description
+	#end
+	<br>
+	Found $entries.size() entries
+	
+	#foreach( $entry in $entries)
+		#template ( "entryTitleView.theme" )
+	#end	
+#end

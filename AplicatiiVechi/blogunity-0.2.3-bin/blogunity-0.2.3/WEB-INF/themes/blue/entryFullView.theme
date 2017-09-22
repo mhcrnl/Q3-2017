@@ -1,0 +1,64 @@
+<div id="entry">
+	
+	<table border="0" width="100%" cellpadding="0" cellspacing="0">
+
+		<tr><td width="100%">
+				<div class="entryTitle">
+					<a href="$base/blogs/${blog.urlName}${entry.permalink}">$entry.title</a>
+				</div>
+			</td>
+			<td>
+			#if ($entry.userpic)
+				<img  src="$base/$entry.userpic.url" border="0">
+			#end
+			</td>
+			</tr>
+			<tr><td colspan="2">
+				<div class="entryInfo">
+					#foreach( $category in $entry.categories)
+        				$utils.renderCategory($blog, $category, $request)&nbsp;&nbsp;
+        			#end
+				</div>	
+			</td></tr>
+
+			#if ($entry.excerpt)
+			<tr><td colspan="2">
+					<div class="entryExcerpt">$entry.excerpt</div>
+			</td></tr>
+			#end
+
+			<tr><td colspan="2">
+				<div class="entryBody">$entry.body</div>
+			</td></tr>
+
+			<tr><td colspan="2">
+				<div class="entryInfo">
+					#i18n("POSTED_BY") $utils.renderUser($entry.author, $request)
+					#i18n("POSTED_AT") $utils.formatDateTime($entry.createTime)
+				</div>
+			</td></tr>	
+		
+			<tr><td colspan="2">
+				<div class="entryControl">
+					<a href="$base/blogs/${blog.urlName}${entry.permalink}">#i18n("ENTRY_PERMALINK")</a>&nbsp;	
+        			#if ($entry.commentingAllowed)
+        				#if ($user || (!$user && $entry.anonymousCommentingAllowed))
+        					<a href="$base/blogs/${blog.urlName}${entry.permalink}?mode=comment#commentForm">#i18n("ENTRY_ADD_COMMENT")</a>&nbsp;
+        				#end
+        				<a href="$base/blogs/${blog.urlName}${entry.permalink}?#commentList">#i18n("ENTRY_COMMENTS")($entry.comments.size())</a>&nbsp;
+        			#end	
+	    			#if ($entry.trackbackAllowed)
+						<a href="$base/blogs/${blog.urlName}${entry.permalink}?#trackbackList">#i18n("ENTRY_TRACKBACKS")($entry.trackbacks.size())</a>&nbsp;
+			        #end
+        			#if ($user && ( $entry.author.id == $user.id) )
+            			<a href="$base/editEntryForm.secureaction?id=$entry.id">#i18n("EDIT")</a>&nbsp;
+            			<a href="$base/deleteBlogEntryConfirm.secureaction?id=$entry.id">#i18n("DELETE")</a>&nbsp;
+        			#end
+					#if($entry.trackbackAllowed)			
+						<div><br>#i18n("ENTRY_TRACKBACK_URL"): <i>$base/blogs/${blog.urlName}/trackback/$entry.id</i></div>
+					#end
+				</div>
+			</td></tr>				
+	</table>	
+	
+</div>		

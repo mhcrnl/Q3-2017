@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+	<link rel="stylesheet" href="$themeDir/theme.css" type="text/css" />		
+	<link rel="stylesheet" href="$themeDir/wiki.css" type="text/css" />
+	<script language="JavaScript" src="$base/js/blogunity.js"></script>
+	<script language="JavaScript" src="$base/js/menu.jsp"></script>		
+	<meta name="keywords" content="$utils.siteKeywords" />
+	<meta name="description" content="$utils.siteDescription" />
+	<title>$utils.siteTitle: $!blog.urlName</title>
+	<script type="text/javascript" language="JavaScript"><!--
+	function toggleImage(selectBox) {
+	  if (document.images) {
+	
+		var theImageSrc = selectBox.options[selectBox.selectedIndex].value;
+		var elements = theImageSrc.split("|");
+		
+
+		document["userpic"].src = "$ctx" + elements[1];
+	  }
+	}
+	//--></script>		
+	<link rel="alternate" type="application/rss+xml" title="$blog.urlName articles" href="$base/blogs/$blog.urlName/feeds/rss_2.0" />
+	<link rel="alternate" type="application/atom+xml" title="$blog.urlName articles" href="$base/blogs/$blog.urlName/feeds/atom_0.3" />	
+</head>
+
+
+<body> 
+<div id="mainLayer">
+
+	<div id="headerLayer">
+    	<div id="logoLayer" style="float: left;">
+				<a href="$base/blogs/$blog.urlName" 
+						style="font-size: 44px;font-weight: bold; text-decoration: none;">$!blog.fullName</a><br/>
+				<font style="font-size: 11px;">$!blog.description</font><br/>
+    	</div>
+    	#if (!$user)
+        	<div id="loginformLayer">
+        		<form method="post" action="$base/exec/login">
+        		<input type="text" name="name" size="20" maxlength="30" />
+        		<input type="password" name="password" size="20" maxlength="30" />
+        		<input type="submit" name="login" value="#i18n("LOGIN")" />
+        		</form>
+    		</div>
+    	#else
+            <div style="float: right; position: relative; margin: 0px 0px 0px 0px; width: 100px; padding: 0px 0px 0px 0px; text-align: right;">
+            	<a href="$base/exec/logout">#i18n("LOGOUT")</a>
+            </div>			
+    	#end
+	</div>
+	
+	<div id="centerLayer">
+		
+		<div id="menuLayer">
+			#if($user)
+			<a href="#" onclick="return clickreturnvalue()" 
+						onmouseover="dropdownmenu(this, event, menu1, '150px')" onmouseout="delayhidemenu()">#i18n("MY_PROFILE")</a> |
+			<a href="#" onclick="return clickreturnvalue()" 
+						onmouseover="dropdownmenu(this, event, menu2, '170px')" onmouseout="delayhidemenu()">#i18n("BLOGS")</a> |
+			<a href="#" onclick="return clickreturnvalue()" 
+						onmouseover="dropdownmenu(this, event, menu3, '170px')" onmouseout="delayhidemenu()">#i18n("MESSAGE_TAPES")</a> |
+			#end
+			<a href="#" onclick="return clickreturnvalue()" 
+						onmouseover="dropdownmenu(this, event, menu4, '150px')" onmouseout="delayhidemenu()">#i18n("SEARCH")</a> |
+			<a href="#" onclick="return clickreturnvalue()" 
+						onmouseover="dropdownmenu(this, event, menu5, '150px')" onmouseout="delayhidemenu()">#i18n("STATISTICS")</a>
+			#if( $user && $user.isAdministrator() )
+			| <a href="#" onclick="return clickreturnvalue()" 
+						onmouseover="dropdownmenu(this, event, menu6, '150px')" onmouseout="delayhidemenu()">#i18n("ADMINISTRATION")</a>
+			#end		
+		</div>
+		
+		
+    	<div id="contentLayer">
+			<table border="0" width="100%" cellpadding="3" cellspacing="3">
+				<tr>
+					<td width="180" valign="top" bgcolor="#F0F0F0">
+    					<div id="controlPanel">
+							#systemBox()
+							#searchBox()
+							#calendarBox()
+							#recentEntriesBox()
+							#recentCommentsBox()
+							#archivesBox()
+							#usersBox()
+							#categoryBox()
+							#linksBox()
+							#feedsBox()
+							#visitedPagesBox()					
+							#referersBox()
+					
+        				</div>
+					</td>
+					<td valign="top">
+    					<div id="contentPanel">$content</div>	
+					</td>						
+				</tr>
+			</table>
+				
+		</div>
+    		
+	</div>
+	<div id="footerLayer">
+	Powered by Blogunity $utils.version ($utils.codename), build $utils.build
+	</div>		
+
+</div>
+</body>
+</html>

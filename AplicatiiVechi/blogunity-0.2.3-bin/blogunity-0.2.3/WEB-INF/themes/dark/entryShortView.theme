@@ -1,0 +1,57 @@
+<div id="entry">
+	<table cellpadding="0" cellspacing="0" width="100%">
+		<tr bgcolor="#E2E2E2" valign="top">
+			<td rowspan="2">
+			#if( $entry.userpic )
+				<img src="${base}${entry.userpic.url}">
+			#else
+				<img src="$base/images/1px.gif" height="1" width="1">
+			#end	
+			</td>			
+			<td><div class="entryTitle">
+				<a href="$base/blogs/${blog.urlName}${entry.permalink}" style="font-size: 24px; color: #000000;">$entry.title</a>
+			</div></td>
+			<td rowspan="2" width="90%" align="right">
+				<div class="entryControl">
+					#i18n("POSTED_BY") $utils.renderUser($entry.author, $request) #i18n("POSTED_AT") $utils.formatDateTime($entry.createTime)<br>
+					<a href="$base/blogs/${blog.urlName}${entry.permalink}">#i18n("ENTRY_PERMALINK")</a>					
+					#if ($entry.trackbackAllowed)
+						| <a href="$base/blogs/${blog.urlName}${entry.permalink}#trackbackList">#i18n("ENTRY_TRACKBACKS")($entry.trackbacks.size())</a>
+			        #end
+					<br/>
+					
+					#if ($entry.commentingAllowed)
+						<a href="$base/blogs/${blog.urlName}${entry.permalink}#commentList">#i18n("ENTRY_COMMENTS")($entry.comments.size())</a>
+        				#if ($user || (!$user && $entry.anonymousCommentingAllowed)) | <a href="$base/blogs/${blog.urlName}${entry.permalink}?mode=comment#commentForm">#i18n("ENTRY_ADD_COMMENT")</a>#end
+				        <br/>
+        			#end	
+	    
+        			#if ($user && ( $entry.author.id == $user.id) )
+            			<a href="$base/editEntryForm.secureaction?id=$entry.id">#i18n("EDIT")</a> | <a href="$base/deleteBlogEntryConfirm.secureaction?id=$entry.id">#i18n("DELETE")</a>
+        			#end					
+        			#if($entry.trackbackAllowed)			
+						<br>#i18n("ENTRY_TRACKBACK_URL"): <i>$base/blogs/${blog.urlName}/trackback/$entry.id</i>
+					#end					
+				</div>
+			</td>
+		</tr>
+		<tr bgcolor="#E2E2E2" valign="top">
+			<td>
+			<div class="entryInfo">
+			#foreach( $category in $entry.categories)
+				$utils.renderCategory($blog, $category, $request) | 
+    		#end
+			</div></td>
+		</tr>
+
+		<tr><td colspan="3">
+		#if ($entry.excerpt)
+			<div class="entryExcerpt">$entry.excerpt</div>
+			<div class="entryBody">(<a href="$base/blogs/${blog.urlName}${entry.permalink}">read more</a>)</div>	
+		#else
+			<div class="entryBody">$entry.body</div>	
+		#end
+		</td></tr>
+		
+	</table>
+</div>
