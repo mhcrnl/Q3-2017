@@ -1,0 +1,10 @@
+Rule 1: Scissors cut paper
+Rule 2: Paper covers rock
+Rule 3: Rock crushes lizard
+Rule 4: Lizard poisons Spock
+Rule 5: Spock smashes (or melts) scissors
+Rule 6: Scissors decapitate lizard
+Rule 7: Lizard eats paper
+Rule 8: Paper disproves Spock
+Rule 9: Spock vaporizes rock
+Rule 10: Rock breaks scissors

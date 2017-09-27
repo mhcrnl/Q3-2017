@@ -1,0 +1,47 @@
+# depslib dependency file v1.0
+1476001600 source:/home/mhcrnl/Documents/Year2016/October/sendEmail2/main.c
+	<stdio.h>
+	<string.h>
+	"tinyfiledialogs.h"
+
+1476001392 /home/mhcrnl/Documents/Year2016/October/sendEmail2/tinyfiledialogs.h
+
+1476001136 source:/home/mhcrnl/Documents/Year2016/October/sendEmail2/tinyfiledialogs.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"tinyfiledialogs.h"
+	<Windows.h>
+	<Shlobj.h>
+	<sys/stat.h>
+	<conio.h>
+	<limits.h>
+	<unistd.h>
+	<dirent.h>
+	<termios.h>
+	<sys/utsname.h>
+
+1476001600 source:/home/mhcrnl/Documents/Year2016/October/tinyFileDialog/main.c
+	<stdio.h>
+	<string.h>
+	"tinyfiledialogs.h"
+
+1476001392 /home/mhcrnl/Documents/Year2016/October/tinyFileDialog/tinyfiledialogs.h
+
+1476001136 source:/home/mhcrnl/Documents/Year2016/October/tinyFileDialog/tinyfiledialogs.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"tinyfiledialogs.h"
+	<Windows.h>
+	<Shlobj.h>
+	<sys/stat.h>
+	<conio.h>
+	<limits.h>
+	<unistd.h>
+	<dirent.h>
+	<termios.h>
+	<sys/utsname.h>
+
