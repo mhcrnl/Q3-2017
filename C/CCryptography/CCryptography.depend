@@ -1,0 +1,50 @@
+# depslib dependency file v1.0
+1506505604 source:/home/mhcrnl/Q3#2017/C/CCryptography/crypto.c
+	"crypto.h"
+
+1506505604 /home/mhcrnl/Q3#2017/C/CCryptography/crypto.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1506599228 source:/home/mhcrnl/Q3#2017/C/CCryptography/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"crypto.h"
+	"fileoper.h"
+	"tictactoe.h"
+	"run_main.h"
+
+1506517515 /home/mhcrnl/Q3#2017/C/CCryptography/fileoper.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1506517515 source:/home/mhcrnl/Q3#2017/C/CCryptography/fileoper.c
+	"fileoper.h"
+
+1506515455 /home/mhcrnl/Q3#2017/C/CCryptography/tictactoe.h
+	<stdio.h>
+	<stdlib.h>
+
+1506516946 source:/home/mhcrnl/Q3#2017/C/CCryptography/tictactoe.c
+	"tictactoe.h"
+
+1506599287 /home/mhcrnl/Q3#2017/C/CCryptography/run_main.h
+	<stdlib.h>
+	<unistd.h>
+	<ncurses.h>
+	<time.h>
+	<string.h>
+	"sudoku.h"
+
+1506598371 /home/mhcrnl/Q3#2017/C/CCryptography/sudoku.h
+	<stdbool.h>
+
+1506598371 source:/home/mhcrnl/Q3#2017/C/CCryptography/sudoku.c
+	<stdlib.h>
+	<time.h>
+	<string.h>
+	"sudoku.h"
+

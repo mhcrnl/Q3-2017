@@ -1,0 +1,15 @@
+[Project]
+FileName=C:\Dev-C++\Examples\Jackpot\Jackpot.dev
+Name=Jackpot
+Use_gpp=1
+UnitCount=1
+NoConsole=0
+Icon=C:\DEV-C++\Icon\Mainicon.ico
+ObjFile=
+IsDll=0
+ResFiles=C:\Dev-C++\Examples\Jackpot\rsrc.rc
+
+[Unit1]
+FileName=C:\Dev-C++\Examples\Jackpot\main.cpp
+FileTime=685204879
+

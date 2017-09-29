@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1506687552 source:/home/mhcrnl/Q3#2017/Cpp/GuessNumber/main.cpp
+	<iostream>
+	"GuessNumber.h"
+
+1506687622 /home/mhcrnl/Q3#2017/Cpp/GuessNumber/include/GuessNumber.h
+	<iostream>
+
+1506687674 source:/home/mhcrnl/Q3#2017/Cpp/GuessNumber/src/GuessNumber.cpp
+	"GuessNumber.h"
+

@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1506601740 source:/home/mhcrnl/Q3#2017/C/ncurses_salut/main.c
+	<stdio.h>
+	<stdlib.h>
+	<ncurses.h>
+

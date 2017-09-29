@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1506500692 source:/home/mhcrnl/Q3#2017/C/CSimpleShell/main.c
+	<stdio.h>
+	<stdlib.h>
+	<sys/types.h>
+	<sys/wait.h>
+	<unistd.h>
+
