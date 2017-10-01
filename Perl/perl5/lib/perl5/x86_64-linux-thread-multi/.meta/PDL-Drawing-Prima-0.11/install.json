@@ -1,0 +1,1 @@
+{"target":"PDL::Drawing::Prima","version":"0.11","name":"PDL::Drawing::Prima","dist":"PDL-Drawing-Prima-0.11","pathname":"D/DC/DCMERTENS/PDL-Drawing-Prima-0.11.tar.gz","provides":{"PDL::Drawing::Prima":{"version":"0.11","file":"lib/PDL/Drawing/Prima.pm.PL"},"PDL::Drawing::Prima::Utils":{"file":"lib/PDL/Drawing/Prima/Utils.pm.PL","version":"0.11"}}}

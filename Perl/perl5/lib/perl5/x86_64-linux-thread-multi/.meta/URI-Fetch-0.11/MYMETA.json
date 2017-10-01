@@ -1,0 +1,58 @@
+{
+   "abstract" : "Smart URI fetching/caching",
+   "author" : [
+      "Benjamin Trott <ben+cpan@stupidfool.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 5.032, CPAN::Meta::Converter version 2.150001, CPAN::Meta::Converter version 2.142060",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "URI-Fetch",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Carp" : "0",
+            "Class::ErrorHandler" : "0",
+            "LWP::UserAgent" : "0",
+            "Storable" : "0",
+            "URI" : "0",
+            "base" : "0",
+            "constant" : "0",
+            "perl" : "5.008_001",
+            "strict" : "0",
+            "warnings" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Data::Dumper" : "0",
+            "Test::More" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "homepage" : "https://github.com/neilbowers/URI-Fetch",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/neilbowers/URI-Fetch.git",
+         "web" : "https://github.com/neilbowers/URI-Fetch"
+      }
+   },
+   "version" : "0.11"
+}

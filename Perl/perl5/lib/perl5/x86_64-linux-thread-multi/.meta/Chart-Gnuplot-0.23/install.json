@@ -1,0 +1,1 @@
+{"dist":"Chart-Gnuplot-0.23","version":"0.23","provides":{"Chart::Gnuplot::Util":{"file":"lib/Chart/Gnuplot/Util.pm"},"Chart::Gnuplot":{"version":"0.23","file":"lib/Chart/Gnuplot.pm"},"Chart::Gnuplot::DataSet":{"file":"lib/Chart/Gnuplot.pm","version":"0.23"}},"pathname":"K/KW/KWMAK/Chart/Gnuplot/Chart-Gnuplot-0.23.tar.gz","name":"Chart::Gnuplot","target":"Chart::Gnuplot"}

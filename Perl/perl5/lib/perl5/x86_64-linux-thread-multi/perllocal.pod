@@ -1,0 +1,418 @@
+=head2 Fri Oct 23 19:02:53 2015: C<Module> L<App::cpanminus|App::cpanminus>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.7039>
+
+=item *
+
+C<EXE_FILES: bin/cpanm>
+
+=back
+
+=head2 Fri Oct 23 19:04:18 2015: C<Module> L<DateTime::Format::Mail|DateTime::Format::Mail>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.402>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Oct 23 19:04:25 2015: C<Module> L<DateTime::Format::W3CDTF|DateTime::Format::W3CDTF>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.06>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Oct 23 19:04:29 2015: C<Module> L<Class::Data::Inheritable|Class::Data::Inheritable>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.08>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Oct 23 19:04:52 2015: C<Module> L<Digest::SHA1|Digest::SHA1>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.13>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Oct 23 19:05:04 2015: C<Module> L<XML::Atom|XML::Atom>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.41>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Oct 23 19:05:14 2015: C<Module> L<Class::ErrorHandler|Class::ErrorHandler>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.04>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Oct 23 19:05:24 2015: C<Module> L<Module::Pluggable|Module::Pluggable>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.2>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Oct 23 19:05:39 2015: C<Module> L<URI::Fetch|URI::Fetch>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.11>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Oct 23 19:05:43 2015: C<Module> L<Feed::Find|Feed::Find>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.07>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Oct 23 19:05:49 2015: C<Module> L<Test::Manifest|Test::Manifest>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.02>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Oct 24 17:03:10 2015: C<Module> L<UNIVERSAL::require|UNIVERSAL::require>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.18>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sat Oct 24 17:03:14 2015: C<Module> L<Class::Accessor|Class::Accessor>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.34>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Oct 27 20:52:48 2015: C<Module> L<Module::ScanDeps|Module::ScanDeps>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.20>
+
+=item *
+
+C<EXE_FILES: script/scandeps.pl>
+
+=back
+
+=head2 Tue Oct 27 20:53:18 2015: C<Module> L<Module::Install|Module::Install>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.16>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Oct 27 20:53:19 2015: C<Module> L<Module::Install::AuthorTests|Module::Install::AuthorTests>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.002>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Tue Oct 27 20:53:35 2015: C<Module> L<Module::Starter|Module::Starter>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.71>
+
+=item *
+
+C<EXE_FILES: bin/module-starter>
+
+=back
+
+=head2 Mon Nov  2 15:57:11 2015: C<Module> L<Chart::Gnuplot|Chart::Gnuplot>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.23>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun Nov  8 18:02:56 2015: C<Module> L<Prima|Prima>
+
+=over 4
+
+=item *
+
+C<installed into: /home/mhcrnl/perl5/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.45>
+
+=item *
+
+C<EXE_FILES: utils/fmview utils/gencls utils/p-class utils/podview utils/tmlink Prima/VB/cfgmaint Prima/VB/VB>
+
+=back
+
