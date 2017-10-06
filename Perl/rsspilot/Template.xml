@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+ <channel>
+  <title></title>
+  <link></link>
+  <description></description>
+  <lastBuildDate></lastBuildDate>
+  <generator>RSSPilot V1.00.A Beta</generator>
+  <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+
+  <item>
+   <title>__Enter_Title_Here __[Internal Error]</title>
+   <description></description>
+   <link></link>
+   <pubDate></pubDate>
+   <guid isPermaLink="false"></guid>
+  </item>
+
+ </channel>
+</rss>
