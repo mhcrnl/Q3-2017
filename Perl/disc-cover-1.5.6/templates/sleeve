@@ -1,0 +1,12 @@
+% Template for Disc-Cover
+% Author: J.I. van Hemert
+% Date: 2003/01/09
+% Description: simple sleeve insert
+\framebox{\parbox[c][118mm][t]{118mm}
+{
+\vspace{1\baselineskip}
+\DCformattedhead{0.9\linewidth}
+\vspace{0.25\baselineskip}
+\DCtracks
+}}
+

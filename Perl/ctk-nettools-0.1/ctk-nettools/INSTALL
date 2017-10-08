@@ -1,0 +1,9 @@
+INSTALLATION
+
+./configure --prefix=<if there's a prefix> \
+	--with-TEMPLATES_URL=<URL_of_your_templates_server> \
+	--with-perl_dir=<perl lib directory>
+
+(if you don't specify any option you will get the Chez settings)
+
+make install.

@@ -1,0 +1,2142 @@
+# $Id: imc.dist,v 1.12 2005/04/01 19:38:08 verthezp Exp $
+# $Name: R4_3 $
+#___________________________________________________________________
+#                            imc 4.3
+#
+# Image Compiler
+#___________________________________________________________________
+
+# Copyright (C) 1998, 1999, 2002 by Peter Verthez
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+# Written by Peter Verthez, <Peter.Verthez@advalvas.be>.
+
+require 5.003_23;
+
+use strict;
+use diagnostics;
+use GD;
+use CGI;
+use CGI::Carp;
+
+######################################################################
+###
+###  Variables set or used by the configure program
+###
+######################################################################
+
+my $version = sprintf("%d.%02d", q$Name: R4_3 $ =~ /R(\d+)_(\d+)/);
+my $max_integer = @MAXINT@;
+my $cpp = '@CPP@';
+my $cpp_path='@CPP_PATH@';
+my $copyright = "@COPYRIGHT@";
+my $debug_lexer = $ENV{"IMC_DEBUG_LEXER"};
+
+$cpp_path =~ s|[^/]*$||;
+$cpp      = "$cpp_path/$cpp";
+
+######################################################################
+###
+###  Some global variables
+###
+######################################################################
+
+my $inputdir = "";
+my @includedirs = ();
+my $inputfile;
+my $outputfile;
+my $outputtype;
+my $quality = undef;
+my $image;
+my $origin_is_bottom;       # 1 if origin is at bottom
+
+######################################################################
+###
+###  Some general functions
+###
+######################################################################
+
+sub minimum {
+  return ($_[0] < $_[1]) ? $_[0] : $_[1];
+}
+
+sub maximum {
+  return ($_[0] < $_[1]) ? $_[1] : $_[0];
+}
+
+sub check_integer {
+  my $result = ($_[0] =~ /^\-?\d+$/);
+  $result = ($result and (abs($result) < $max_integer));
+  if ($result and (@_ > 1)) {
+    $result = $result && ($_[0] >= $_[1]);
+    if ($result and (@_ > 2)) {
+      $result = $result && ($_[0] <= $_[2]);
+    }
+  }
+  return $result;
+}
+
+sub check_float {
+  my $result = ($_[0] =~ /^\-?\d+.?\d*$/);
+  if ($result and (@_ > 1)) {
+    $result = $result && ($_[0] >= $_[1]);
+    if ($result and (@_ > 2)) {
+      $result = $result && ($_[0] <= $_[2]);
+    }
+  }    
+  return $result;
+}
+
+sub add_point {
+  return ($_[0] + $_[2], $_[1] + $_[3]);
+}
+
+sub round {
+  return int($_[0] + 0.5);
+}
+
+######################################################################
+###
+###  Environment dependent subroutines
+###  (To web or not to web, that is the question...)
+###
+######################################################################
+
+my $CGI;
+
+sub error_handler {
+  my $error_string = shift;
+  if ($CGI) {
+    print $CGI->header("text/html");
+    print $CGI->start_html(-title => 'Error',
+			   -BGCOLOR => 'White');
+    print "<STRONG>Error: </STRONG><P>";
+    print "$error_string<BR>";
+    if ($cpp eq "") {
+      print "<BR>Note: imc configured to run without pre-processor !<BR>";
+    }
+    print $CGI->end_html();
+  }
+  else {
+    print STDERR "Error: $error_string\n";
+    if ($cpp eq "") {
+      print STDERR
+	  "\nNote: imc configured to run without pre-processor !\n";
+    }
+  }
+  exit 1;
+}
+
+sub supported_output_types {
+  return split /\s+/, "@SUPP_OUTPUT@";
+}
+
+sub supported_input_types {
+  return split /\s+/, "@SUPP_INPUT@";
+}
+
+sub get_image_type {
+  my ($file) = @_;
+  my ($type);
+  for ($file) {
+    /\.png$/ && do { $type = "PNG"; last; };
+    /\.xbm$/ && do { $type = "XBM"; last; };
+    /\.xpm$/ && do { $type = "XPM"; last; };
+    /\.jpg$/ && do { $type = "JPG"; last; };
+    /\.gif$/ && do { $type = "GIF"; last; };
+  }
+  return $type;
+}
+
+sub do_input_image {
+  my ($filename) = @_;
+  my ($error, $image) = "";
+  my @supported = supported_input_types();
+  if (!open(IM, "$filename")) {
+    $error = "Cannot open file '$filename'";
+  }
+  else {
+    my $image_type = get_image_type($filename);
+    if (! grep /^$image_type$/, @supported) {
+      $error = "Image type for input file '$filename' not supported.\n"
+	  . "Supported types are: @supported\n";
+    }
+    else {
+      my $image_handle = \*IM;
+      for (get_image_type($filename)) {
+	/^PNG$/ && do { $image = newFromPng GD::Image($image_handle); last; };
+	/^XBM$/ && do { $image = newFromXbm GD::Image($image_handle); last; };
+	/^XPM$/ && do { $image = newFromXpm GD::Image($image_handle); last; };
+	/^JPG$/ && do { $image = newFromJpeg GD::Image($image_handle); last; };
+	/^GIF$/ && do { $image = newFromGif GD::Image($image_handle); last; };
+      }
+      if (!defined $image) {
+	$error = "Could not load image from input file '$filename'\n";
+      }
+      close $image_handle;
+    }
+  }
+  return ($error, $image);
+}
+
+sub do_output_image {
+  my ($fh) = @_;
+  my ($error) = "";
+  my @supported = supported_output_types();
+  for ($outputtype) {
+    /^PNG$/ && do { print $fh $CGI->header("image/png") if $CGI;
+		    print $fh $image->png;
+		    last;
+		  };
+    /^JPG$/ && do { print $fh $CGI->header("image/jpeg") if $CGI;
+		    print $fh $image->jpeg($quality);
+		    last;
+		  };
+    /^GIF$/ && do { print $fh $CGI->header("image/gif") if $CGI;
+		    print $fh $image->gif;
+		    last;
+		  };
+  }
+  return $error;
+}
+
+sub init_program {
+  $ENV{PATH}='/bin:/usr/bin';
+  if ($ENV{'SERVER_PROTOCOL'}) {
+    $CGI = new CGI;
+    $inputfile = $CGI->param('file');
+    @includedirs = $CGI->param('include');
+    my $quality = $CGI->param('quality') || $quality;
+    if ($quality !~ /^\d+$/ or $quality < 0 or $quality > 100) {
+      error_handler("Quality should be an integer between 0 and 100\n");
+    }
+    $inputfile or
+	error_handler
+	    ("Name of inputfile must be given on URL:  ".
+	     "<CODE>.../imc?file=<EM>filename</EM>".
+	     "{&include=<EM>includedir</EM>}*</CODE>");
+    $outputtype = "PNG";
+  }
+  else {
+    my $usage_string =
+	"Usage: imc [-v] [-h] [-q jpg_quality] [inputfile] -o outputfile {-I includedir}*\n";
+    while (@ARGV) {
+      my $arg = shift @ARGV;
+      if ($arg =~ /^\-/) {
+	if ($arg eq "-o") {
+	  $outputfile = shift @ARGV;
+	  $outputtype = get_image_type($outputfile);
+	  if (!defined $outputtype) {
+	    my @supported = supported_output_types();
+	    error_handler("Image type for output file \"$outputfile\" not supported.\n".
+			  "Supported types are: @supported\n");
+	  }
+	}
+	elsif ($arg eq "-I") {
+	  my $val = shift @ARGV;
+	  @includedirs = (@includedirs, $val);
+	}
+	elsif ($arg eq "-v") {
+	  print "Image Compiler $version\n";
+	  print "$copyright\n\n";
+	  print "This program is free software, distributed under the GPL,\n";
+	  print "and comes with ABSOLUTELY NO WARRANTY, as detailed by ".
+	      "the GPL.\n";
+	  exit 0;
+	}
+	elsif ($arg eq "-q") {
+	  $quality = shift @ARGV;
+	  if ($quality !~ /^\d+$/ or $quality < 0 or $quality > 100) {
+	    error_handler("Quality should be an integer between 0 and 100\n");
+	  }
+	}
+	elsif ($arg eq "-h") {
+	  print $usage_string;
+	  print "Details: \n";
+	  print "  -v              prints the version number, then quits\n";
+	  print "  -h              prints this help text, then quits\n";
+	  print "  inputfile       the input file, STDIN if omitted\n";
+	  print "  -o outputfile   the output file, mandatory\n";
+	  print "  -I includedir   a directory to be appended to ".
+	      "the standard include path\n";
+	  print "Report bugs to <Peter.Verthez\@advalvas.be> (please include ".
+	      "the version number).\n";
+	  exit 0;
+	}
+	else { error_handler("Unrecognized option $arg\n".$usage_string); }
+      }
+      elsif (!defined $inputfile) {
+	$inputfile = $arg;
+      }
+      else { error_handler("Unexpected argument $arg\n".$usage_string); }
+    }
+    $outputfile or 
+	error_handler("No output file given...\n".$usage_string);
+  }
+  if ((defined $inputfile) and ($inputfile =~ /(.*)?\/[^\/]+$/)) {
+    $inputdir = $1;
+  }
+  do_moveto(0,0);
+}
+
+sub output_image {
+  my $output;
+  if ($CGI) {
+    $output = \*STDOUT;
+  }
+  else {
+    open OUTPUT, ">$outputfile"
+	or error_handler("Can't open output file '$outputfile'.");
+    $output = \*OUTPUT;
+  }
+  binmode $output;
+  my $error = do_output_image ($output);
+  if ($error) {
+    error_handler($error);
+  }
+  if (!$CGI) {
+    close $output;
+  }
+}
+
+######################################################################
+###
+###  Color functions
+###
+######################################################################
+
+my $bg_color;               # index of the background color (0 if defined)
+my $bg_non_bg_color;        # index of the color with same values as
+                            # the background color
+my $tp_color;               # index of the transparent color
+my $tp_non_tp_color;        # index of the color with same values as
+                            # the transparent color
+
+# the following variables can be localized:
+use vars qw($drawcolor);    # color to draw
+use vars qw($fillcolor);    # color to fill
+use vars qw($textcolor);    # color to print text
+
+sub set_background_color {
+  # must be initially used to set default background color !!
+  my ($model, @rgb) = @_;
+  my $is_tp;
+  if ($rgb[0] eq "TRANSPARENT") {
+    $is_tp = 1;
+    @rgb = (255, 255, 255);
+  }
+  if (defined $bg_color) {
+    $image->colorDeallocate($bg_color);
+  }
+  $bg_non_bg_color = $image->colorExact(@rgb);
+  $bg_color = $image->colorAllocate(@rgb);
+  if ($is_tp) {
+    $image->transparent($bg_color);
+    $tp_color = $bg_color;
+    $tp_non_tp_color = $bg_non_bg_color;
+  }
+  elsif ($image->transparent == $bg_color) {
+    $image->transparent(-1);
+    $tp_color = undef;
+    $tp_non_tp_color = undef;
+  }
+}
+
+sub get_unique_color {
+  my ($the_image) = @_;
+  my (@rgb) = (int(rand(255)), int(rand(255)), int(rand(255)));
+  while ($the_image->colorExact(@rgb) != -1) {
+    $rgb[0] = ($rgb[0] + 1) % 256;
+    if ($rgb[0] == 0) {
+      $rgb[1] = ($rgb[1] + 1) % 256;
+      if ($rgb[1] == 0) {
+	$rgb[2] = ($rgb[2] + 1) % 256;
+	if ($rgb[2] == 0) {
+	  $rgb[0] += 1;
+	}
+      }
+    }
+  }
+  return ("RGB", @rgb);
+}
+
+sub get_color {
+  my ($model, @rgb) = @_;
+  my $result;
+  if ($rgb[0] eq "TRANSPARENT") {
+    if (defined $tp_color) {
+      $result = $tp_color;
+    }
+    else {
+      ($model, @rgb) = get_unique_color($image);
+      $result = $image->colorAllocate(@rgb);
+      if ($result == -1) {
+	error_handler("Cannot allocate transparent color");
+      }
+      else {
+	$image->transparent($result);
+	$tp_color = $result;
+      }
+    }
+  }
+  else {
+    my ($eq_bg, $eq_tp);
+    $result = $image->colorExact(@rgb);
+    if ($result == $bg_color) {
+      $result = $bg_non_bg_color;
+      $eq_bg = 1;
+    }
+    if ((defined $tp_color) and ($result == $tp_color)) {
+      $result = $tp_non_tp_color;
+      $eq_tp = 1;
+    }
+    if ($result == -1) {
+      $result = $image->colorAllocate(@rgb);
+      if ($result == -1) {
+	error_handler("Cannot allocate color ".
+		      "Red:$rgb[0] Green:$rgb[1] Blue:$rgb[2]");
+      }
+      $bg_non_bg_color = $result if $eq_bg;
+      $tp_non_tp_color = $result if $eq_tp;
+    }
+  }
+  return $result;
+}
+
+sub delete_color {
+  $image->colorDeallocate($_[0]);
+}
+
+sub copy_color_table {
+  my ($old_image, $new_image) = @_;
+  my $index;
+
+  for ($index = 0; $index < 255; $index++) {
+    $new_image->colorDeallocate($index);
+  }
+  for ($index = 0; $index < $old_image->colorsTotal; $index++) {
+    $new_image->colorAllocate($old_image->rgb($index));
+  }
+  if (defined $tp_color) {
+    $new_image->transparent($tp_color);
+  }
+}
+
+sub parse_X11_numeric_colorspec {
+  my ($arg, @result) = @_;
+  if (length($arg) % 3 != 0) {
+    $result[0] = "'#$arg' is not a valid X11 color specification";
+  }
+  else {
+    my $l = length($arg) / 3;
+    if (($l < 1) or ($l > 4)) {
+      $result[0] = "'#$arg' is not a valid X11 color specification";
+    }
+    else {
+      $arg =~ /^([0-9A-F]{$l})([0-9A-F]{$l})([0-9A-F]{$l})$/;
+      my @rgb = ("${1}0", "${2}0", "${3}0");
+      @result = ("RGB", map {
+	while (length > 2) {
+	  my $last = substr($_, -1, 1);
+	  $_ = substr($_, 0, $#_ - 1);
+	  if ($last =~ /[89A-F]/) {
+	    if (/F$/) {
+	      substr($_, -1, 1) = "0";
+	    }
+	    else {
+	      substr($_, -1, 1) =~ tr/0-89A-E/1-9AB-F/;
+	    }
+	  }
+	}
+	hex;
+      } @rgb );
+    }
+  }
+  return @result;
+}
+
+my %rgb_txt_hash = ();
+my $rgbfile;
+
+sub read_rgb_txt_hash {
+  my ($error) = "";
+  if (-r "rgb.txt") {
+    $rgbfile = "rgb.txt";
+  }
+  elsif (-r "$inputdir/rgb.txt") {
+    $rgbfile = "$inputdir/rgb.txt";
+  }
+  elsif (-r "/etc/X11/rgb.txt") {
+    $rgbfile = "/etc/X11/rgb.txt";
+  }
+  elsif (-r "/usr/lib/X11/rgb.txt") {
+    $rgbfile = "/usr/lib/X11/rgb.txt";
+  }
+  if ($rgbfile) {
+    open RGBTXT, $rgbfile;
+    while (<RGBTXT>) {
+      if (/^\s*(\d+)\s+(\d+)\s+(\d+)\s+(.*)\s+$/) {
+	$rgb_txt_hash{uc($4)} = [$1, $2, $3];
+      }
+    }
+    close RGBTXT;
+  }
+  else {
+    $error = "Could not find rgb.txt file";
+  } 
+  return $error;
+}
+
+sub parse_X11_string_colorspec {
+  my ($error, $arg, @result) = ("", @_);
+  $error = read_rgb_txt_hash() unless %rgb_txt_hash;
+  if ($error) {
+    $result[0] = $error;
+  }
+  else {
+    my $rgb_result = $rgb_txt_hash{uc($arg)};
+    if (defined $rgb_result) {
+      $result[0] = "RGB";
+      $result[1] = $rgb_result->[0];
+      $result[2] = $rgb_result->[1];
+      $result[3] = $rgb_result->[2];
+    }
+    else {
+      $result[0] = "Could not find color '$arg' in $rgbfile";
+    }
+  }
+  return @result;
+}
+
+sub parse_colorspec {
+  # returns four values (model, red, green, blue) if ok
+  # returns a singleton (error message) if not ok
+  my @spec = @_;
+  my @restargs;
+  my @result = ();
+  $spec[0] = uc($spec[0]);
+  if ($spec[0] eq "RGB") {
+    if ((@spec >= 4)
+	and check_integer($spec[1], 0, 255)
+	and check_integer($spec[2], 0, 255)
+	and check_integer($spec[3], 0, 255)) {
+      @result = @spec[0..3];
+      @restargs = @spec[4..$#spec] if (@spec > 4);
+    }
+    else {
+      $result[0] = "RGB color specification '@spec' should use 3 integers ".
+	           "between 0 and 255";
+    }
+  }
+  elsif ($spec[0] eq "TRANSPARENT") {
+    @result = ("RGB", $spec[0]);
+    @restargs = @spec[1..$#spec] if (@spec > 1);
+  }
+  elsif ($spec[0] eq "X11") {
+    my $arg = $spec[1];
+    @restargs = @spec[2..$#spec] if (@spec > 2);
+    if ($arg =~ /^\#([0-9a-fA-F]*)/) {
+      @result = parse_X11_numeric_colorspec(uc($1));
+    }
+    else {
+      @result = parse_X11_string_colorspec($arg);
+    }
+  }
+  else {
+    $result[0] = "Unknown color specification '@spec'";
+  }
+  if (@result == 1) {
+    $result[1] = 0; $result[2] = 0; $result[3] = 0;
+  }
+  return (@result, @restargs);
+}
+
+######################################################################
+###
+###  Angles
+###
+######################################################################
+
+my $angledirection;         # 1 if clockwise, -1 if counterclockwise
+
+sub split_arc {
+  my ($start, $end) = @_;
+  $start = $start * $angledirection;
+  $end   = $end * $angledirection;
+  my @arc_parts = ( [minimum($start, $end), maximum($start, $end)] );
+  $start = $arc_parts[0][0];
+  $end   = $arc_parts[0][1];
+
+  if ($end - $start >= 360) {
+    @arc_parts = ( [ 0, 360] );
+  }
+  else {
+    while ($end <= 0) { $start += 360; $end += 360; }
+    while ($start >= 360) { $start -= 360; $end -= 360; }
+    if ($start * $end < 0) {
+      @arc_parts = ( [$start + 360, 360],
+		     [0, $end] );
+    }
+    elsif (($start - 360) * ($end - 360) < 0) {
+      @arc_parts = ( [$start, 360],
+		     [0, $end - 360] );
+    }
+    else { @arc_parts = ( [$start, $end] ); }
+  }
+  return @arc_parts;
+}
+
+######################################################################
+###
+###  Text and images
+###
+######################################################################
+
+# the following variables can be localized:
+use vars qw($textsize);     # the size for text
+use vars qw($texthalign);   # the horizontal alignment for text
+                            # 0 is LEFT, 1 is CENTER, 2 is RIGHT
+use vars qw($textvalign);   # the vertical alignment for text
+                            # 0 is TOP, 1 is MIDDLE, 2 is BOTTOM
+use vars qw($textrotate);   # angle for text rotation
+use vars qw($textmirror);   # 0 is no mirroring, 1 is horizontal mirroring
+use vars qw($imagehalign);  # the horizontal alignment for images
+                            # 0 is LEFT, 1 is CENTER, 2 is RIGHT
+use vars qw($imagevalign);  # the vertical alignment for images
+                            # 0 is TOP, 1 is MIDDLE, 2 is BOTTOM
+use vars qw($imagerotate);  # angle for image rotation
+use vars qw($imagemirror);  # 0 is no mirroring, 1 is horizontal mirroring
+
+sub parse_alignspec {
+  # returns two values (valign, halign) if ok (both can be undef)
+  # returns two values ("ERROR", error message) if not ok
+  my @spec = @_;
+  my @restargs;
+  my ($valign, $halign, $error);
+  my %valign_keyw = ( "TOP" => 0, "MIDDLE" => 1, "BOTTOM" => 2 );
+  my %halign_keyw = ( "LEFT" => 0, "CENTER" => 1, "RIGHT" => 2 );
+
+  $valign = $valign_keyw{uc($spec[0])};
+  if (defined $valign) {
+    $halign = $halign_keyw{uc($spec[1])};
+    if (defined $halign) {
+      @restargs = @spec[2..$#spec] if (@spec > 2);
+    }
+    else {
+      @restargs = @spec[1..$#spec] if (@spec > 1);
+    }
+  }
+  else {
+    $halign = $halign_keyw{uc($spec[0])};
+    if (defined $halign) {
+      @restargs = @spec[1..$#spec] if (@spec > 1);
+    }
+    else {
+      $error = "Alignment specification needs vertical alignment and/or ".
+	  "horizontal alignment parameter, in that order";
+      return ("ERROR", $error);
+    }
+  }
+  return ($valign, $halign, @restargs);
+}
+
+######################################################################
+###
+###  Supporting drawing width
+###
+######################################################################
+
+# the following variables can be localized:
+use vars qw($drawwidth);    # drawing width
+
+sub create_linebrush {
+  my ($brush, @lineco) = (0, @_);
+  my ($tanx, $width, $height) = 0;
+  if ($lineco[1] == $lineco[3]) {
+    ($width, $height) = (1, $drawwidth);
+  }
+  elsif ($lineco[0] == $lineco[2]) {
+    ($width, $height) = ($drawwidth, 1);
+  }
+  else {
+    $tanx = ($lineco[0] - $lineco[2]) / ($lineco[3] - $lineco[1]);
+    my $cosx = 1 / sqrt(1 + $tanx * $tanx);
+    my $sinx = $cosx * abs($tanx);
+    $width   = round($drawwidth * $cosx);
+    $height  = round($drawwidth * $sinx);
+  }
+  $brush = new GD::Image($width, $height);
+  my $background = $brush->colorAllocate(255, 255, 255);
+  $brush->transparent($background);
+  my $foreground = $brush->colorAllocate($image->rgb($drawcolor));
+  $tanx = -$tanx if $origin_is_bottom;
+  if ($tanx > 0) {
+    $brush->line(0, 0, $width-1, $height-1, $foreground);
+  }
+  else {
+    $brush->line($width-1, 0, 0, $height-1, $foreground);
+  }
+  return $brush;
+}
+
+sub create_squarebrush {
+  my ($brush) = new GD::Image($drawwidth, $drawwidth);
+  my $background = $brush->colorAllocate(255, 255, 255);
+  $brush->transparent($background);
+  my $foreground = $brush->colorAllocate($image->rgb($drawcolor));
+  $brush->filledRectangle(0, 0, $drawwidth-1, $drawwidth-1, $foreground);
+  return $brush;
+}
+
+######################################################################
+###
+###  General image functions
+###
+######################################################################
+
+my @phys_size;              # physical size of the image
+my @log_size;               # size of the drawn-on region
+my $fixed_size;             # has size been specified ?
+my @origin = (0, 0);        # coordinates of lower left corner
+
+# The following variables can be localized
+use vars qw($scalewidth $scaleheight $relwidth $relheight);  
+
+sub is_origin_bottom {
+  my $value = $origin_is_bottom;
+  if (!defined $origin_is_bottom) {
+    $origin_is_bottom = 0;
+  }
+  return $value;
+}
+
+sub get_coord {
+  if (!defined $origin_is_bottom) {
+    $origin_is_bottom = 0;
+  }
+  if ($origin_is_bottom) {
+    return ($_[0] - $origin[0], $phys_size[1] - 1 - $_[1] - $origin[1]);
+  }
+  else {
+    return ($_[0] - $origin[0], $_[1] - $origin[1]);
+  }
+}
+
+sub order_rect_coords {
+  return (minimum($_[0], $_[2]),
+	  minimum($_[1], $_[3]),
+	  maximum($_[0], $_[2]),
+	  maximum($_[1], $_[3]));
+}
+
+sub resize_image {
+  my $old_image = $image;
+  my @new_size  = @_;
+  my @copy_size;
+
+  $copy_size[0] = minimum($new_size[0], $phys_size[0]);
+  $copy_size[1] = minimum($new_size[1], $phys_size[1]);
+
+  my @src_ul;
+  if (is_origin_bottom()) {
+    @src_ul = get_coord($origin[0], $copy_size[1] - 1 + $origin[1]);
+  }
+  else { @src_ul = @origin; }
+  $image = new GD::Image(@new_size);
+  if (!defined $image) {
+    error_handler("Out of memory");
+  }
+  copy_color_table($old_image, $image);
+  @phys_size = @new_size;
+  my @dst_ul;
+  if (is_origin_bottom()) {
+    @dst_ul = get_coord($origin[0], $copy_size[1] - 1 + $origin[1]);
+  }
+  else { @dst_ul = @origin; }
+  $image->copy($old_image, @dst_ul, @src_ul, @copy_size);
+}
+
+sub check_size {
+  if (!$fixed_size) {
+    my @new_log_size = ($_[0] + 1, $_[1] + 1);
+    if ($new_log_size[0] > $log_size[0]) { $log_size[0] = $new_log_size[0]; }
+    if ($new_log_size[1] > $log_size[1]) { $log_size[1] = $new_log_size[1]; }
+    my @new_phys_size = @phys_size;
+    my $resize = 0;
+    while ($log_size[0] > $new_phys_size[0]) {
+      $resize = 1;
+      @new_phys_size = ($new_phys_size[0]*2, $new_phys_size[1]);
+    }
+    while ($log_size[1] > $new_phys_size[1]) {
+      $resize = 1;
+      @new_phys_size = ($new_phys_size[0], $new_phys_size[1]*2);
+    }
+    resize_image(@new_phys_size) if $resize;
+  }
+}
+
+sub init_image {
+  $image = new GD::Image(100, 100);
+  if (!defined $image) {
+    error_handler("Out of memory");
+  }
+  @phys_size = (100, 100);
+  @log_size  = (0, 0);
+  set_background_color("RGB", 255, 255, 255);
+  $drawcolor = get_color("RGB", 0, 0, 0);
+  $fillcolor = get_color("RGB", 0, 0, 0);
+  $textcolor = get_color("RGB", 0, 0, 0);
+  $drawwidth = 1;
+  $textsize  = gdSmallFont;
+  $textvalign = 0;
+  $texthalign = 0;
+  $textrotate = 0;
+  $textmirror = 0;
+  $imagevalign = 0;
+  $imagehalign = 0;
+  $imagerotate = 0;
+  $imagemirror = 0;
+  $angledirection = 1;
+}
+
+sub finish_image {
+  if (($log_size[0] == 0) or ($log_size[1] == 0)) {
+    error_handler("Empty image");
+  }
+  else {
+    resize_image(@log_size) unless $fixed_size;
+  }
+}
+
+######################################################################
+###
+###  Rotate (and optionally mirror) an image
+###
+######################################################################
+
+# This function returns a new image, which is the rotation (of
+# optionally the horizonally mirrored image) of the given image over
+# the given angle.
+# This is a "slow" implementation: to be really fast, it should be in
+# C, but then it should be implemented in the gd library, which is
+# not mine...
+
+sub rotate_and_mirror_image {
+  my ($image, $angle, $mirror) = @_;
+  $angle %= 360;
+
+  my $rad_angle = $angle * atan2(1,1) / 45;   # degrees to radians
+  my $cos = cos($rad_angle);  my $abscos = abs($cos);
+  my $sin = sin($rad_angle);  my $abssin = abs($sin);
+
+  my @size = $image->getBounds;
+  my @new_size;
+  $new_size[0] = round($size[0] * $abscos + $size[1] * $abssin);
+  $new_size[1] = round($size[0] * $abssin + $size[1] * $abscos);
+
+  my $new_image = new GD::Image(@new_size);
+  if (!defined $new_image) {
+    error_handler("Out of memory");
+  }
+
+  my $im_trans = $image->transparent();
+  my $trans_bg;
+  if ($im_trans != -1) {
+    $trans_bg = $new_image->colorAllocate(255,255,255);
+  }
+  else {
+    $trans_bg = $new_image->colorAllocate($image->rgb($im_trans));
+  }
+  $new_image->transparent($trans_bg);
+  
+  my @new_orig;
+  if ($angle < 90) {
+    @new_orig = (round($size[1] * $abssin), 0) }
+  elsif ($angle < 180) {
+    @new_orig = ($new_size[0] - 1, round($size[1] * $abscos)) }
+  elsif ($angle < 270) {
+    @new_orig = ($new_size[0] - 1 - round($size[1] * $abssin),
+		 $new_size[1] - 1) }
+  else {
+    @new_orig = (0, $new_size[1] - 1 - round($size[1] * $abscos)) }
+
+  my ($x, $y, $xa, $ya, $xc, $yc, $col, @rgb);
+  my ($xccos, $xcsin, $yccos, $ycsin);
+  my ($inside);
+  LINE: for ($xa = 0, $xc = $xa - $new_orig[0],
+	        $xccos = $xc * $cos, $xcsin = $xc * $sin;
+	     $xa < $new_size[0];
+	     $xa++, $xc++, $xccos += $cos, $xcsin += $sin) {
+    undef $inside;
+    POINT: for ($ya = 0, $yc = $ya - $new_orig[1],
+		   $yccos = $yc * $cos, $ycsin = $yc * $sin;
+		$ya < $new_size[1];
+		$ya++, $yc++, $yccos += $cos, $ycsin += $sin) {
+      $x = round($xccos + $ycsin);
+      if (($x < 0) or ($x > $size[0])) {
+	defined $inside ? next LINE : next POINT;
+      }
+      $x = $size[0] - 1 - $x if ($mirror == 1);
+      $y = round(- $xcsin + $yccos);
+      if (($y < 0) or ($y > $size[1])) {
+	defined $inside ? next LINE : next POINT;
+      }
+      $inside = 1;
+      $col = $image->getPixel($x, $y);
+      @rgb = $image->rgb($col);
+      $col = $new_image->colorExact(@rgb);
+      if (($col == $trans_bg) and ($im_trans == -1)) {
+	my $model;
+	my @trans_col = @rgb;
+	$new_image->colorDeallocate($trans_bg);
+	while (($trans_col[0] == $rgb[0]) and ($trans_col[1] == $rgb[1])
+	       and ($trans_col[2] == $rgb[2])) {
+	  ($model, @trans_col) = get_unique_color($new_image);
+	}
+	$trans_bg  = $new_image->colorAllocate(@trans_col);
+	$new_image->transparent($trans_bg);
+	$col = -1;
+      }
+      if ($col == -1) { $col = $new_image->colorAllocate(@rgb); }
+      $new_image->setPixel($xa, $ya, $col);
+    }
+  }
+  return $new_image;
+}
+
+######################################################################
+###
+###  Sub-command processing
+###
+######################################################################
+
+sub process_subcommand {
+  my ($error, $comm_hndl, @restargs) = ("", @_);
+  my %commands = %{$comm_hndl};
+
+  while (@restargs and ($error eq "")) {
+    my $subcommand = uc(shift @restargs);
+    my $proc     = $commands{$subcommand};
+    if (!defined $proc) {
+      $error = "Unknown subcommand '$subcommand'";
+    }
+    else {
+      my @args;
+      while (@restargs and !defined $commands{$restargs[0]}) {
+	@args = (@args, shift @restargs);
+      }
+      ($error, @restargs)  = (&$proc(@args), @restargs);
+    }
+  }
+  return ($error, @restargs);
+}
+
+sub do_sub_filled {
+  my ($error, @spec, @restargs) = ("", @_);
+  if (@spec == 0) {
+    $fillcolor = -1;
+  }
+  else {
+    my (@parsed) = parse_colorspec(@spec);
+    if ($parsed[0] ne "RGB") {
+      $error = $parsed[0];
+    }
+    else {
+      $fillcolor = get_color(@parsed[0..3]);
+    }
+    @restargs = @parsed[4..$#parsed] if (@parsed > 4);
+  }
+  return ($error, @restargs);  
+}
+
+use vars qw ($bordercolor);         # for the FILL command
+
+sub do_sub_border {
+  my ($error, @spec, @restargs) = ("", @_);
+  my (@parsed) = parse_colorspec(@spec);
+  if ($parsed[0] ne "RGB") {
+    $error = $parsed[0];
+  }
+  else {
+    $bordercolor = get_color(@parsed[0..3]);
+  }
+  @restargs = @parsed[4..$#parsed] if (@parsed > 4);
+  return ($error, @restargs);  
+}
+
+sub do_sub_size {
+  my ($error, $width, $height, @restargs) = ("", @_);
+  my ($widthpct, $heightpct);
+  if (@_ < 2) {
+    $error = "Size specification needs two parameters: width and height";
+  }
+  if (!check_integer($width, 1)) {
+    if ($width =~ /^([^%]+)%$/) {
+      $widthpct = $1;
+      if (!check_float($widthpct, 0.000000001)) {
+	$error = "Width '$width' should be an integer number bigger than 0 ".
+	    "or a floating point percentage bigger than 0";
+      }
+    }
+  }
+  if (!check_integer($height, 1)) {
+    if ($height =~ /^([^%]+)%$/) {
+      $heightpct = $1;
+      if (!check_float($heightpct, 0.000000001)) {
+	$error = "Height '$height' should be an integer number bigger than 0 ".
+	    "or a floating point percentage bigger than 0";
+      }
+    }
+  }
+  if ($error eq "") {
+    $relwidth   = $widthpct / 100 if defined $widthpct;
+    $relheight  = $heightpct / 100 if defined $heightpct;
+    $scalewidth = $width;
+    $scaleheight = $height;
+  }
+  return ($error, @restargs);
+}
+
+use vars qw($closedarc);     # whether an arc should be drawn closed or not
+
+sub do_sub_closed {
+  my ($error, @restargs) = ("", @_);
+  my $arg = uc($restargs[0]);
+  if ($arg eq "PIE") {
+    $closedarc = 1;
+    shift @restargs;
+  }
+  elsif ($arg eq "SEGMENT") {
+    $closedarc = 2;
+    shift @restargs;
+  }
+  else {
+    $closedarc = 1;
+  }
+  return ($error, @restargs);
+}
+
+######################################################################
+###
+###  Command processing
+###
+######################################################################
+
+# What to do for the different keywords
+# Format of each hash value: [ command procedure, sub procedures ]
+my %keyword_proc =
+    ("MOVETO"       => [ \&do_moveto ],
+     "LINETO"       => [ \&do_lineto,
+			 { "COLOUR" => \&do_drawcolor,
+			   "COLOR"  => \&do_drawcolor,
+			   "WIDTH"  => \&do_drawwidth } ],
+     "LINE"         => [ \&do_line,
+			 { "COLOUR" => \&do_drawcolor,
+			   "COLOR"  => \&do_drawcolor,
+			   "WIDTH"  => \&do_drawwidth } ],
+     "INTERLACED"   => [ \&do_interlaced ],
+     "BACKGROUND"   => [ \&do_background ],
+     "LINECOLOUR"   => [ \&do_drawcolor ],
+     "LINECOLOR"    => [ \&do_drawcolor ],
+     "LINEWIDTH"    => [ \&do_drawwidth ],
+     "FILLCOLOUR"   => [ \&do_fillcolor ],
+     "FILLCOLOR"    => [ \&do_fillcolor ],
+     "TEXTCOLOUR"   => [ \&do_textcolor ],
+     "TEXTCOLOR"    => [ \&do_textcolor ],
+     "TEXTSIZE"     => [ \&do_textsize ],
+     "TEXTALIGN"    => [ \&do_textalign ],
+     "TEXTROTATE"   => [ \&do_textrotate ],
+     "TEXTMIRROR"   => [ \&do_textmirror ],
+     "IMAGEALIGN"   => [ \&do_imagealign ],
+     "IMAGEROTATE"  => [ \&do_imagerotate ],
+     "IMAGEMIRROR"  => [ \&do_imagemirror ],
+     "TEXT"         => [ \&do_text,
+			 { "COLOUR" => \&do_textcolor,
+			   "COLOR"  => \&do_textcolor,
+			   "SIZE"   => \&do_textsize,
+			   "ALIGN"  => \&do_textalign,
+			   "ROTATE" => \&do_textrotate,
+			   "MIRROR" => \&do_textmirror } ],
+     "TEXTAT"       => [ \&do_textat,
+			 { "COLOUR" => \&do_textcolor,
+			   "COLOR"  => \&do_textcolor,
+			   "SIZE"   => \&do_textsize,
+			   "ALIGN"  => \&do_textalign,
+			   "ROTATE" => \&do_textrotate,
+			   "MIRROR" => \&do_textmirror } ],
+     "CIRCLE"       => [ \&do_circle,
+			 { "FILLED" => \&do_sub_filled,
+			   "COLOUR" => \&do_drawcolor,
+			   "COLOR"  => \&do_drawcolor,
+			   "WIDTH"  => \&do_drawwidth } ],
+     "ELLIPSE"      => [ \&do_ellipse,
+			 { "FILLED" => \&do_sub_filled,
+			   "COLOUR" => \&do_drawcolor,
+			   "COLOR"  => \&do_drawcolor,
+			   "WIDTH"  => \&do_drawwidth } ],
+     "ARC"          => [ \&do_arc,
+			 { "COLOUR" => \&do_drawcolor,
+			   "COLOR"  => \&do_drawcolor,
+			   "WIDTH"  => \&do_drawwidth,
+			   "CLOSED" => \&do_sub_closed,
+			   "FILLED" => \&do_sub_filled } ],
+     "RECTANGLE"    => [ \&do_rectangle,
+			 { "FILLED" => \&do_sub_filled,
+			   "COLOUR" => \&do_drawcolor,
+			   "COLOR"  => \&do_drawcolor,
+			   "WIDTH"  => \&do_drawwidth } ],
+     "IMAGE"        => [ \&do_image,
+			 { "SIZE"   => \&do_sub_size,
+			   "ALIGN"  => \&do_imagealign,
+			   "ROTATE" => \&do_imagerotate,
+			   "MIRROR" => \&do_imagemirror } ],
+     "SIZE"         => [ \&do_size ],
+     "ORIGIN"       => [ \&do_origin ],
+     "ANGLES"       => [ \&do_angles ],
+     "FILL"         => [ \&do_fill,
+			 { "COLOUR" => \&do_sub_filled,
+			   "COLOR"  => \&do_sub_filled,
+			   "BORDER" => \&do_sub_border } ]
+     );
+
+my $command;               # currently executing command
+# the following variables can be localized:
+use vars qw(@cp);          # current position
+
+sub process_sub_commands {
+  my ($error, @restargs) = ("", @_);
+  if (@restargs) {
+    my $before = $keyword_proc{$command}[1];
+    while (@restargs and ($error eq "")) {
+      ($error, @restargs) = process_subcommand($before, @restargs);
+    }
+  }
+  return ($error, @restargs);
+}
+
+sub do_moveto {
+  my ($error, $x, $y, @restargs) = ("", @_);
+  if (@_ < 2) {
+    $error = "MOVETO command needs two parameters: X and Y coordinate";
+  }
+  elsif (!check_integer($x)) {
+    $error = "X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "Y coordinate '$y' is not an integer number";
+  }
+  else {
+    # MOVETO does not adjust the logical size of the image
+    @cp = ($x, $y);
+  }
+  return ($error, @restargs);
+}
+
+sub do_draw_lineto {
+  my (@dest, $brush) = @_;
+  check_size(@cp);
+  check_size(@dest);
+  my $colorpar  = $drawcolor;
+  if ($drawwidth > 1) {
+    $brush = create_linebrush(@cp, @dest);
+    my (@brush_size) = $brush->getBounds;
+    @brush_size = (int($brush_size[0] / 2), int($brush_size[1] / 2));
+    check_size(add_point(@cp, @brush_size));
+    check_size(add_point(@dest, @brush_size));
+    $image->setBrush($brush);
+    $colorpar = gdBrushed;
+  }
+  my @real_cp   = get_coord(@cp);
+  my @real_dest = get_coord(@dest);
+  $image->line(@real_cp, @real_dest, $colorpar);
+}
+
+sub do_lineto {
+  my ($error, $x, $y, @restargs) = ("", @_);
+  if (@_ < 2) {
+    $error = "LINETO command needs two parameters: X and Y coordinate";
+  }
+  elsif (!check_integer($x)) {
+    $error = "X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "Y coordinate '$y' is not an integer number";
+  }
+  else {
+    my (@dest) = ($x, $y);
+    local $drawcolor = $drawcolor;
+    local $drawwidth = $drawwidth;
+    
+    ($error, @restargs) = process_sub_commands(@restargs);
+    return ($error, @restargs) if ($error ne "");
+
+    do_draw_lineto($x, $y);
+    @cp = @dest;
+  }
+  return ($error, @restargs);
+}
+
+sub do_line {
+  my ($error, $x, $y, @restargs) = ("", @_);
+  if (@_ < 4) {
+    $error = "LINE command needs four parameters: X and Y coordinate ".
+	"of start point and X and Y coordinate of end point";
+  }
+  elsif (!check_integer($x)) {
+    $error = "X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "Y coordinate '$y' is not an integer number";
+  }
+  else {
+    local (@cp) = ($x, $y);
+    ($error, @restargs) = do_lineto(@restargs);
+  }
+  return ($error, @restargs);
+}
+
+sub do_interlaced {
+  my ($error, @restargs) = ("", @_);
+  $image->interlaced(1);
+  return ($error, @restargs);
+}
+
+sub do_background {
+  my ($error, @spec, @restargs) = ("", @_);
+  my (@parsed) = parse_colorspec(@spec);
+  if ($parsed[0] ne "RGB") {
+    $error = $parsed[0];
+  }
+  else {
+    set_background_color(@parsed[0..3]);
+  }
+  @restargs = @parsed[4..$#parsed] if (@parsed > 4);
+  return ($error, @restargs);
+}
+
+sub do_drawcolor {
+  my ($error, @spec, @restargs) = ("", @_);
+  my (@parsed) = parse_colorspec(@spec);
+  if ($parsed[0] ne "RGB") {
+    $error = $parsed[0];
+  }
+  else {
+    $drawcolor = get_color(@parsed[0..3]);
+  }
+  @restargs = @parsed[4..$#parsed] if (@parsed > 4);
+  return ($error, @restargs);
+}
+
+sub do_fillcolor {
+  my ($error, @spec, @restargs) = ("", @_);
+  my (@parsed) = parse_colorspec(@spec);
+  if ($parsed[0] ne "RGB") {
+    $error = $parsed[0];
+  }
+  else {
+    $fillcolor = get_color(@parsed[0..3]);
+  }
+  @restargs = @parsed[4..$#parsed] if (@parsed > 4);
+  return ($error, @restargs);
+}
+
+sub do_textcolor {
+  my ($error, @spec, @restargs) = ("", @_);
+  my (@parsed) = parse_colorspec(@spec);
+  if ($parsed[0] ne "RGB") {
+    $error = $parsed[0];
+  }
+  else {
+    $textcolor = get_color(@parsed[0..3]);
+  }
+  @restargs = @parsed[4..$#parsed] if (@parsed > 4);
+  return ($error, @restargs);
+}
+
+sub do_textsize {
+  my ($error, $arg, @restargs) = ("", @_);
+  my %fonts = ( "5X8"   => gdTinyFont,
+		"TINY"  => gdTinyFont,
+		"6X12"  => gdSmallFont,
+		"SMALL" => gdSmallFont,
+		"7X13"  => gdMediumBoldFont,
+		"MEDIUM"=> gdMediumBoldFont,
+		"8X16"  => gdLargeFont,
+		"LARGE" => gdLargeFont,
+		"9X15"  => gdGiantFont,
+		"GIANT" => gdGiantFont );
+  my $the_font = $fonts{uc($arg)};
+  if (defined $the_font) {
+    $textsize = $the_font;
+  }
+  else {
+    $error = "Supported text sizes are: 5x8, 6x12, 7x13, 8x16 and 9x15\n".
+	"Aliases for these sizes are: TINY, SMALL, MEDIUM, LARGE, GIANT";
+  }
+  return ($error, @restargs);
+}
+
+sub do_textalign {
+  my ($error, @spec, @restargs) = ("", @_);
+  my (@parsed) = parse_alignspec(@spec);
+  if ((defined $parsed[0]) and ($parsed[0] eq "ERROR")) {
+    $error = $parsed[1];
+  }
+  else {
+    $texthalign = $parsed[0] if defined $parsed[0];
+    $textvalign = $parsed[1] if defined $parsed[1];
+  }
+  @restargs = @parsed[2..$#parsed] if (@parsed > 2);
+  return ($error, @restargs);
+}
+
+sub do_textrotate {
+  my ($error, $angle, @restargs) = ("", @_);
+  if (@_ < 1) {
+    $error = "Text rotation specification needs one parameter: the angle";
+  }
+  elsif (!check_integer($angle)) {
+    $error = "The angle '$angle' is not an integer number";
+  }
+  else {
+    $textrotate = $angle * $angledirection;
+  }
+  return ($error, @restargs);
+}
+
+sub do_textmirror {
+  my ($error, @restargs) = ("", @_);
+  $textmirror = 1;
+  return ($error, @restargs);
+}
+
+sub do_imagealign {
+  my ($error, @spec, @restargs) = ("", @_);
+  my (@parsed) = parse_alignspec(@spec);
+  if ((defined $parsed[0]) and ($parsed[0] eq "ERROR")) {
+    $error = $parsed[1];
+  }
+  else {
+    $imagehalign = $parsed[0] if defined $parsed[0];
+    $imagevalign = $parsed[1] if defined $parsed[1];
+  }
+  @restargs = @parsed[2..$#parsed] if (@parsed > 2);
+  return ($error, @restargs);
+}
+
+sub do_imagerotate {
+  my ($error, $angle, @restargs) = ("", @_);
+  if (@_ < 1) {
+    $error = "Image rotation specification needs one parameter: the angle";
+  }
+  elsif (!check_integer($angle)) {
+    $error = "The angle '$angle' is not an integer number";
+  }
+  else {
+    $imagerotate = $angle * $angledirection;
+  }
+  return ($error, @restargs);
+}
+
+sub do_imagemirror {
+  my ($error, @restargs) = ("", @_);
+  $imagemirror = 1;
+  return ($error, @restargs);
+}
+
+sub do_drawwidth {
+  my ($error, $width, @restargs) = ("", @_);
+  if (@_ < 1) {
+    $error = "Line width specification needs one parameter: the width";
+  }
+  elsif (!check_integer($width, 1)) {
+    $error = "Width '$width' should be an integer number bigger than 0";
+  }
+  else {
+    $drawwidth = $width;
+  }
+  return ($error, @restargs);
+}
+
+sub do_import_image {
+  my ($imported_image, $x, $y, $valign, $halign) = @_;
+  my ($width, $height) = $imported_image->getBounds;
+  my @ll_corner
+      = add_point($x, $y,
+		  (- $width * $valign / 2,
+		   - $height * $halign / 2));
+  
+  my @start_pt = @ll_corner;
+  @start_pt = add_point(@start_pt, (0, $height * $halign))
+      if is_origin_bottom();
+  my @ur_corner = add_point(@start_pt,
+			    ($width, is_origin_bottom() ? 0 : $height));
+  check_size(@ur_corner);
+  $image->copy($imported_image, get_coord(@start_pt), 0, 0, $width, $height);
+}
+
+sub do_text {
+  my ($error, $text, @restargs) = ("", @_);
+  if (@_ < 1) {
+    $error = "TEXT command needs one parameter: the text";
+  }
+  else {
+    local $textcolor  = $textcolor;
+    local $textsize   = $textsize;
+    local $textvalign = $textvalign;
+    local $texthalign = $texthalign;
+    local $textrotate = $textrotate;
+    local $textmirror = $textmirror;
+    
+    ($error, @restargs) = process_sub_commands(@restargs);
+    return ($error, @restargs) if ($error ne "");
+
+    my $width = $textsize->width * length($text);
+    my $height = $textsize->height;
+
+    my $textimage = new GD::Image($width, $height);
+    my $trans_bg = $textimage->colorAllocate(255,255,255);
+    $textimage->transparent($trans_bg);
+    my @rgb = $image->rgb($textcolor);
+    my $im_textcolor = $textimage->colorAllocate(@rgb);
+    $textimage->string($textsize, 0, 0, $text, $im_textcolor);
+
+    if (($textrotate != 0) or ($textmirror != 0)) {
+      my $new_image = rotate_and_mirror_image($textimage, $textrotate,
+					      $textmirror);
+      $textimage = $new_image;      
+    }
+
+    do_import_image($textimage, @cp, $textvalign, $texthalign);
+  }
+  return ($error, @restargs);
+}
+
+sub do_textat {
+  my ($error, $x, $y, @restargs) = ("", @_);
+  if (@_ < 3) {
+    $error = "TEXTAT command needs three parameters: the X and Y coordinate ".
+	"and the text";
+  }
+  elsif (!check_integer($x)) {
+    $error = "X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "Y coordinate '$y' is not an integer number";
+  }
+  else {
+    local @cp = ($x, $y);
+    ($error, @restargs) = do_text(@restargs);
+  }
+  return ($error, @restargs);
+}
+
+sub do_rectangle {
+  my ($error, $x, $y, $x_end, $y_end, @restargs) = ("", @_);
+  if (@_ < 4) {
+    $error = "RECTANGLE command needs four parameters: the X and Y coordinate".
+	"of two opposite points";
+  }
+  elsif (!check_integer($x)) {
+    $error = "First X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "First Y coordinate '$y' is not an integer number";
+  }
+  elsif (!check_integer($x_end)) {
+    $error = "Second X coordinate '$x_end' is not an integer number";
+  }
+  elsif (!check_integer($y_end)) {
+    $error = "Second Y coordinate '$y_end' is not an integer number";
+  }
+  else {
+    my $global_fillcolor = $fillcolor;
+    local $fillcolor;
+    local $drawcolor = $drawcolor;
+    local $drawwidth = $drawwidth;
+
+    ($error, @restargs) = process_sub_commands(@restargs);
+    return ($error, @restargs) if ($error ne "");
+
+    my $offset = int(($drawwidth-1)/2);
+    check_size($x+$offset, $y+$offset);
+    check_size($x+$offset, $y_end+$offset);
+    check_size($x_end+$offset, $y+$offset);
+    check_size($x_end+$offset, $y_end+$offset);
+
+    my @real_start = get_coord($x, $y);
+    my @real_end   = get_coord($x_end, $y_end);
+    my ($x1, $y1, $x2, $y2) = order_rect_coords(@real_start, @real_end);
+    if (defined $fillcolor) {
+      $fillcolor = $global_fillcolor if ($fillcolor == -1);
+      $image->filledRectangle($x1, $y1, $x2, $y2, $fillcolor);
+    }
+    my $brush;
+    my $colorpar = $drawcolor;
+    if ($drawwidth > 1) {
+      $brush=create_squarebrush();
+      $image->setBrush($brush);
+      $colorpar= gdBrushed;
+    }
+    $image->rectangle($x1, $y1, $x2, $y2, $colorpar);
+  }
+  return ($error, @restargs);
+}
+
+sub do_arc {
+  my ($error, $x, $y, $x_rad, $y_rad, $start, $end, @restargs)
+      = ("", @_);
+  if (@_ < 6) {
+    $error = "ARC command needs six parameters: the X and Y coordinate ".
+	"of the center, the horizontal and vertical radius, and the ".
+	    "start and end angle";
+  }
+  elsif (!check_integer($x)) {
+    $error = "X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "Y coordinate '$y' is not an integer number";
+  }
+  elsif (!check_integer($x_rad)) {
+    $error = "Horizontal radius '$x_rad' is not an integer number";
+  }
+  elsif (!check_integer($y_rad)) {
+    $error = "Vertical radius '$y_rad' is not an integer number";
+  }
+  elsif (!check_integer($start)) {
+    $error = "Start angle '$start' is not an integer number";
+  }
+  elsif (!check_integer($end)) {
+    $error = "End angle '$end' is not an integer number";
+  }
+  else {
+    local $drawcolor = $drawcolor;
+    local $drawwidth = $drawwidth;
+    local $closedarc = 0;
+    my $global_fillcolor = $fillcolor;
+    local $fillcolor;
+    ($error, @restargs) = process_sub_commands(@restargs);
+    if ((defined $fillcolor) and (!$closedarc)) {
+      $error = "An arc that is not closed cannot be filled";
+    }
+    return ($error, @restargs) if ($error ne "");
+
+    my $origin_fact = is_origin_bottom() ? -1 : 1;
+    my $offset = int(($drawwidth-1)/2);
+    my $d2r    = atan2(1,1) / 45;          # degrees to radians
+
+    my @arc_parts = split_arc($start, $end);
+    
+    my $arc_part;
+    my @start_point;
+    my @end_point;
+    foreach $arc_part (@arc_parts) {
+      my $start_angle = $arc_part->[0];
+      my $end_angle   = $arc_part->[1];
+      my @part_start_point =
+	  add_point
+	      (($x, $y),
+	       (round(($x_rad + $offset) * cos($start_angle * $d2r)),
+		round(($y_rad + $offset) * sin($start_angle * $d2r)
+		      * $origin_fact)));
+      my @part_end_point=
+	  add_point
+	      (($x, $y),
+	       (round(($x_rad + $offset) * cos($end_angle * $d2r)),
+		round(($y_rad + $offset) * sin($end_angle * $d2r)
+		      * $origin_fact)));
+      if (!@start_point) { @start_point = @part_start_point; }
+      @end_point = @part_end_point;
+      check_size(@part_start_point);
+      check_size(@part_end_point);
+      my $start_quadr = int ($start_angle / 90) + 1;
+      my $end_quadr   = int ($end_angle / 90) + 1;
+      if ($start_quadr != $end_quadr) {
+	my $quadr;
+	for ($quadr = $start_quadr; $quadr < $end_quadr; $quadr++) {
+	  if ($quadr == 1) {
+	    check_size (add_point(($x + $offset, $y + $offset),
+				  (0, $y_rad * $origin_fact)));
+	  }
+	  elsif ($quadr == 2) {
+	    check_size (add_point(($x + $offset, $y + $offset),
+				  (-$x_rad, 0)));
+	  }
+	  elsif ($quadr == 3) {
+	    check_size (add_point(($x + $offset, $y + $offset),
+				  (0, -$y_rad * $origin_fact)));
+	  }
+	  else {
+	    check_size (add_point(($x + $offset, $y + $offset),
+				  ($x_rad, 0)));
+	  }
+	}
+      }
+    }
+
+    if (defined $fillcolor) {
+      $fillcolor = $global_fillcolor if ($fillcolor == -1);
+      my $tempcolor = get_color(get_unique_color($image));
+      foreach $arc_part (@arc_parts) {
+	$image->arc(get_coord($x, $y), $x_rad * 2, $y_rad * 2,
+		    $arc_part->[0], $arc_part->[1],
+		    $tempcolor);
+      }
+      my @inside_coord;
+      my $mid_angle;
+      my @mid_point;
+      if ($closedarc > 0) {
+	if ($#arc_parts == 1) {   # arc crosses 0 degree point
+	  $mid_angle = ($arc_parts[0][0] + $arc_parts[1][1]) / 2 + 180;
+	  $mid_angle -= 360 if $mid_angle > 360;
+	}
+	else {   # arc has positive start and end angle
+	  $mid_angle = ($arc_parts[0][0] + $arc_parts[0][1]) / 2;
+	}
+	@mid_point =
+	    add_point
+		(($x, $y),
+		 $x_rad * cos($mid_angle * $d2r),
+		 $y_rad * sin($mid_angle * $d2r) * $origin_fact);
+      }
+      if ($closedarc == 1) {   # PIE
+	if (($start_point[0] != $end_point[0]) or
+	    ($start_point[1] != $end_point[1])) {
+	  $image->line($x, $y, @start_point, $tempcolor);
+	  $image->line($x, $y, @end_point, $tempcolor);
+	}
+	my $factor = (180 <=> (abs($end - $start)));
+	my @diff_coord;
+	my @third_point = ($x, $y);
+	if (abs(abs($end - $start) - 180) < 45) {
+	  @third_point = @mid_point;
+	  $factor = 1;
+	}
+	@diff_coord =
+	    ($factor * (($start_point[0] + $end_point[0] + $third_point[0])
+			/ 3 - $x),
+	     $factor * (($start_point[1] + $end_point[1] + $third_point[1])
+			/ 3 - $y));
+	@inside_coord = add_point(($x, $y), @diff_coord);
+      }
+      elsif ($closedarc == 2) {   # SEGMENT
+	if (($start_point[0] != $end_point[0]) or
+	    ($start_point[1] != $end_point[1])) {
+	  $image->line(@start_point, @end_point, $tempcolor);
+	}
+	@inside_coord =
+	    ((($start_point[0] + $end_point[0])/2 + $mid_point[0]) / 2,
+	     (($start_point[1] + $end_point[1])/2 + $mid_point[1]) / 2);
+	{
+	  use integer;
+	  if (($inside_coord[0] == $mid_point[0]) and
+	      ($inside_coord[1] == $mid_point[1])) {
+	    $inside_coord[0] = undef;
+	  }
+	}
+      }
+      if (defined $inside_coord[0]) {
+	$image->fillToBorder(@inside_coord, $tempcolor, $fillcolor);
+      }
+      delete_color($tempcolor);
+    }
+
+    foreach $arc_part (@arc_parts) {
+      my $start_angle = $arc_part->[0];
+      my $end_angle   = $arc_part->[1];
+      my ($start_x_width) = ($x_rad - int($drawwidth/2)) * 2;
+      my ($start_y_width) = ($y_rad - int($drawwidth/2)) * 2;
+      my ($the_x_width, $the_y_width, $index);
+      for ($index = 0; $index < $drawwidth*2 - 1; $index++) {
+	$the_x_width = $start_x_width + $index;
+	$the_y_width = $start_y_width + $index;
+	$image->arc(get_coord($x, $y),
+		    maximum($the_x_width, 0), maximum($the_y_width, 0),
+		    $start_angle, $end_angle,
+		    $drawcolor);
+      }
+    }
+    if ($closedarc == 1) {
+      if (($start_point[0] != $end_point[0]) or
+	  ($start_point[1] != $end_point[1])) {
+	local @cp = ($x, $y);
+	do_draw_lineto(@start_point);
+	do_draw_lineto(@end_point);
+      }
+    }
+    elsif ($closedarc == 2) {
+      if (($start_point[0] != $end_point[0]) or
+	  ($start_point[1] != $end_point[1])) {
+	local @cp = @start_point;
+	do_draw_lineto(@end_point);
+      }      
+    }
+  }
+  return ($error, @restargs);
+}
+
+sub do_ellipse {
+  my ($error, $x, $y, $x_rad, $y_rad, @restargs) = ("", @_);
+  if (@_ < 4) {
+    $error = "ELLIPSE command needs four parameters: the X and Y coordinate ".
+	"of the center, and the horizontal and vertical radius";
+  }
+  elsif (!check_integer($x)) {
+    $error = "X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "Y coordinate '$y' is not an integer number";
+  }
+  elsif (!check_integer($x_rad)) {
+    $error = "Horizontal radius '$x_rad' is not an integer number";
+  }
+  elsif (!check_integer($y_rad)) {
+    $error = "Vertical radius '$y_rad' is not an integer number";
+  }
+  else {
+    my $global_fillcolor = $fillcolor;
+    local $fillcolor;
+    local $drawcolor = $drawcolor;
+    local $drawwidth = $drawwidth;
+    
+    ($error, @restargs) = process_sub_commands(@restargs);
+    return ($error, @restargs) if ($error ne "");
+
+    check_size(add_point(($x, $y),
+			 (0, $y_rad + int(($drawwidth-1) / 2))));
+    check_size(add_point(($x, $y),
+			 ($x_rad + int(($drawwidth-1) / 2), 0)));
+    if (defined $fillcolor) {
+      $fillcolor = $global_fillcolor if ($fillcolor == -1);
+      my $tempcolor = get_color(get_unique_color($image));
+      $image->arc(get_coord($x, $y), $x_rad * 2, $y_rad * 2, 0, 360,
+		  $tempcolor);
+      $image->fillToBorder(get_coord($x, $y), $tempcolor, $fillcolor);
+      delete_color($tempcolor);
+    }
+    my ($start_x_width) = ($x_rad - int($drawwidth/2)) * 2;
+    my ($start_y_width) = ($y_rad - int($drawwidth/2)) * 2;
+    my ($the_x_width, $the_y_width, $index);
+    for ($index = 0; $index < $drawwidth*2 - 1; $index++) {
+      $the_x_width = $start_x_width + $index;
+      $the_y_width = $start_y_width + $index;
+      $image->arc(get_coord($x, $y),
+		  maximum($the_x_width, 0), maximum($the_y_width, 0), 0, 360,
+		  $drawcolor);
+    }
+  }
+  return ($error, @restargs);
+}
+
+sub do_circle {
+  my ($error, $x, $y, $radius, @restargs) = ("", @_);
+  if (@_ < 3) {
+    $error = "CIRCLE command needs three parameters: the X and Y coordinate ".
+	"of the center, and the radius";
+  }
+  elsif (!check_integer($x)) {
+    $error = "X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "Y coordinate '$y' is not an integer number";
+  }
+  elsif (!check_integer($radius)) {
+    $error = "Radius '$radius' is not an integer number";
+  }
+  else {
+    ($error, @restargs) = do_ellipse($x, $y, $radius, $radius, @restargs);
+  }
+  return ($error, @restargs);
+}
+
+my $included_image_filename;
+my $included_image;
+
+sub do_image {
+  my ($error, $x, $y, $filename, @restargs) = ("", @_);
+  if (@_ < 2) {
+    $error = "IMAGE command needs at least two parameters: X and Y ".
+	"coordinate";
+  }
+  elsif (!check_integer($x)) {
+    $error = "X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "Y coordinate '$y' is not an integer number";
+  }
+  else {
+    my %subcommandhash = %{$keyword_proc{$command}[1]};
+    if (defined $filename and exists $subcommandhash{uc($filename)}) {
+      unshift @restargs, $filename;
+      undef $filename;
+    }
+    my $the_filename = $included_image_filename;
+    $the_filename = $filename if defined $filename;
+    if (!defined $the_filename) {
+      $error = "No image specified; no previous image";
+    }
+    else {
+      if ((!defined $included_image_filename) or
+	  ($the_filename ne $included_image_filename)) {
+	($error, $included_image) = do_input_image($the_filename);
+      }
+      if ($error eq "") {
+	local $scalewidth;
+	local $scaleheight;
+	local $relwidth;
+	local $relheight;
+	local $imagevalign = $imagevalign;
+	local $imagehalign = $imagehalign;
+	local $imagerotate = $imagerotate;
+	local $imagemirror = $imagemirror;
+	my $the_image = $included_image;
+	
+	($error, @restargs) = process_sub_commands(@restargs);
+	return ($error, @restargs) if ($error ne "");
+
+	# scale it
+	my @size = $the_image->getBounds;
+	$scalewidth = int($size[0] * $relwidth) if defined $relwidth;
+	$scaleheight = int($size[1] * $relheight) if defined $relheight;
+	if (defined ($scalewidth) or defined($scaleheight)) {
+	  my $new_image = new GD::Image($scalewidth, $scaleheight);
+	  $new_image->copyResized($the_image, 0, 0, 0, 0,
+				  $scalewidth, $scaleheight,
+				  @size);
+	  $the_image = $new_image;
+	}
+	
+	# mirror/rotate it
+	if (($imagerotate != 0) or ($imagemirror != 0)) {
+	  my $new_image = rotate_and_mirror_image($the_image, $imagerotate,
+						  $imagemirror);
+	  $the_image = $new_image;
+	}
+
+	# import it
+	do_import_image($the_image, $x, $y, $imagevalign, $imagehalign);
+	$included_image_filename = $the_filename;
+      }
+    }
+  }
+  return ($error, @restargs);
+}
+
+sub do_size {
+  my ($error, $width, $height, @restargs) = ("", @_);
+  if (@_ < 2) {
+    $error = "SIZE command needs two parameters: width and height";
+  }
+  elsif (!check_integer($width)) {
+    $error = "Width '$width' is not an integer number";
+  }
+  elsif (!check_integer($height)) {
+    $error = "Height '$height' is not an integer number";
+  }
+  else {
+    @log_size = ($width, $height);
+    resize_image(@log_size);
+    $fixed_size = 1;
+  }
+  return ($error, @restargs);
+}
+
+sub do_origin {
+  my ($error, $spec, @restargs) = ("", @_);
+  if (defined is_origin_bottom()) {
+    $error = "You have to specify the ORIGIN command before any ".
+	"drawing command";
+  }
+  else {
+    if (uc($spec) eq "TOP") {
+      $origin_is_bottom = 0;
+    }
+    elsif (uc($spec) eq "BOTTOM") {
+      $origin_is_bottom = 1;
+    }
+    else {
+      $error = "ORIGIN specification must be TOP or BOTTOM";
+    }
+  }
+  return ($error, @restargs);
+}
+
+sub do_angles {
+  my ($error, $spec, @restargs) = ("", @_);
+  if (uc($spec) eq "CLOCKWISE") {
+    $angledirection = 1;
+  }
+  elsif ((uc($spec) eq "ANTICLOCKWISE") or
+	 (uc($spec) eq "COUNTERCLOCKWISE")) {
+    $angledirection = -1;
+  }
+  else {
+    $error = "ANGLES specification must be CLOCKWISE or ANTICLOCKWISE ".
+	"(or COUNTERCLOCKWISE)";
+  }
+  return ($error, @restargs);
+}
+
+sub do_fill {
+  my ($error, $x, $y, @restargs) = ("", @_);
+  if (@_ < 2) {
+    $error = "FILL command needs two parameters: the X and Y coordinate";
+  }
+  elsif (!check_integer($x)) {
+    $error = "X coordinate '$x' is not an integer number";
+  }
+  elsif (!check_integer($y)) {
+    $error = "Y coordinate '$y' is not an integer number";
+  }
+  else {
+    local $fillcolor = $fillcolor;
+    local $bordercolor;
+
+    ($error, @restargs) = process_sub_commands(@restargs);
+    return ($error, @restargs) if ($error ne "");
+
+    if (defined $bordercolor) {
+      $image->fillToBorder(get_coord($x, $y), $bordercolor, $fillcolor);
+    }
+    else {
+      $image->fill(get_coord($x, $y), $fillcolor);
+    }
+  }
+  return ($error, @restargs);
+}
+
+######################################################################
+###
+###  Main parser functions
+###
+######################################################################
+
+# Language syntax definition:
+# Note: This is after preprocessing, handling of line continuation and comments
+#
+# file      ::= line*
+# line      ::= empty | ( statement [ whitespace* ; whitespace* statement ]* )
+# statement ::= wordtoken [ whitespace argument ]*
+# argument  ::= wordtoken | string | evalexp
+# wordtoken ::= wordtokenchar+
+# string    ::= <"> stringchar* <">
+# evalexp   ::= <{> expchar* <}>
+#
+# wordtokenchar = [a-zA-Z0-9]
+#      i.e. any letter or digit
+# stringchar    = [^\"\\] | \" | \\ | whitespace
+#      i.e. any character, but double-quote and backslash have to be
+#           escaped using a backslash
+# expchar       = [0-9\+\-\/\*\(\)] | whitespace
+#      i.e. only the characters given above, or whitespace
+# whitespace    = <space> | <tab>
+
+my $lineno = 0;
+
+sub syntax_error {
+  my $error_string = shift;
+  error_handler("Syntax error on line $lineno:\n$error_string");
+}
+
+sub eval_expression {
+  my ($expr) = @_;
+  my $result = eval($expr);
+  if (!defined $result) {
+    return ("ERROR", $@);
+  }
+  else { return ("", round($result)); }
+}
+
+sub debug_lexer {
+  my ($text) = @_;
+  if ($debug_lexer) {
+    print STDERR "$text\n";
+  }
+}
+
+sub process_tokens {
+  my @tokens = @_;
+  
+  #Filter out empty tokens
+  @tokens = grep { $_ ne "" } @tokens;
+  
+  if (@tokens) {
+    debug_lexer("T: " . (join "#", @tokens));
+    syntax_error($tokens[1]) if ($tokens[0] eq "ERROR");
+    $command     = uc(shift @tokens);
+    my $proc     = $keyword_proc{$command}[0];
+    syntax_error("Unknown command '$command'") unless defined $proc;
+    my ($error, @restargs)  = &$proc (@tokens);
+    syntax_error($error) unless $error eq "";
+    syntax_error("Superfluous arguments '@restargs'") unless @restargs == 0;
+  }
+}
+
+sub process_line {
+  my $line = shift;
+  my @tokens = ();
+  my $state = "initial";
+  my $token;
+  my $escaped;
+
+  while ($line) {
+    debug_lexer("S: $state");
+    if ($state eq "initial") {
+      if ($line =~ s/^([^\\\;\{\}]*?)\"(.*)$/$2/) {
+	# Found beginning of string
+	$state = "string"; $escaped = 0; $token = "";
+	my $pre = $1;
+	push @tokens, (split /\s+/, $pre);
+      }
+      elsif ($line =~ s/^([^\\\;\"\}]*?)\{(.*)$/$2/) {
+	# Found beginning of evalexp
+	$state = "evalexp"; $token = "";
+	my $pre = $1;
+	push @tokens, (split /\s+/, $pre);
+      }
+      elsif ($line =~ s/^([^\\\;\{\}]*?);(.*)$/$2/) {
+	# Found end of statement
+	my $pre = $1;
+	push @tokens, (split /\s+/, $pre);
+	process_tokens(@tokens);
+	@tokens = ();
+      }
+      else {
+	push @tokens, (split /\s+/, $line);
+	$line = "";
+      }
+    }
+    elsif ($state eq "string") {
+      debug_lexer("STR: val = $line");
+      if ($line =~ s/^([^\"]*?)\\(.*)$/$2/) {
+	# Found backslash
+	debug_lexer("STR: backslash");
+	my $pre = $1;
+	$token .= $pre. "\\";
+	# if $pre is not empty, then this backslash is the first one
+	# else we have to toggle the $escaped variable
+	$escaped = ($pre ? 1 : 1 - $escaped);
+      }
+      elsif ($line =~ s/^([^\\]*?)\"(.*)$/$2/) {
+ 	# Found double quote
+	my $pre = $1;
+	if ($escaped and not $pre) {
+	  debug_lexer("STR: escaped double quote");
+	  # double quote preceded by backslash
+	  $token .= '"';
+	}
+	else {
+	  debug_lexer("STR: double quote");
+	  $token .= $pre;
+	  push @tokens, "$token";
+	  $state = "initial"; undef $escaped; undef $token;
+	}
+      }
+      else {
+	debug_lexer("STR: unmatched quote");
+	$state = "initial";
+	@tokens = ("ERROR", "Unmatched quote"); last;
+      }
+    }
+    elsif ($state eq "evalexp") {
+      if ($line =~ s/^([0-9\+\-\/\*\s\(\)]*)\}(.*)$/$2/) {
+	my @eval_result = eval_expression($1);
+	if ($eval_result[0] eq "ERROR") {
+	  return @eval_result;
+	}
+	push @tokens, $eval_result[1];
+	$state = "initial";
+      }
+      else {
+	$state = "initial";
+	@tokens = ("ERROR",
+		   "Only +, -, /, *, brackets and numbers are allowed ".
+		   "in arithmetic expressions");
+	last;
+      }
+    }
+    else {
+      @tokens = ("ERROR", "Parser error: unknown state '$state'"); last;
+    }
+  }
+
+  process_tokens(@tokens);
+}
+
+sub process_input {
+  my $input;
+  local $SIG{PIPE} = sub { error_handler("Pipe to C pre-processor broke"); };
+  if ($inputfile) {
+    open INPUT, "$inputfile"
+	or error_handler("Can't open input file '$inputfile'.");
+    $input = \*INPUT;
+
+    if ($cpp ne "") {
+      close $input;
+      ## Why is this necessary ??
+      # chdir $inputdir if $inputdir ne "";
+      @includedirs = map { "-I$_" } @includedirs;
+      open $input, "cat $inputfile | $cpp @includedirs - |";
+    }
+  }
+  else {
+    if ($cpp ne "") {
+      @includedirs = map { "-I$_" } @includedirs;
+      open INPUT, "cat - | $cpp @includedirs - |";
+      $input = \*INPUT;
+    }
+    else {
+      $input = \*STDIN;
+    }
+  }
+
+  while (<$input>) {
+    my $line = $_;
+    $line =~ s/^\#.*//;          # remove shell style comments (# ...)
+    $line =~ s:/\*.*?\*/::;      # remove C style comments (/* ... */)
+    my $stop;
+    $lineno++;
+    while (($line =~ /\\$/) and !$stop) {    # line continuation
+      chomp $line; chop $line;
+      my $next = <$input>;
+      $lineno++;
+      if (defined $next) {
+	$line .= " $next";
+      }
+      else {
+	$stop = 1;
+      }
+    }
+    process_line($line);
+  }
+
+  if ($inputfile) {
+    close $input;
+  }
+}
+
+######################################################################
+###
+###  Main program
+###
+######################################################################
+
+&init_program;
+&init_image;
+&process_input;
+&finish_image;
+&output_image;

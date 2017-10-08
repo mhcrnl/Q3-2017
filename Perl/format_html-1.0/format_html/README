@@ -1,0 +1,20 @@
+format_html.pl
+------------
+format_html.pl is under the GPL
+
+format_html.pl is a perl script that : 
+
+	- uppercases HTML key word.
+	- replaces special character by their HTML code.
+	- indents HTML code.
+
+
+You can edit format_html.pl to change number of space for indentation by setting the $space_char value.
+And you can add key word to do no care for indentation in the list @list_tag_expect.
+
+
+format_html.pl can have several files in argument, and it does a copy of them (.bak) before to replace them.
+There is an option (-a) to make a strict indentation.
+
+
+For any comment mail Julien Mulot <mulot_j@epita.fr>

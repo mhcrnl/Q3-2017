@@ -1,0 +1,18 @@
+KNOWN BUGS:
+
+  - sperator is at the moment ONLY A SINGLE BLANK, it should become any kind
+    and number of whitespace
+  - fonts in tables and as defult_font are not counted and create warnings
+  - the dummy is also inserted after the last menuitem
+
+TO-DO-LIST:
+  - autosize for jpgs and png (png can be solved by GNU file)
+  - use of GNU file command for autosize if GD is not installed
+  - check & install script (check for modules, file)
+  - default values for start_count_gfx and add_count_gfx (both -1)
+  - default html version 4.0
+  - ignore dummy gfx if it is not set
+  - next/prev tag which set according to the menu order
+  - function to include source code (<> replacement)
+  - replacement of special characters like German umlaute
+  - switches --warnunusedfonts and --warnunusedtables

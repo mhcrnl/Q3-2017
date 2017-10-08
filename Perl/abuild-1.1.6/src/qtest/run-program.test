@@ -1,0 +1,62 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+use Cwd;
+use File::Basename;
+
+require TestDriver;
+require abuild_test_utils;
+
+my $top = windir(getcwd());
+
+chdir("run-program") or die "chdir testdir failed: $!\n";
+
+my $td = new TestDriver('run program');
+
+my $in_windows = ($^O =~ m/^(cygwin|MSWin32)$/);
+
+$td->runtest("run program",
+	     {$td->COMMAND => "test_run_program",
+	      $td->FILTER => "perl filter.pl $top"},
+	     {$td->FILE => "run_program.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+if ($in_windows)
+{
+    $td->runtest("batch file",
+		 {$td->COMMAND => "test_run_program -win32"},
+		 {$td->FILE => "win32.out", $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+$td->runtest("capture output",
+	     {$td->COMMAND =>
+		  "test_run_program -handle-output perl make-output.pl"},
+	     {$td->FILE => "captured-output.out", $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+my $echo = windir(find_in_path('echo'));
+foreach my $i (1..5)
+{
+    $td->runtest("threaded fork ($i)",
+		 {$td->COMMAND => "test_threaded_fork $echo",
+		  $td->FILTER => "sort -n"},
+		 {$td->FILE => "threaded-fork.out", $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+$td->report(7 + ($in_windows ? 1 : 0));
+
+sub windir
+{
+    my $dir = shift;
+    my $windir = $dir;
+    if ($^O eq 'cygwin')
+    {
+	chop($windir = `cygpath -w $dir`);
+	$windir =~ s,\\,/,g;
+    }
+    $windir;
+}

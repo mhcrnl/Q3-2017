@@ -1,0 +1,17 @@
+ORIGIN bottom
+
+#include "grid200x200.imc"
+
+LINECOLOR x11 blue
+
+CIRCLE 20  20  3; IMAGE 20  20 "next.png" ALIGN bottom left
+CIRCLE 100 20  3; IMAGE 100 20 ALIGN bottom center
+CIRCLE 180 20  3; IMAGE 180 20 ALIGN bottom right
+
+CIRCLE 20  100 3; IMAGE 20  100 ALIGN middle left
+CIRCLE 100 100 3; IMAGE 100 100 ALIGN middle center
+CIRCLE 180 100 3; IMAGE 180 100 ALIGN middle right
+
+CIRCLE 20  180 3; IMAGE 20  180 ALIGN top left
+CIRCLE 100 180 3; IMAGE 100 180 ALIGN top center
+CIRCLE 180 180 3; IMAGE 180 180 ALIGN top right

@@ -1,0 +1,41 @@
+% Template for Disc-Cover
+% Author: J.I. van Hemert
+% Date: 2003/01/09
+% Description: slim that fits on letter sized paper
+\enlargethispage{5\baselineskip}
+
+\noindent
+\vspace{-0.5mm}
+\framebox{\rotatebox{180}{\parbox[c][0.5mm][t]{11.5cm}
+{
+    \hspace*{\fill}\raisebox{-0.2mm}[1.25mm][2.5mm]{\small\DCsidetext}\hspace*{\fill}
+}}}
+
+\noindent
+\vspace{-0.5mm}
+\framebox{\parbox[c][118mm][t]{118mm}
+{
+		\rotatebox{-90}{\parbox[c][118mm][t]{\linewidth}{
+			\vspace{2\baselineskip}
+			\DCformattedhead{0.9\linewidth}
+			\vspace*{\fill}
+			\begin{center}
+			\DCpicture
+			\vspace*{\fill}
+			\parbox{0.9\linewidth}{{\footnotesize\sffamily\DCdiscinfo}}
+			\\
+			\end{center}
+		}}
+}}
+
+\noindent
+\vspace{-0.5mm}
+\framebox{\parbox[c][118mm][t]{118mm}
+{
+	\rotatebox{-90}{\parbox[c][118mm][t]{\linewidth}{
+	\DCformattedhead{0.97\linewidth}
+	\vspace{0.25\baselineskip}
+	\DCtracks
+	}}
+}}
+

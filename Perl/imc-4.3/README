@@ -1,0 +1,131 @@
+This is imc, the IMage Compiler, v4.3.
+
+Requirements:
+------------
+
+- perl 5.004 or higher
+- GD perl module, version 1.22 or higher (1.26 or higher needed
+  for JPEG input/output, 2.15 or higher needed for GIF input/output).
+
+Both of these can be obtained via the CPAN archives:
+  http://www.perl.com/CPAN
+
+Note that the GD perl module in turn requires some libraries (e.g. libgd,
+libpng, zlib).  Those are described in the documentation of the GD perl
+module.
+
+Installation:
+------------
+
+Execute, in this directory:
+
+  ./configure
+  make
+  make install
+
+For 'make install', you need to have the right permissions to
+write to the target directory.
+
+You can then test imc before you install it with:
+
+  make check
+
+This compiles the imc examples in the example directory to
+PNG files and compares them with the reference PNG files in
+the example directory.  Note that especially the comparison can
+take a while, because the PNGs are compared pixel by pixel.
+
+Notes:
+
+- The 'configure' script tries to find the perl interpreter; if
+  is not in the path, you can provide it to the 'configure'
+  script via the --with-perl option, e.g. --with-perl=/my-path/perl.
+
+- The 'configure' script will also assume you want to use a C
+  pre-processor on your input files and will try to find one.
+
+  If you don't want to use a C pre-processor, give the option
+  --disable-pp, or --enable-pp=no, to 'configure'.
+
+- The default installation path is /usr/local, i.e. the script
+  will then come in /usr/local/bin and the manual page in
+  /usr/local/man.  This can be overridden via the --prefix option
+  to 'configure', e.g. --prefix=/usr.
+
+- For other options to 'configure', try './configure --help'.
+
+- 'make clean' will remove the files that are made, but will
+  not remove configuration files.
+
+- 'make distclean' will clean up the distribution, removing all
+  temporary files and configuration files.
+
+Documentation:
+-------------
+This package contains, next to a manual page which will be
+automatically installed, documentation in three formats (all in the
+directory 'doc'):
+
+ - imc.txt:
+     ASCII file, containing a description of the use of the program
+     (also described in the manual page) and the reference guide
+     with the imc syntax.
+
+ - imc.html:
+     HTML file, containing the reference guide with the imc
+     syntax.
+
+ - imc.ref:
+     ASCII file containing only the commands and their arguments,
+     no explanation
+
+These three files are not installed anywhere.  If you want to use
+them, copy them to an appropriate place.
+
+Overview of distribution files:
+------------------------------
+
+  AUTHORS	description of the authors
+  COPYING	the GNU Public License (GPL)
+  ChangeLog	detailed description of changes
+  INSTALL	general GNU installation instructions
+  Makefile.am	input file for Makefile.in, used by automake
+  Makefile.in	input file for Makefile, used by configure
+  NEWS		general description of changes (in terms of features)
+  README	this file
+  THANKS	thanks file
+  Todo		list of things still to do (in later versions)
+  acinclude.m4	macros for autoconf
+  aclocal.m4	input file for autoconf
+  configure	the configuration utility script
+  configure.in	input file for configure, used by autoconf
+  imc.1        	manual page
+  make.cfg.in	input file for the configure stage
+  imc.dist      source file for the imc program
+  install-sh	installation utility script
+  make.pl       Perl script used by make
+  missing	installation utility script
+  mkinstalldirs	installation utility script
+
+  examples/Makefile.am	input file for Makefile.in, used by automake
+  examples/Makefile.in	input file for Makefile, used by configure
+  examples/*.imc	imc example input files
+  examples/*.png	PNG images to be imported in examples
+  examples/imcmp.pl	Perl script used by make (to compare PNGs)
+  examples/rgb.txt	reference rgb.txt file for make check
+  examples/ref/*.png.ref	reference PNG files (for make check)
+
+  doc/Makefile.am	input file for Makefile.in, used by automake
+  doc/Makefile.in	input file for Makefile, used by configure
+  doc/imc.html     	documentation in HTML
+  doc/imc.ref		list of the commands with their arguments
+  doc/imc.txt      	documentation in ASCII
+
+Bug reports:
+-----------
+
+Bugs should be reported to <Peter.Verthez@advalvas.be>.  Please include the
+version of imc that you use.  You can find the version number
+by executing 'imc -v'.  Better yet: only report bugs on the latest
+version of imc...
+

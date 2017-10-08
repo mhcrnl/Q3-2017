@@ -1,0 +1,569 @@
+#!/usr/bin/env perl
+#
+# This script is used to create a binary distribution for abuild.  It
+# extracts a source distribution, builds it, runs its test suite, and
+# packages it.  It can optionally create doc and java distribution
+# files.  These are not for external distribution but are rather to be
+# used to supplement the source distribution for creation of binary
+# distribution files.
+#
+# The usual process for doing a release would to first create a source
+# distribution.  Then, on a system that can build everything, create a
+# binary distribution by running this script with the --make-java-dist
+# and --make-doc-dist flags.  Then copy the make-binary-distribution
+# script, the source distribution, and whichever of the doc and java
+# distributions are required to the other platform build systems and
+# run this script on each one.
+#
+# Note that qtest-driver must be in your path to run the test suites.
+
+# To debug certain parts of the creation script, run this from inside
+# a fully built source tree using "." as the source distribution.  In
+# this case, the current source tree is copied to a temporary
+# directory and build and test steps are skipped.  Additional
+# arguments, such as documentation and java distributions, can be
+# given if needed, but they may be given as absolute paths and the
+# versions don't have to match.  The resulting distribution will be
+# written into /tmp and should never be released.
+
+require 5.008;
+use warnings;
+use strict;
+use File::Find;
+use File::Basename;
+use Cwd;
+use Cwd 'abs_path';
+use File::Copy;
+
+my $whoami = basename($0);
+my $dirname = dirname($0);
+
+my $tmpdir = undef;
+my $cwd = getcwd();
+
+END
+{
+    chdir $cwd;
+    rmrf($tmpdir) if defined $tmpdir;
+}
+
+usage() unless @ARGV >= 1;
+my $src_dist = shift(@ARGV);
+my $version;
+my $test_mkdist = 0;
+if ($src_dist eq '.')
+{
+    $version = 'test';
+    $test_mkdist = 1;
+}
+else
+{
+    usage() unless
+	$src_dist =~ m/^abuild-(\d+\.\d+\.(?:a|b|rc)?\d+)\.tar.bz2$/;
+    $version = $1;
+}
+
+my $java_dist = undef;
+my $make_java_dist = 0;
+my $doc_dist = undef;
+my $make_doc_dist = 0;
+my $make_static = 0;
+foreach my $arg (@ARGV)
+{
+    if ($arg eq '--make-java-dist')
+    {
+	$make_java_dist = 1;
+    }
+    elsif ($arg eq '--make-doc-dist')
+    {
+	$make_doc_dist = 1;
+    }
+    elsif ($arg eq "abuild-$version-java.tar.bz2")
+    {
+	$java_dist = $arg;
+    }
+    elsif ($arg eq "abuild-$version-doc.tar.bz2")
+    {
+	$doc_dist = $arg;
+    }
+    elsif ($arg eq '--make-static')
+    {
+	$make_static = 1;
+    }
+    elsif ($test_mkdist && ($arg =~ m/abuild-.*-java.tar.bz2$/))
+    {
+	$java_dist = $arg;
+    }
+    elsif ($test_mkdist && ($arg =~ m/abuild-.*-doc.tar.bz2$/))
+    {
+	$doc_dist = $arg;
+    }
+    else
+    {
+	usage();
+    }
+}
+
+run("qtest-driver --version > /dev/null");
+
+if (! $test_mkdist)
+{
+    $src_dist = normalize_path($src_dist);
+}
+$java_dist = normalize_path($java_dist);
+$doc_dist = normalize_path($doc_dist);
+
+my $build_java = 1;
+my $build_doc = 1;
+
+if (defined $java_dist)
+{
+    $ENV{'ABUILD_NO_JAVA'} = '1';
+    $build_java = 0;
+}
+if (defined $doc_dist)
+{
+    $build_doc = 0;
+}
+
+if ($make_doc_dist && (! $build_doc))
+{
+    die "$whoami: can't create documentation distribution file" .
+	" if not building documentation\n";
+}
+if ($make_java_dist && (! $build_java))
+{
+    die "$whoami: can't create java distribution file" .
+	" if not building java support\n";
+}
+
+if ($build_doc || $build_java)
+{
+    if (! ((exists $ENV{'JAVA_HOME'}) &&
+	   (-f $ENV{'JAVA_HOME'} . "/lib/tools.jar")))
+    {
+	die "$whoami: JAVA_HOME must be set to a valid jdk to build" .
+	    " documentation or Java support.\n"
+    }
+}
+
+if ($build_java)
+{
+    if (system("groovy -version >/dev/null 2>&1") != 0)
+    {
+	die "$whoami: you must have groovy in your path to build" .
+	    " Java support.\n";
+    }
+}
+
+my $windows = 0;
+
+# This should pretty much work with native Win32 perl, but there are
+# incorrect assumptions about what to do for windows bootstrap build
+# and binary distribution creation.  Don't remove this without
+# thorough testing.
+die "MSWin32 not yet supported" if $^O eq 'MSWin32';
+
+if ($^O eq 'cygwin')
+{
+    # For now, assume cygwin means windows
+    $windows = 1;
+    # We need objdump to determine which DLLs are required.
+    run("objdump --version > /dev/null");
+}
+
+if ($windows && $make_static)
+{
+    die "$whoami: --static not supported in Windows\n";
+}
+
+if ($build_java && (! exists $ENV{'ABUILD_JUNIT_JAR'}))
+{
+    die "$whoami: set ABUILD_JUNIT_JAR to run junit tests\n";
+}
+
+my $now = time;
+$tmpdir = ".abuild-release-$$-$now";
+if ($test_mkdist)
+{
+    $tmpdir = "/tmp/$tmpdir";
+}
+
+safe_mkdir($tmpdir);
+$tmpdir = abs_path($tmpdir);
+
+chdir $tmpdir or die "$whoami: can't cd $tmpdir\n";
+
+if ($test_mkdist)
+{
+    my $srcdir = $cwd;
+    while (! -f "$srcdir/src/Makefile.bootstrap")
+    {
+	$srcdir = dirname($srcdir);
+	if ($srcdir eq '/')
+	{
+	    die "$whoami: unable to find source directory in test mode\n";
+	}
+    }
+    print "$whoami: copying $srcdir to $tmpdir...\n";
+    run("cp -a $srcdir $tmpdir/abuild-$version");
+}
+else
+{
+    run("tar xjf $src_dist");
+}
+safe_chdir("abuild-$version");
+
+# Determination of bin_platform is duplicated in Makefile.bootstrap.
+$ENV{'ABUILD_BOOTSTRAP_RELEASE'} = 1;
+$ENV{'ABUILD_PLATFORM_SELECTORS'} = 'native:option=release';
+chop(my $bin_platform = `private/bin/bootstrap_native_platform`);
+
+if ($bin_platform !~ m/^([^\.]+)\.([^\.]+)\.([^\.]+)\.([^\.]+)/)
+{
+    die "$whoami: can't parse platform $bin_platform\n";
+}
+my ($os, $cpu, $dist, $compiler) = ($1, $2, $3, $4);
+my $bin_dist = "abuild-$version-$dist-$cpu-bin";
+my $abuild_outdir = "abuild-$bin_platform";
+print $bin_dist, "\n";
+
+safe_chdir("src");
+
+if ($test_mkdist && (-f "$abuild_outdir/abuild" ||
+		     -f "$abuild_outdir/abuild.exe"))
+{
+    print "$whoami: test mode: skipping build\n";
+}
+else
+{
+    run("make -f Makefile.bootstrap ABUILD_SKIP_WERROR=1");
+}
+my $abuild = getcwd() . "/$abuild_outdir/abuild";
+my $actual_version = `$abuild --version`;
+if ($? != 0)
+{
+    die "$whoami: abuild --version failed\n";
+}
+if ((! $test_mkdist) && ($actual_version !~ m/\b$version\b/))
+{
+    die "$whoami: abuild --version reported the wrong version" .
+	" ($actual_version)\n";
+}
+my $static_dist = undef;
+if ($make_static)
+{
+    safe_rename($abuild, "$abuild.real");
+    run("make -f Makefile.bootstrap ABUILD_STATIC=1");
+    safe_rename($abuild, "$tmpdir/abuild.static");
+    $static_dist = "abuild-$version-${os}_static-$cpu-bin";
+    safe_rename("$abuild.real", $abuild);
+}
+
+my $test_failed = 0;
+if ($build_java)
+{
+    run("groovy BootstrapJava.groovy");
+}
+if ($build_doc)
+{
+    run("$abuild -C manual");
+}
+if ($test_mkdist)
+{
+    print "$whoami: test mode: skipping test\n";
+}
+else
+{
+    if (system("$abuild check") != 0)
+    {
+	safe_copy("$abuild_outdir/qtest.log", "$tmpdir/../qtest.log");
+	test_warning();
+	$test_failed = 1;
+    }
+}
+
+safe_chdir($tmpdir);
+safe_chdir("abuild-$version");
+
+print "\n";
+
+# Copy autogenerated files to installation directory
+if ($build_doc)
+{
+    safe_copy("src/manual/abuild-indep/abuild-manual.pdf",
+	      "doc/abuild-manual.pdf");
+    safe_mkdir("doc/html");
+    my @html = map { basename $_ } (<src/manual/abuild-indep/html/*>);
+    foreach my $p (@html)
+    {
+	safe_copy("src/manual/abuild-indep/html/$p", "doc/html/$p");
+    }
+    if ($make_doc_dist)
+    {
+	run("tar cjf $cwd/abuild-$version-doc.tar.bz2" .
+	    " doc/abuild-manual.pdf doc/html");
+	print "$whoami: created abuild-$version-doc.tar.bz2\n";
+    }
+}
+else
+{
+    run("tar xjf $doc_dist");
+}
+if ($build_java)
+{
+    safe_copy("src/java-support/abuild-java/dist/abuild-java-support.jar",
+	      "lib/abuild-java-support.jar");
+    if ($make_java_dist)
+    {
+	run("tar cjf $cwd/abuild-$version-java.tar.bz2" .
+	    " lib/abuild-java-support.jar");
+	print "$whoami: created abuild-$version-java.tar.bz2\n";
+    }
+}
+else
+{
+    run("tar xjf $java_dist");
+}
+
+safe_mkdir("bin");
+if ($windows)
+{
+    # Abuild embeds the manifest file into the executable, so we don't
+    # have to copy it.
+    safe_copy("$abuild.exe", "bin/abuild.exe");
+
+    # Attempt to copy Windows DLLs required by this program.
+
+    # We check for objdump at the start of this program.
+    my @dlls = ();
+    open(O, "objdump -p bin/abuild.exe|") or die "$whoami: can't run objdump\n";
+    while (<O>)
+    {
+	if (m/^\s+DLL Name:\s+(.+\.dll)/i)
+	{
+	    my $dll = $1;
+	    next unless $dll =~ m/MSVC/i;
+	    $dll =~ tr/A-Z/a-z/;
+	    push(@dlls, $dll);
+	}
+    }
+    close(O);
+    my @path = split(':', $ENV{'PATH'});
+
+    if (-f "$abuild.exe.manifest")
+    {
+	unshift(@path, get_manifest_dirs("$abuild.exe.manifest"));
+    }
+
+  dll:
+    foreach my $dll (@dlls)
+    {
+	foreach my $p (@path)
+	{
+	    if (-f "$p/$dll")
+	    {
+		safe_copy("$p/$dll", "bin/$dll");
+		next dll;
+	    }
+	}
+	die "$whoami: can't find $dll in path\n";
+    }
+}
+else
+{
+    safe_copy($abuild, "bin/abuild");
+    system("chmod -R g-w .");
+    system("chmod +x bin/abuild");
+}
+
+rmrf("src");
+safe_unlink("README.source-distribution");
+safe_unlink("configure");
+safe_chdir($tmpdir);
+
+if ($windows)
+{
+    run("zip -r ../$bin_dist.zip abuild-$version");
+    print "$whoami: created $bin_dist.zip\n";
+}
+else
+{
+    run("tar cjf ../$bin_dist.tar.bz2 abuild-$version");
+    print "$whoami: created $bin_dist.tar.bz2\n";
+}
+
+if (defined $static_dist)
+{
+    safe_unlink("abuild-$version/bin/abuild");
+    safe_copy("abuild.static", "abuild-$version/bin/abuild");
+    system("chmod +x abuild-$version/bin/abuild");
+    run("tar cjf ../$static_dist.tar.bz2 abuild-$version");
+    print "$whoami: created $static_dist.tar.bz2\n";
+}
+
+test_warning() if $test_failed;
+
+sub get_manifest_dirs
+{
+    # Find all system directories in which to search for DLLs based on
+    # the contents of a Visual Studio manifest file.
+
+    my $manifest_file = shift;
+
+    require XML::Parser;
+    my $sysroot = $ENV{'SYSTEMROOT'} or die "$whoami: can't get \$SYSTEMROOT\n";
+    $sysroot =~ s,\\,/,g;
+    if ($^O eq 'cygwin')
+    {
+	chop($sysroot = `cygpath $sysroot`);
+	die "$whoami: can't get system root" unless $? == 0;
+    }
+    my $winsxs = "$sysroot/WinSxS";
+    opendir(D, $winsxs) or die "$whoami: can't opendir $winsxs: $!\n";
+    my @entries = readdir(D);
+    closedir(D);
+
+    my @candidates = ();
+
+    my $readAssemblyIdentity = sub
+    {
+	my ($parser, $element, %attrs) = @_;
+	return unless $element eq 'assemblyIdentity';
+	my $type = $attrs{'type'};
+	my $name = $attrs{'name'};
+	my $version = $attrs{'version'};
+	my $processorArchitecture = $attrs{'processorArchitecture'};
+	my $publicKeyToken = $attrs{'publicKeyToken'};
+
+	my $dir_start = join('_',
+			     $processorArchitecture,
+			     $name,
+			     $publicKeyToken,
+			     $version);
+	push(@candidates, $dir_start);
+    };
+
+    my $p = new XML::Parser(Handlers => {'Start' => $readAssemblyIdentity});
+    $p->parsefile($manifest_file);
+
+    my @dirs = ();
+    foreach my $c (@candidates)
+    {
+	push(@dirs, map { "$winsxs/$_" } (grep { m/^\Q$c\E/i } @entries));
+    }
+
+    @dirs;
+}
+
+sub test_warning
+{
+    print  "\n\n********\n";
+    print "WARNING: TEST SUITE FAILED!\n";
+    print "CHECK qtest.log BEFORE RELEASING\n";
+    print "********\n\n\n";
+}
+
+sub safe_mkdir
+{
+    my $dir = shift;
+    mkdir $dir, 0777 or die "$whoami: can't mkdir $dir: $!\n";
+}
+
+sub safe_rename
+{
+    my ($src, $dest) = @_;
+    rename $src, $dest or die "$whoami: rename $src $dest failed: $!\n";
+}
+
+sub safe_copy
+{
+    my ($src, $dest) = @_;
+    copy($src, $dest) or die "$whoami: copy $src $dest failed: $!\n";
+}
+
+sub safe_unlink
+{
+    my $file = shift;
+    unlink $file or die "unlink $file failed: $!\n";
+}
+
+sub run
+{
+    my $cmd = shift;
+    system($cmd) == 0 or die "$whoami: $cmd failed\n";
+}
+
+sub normalize_path
+{
+    my $path = shift;
+    return undef unless defined $path;
+    die "$whoami: $path not found\n" unless -f $path;
+    abs_path($path);
+}
+
+sub safe_chdir
+{
+    my $dir = shift;
+    chdir($dir) or die "$whoami: chdir $dir failed: $!\n";
+}
+
+sub rmrf
+{
+    my $path = shift;
+    return unless -e $path;
+    my $wanted = sub
+    {
+	if (-d $_)
+	{
+	    rmdir $_ or die "rmdir $_ failed: $!\n";
+	}
+	else
+	{
+	    safe_unlink($_);
+	}
+    };
+    finddepth({wanted => $wanted, no_chdir => 1}, $path);
+}
+
+sub usage
+{
+    die "
+Usage: $whoami src-dist [ java-dist | --make-java-dist ]
+               [ doc-dist | --make-doc-dist ]
+               [ --make-static ]
+
+For debugging, use \"$whoami .\", and see comments
+in this script.
+
+src-dist must be of the form abuild-version.tar.bz2
+java-dist, if present, must be of the form abuild-version-java.tar.bz2
+doc-dist, if present, must be of the form abuild-version-doc.tar.bz2
+
+This program creates a binary distribution of abuild from the given
+source distribution.  The version number of the distribution is
+determined from the name of the source distribuion file.  This program
+creates a binary distribution file called
+abuild-version-bin-platform-bin.tar.bz2.
+
+If java-dist is specified, its contents are added to the binary
+distribution, and no attempt is made to build or test the Java
+portions of abuild.  This makes it possible to create complete binary
+distributions of abuild on systems that do not have a Java development
+environment.
+
+If doc-dist is specified, its contents are added to the binary
+distribution, and no attempt is made to build the documentation.  This
+makes it possible to create complete binary distributions of abuild on
+systems that can't compile texinfo documentation.
+
+If --make-java-dist or --make-doc-dist are specified, this program
+creates java-dist or doc-dist files usable for invocations of this
+program on other platforms.
+
+If --make-static is specified, also create a static version.  This
+will be called abuild-os_static-cpu.bin.tar.bz2.  The static version
+will be in addition to, not instead of, the regular dynamic version.
+
+";
+}

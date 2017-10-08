@@ -1,0 +1,23 @@
+#!/bin/sh
+
+testfile=$1
+filebase=`basename $testfile .imc`
+builddir=`pwd`
+cd $srcdir
+if $builddir/../imc -I $srcdir $testfile -o $builddir/$filebase.png
+then
+  if cmp $builddir/$filebase.png ref/$filebase.png.ref > /dev/null 2>&1
+  then
+    exit 0
+  else
+    if $PERL imcmp.pl $builddir/$filebase.png ref/$filebase.png.ref
+    then
+      exit 0
+    else
+      exit 1
+    fi
+  fi
+else
+  exit 1
+fi
+

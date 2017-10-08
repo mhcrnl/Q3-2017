@@ -1,0 +1,176 @@
+1.1.0
+  28 Apr 2001
+  Initial release of development version - implements new structure of
+  using separate scripts for different functions. 
+
+
+1.0.12
+  11 Mar 2001
+  Added --stripdir option to put the files for each strip in a separate directory
+  (Daniel Skarda)
+
+  Added --date to specify the date to work with, instead of the current date.
+  This works with many strips, but some sites do not provide an HTML page for
+  each day (in the case of URLs that must be searched for) or an image
+  for each day (in the case of URLs that are generated). Check the definition
+  file before using this option, or you may end up downloading current strips
+  in addition to strips for the specified date (this requires the Date::Parse
+  module from CPAN) (Daniel Skarda)
+
+  Added --verbose option to give extra status information. This is helpful
+  if you're trying to figure out what's wrong when a strip won't download.
+
+  Fixed the Dr. Fun definition -  the strip is not updated daily
+
+1.0.11
+  07 Mar 2001
+  Output no longer contains my name and email, so as not to confuse the
+  lawyers.
+ 
+1.0.10
+  27 Feb 2001
+  Documentation now better explains usage of groups
+
+  Non-date variables now use '$' instead of '%'. Before, when both used '%'
+  it was impossible for the script to distinguish between a date variable
+  follwed by unrelated text and any other sort of named variable (most
+  importantly, this was breaking Sluggy Freelance)
+
+  Added several new strips
+
+  Fixed several strips
+
+  Added --nospaces option (Michael Lewis)
+
+  Added proxy authentication support
+
+1.0.9
+  24 Feb 2001
+  Added groups support - define multiple strips as one keyword
+
+  Minor code enhancements
+
+  Fixed jokesonyou definition
+
+  21 Feb 2001
+  Added Peanuts and everything except Yak's Corner from comicspage.com
+  (strip count is now 206)
+
+  Cleaned out a bunch of old code from the script
+
+  Made searchpage the default referer (if different than homepage)
+
+  Added documentation for the strip definition file
+
+1.0.8
+  20 Feb 2001
+  Added HTTP proxy server support
+
+  Added 'referer' value to definition file - this can be used if a web server
+  refuses to return the image without a referer set. Actually, the program uses
+  'homepage' as a default referer - you only need to specify 'referer' if the
+  homepage value doesn't work.
+
+  Fixed a bug that was causing problems with image files that have no extension
+
+  With the completion of the above two items, SFGate strips should now work properly.
+
+  Fixed the Avalon High definition
+
+  Cleaned up the definition file parsing code somewhat
+
+1.0.7
+  19 Feb 2001
+  Added several new strips (total is now 148)
+
+  18 Feb 2001
+  Fixed a bug when using the --dailydir option that would make incorrect
+  symlinks for duplicate files
+
+  Fixed the sample code in README.LOCAL
+
+1.0.6
+  02 Feb 2001
+  Added --basedir option. dailystrips will change to the specified directory to
+  look for information files and save new files there. This makes possible the
+  elimination of lines in cron scripts to manually change to a directory for
+  operation.
+
+  31 Jan 2001
+  The strips definition file now specifies the frequency that each strip is
+  expected to be updated at (just daily/semidaily for now). Now, dailystrips
+  will not download the same image two days in a row for a daily strip (which
+  previously would happen if it was being run before a strip's website was
+  updated with the day's new strip). If youwish to add to the definitions file,
+  note that "updated daily" is assumed (being the most common) if no "updated"
+  line is present - only "updated semidaily" needs to be specified.
+
+  29 Jan 2001
+  Fixed a bug with the new mode of sylinking to previous images (previously,
+  if today's image wass a symlink and the program was being run for the second
+  time that day,the old file would get overwritten - this has been fixed by
+  deleting the symlink before downloading a new strip and doing the comparison.
+
+1.0.5
+  29 Jan 2001
+  Added sfgate strips & misc others (Dave Tweed)
+
+  28 Jan 2001
+  Implemented detection and symlinking for duplicate strip files (Scott Carlson)
+
+1.0.4
+  26 Jan 2001
+  Added all strips from unitedmedia.com (Joaquín Perez again).
+
+  Implemented strip definitions file to describe strips (instead of having a
+  separate subroutine for each strip in the program). See strips.def to see how
+  this works
+
+1.0.3
+  24 Jan 2001
+  Added --dailydir option (Marc Doumayrou)
+
+  Also added links to previous day's page (Marc again), and a link in
+  the previous day's page to today's page.
+
+  Added warning/error messages if various operations fail that the user should
+  know about
+
+1.0.2
+  24 Jan 2001
+  Added the rest of the strips at ucomics.com (Joaquín Perez).
+  dailystrips now has a total of 38 strips available.
+
+  23 Jan 2001
+  Re-did command line options parsing code so that order of commands no longer
+  matters
+
+  Added --archive option. This adds a link to the current day's page to the
+  file archive.html
+
+  Added --noindex option. This disables symlinking the latest page to 'index.html'
+
+  Various other cleanups
+
+1.0.1
+  22 Jan 2001
+  No longer uses the external 'date' command. Now, dailystrips should run on
+  any platworm where the modules HTTP::Request, LWP::UserAgent, and POSIX are
+  available
+
+  Added --save option. This recognizes if a strip has already been
+  downloaded for the currect day and saves time/bandwidth by not
+  re-downloading
+
+  Added 2 new strips - Garfield & Adam@home
+
+  Various other code cleanups/optimizations
+
+  21 Jan 2001
+  No longer uses wget - replaced with LWP
+  This enhances portability and also allows for better error handling of
+  failed downloads
+
+1.0.0:
+  20 Jan 2001
+  First public release

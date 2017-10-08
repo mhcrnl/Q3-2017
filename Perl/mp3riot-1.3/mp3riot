@@ -1,0 +1,4518 @@
+#!/usr/bin/perl
+#********************************************************************************
+#                                                                               *
+#                       mp3riot                                                 *
+#                                                                               *
+#********************************************************************************
+# Copyright (C) 2000-2004 by Nikolei Steinhage.   All Rights Reserved.          *
+#********************************************************************************
+# This program is free software; you can redistribute it and/or                 *
+# modify it under the terms of the GNU General Public                           *
+# License as published by the Free Software Foundation; either                  *
+# version 2 of the License, or (at your option) any later version.              *
+#                                                                               *
+# This program is distributed in the hope that it will be useful,               *
+# but WITHOUT ANY WARRANTY; without even the implied warranty of                *
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU             *
+# General Public License for more details.                                      *
+#                                                                               *
+# You should have received a copy of the GNU Library General Public             *
+# License along with this program/script; if not, write to the Free             *
+# Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            *
+#********************************************************************************
+# Bugs: Doubtless many. Feel free to contact the author, but remember:          *
+#       I do not promise anything.                                              *
+#       nikolei@linuxsecure.de                                                  *
+#********************************************************************************
+# Disclaimer: - I do not support Perl, html, or any OS                          *
+#             - I do not promise that this program does anything                *
+#             - this program may distroy all your data                          *
+#             - I cannot promise that this program will not distroy             *
+#               all human civilization                                          *
+#********************************************************************************
+# Das fortwaerende Dasein des Menschengeschlechts ist bloss ein Beweis          *
+# der Geilheit desselben.         ATHUR SCHOPENHAUER                            *
+# Translation: The continous existence of mankind is only a proof of their      *
+# contempt.                                                                     *
+#********************************************************************************
+#										*
+# Thanks to Christoph Broennimann for finding bugs and submitting fixes.        *
+#										*
+#********************************************************************************
+
+use Getopt::Long qw(:config no_ignore_case);
+
+#********************************************************************************
+# global variables i need
+
+my @mp3v;            # directories for depth search
+my $htmlfile;        # html file (at the moment only one)
+my $m3ufile;         # m3u playlistfile
+my $xmlfile;         # xml playlistfile
+my $plsfile;         # pls playlistfile
+my $b4sfile;         # b4s playlistfile
+my $dbfile;          # database file
+my $hexfile;         # file the hextable ist stored in
+my %hexhash;         # hash to store hexreplacements
+my $httpaddress;     # address of httpd
+my $seperatepath;    # path for seperate html files
+my @checkext;        # string to keep fileext for checks
+my $os = "unix"; # default os
+my @execs;       # array for execs
+my $depth;       # depth of dir elements to keep
+my %replhash;    # hash for url replacement
+my $replacefile; # file that contains strings to be replaced at the beginning of
+    # each url; the form is for example:  c:\mp3\A /mp3C and then a new line
+my %sum_files = ();    # hash for number of files for every beginning character
+my %sum_sizes = ();    # hash for sum of sizes for every character
+my $statfile;          # file for html-statistics
+my @sqlinfos;          # list for sql data
+my $sqlfile;           # file to store sql table in
+my %dublicates;        # to store number of dublicates per file
+my @index;             # index hash for filenames for better sorting
+my $global_rename_counter = 0;    # count the number of renamings
+my %datastruct;                   # the new internal datastructure
+my $grouppath;    # the path where to write the html files for groups
+my $groupfile;    # name of file used for grouping
+my %grouphash;    # hash to store the group information in
+my $html_head;    # variable for html header using templates
+my $html_change
+  ; # variable for html, if a the first character of the file changes, using templates
+my $html_body;      # variable for each file, using templates
+my $html_footer;    # variable for html footer using templates
+my $html_sep_head
+  ;    # variable for the header of seperate html files using templates
+my $previoustime
+  ;    # number of days. files have to be older than it to be selected
+my $sincetime; # number of days. files have to be younger than it to be selected
+my $random;    # random variable for perentage of files to select
+my $rename_template; # variable to store the template for automatic filerenaming
+my $md5doublicateseekvalues
+  ; # variable to store the three values for seeks in finding doublicate files using their md5 sum
+my $sortby;    # files will be sorted by .....
+
+#********************************************************************************
+# flags to define for controlling runnig of the program
+my $MP3FLAG          = 0;    # get mp3info
+my $TAGRMFLAG        = 0;    # remove tags
+my $HTTPFLAG         = 0;    # correct path and character
+my $M3UFLAG          = 0;    # write m3u file
+my $PLSFLAG          = 0;    # write pls file
+my $XMLFLAG          = 0;    # write xml file
+my $B4SFLAG          = 0;    # write b4s file
+my $HTMLFLAG         = 0;    # write html file
+my $DBFLAG           = 0;    # write db file
+my $OSFLAG           = 0;    # set os, default = unix
+my $REMEXTFLAG       = 0;    # remove file extensions
+my $SEPERATEFLAG     = 0;    # write seperate html file for every character
+my $CHECKFLAG        = 0;    # check for file extension like "mp3"
+my $FILESIZEFLAG     = 0;    # include filesize in html output
+my $DEPTHFLAG        = 0;    # use only last n elements of dir/file
+my $REPLACEFLAG      = 0;    # replace pattern given by replacementfile
+my $HEXFLAG          = 0;    # replace characters by their hex
+my $NOCSFLAG         = 0;    # do sorting not case sensitive
+my $STATFILEFLAG     = 0;    # write statistics file
+my $SQLFLAG          = 0;    # write sql data
+my $MKCONFFLAG       = 0;    # write a config file
+my $DUBLICATEFLAG    = 0;    # check for doblicates of files by their name
+my $RENAMEFLAG       = 0;    # rename mp3 and ogg files using their id3tag
+my $RENAMEBACKFLAG   = 0;    # rename files back using the file RENAME.bak
+my $GROUPFLAG        = 0;    # make groupings
+my $HTMLTEMPLATEFLAG = 0;    # use html templates
+my $PREVIOUSTIMEFLAG =
+  0;    # used to select files that are n-days older current time
+my $SINCETIMEFLAG =
+  0;    # used to select files that are n-days younger current time
+my $ID3TAGFLAG        = 0;    # use the id3 tag if possible
+my $RANDOMFLAG        = 0;    # use random files
+my $MD5DOUBLICATEFLAG = 0;    # search for doublicates by MD5
+my $SORTFLAG          = 0;    # sort file by other criteria than their filename
+my $HTMLGROUPFLAG     = 0;    # wirte html files for groups
+my $M3UGROUPFLAG      = 0;    # write m3u files for groups
+my $XMLGROUPFLAG      = 0;    # write xml files for groups
+my $PLSGROUPFLAG      = 0;    # write pls files for groups
+my $B4SGROUPFLAG      = 0;    # write b4s files for groups
+
+#********************************************************************************
+# counter and summaries
+
+#********************************************************************************
+# so lets start the program
+
+&Checkmodules;
+&Programinfo;
+&Mainprog;
+
+#********************************************************************************
+# check and load modules needed
+
+sub Checkmodules {
+
+    #   eval {
+    #     require Getopt::Long qw(:config no_ignore_case);
+    #     import Getopt::Long qw(:config no_ignore_case);
+    #   };
+    #   if ($@) {
+    #     print STDERR ("\n'Getopt::Long' is missing!");
+    #   }
+
+    ###########
+    eval {
+        require MP3::Info;
+        import MP3::Info;
+    };
+    if ($@) {
+        print STDERR ("\nYou have to install the Perl module 'MP3::Info'.");
+        print STDERR (
+            "\nIt is needed for all mp3 and some ogg vorbis related functions."
+        );
+        print STDERR (
+            "\nSee the 'README' for instructions on how to install it!\n");
+    }
+
+    ###########
+    eval {
+        require Digest::MD5;
+        import Digest::MD5;
+    };
+    if ($@) {    # ups, no Digest::MD5
+        eval {
+            require Digest::Perl::MD5;
+            import Digest::Perl::MD5;
+        };
+        if ($@) {    # ups, no Digest::Perl::MD5
+            print STDERR (
+"\n'Digest::MD5' and the alternative 'Digest::Perl::MD5' are missing!"
+            );
+        }
+    }
+
+}
+
+#********************************************************************************
+# here is the main prog
+
+sub Mainprog {
+
+    $| = 1;    # turn off I/O buffering
+
+    &Getparameters;
+
+    if ( $RENAMEBACKFLAG == 1 ) { &Renamefilesbyorig; }
+
+    if ( $MKCONFFLAG == 1 ) { &Write_Configfile; }
+
+    if ( $HEXFLAG == 1 ) { &Loadhextable($hexfile); }
+
+    if ( $REPLACEFLAG == 1 ) { &Loadreplacementtable($replacefile); }
+
+    &Searchengine2;
+
+    if ( $GROUPFLAG == 1 ) {
+        &Message( "Begin", "Preparing html files for groups" );
+        &Message( "Info",  "Depending on the number of files and groups," );
+        &Message( "Info",  "the process may be slow" );
+        &Loadgrouptable($groupfile);
+        &Findgroupmembers;
+
+# start to refresh %sum_files. otherwise Wirtehtml and Writesephtml do not work correctly!
+        &Refreshinternaldata;
+    }
+
+    &Message( "Begin", "Sorting filelist" );
+    &Message( "Info",  "Depending on the number of files sorting may be slow" );
+
+    if ( $SORTFLAG == 1 ) {
+        if ( $NOCSFLAG == 1 ) {
+            if ( $sortby =~ /^(URLNAME)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{URLNAME} ) cmp
+                      lc( $datastruct{$b}->{URLNAME} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(SHOWNAME)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{SHOWNAME} ) cmp
+                      lc( $datastruct{$b}->{SHOWNAME} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(DIR)$/ ) {
+                @index = sort {
+                    lc( $mp3v[ $datastruct{$a}->{DIR} ] ) cmp
+                      lc( $mp3v[ $datastruct{$b}->{DIR} ] )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(NAME)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{NAME} ) cmp
+                      lc( $datastruct{$b}->{NAME} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(TITLE)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{TITLE} ) cmp
+                      lc( $datastruct{$b}->{TITLE} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(ARTIST)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{ARTIST} ) cmp
+                      lc( $datastruct{$b}->{ARTIST} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(ALBUM)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{ALBUM} ) cmp
+                      lc( $datastruct{$b}->{ALBUM} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(YEAR)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{YEAR} ) <=>
+                      lc( $datastruct{$b}->{YEAR} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(COMMENT)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{COMMENT} ) cmp
+                      lc( $datastruct{$b}->{COMMENT} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(GENRE)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{GENRE} ) cmp
+                      lc( $datastruct{$b}->{GENRE} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(TRACKNUM)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{TRACKNUM} ) <=>
+                      lc( $datastruct{$b}->{TRACKNUM} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(SIZE)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{SIZE} ) <=>
+                      lc( $datastruct{$b}->{SIZE} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(MODTIME)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{MODTIME} ) <=>
+                      lc( $datastruct{$b}->{MODTIME} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(VBR)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{VBR} ) <=>
+                      lc( $datastruct{$b}->{VBR} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(BITRATE)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{BITRATE} ) <=>
+                      lc( $datastruct{$b}->{BITRATE} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(FREQUENCY)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{FREQUENCY} ) <=>
+                      lc( $datastruct{$b}->{FREQUENCY} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(MINUTES)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{MM} ) <=> lc( $datastruct{$b}->{MM} )
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(SECONDS)$/ ) {
+                @index = sort {
+                    lc( $datastruct{$a}->{SS} ) <=> lc( $datastruct{$b}->{SS} )
+                } keys %datastruct;
+            }
+        }
+        else {
+            if ( $sortby =~ /^(URLNAME)$/ ) {
+                @index = sort {
+                    $datastruct{$a}->{URLNAME} cmp $datastruct{$b}->{URLNAME}
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(SHOWNAME)$/ ) {
+                @index = sort {
+                    $datastruct{$a}->{SHOWNAME} cmp $datastruct{$b}->{SHOWNAME}
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(DIR)$/ ) {
+                @index = sort {
+                    $mp3v[ $datastruct{$a}->{DIR} ]
+                      cmp $mp3v[ $datastruct{$b}->{DIR} ]
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(NAME)$/ ) {
+                @index =
+                  sort { $datastruct{$a}->{NAME} cmp $datastruct{$b}->{NAME} }
+                  keys %datastruct;
+            }
+            if ( $sortby =~ /^(TITLE)$/ ) {
+                @index =
+                  sort { $datastruct{$a}->{TITLE} cmp $datastruct{$b}->{TITLE} }
+                  keys %datastruct;
+            }
+            if ( $sortby =~ /^(ARTIST)$/ ) {
+                @index = sort {
+                    $datastruct{$a}->{ARTIST} cmp $datastruct{$b}->{ARTIST}
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(ALBUM)$/ ) {
+                @index =
+                  sort { $datastruct{$a}->{ALBUM} cmp $datastruct{$b}->{ALBUM} }
+                  keys %datastruct;
+            }
+            if ( $sortby =~ /^(YEAR)$/ ) {
+                @index =
+                  sort { $datastruct{$a}->{YEAR} <=> $datastruct{$b}->{YEAR} }
+                  keys %datastruct;
+            }
+            if ( $sortby =~ /^(COMMENT)$/ ) {
+                @index = sort {
+                    $datastruct{$a}->{COMMENT} cmp $datastruct{$b}->{COMMENT}
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(GENRE)$/ ) {
+                @index =
+                  sort { $datastruct{$a}->{GENRE} cmp $datastruct{$b}->{GENRE} }
+                  keys %datastruct;
+            }
+            if ( $sortby =~ /^(TRACKNUM)$/ ) {
+                @index = sort {
+                    $datastruct{$a}->{TRACKNUM} <=> $datastruct{$b}->{TRACKNUM}
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(SIZE)$/ ) {
+                @index =
+                  sort { $datastruct{$a}->{SIZE} <=> $datastruct{$b}->{SIZE} }
+                  keys %datastruct;
+            }
+            if ( $sortby =~ /^(MODTIME)$/ ) {
+                @index = sort {
+                    $datastruct{$a}->{MODTIME} <=> $datastruct{$b}->{MODTIME}
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(VBR)$/ ) {
+                @index =
+                  sort { $datastruct{$a}->{VBR} <=> $datastruct{$b}->{VBR} }
+                  keys %datastruct;
+            }
+            if ( $sortby =~ /^(BITRATE)$/ ) {
+                @index = sort {
+                    $datastruct{$a}->{BITRATE} <=> $datastruct{$b}->{BITRATE}
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(FREQUENCY)$/ ) {
+                @index = sort {
+                    $datastruct{$a}->{FREQUENCY} <=> $datastruct{$b}
+                      ->{FREQUENCY}
+                } keys %datastruct;
+            }
+            if ( $sortby =~ /^(MINUTES)$/ ) {
+                @index =
+                  sort { $datastruct{$a}->{MM} <=> $datastruct{$b}->{MM} }
+                  keys %datastruct;
+            }
+            if ( $sortby =~ /^(SECONDS)$/ ) {
+                @index =
+                  sort { $datastruct{$a}->{SS} <=> $datastruct{$b}->{SS} }
+                  keys %datastruct;
+            }
+        }
+    }
+
+    else {
+        if ( $NOCSFLAG == 1 ) {
+            @index = sort { lc($a) cmp lc($b) } keys %datastruct;
+        }
+        else {
+            @index = sort { $a cmp $b } keys %datastruct;
+        }
+    }
+
+    if ( $M3UFLAG == 1 ) { &Writem3u2($m3ufile); }
+    if ( $XMLFLAG == 1 ) { &WriteXML($xmlfile); }
+    if ( $PLSFLAG == 1 ) { &WritePLS($plsfile); }
+    if ( $B4SFLAG == 1 ) { &WriteB4S($b4sfile); }
+
+    if ( $HTMLFLAG == 1 && $SEPERATEFLAG == 0 ) {
+        &Writehtml2( $htmlfile, @index );
+    }
+
+    if ( $DBFLAG == 1 ) { &Writedb2($dbfile); }
+
+    if ( $SEPERATEFLAG == 1 && $HTMLFLAG == 0 ) {
+        &Writesephtml2($seperatepath);
+    }
+
+    if ( $STATFILEFLAG == 1 ) { &Writestatfile($statfile); }
+
+    if ( $SQLFLAG == 1 ) { &Writesql2($sqlfile); }
+
+    if ( $DUBLICATEFLAG == 1 ) { &Printdoublicates2; }
+
+    if ( $MD5DOUBLICATEFLAG == 1 ) {
+        &Printmd5doublicates($md5doublicateseekvalues);
+    }
+
+    if (@execs) {
+        foreach $execs (@execs) {
+            &Execsys($execs);
+        }
+    }
+
+    &Message( "Job", "done" );
+
+}
+
+#********************************************************************************
+# just make a output on stdout for sysntax etc.
+
+# already used chars: abcdefghijklmnopqrstxyz (all)
+
+sub Help {
+    print <<EOF
+mp3riot (c)2000-2004. Make playlists and html files. Version: 1.3
+by Nikolei Steinhage <nikolei\@linuxsecure.de>
+Latest version at http://www.linuxsecure.de/index.php?action=55
+This program is licensed under Version 2 of the GNU Public License.
+See http://www.gnu.org for details.
+
+Usage: perl mp3riot [options]			 
+
+	-h, --help                  Show this screen and exit
+	-k, --mkconf                Use an assistant to write a config file
+        -o, --os       <value>      Default "unix", otherwise windows. Possible values are:
+				    win, unix
+	-Q, --sortby   <value>      Default is "NAME" (the filename). You can sort
+				    the filelist by the following criteria:
+				    URLNAME, SHOWNAME, DIR, NAME, TITLE, ARTIST, 
+				    ALBUM, YEAR, COMMENT, GENRE, TRACKNUM, SIZE,  MODTIME, VBR, 
+				    BITRATE, FREQUENCY, MINUTES, SECONDS, FIRSTCHAR
+	-n, --doublicates           Check for doublicates of files by their
+	                            filename
+	-D, --md5doublicates	    Check for doublicates of files by their
+				    MD5 sum			    				   
+        -V, --seekvalues <n,+-n,n>  Three values that have to be seperated by ",". This
+				    is an useful option for --md5doublicates.
+				    The first one is the offset in bytes, the second is
+				    the number of bytes to seek (and the direction), and 
+				    the last value tells the program where to start from (1 means to
+				    start from the begining of a file, 2 means to start 
+				    from the end of a file. So, a combination of 1000,-1128,2 
+				    tells the programm to start 1128 bytes before the file ends 
+				    (id3v1 tag is 128 bytes long!) and use
+				    1000 bytes for calculation of md5 sums.				    			   
+        -b, --dbfile   <file>       Write database to a file for searching it
+        -m, --m3u      <file>       Write a m3u playlist file. Directory and filename or
+				    "GROUPPATH" for writing m3u files for groups.
+        -X, --xml      <file>       Write a xml playlist file. Directory and filename or
+				    "GROUPPATH" for writing xml files for groups.	
+        -L, --pls      <file>       Write a pls playlist file. Directory and filename or
+				    "GROUPPATH" for writing pls files for groups.			
+	-W, --b4s      <file>	    Write a b4s playlist file. Directory and filename or
+				    "GROUPPATH" for writing b4s files for groups. 
+        -t, --html     <file>       Write a html file. Directory and filename or
+				    "GROUPPATH" for writing m3u files for groups.
+        -a, --http     <name>       Define the http address for url
+        -r, --remove                Remove id3tags (do you know what you are doing?)
+        -i, --mp3info               Use mp3/ogg info for html output
+        -e, --ext                   Remove file extensions in html output
+        -f, --filesize              Use filesize for html output
+        -c, --check    <ext>        Select files by their extension(s) (e.g. mp3).
+				    For every extension use a seperate flag!
+        -z, --skip     <number>     Skip n elements of mount/directories/names
+        -p, --conf     <file>       Use a config file
+        -w, --utf8     <file>       File with UTF-8 code for replacements in links
+        -q, --nocs                  Do sorting not case sensitive
+        -j, --statfile <file>       Write statistics to file
+        -d, --dir      <directory>  Define the (multiple) directory(ies) the
+                                    mp3s are stored in. For every directory use a 
+				    seperate flag!
+	-g, --sql      <file>       Filename to store sql table in (only for mp3 and ogg!)
+        -y, --replace  <file>       Name of replacement file; in the file use
+                                    <string_1>=<string_2> to transform <string_1>
+                                    into <string_2>; special characters like a
+                                    backslash have to be preceeded by a
+                                    backslash "\\" (used for directories)
+        -s, --seperate <path>       Write seperate html files for every
+                                    character
+	-R, --rename                Renames mp3 and ogg file using their id3tag. 
+				    The use of rename_template in the configfile 
+				    is optional. If rename_template is not used,
+				    the program tries to create a filename like:
+				    ARTIST - ALBUM - TRACKNUMBER - TITLE by using 
+				    the id3tag. It assumes, that the filenames have
+				    a similar format and tries to guess, whether the 
+				    id3tag has enough information to create a better 
+				    filename. Old and new filenames are stored in
+				    RENAME.bak	
+	-B, --renameback	    Renames files back using the file RENAME.bak	    
+	-T, --templates             Html templates are used. They have to be defined 
+                                    in the conmfig file using the commands html_head,
+				    html_change, html_body, html_footer, html_sep_head.
+				    See the README for avalable templates!
+	-G, --groupfile <file>      Filename for grouping information:				    
+	                            <groupname1>=<TYPE>=<string1>,<string2>,...
+				    Prossible types are: EQUAL, NAME, DIR, TITLE, ARTIST,   
+				    ALBUM, YEAR, COMMENT, GENRE, TRACKNUM, SIZE, MODTIME, 
+				    VBR, BITRATE, FREQUENCY, MM, SS, EQUAL, FIRSTCHAR     				    
+	-P, --grouppath <path>      The path, where to write the html, m3u, xml, b4s, and pls 
+				    files for groups			    
+        -O, --older     <number>    Only files are selected, having a modification time
+				    higher than the specified days
+	-Y, --younger   <number>    Only files are selected, having a modification time
+				    less than the specified days
+	-I, --id3tag                Use the id3 tag to get infos			    
+	-S, --random    <number>    Percentage of file to select randomly (e.g. 50 to select
+				    50% of files/every second file)
+
+        Additionally, in the config file it is possible to use the commands:
+        exec=           <param>     Execute system command. This command can be used multiple
+				    times
+	
+	rename_template=<string>    string with templates for renaming files by their id3tag
+				    (to be used together with --rename)
+	
+	The following rename templates are available:
+	**TITLE**, **ARTIST**, **ALBUM**, **YEAR**, **COMMENT**, **GENRE**. **TRACKNUM**
+			                            
+	html_head=      <string>     Html code for the head
+	html_change=    <string>     Html code if the first character between two file names
+	                             change
+	html_body=      <string>     Html code for each filename
+	html_footer=    <string>     Html code for the foot.
+	html_sep_head=  <string>     Html code for the head seperate html files by first character
+	
+	The following html templates are available:
+	**SUMOFFILES**, **SUMOFMEGS**, **DATE**, **URLNAME**, **SHOWNAME**, **DIR**, **NAME**,
+	**TITLE**, **ARTIST**, **ALBUM**, **YEAR**, **COMMENT**, **GENRE**, **TRACKNUM**, **SIZE**, 
+	**MODTIME**, **VBR**, **BITRATE**, **FREQUENCY**, **MINUTES**, **SECONDS**, **HTMLINDEX**, 
+	**FIRSTCHAR** 
+EOF
+      ;
+
+    exit 1;
+}
+
+#********************************************************************************
+# get the parameters and check them
+# here a lot of things have to be done !!!!!!!!!!
+
+sub Getparameters {
+
+    my $error;
+    my $conffile;
+
+    $error = &GetOptions(
+        "mkconf|k"   => \$MKCONFFLAG,
+        "os|o=s"     => \$os,
+        "sortby|Q=s" => \$sortby,
+        "dbfile|b=s" => \$dbfile,
+        "m3u|m=s"    => \$m3ufile,
+        "xml|X=s"    => \$xmlfile,
+        "pls|L=s"    => \$plsfile,
+        "b4s|W=s"    => \$b4sfile,
+        "html|t=s"   => \$htmlfile,
+        "http|a=s"   => \$httpaddress,
+        "remove|r" => \$TAGRMFLAG, # no argument; variable is set to one if true
+        "mp3info|i"    => \$MP3FLAG,
+        "ext|e"        => \$REMEXTFLAG,
+        "seperate|s=s" => \$seperatepath,
+        "dir|d=s"      => \@mp3v,
+        "check|c=s"    => \@checkext,
+        "filesize|f"   => \$FILESIZEFLAG,
+        "conf|p=s"     => \$conffile,
+        "skip|z=i"     => \$depth,
+        "replace|y=s"  => \$replacefile,
+        "utf8|w=s"     => \$hexfile,
+        "nocs|q" => \$NOCSFLAG,    # no argument; variale is set to one if true
+        "statfile|j=s"     => \$statfile,
+        "sql|g=s"          => \$sqlfile,
+        "doublicates|n"    => \$DUBLICATEFLAG,
+        "rename|R"         => \$RENAMEFLAG,
+        "renameback|B"     => \$RENAMEBACKFLAG,
+        "templates|T"      => \$HTMLTEMPLATEFLAG,
+        "groupfile|G=s"    => \$groupfile,
+        "grouppath|P=s"    => \$grouppath,
+        "older|O=i"        => \$previoustime,
+        "younger|Y=i"      => \$sincetime,
+        "id3tag|I"         => \$ID3TAGFLAG,
+        "random|S=i"       => \$random,
+        "md5doublicates|D" => \$MD5DOUBLICATEFLAG,
+        "seekvalues|V=s"   => \$md5doublicateseekvalues,
+        "help|h"           => \&Help,
+    );
+
+    # if a configuration file is specified, then use it!!!
+    if ($conffile) { &Configfile($conffile); }
+
+    # set the flags needed and not set in GetOptions!!!!
+    if ( $os eq "win" ) { $OSFLAG = 1; }
+    else { $OSFLAG = 0; }    # default unix else window
+
+    # delete last slash or backslash if existing
+    $seperatepath = &Delslash( $seperatepath, $OSFLAG );
+    foreach $mp3v (@mp3v) { $mp3v = &Delslash( $mp3v, $OSFLAG ); }
+
+    if ($m3ufile) {
+        if ( $m3ufile =~ /^(GROUPPATH)$/ ) { $M3UGROUPFLAG = 1; }
+        else { $M3UFLAG = 1; }
+    }
+    if ($xmlfile) {
+        if ( $xmlfile =~ /^(GROUPPATH)$/ ) { $XMLGROUPFLAG = 1; }
+        else { $XMLFLAG = 1; }
+    }
+    if ($plsfile) {
+        if ( $plsfile =~ /^(GROUPPATH)$/ ) { $PLSGROUPFLAG = 1; }
+        else { $PLSFLAG = 1; }
+    }
+    if ($b4sfile) {
+        if ( $b4sfile =~ /^(GROUPPATH)$/ ) { $B4SGROUPFLAG = 1; }
+        else { $B4SFLAG = 1; }
+    }
+    if ($htmlfile) {
+        if ( $htmlfile =~ /^(GROUPPATH)$/ ) { $HTMLGROUPFLAG = 1; }
+        else { $HTMLFLAG = 1; }
+    }
+
+    if ($httpaddress) {
+        $HTTPFLAG = 1;
+    }    # set the url to httpaddess for htmlfile, correct slashes for win
+    if ($sortby)       { $SORTFLAG     = 1; }
+    if ($hexfile)      { $HEXFLAG      = 1; }
+    if ($dbfile)       { $DBFLAG       = 1; }
+    if ($seperatepath) { $SEPERATEFLAG = 1; }
+    if (@checkext)     { $CHECKFLAG    = 1; }
+    if ($depth)        { $DEPTHFLAG    = 1; }
+    if ($replacefile)  { $REPLACEFLAG  = 1; }
+
+    #  if($sepdirs){$SEPDIRSFLAG=1;}
+    if ($statfile) { $STATFILEFLAG = 1; }
+
+    if ($random) {
+        $RANDOMFLAG = 1;
+        $random     = $random / 100;
+    }
+
+    if ($sqlfile) {
+        $SQLFLAG = 1;
+
+        # also necessary!
+        $ID3TAGFLAG = 1;
+    }
+
+    if ($previoustime) { $PREVIOUSTIMEFLAG = 1; }
+    if ($sincetime)    { $SINCETIMEFLAG    = 1; }
+
+    if (   ( $previoustime && $previoustime == 0 )
+        || ( $sincetime && $sincetime == 0 ) )
+    {
+        &Message( "Error",
+"You have to define a non-zero value when using --older or --younger!"
+        );
+        exit 1;
+    }
+
+    if ($groupfile) {
+        $GROUPFLAG = 1;
+        if ( !$grouppath ) {
+            &Message( "Error",
+                "You have to define --grouppath when using --group!" );
+            exit 1;
+        }
+        else { $grouppath = &Delslash( $grouppath, $OSFLAG ); }
+    }
+
+    # if html tempaltes are used, then check whether everything is
+    # that is needed is defined!
+    if (   $HTMLTEMPLATELFAG == 1
+        && $HTMLFLAG == 1
+        && ( !$html_head || !$html_change || !$html_body || !$html_footer ) )
+    {
+        &Message( "Error", "You have not defined all variales necessary" );
+        &Message( "Error", "For using html templates." );
+        exit 1;
+    }
+    if (   $HTMLTEMPLATELFAG == 1
+        && $SEPERATEFLAG == 1
+        && ( !$html_sep_head || !$html_change || !$html_body || !$html_footer )
+      )
+    {
+        &Message( "Error", "You have not define all variales necessary" );
+        &Message( "Error", "For using html templates." );
+        exit 1;
+    }
+
+    if ( !@mp3v && $MKCONFFLAG == 0 && $RENAMEBACKFLAG == 0 ) {
+        warn "\nTry mp3riot --help |more\n";
+        exit 1;
+    }
+
+    if ( !$error ) {
+        &Help;
+        exit 1;
+    }
+
+}
+
+#********************************************************************************
+# Info about the program at program start
+
+sub Programinfo {
+    print "\n     mp3riot version 1.3 (c)2000-2004 by Nikolei Steinhage\n\n";
+}
+
+#********************************************************************************
+#********************************************************************************
+#********************************************************************************
+#********************************************************************************
+#********************************************************************************
+# search for files through the directories and get the informations needed
+
+sub Searchengine2 {
+    my @statistics;    # to store file statistics
+    my $fileinfos;     # to store file infos --> is now a global var!
+    my $info;          # to store id3tag info
+    my $dircount = 0;  # to cout directories
+    my $name;          # name of current file
+    my $CHECKOK;       # if checkext found then 1
+    my @keyofhash;     # keys of hash
+    my $sumoffiles;    # number of collected files
+    my $temp;          # temporary variable
+    my $key;
+    my $temp_random;   # a random number
+    my $curtime = time;
+    my $spinner = 0;      # spinner, here simple file count
+
+    #  if($MD5DOUBLICATEFLAG==1){
+    #     &Message("Info","Checking for doublicate files using MD5");
+    #     &Message("","This will take a lot of time");
+    #  }
+    if ( $RENAMEFLAG == 0 ) { &Message( "Begin", "Collecting files" ); }
+    else {
+        &Message( "Begin", "Collecting files and renaming them using id3 tag" );
+        if ( -e "RENAME.bak" ) {
+            &Message( "Info", "File 'RENAME.bak' already exists ... aborting" );
+            &Message( "Info", "Delete or rename 'RENAME.bak' fist," );
+            &Message( "Info", "It's in same folder as 'mp3riot'." );
+            exit 1;
+        }
+        &Openfile( "RENAME.bak", ">", RENAME );
+    }
+
+    if (   $CHECKFLAG == 1
+        || $PREVIOUSTIMEFLAG == 1
+        || $SINCETIMEFLAG == 1
+        || $RANDOMFLAG == 1 )
+    {
+        &Message( "Info", "Selection criteria:" );
+    }
+    if ( $CHECKFLAG == 1 ) { &Message( "", "extensions: @checkext" ); }
+    if ( $PREVIOUSTIMEFLAG == 1 ) {
+        &Message( "", "Files older than: $previoustime" );
+    }
+    if ( $SINCETIMEFLAG == 1 ) {
+        &Message( "", "Files younger than: $sincetime" );
+    }
+    if ( $RANDOMFLAG == 1 ) { &Message( "", "Random files: $random %" ) }
+
+    foreach (@mp3v) {
+
+        chdir( $mp3v[$dircount] )
+          || warn
+"Cannot open $mp3v[$dircount]! Maybe directory does not exist or has insufficient rights!";
+        opendir( ACDIR, $mp3v[$dircount] )
+          || die "cannot open $mp3v[$dircount] !";
+
+      INPUT: foreach $name ( readdir(ACDIR) ) {
+            $fileinfos =
+              "";    # free $fileinfos, because some files might be not mp3
+
+            next INPUT if $name =~ /^\.|\.\.$/;    # skip upper dirs
+
+            if ( -d $name ) {
+                if ( $OSFLAG == 0 ) {
+                    push @mp3v, join '', $mp3v[$dircount], "/", $name;
+                }
+                else { push @mp3v, join '', $mp3v[$dircount], "\\", $name; }
+                next INPUT;
+            }
+
+            # if it is a file and if random is selectet
+            elsif ( $RANDOMFLAG == 1 ) {
+                $temp_random = rand;
+                next INPUT if $temp_random > $random;
+            }
+
+            ## a very big/long else environment is following
+            ## if it is a file and not a dierectory then go on!
+            else {
+
+                if ( $CHECKFLAG == 1 ) {
+                    $CHECKOK = 0;
+                    foreach $checkext (@checkext) {
+                        if ( $name =~ /\.($checkext)\Z/ ) {
+                            $CHECKOK = 1;
+                        }
+                    }
+                    next INPUT if ( $CHECKOK == 0 );
+                }
+
+                @statistics = stat($name);
+
+                if ( $PREVIOUSTIMEFLAG == 1 ) {
+                    if ( $previoustime >
+                        int( ( $curtime - $statistics[9] ) / 86400 ) )
+                    {
+                        next INPUT;
+                    }
+                }
+
+                if ( $SINCETIMEFLAG == 1 ) {
+                    if ( $sincetime <
+                        int( ( $curtime - $statistics[9] ) / 86400 ) )
+                    {
+                        next INPUT;
+                    }
+                }
+
+                if ( $RENAMEFLAG == 1 ) {
+                    if ( $name =~ /(.mp3)\Z/i ) {
+                        $name = &Renamefilesbyid3( $name, $mp3v[$dircount] );
+                    }
+                    if ( $name =~ /(.ogg)\Z/i ) {
+                        $name = &Renamefilesbyid3( $name, $mp3v[$dircount] );
+                    }
+                }
+
+                ### because of the new timeselection functions, i have to move this statistics up!!!
+                ###          @statistics=stat($name);
+
+                $key = $name . "§" . $dircount;
+                $datastruct{$key}->{NAME} = $name;
+
+                if ( $MP3FLAG == 1 ) {
+                    if ( $name =~ /(.mp3)\Z/i ) {
+                        &Getmp3info2( $name, $key );
+                    }
+                    elsif ( $name =~ /(.ogg)\Z/i ) {
+                        &Getogginfo2( $name, $statistics[7], $key );
+                    }
+                    else { }    ## added 12.10.2002
+                }
+
+                if ( $ID3TAGFLAG == 1 ) {
+                    if ( $name =~ /(.mp3)\Z/i || $name =~ /(.ogg)\Z/i ) {
+                        &Getid3tag2( $name, $key );
+                    }
+                }
+
+                if ( $TAGRMFLAG == 1 ) {
+                    if ( $name =~ /(.mp3)\Z/i || $name =~ /(.ogg)\Z/i ) {
+                        &Removeid3tag($name);
+                    }
+                }
+
+                if ( $DUBLICATEFLAG == 1 ) {
+
+                    #	     $dublicates{$name}++;
+                    $dublicates{$name}->{COUNT}++;
+                    push( @{ $dublicates{$name}->{DIR} }, $dircount );
+                }
+
+                $datastruct{$key}->{DIR}     = $dircount;
+                $datastruct{$key}->{SIZE}    = $statistics[7];
+                $datastruct{$key}->{MODTIME} = $statistics[9];
+
+                if ( $NOCSFLAG == 1 ) {
+                    $datastruct{$key}->{FIRSTCHAR} =
+                      uc( substr( $name, 0, 1 ) );
+                    $sum_files{ uc( substr( $name, 0, 1 ) ) }++;
+                    $sum_sizes{ uc( substr( $name, 0, 1 ) ) } += $statistics[7];
+                }
+                else {
+                    $datastruct{$key}->{FIRSTCHAR} = substr( $name, 0, 1 );
+                    $sum_files{ substr( $name, 0, 1 ) }++;
+                    $sum_sizes{ substr( $name, 0, 1 ) } += $statistics[7];
+
+                }
+
+                $filecounter++;
+                $spinner++;
+                if ( $spinner == 50 ) {
+                    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: %d files collected",
+                      $filecounter;
+                    $spinner = 0;
+                }
+
+            }
+        }
+        closedir(ACDIR);
+        $dircount++;
+    }
+
+    @keysofhash = keys %sum_files;
+    foreach $keysofhash (@keysofhash) {
+        $sumoffiles += $sum_files{$keysofhash};
+    }
+    if ( $RENAMEFLAG == 1 ) {
+        &Message( "Info", "Renamed $global_rename_counter file(s)" );
+    }
+
+    #  &Message("Info","Collected $sumoffiles file(s)");
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: %d files collected\n",
+      $filecounter;
+    if ( $RENAMEFLAG == 1 ) { &Closefile(RENAME); }
+}
+
+#********************************************************************************
+# get some id3tag infos: &Getid3tag2($name,$key)
+
+sub Getid3tag2 {
+    my $param1 = $_[0];    # filename
+    my $param2 = $_[1];    # key
+    my $b;
+
+#($b=get_mp3tag($param1))||&Message("Warn","Cannot get id3tag of file $param1");
+    $b = get_mp3tag($param1);
+
+    $datastruct{$param2}->{TITLE}    = $b->{TITLE};
+    $datastruct{$param2}->{ARTIST}   = $b->{ARTIST};
+    $datastruct{$param2}->{ALBUM}    = $b->{ALBUM};
+    $datastruct{$param2}->{YEAR}     = $b->{YEAR};
+    $datastruct{$param2}->{COMMENT}  = $b->{COMMENT};
+    $datastruct{$param2}->{GENRE}    = $b->{GENRE};
+    $datastruct{$param2}->{TRACKNUM} = $b->{TRACKNUM};
+}
+
+#********************************************************************************
+# get ogginfo: &Getogginfo2(filename, filesize)
+
+sub Getogginfo2 {
+    my $oggfilename = $_[0];    # filename
+    my $oggfilesize = $_[1];    # filesize
+    my $param2      = $_[2];    # the key of $datastruct
+    my %vorbis_header_info;     # the info hash
+    my $min;                    # minutes tracklength
+    my $sec;                    # seconds tracklength
+    my $time;                   # tmporary time variable
+
+    ( %vorbis_header_info = &Ogg($oggfilename) )
+      || &Message( "Warn", "Cannot get info of file $oggfilename" );
+    $time =
+      int(
+        $oggfilesize / ( int( $vorbis_header_info{'bitrate_nominal'} / 8 ) ) );
+    $min                            = int( $time / 60 );
+    $sec                            = $time % 60;
+    $datastruct{$param2}->{VBR}     = 0;
+    $datastruct{$param2}->{BITRATE} =
+      int( $vorbis_header_info{'bitrate_nominal'} / 1000 );
+    $datastruct{$param2}->{FREQUENCY} =
+      $vorbis_header_info{'samplerate'} / 1000;
+    $datastruct{$param2}->{MM} = $min;
+    $datastruct{$param2}->{SS} = $sec;
+
+}
+
+#********************************************************************************
+# get mp3info: &Getmp3info2(filename)
+
+sub Getmp3info2 {
+    my $param  = $_[0];    # filename
+    my $param2 = $_[1];    # key
+    my $info;              # get mp3info
+
+    if (   $info = get_mp3info($param)
+        || &Message( "Warn", "Cannot get info of file $param" ) )
+    {
+        if ( $info->{VBR} == 1 ) { $datastruct{$param2}->{VBR} = "VBR"; }
+        else { $datastruct{$param2}->{VBR} = ""; }
+        $datastruct{$param2}->{BITRATE}   = $info->{BITRATE};
+        $datastruct{$param2}->{FREQUENCY} = $info->{FREQUENCY};
+        $datastruct{$param2}->{MM}        = $info->{MM};
+        $datastruct{$param2}->{SS}        = $info->{SS};
+    }
+
+}
+
+#********************************************************************************
+# write one html file or
+
+sub Writehtml2 {
+
+    my $param = $_[0];    # name of file to write
+    my $urlname;          # url name that can be corrected
+    my $datastring = "";  # string to store the m3u records
+    my $shownname;        # name that is visible
+    my $firstchar =
+      " ";    # need a character to compare the first char of exery file with
+    my $sunoffiles = 0;    # sum of files
+    my $sumofmegs  = 0;    # sum of filesizes
+    my @keysofhash = 0;    # keys for the hashes sum_file and sum_sizes
+
+    #  my $last=0;                   # counter
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    &Message( "Begin", "Preparing html file" );
+    if ( $HTMLTEMPLATEFLAG == 1 ) {
+        &Message( "Info",
+            "You are using html templates. This can slow down the process." );
+    }
+
+    &Openfile( $param, ">", HTMLFILE );
+
+    $sumoffiles = @index;
+    $onepct     = int( $sumoffiles / 100 );
+
+    if ( $HTMLTEMPLATEFLAG == 1 ) {
+        $datastring = join '', $datastring,
+          &Htmltemplate( $html_head, '', '', '', '', '', '', &Htmlindex, '' );
+    }
+    else { $datastring = join '', $datastring, &Htmlheader; }
+
+    foreach $index (@index) {
+
+        $urlname = $mp3v[ $datastruct{$index}->{DIR} ];
+        $filecounter++;
+
+        if ( $REPLACEFLAG == 1 ) { $urlname = &Replacelink($urlname) }
+
+        if ( $OSFLAG == 1 ) {
+            $urlname =
+              &Correctpathnames( join '', $urlname, "\\",
+                $datastruct{$index}->{NAME} );
+        }
+        else { $urlname = join '', $urlname, "/", $datastruct{$index}->{NAME}; }
+
+        if ( $DEPTHFLAG == 1 ) { $urlname = &Keeppath( $urlname, $depth ); }
+
+        if ( $HEXFLAG == 1 ) { $urlname = &Correcthexlinks($urlname); }
+
+        if ( $HTTPFLAG == 1 ) {
+            $urlname = join '', $httpaddress, "/", $urlname;
+        }
+
+        if ( $REMEXTFLAG == 1 ) {
+            $shownname = &Deletefileext( $datastruct{$index}->{NAME} );
+        }
+        else { $shownname = $datastruct{$index}->{NAME}; }
+
+##################################################################
+### if we use the new flexible sorting function, then we also have to replace NAME by our new variable!!!!!!
+### we also have to do it for writesephtml etc.....
+        if ( $NOCSFLAG == 1 &
+            lc( substr( $datastruct{$index}->{NAME}, 0, 1 ) ) ne lc($firstchar)
+          )
+        {
+            $firstchar = substr( $datastruct{$index}->{NAME}, 0, 1 );
+            if ( $HTMLTEMPLATEFLAG == 1 ) {
+                $datastring = join '', $datastring,
+                  &Htmltemplate( $html_change, '', '', '', '', '', '', '',
+                    $firstchar );
+            }
+            else {
+                $datastring = join '', $datastring,
+                  &Htmlchange( uc($firstchar) );
+            }
+        }
+        elsif ( $NOCSFLAG == 0 &
+            substr( $datastruct{$index}->{NAME}, 0, 1 ) ne $firstchar )
+        {
+            $firstchar = substr( $datastruct{$index}->{NAME}, 0, 1 );
+            if ( $HTMLTEMPLATEFLAG == 1 ) {
+                $datastring = join '', $datastring,
+                  &Htmltemplate( $html_change, '', '', '', '', '', '', '',
+                    $firstchar );
+            }
+            else {
+                $datastring = join '', $datastring, &Htmlchange($firstchar);
+            }
+        }
+
+        if ( $HTMLTEMPLATEFLAG == 1 ) {
+            $datastring = join '', $datastring,
+              &Htmltemplate( $html_body, '', '', '', $urlname, $shownname,
+                $index, '', '' );
+        }
+        else {
+            $datastring = join '', $datastring,
+              &Htmlbody2( $urlname, $shownname, $index );
+        }
+
+        $spinner++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+    }
+
+### maybe i should check here whether $sumoffiles is not zero, because the grouping procedure decreasses files.
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    @keysofhash = keys %sum_files;
+    foreach $keysofhash (@keysofhash) { $sumofmegs += $sum_sizes{$keysofhash}; }
+
+    #############################
+    ## i have to implement variables for HTMLTEMPLATEFLAG and html_footer etc.
+
+    if ( $HTMLTEMPLATEFLAG == 1 ) {
+        $datastring = join '', $datastring,
+          &Htmltemplate( $html_footer, $sumoffiles, int( $sumofmegs / 1000000 ),
+            &Date, '', '', '', '', '', '' );
+    }
+    else {
+        $datastring = join '', $datastring,
+          &Htmlfooter( $sumoffiles, int( $sumofmegs / 1000000 ), &Date );
+    }
+
+    &Message( "Begin", "Writing html file" );
+    print {HTMLFILE} "$datastring";
+    &Closefile(HTMLFILE);
+}
+
+#********************************************************************************
+# here is the replace function for html templates &Htmltemplate($template, $sumoffiles, $sumofmegs, &Date, $urlname, $showname, $index, $indexheader, $firstchar)
+sub Htmltemplate {
+
+    my @template = @_;
+    my $temp;
+
+    $template[0] =~ s/(\*\*SUMOFFILES\*\*)/$template[1]/g;
+    $template[0] =~ s/(\*\*SUMOFMEGS\*\*)/$template[2]/g;
+    $template[0] =~ s/(\*\*DATE\*\*)/$template[3]/g;
+
+    $template[0] =~ s/(\*\*URLNAME\*\*)/$template[4]/g;
+    $template[0] =~ s/(\*\*SHOWNAME\*\*)/$template[5]/g;
+    $temp = $mp3v[ $datastruct{ $template[6] }->{DIR} ];
+    $template[0] =~ s/(\*\*DIR\*\*)/$temp/g;
+    $template[0] =~ s/(\*\*NAME\*\*)/$datastruct{$template[6]}->{NAME}/g;
+    $template[0] =~ s/(\*\*TITLE\*\*)/$datastruct{$template[6]}->{TITLE}/g;
+    $template[0] =~ s/(\*\*ARTIST\*\*)/$datastruct{$template[6]}->{ARTIST}/g;
+    $template[0] =~ s/(\*\*ALBUM\*\*)/$datastruct{$template[6]}->{ALBUM}/g;
+    $template[0] =~ s/(\*\*YEAR\*\*)/$datastruct{$template[6]}->{YEAR}/g;
+    $template[0] =~ s/(\*\*COMMENT\*\*)/$datastruct{$template[6]}->{COMMENT}/g;
+    $template[0] =~ s/(\*\*GENRE\*\*)/$datastruct{$template[6]}->{GENRE}/g;
+    $template[0] =~
+      s/(\*\*TRACKNUM\*\*)/$datastruct{$template[6]}->{TRACKNUM}/g;
+    $temp = int( $datastruct{ $template[6] }->{SIZE} / 1000 );
+    $template[0] =~ s/(\*\*SIZE\*\*)/$temp/g;
+    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
+      localtime( $datastruct{ $template[6] }->{MODTIME} );
+    $year += 1900;
+    $temp = $year . "-" . $mon . "-" . $mday;
+    $template[0] =~ s/(\*\*MODTIME\*\*)/$datastruct{$template[6]}->{MODTIME}/g;
+    $template[0] =~ s/(\*\*VBR\*\*)/$datastruct{$template[6]}->{VBR}/g;
+    $template[0] =~ s/(\*\*BITRATE\*\*)/$datastruct{$template[6]}->{BITRATE}/g;
+    $template[0] =~
+      s/(\*\*FREQUENCY\*\*)/$datastruct{$template[6]}->{FREQUENCY}/g;
+    $template[0] =~ s/(\*\*MINUTES\*\*)/$datastruct{$template[6]}->{MM}/g;
+    $template[0] =~ s/(\*\*SECONDS\*\*)/$datastruct{$template[6]}->{SS}/g;
+
+    $template[0] =~ s/(\*\*HTMLINDEX\*\*)/$template[7]/g;
+    $template[0] =~ s/(\*\*FIRSTCHAR\*\*)/$template[8]/g;
+
+    return $template[0];
+
+}
+
+#********************************************************************************
+# here is the definition of the html body: &Htmlbody2(urlname,shownname,key)
+
+sub Htmlbody2 {
+
+    my @params = @_;
+    my $a      = "";   # this variable will contain the html code for the header
+    my $b      = "";
+
+    if ( $FILESIZEFLAG == 1 ) {
+        $b = int( $datastruct{ $params[2] }->{SIZE} / 1000 ) . " kb";
+    }
+    if ( $datastruct{ $params[2] }->{MM} ) {   #### equal to if($MP3INFOFLAG==1)
+        $b =
+            $b . ", "
+          . $datastruct{ $params[2] }->{MM} . "\'"
+          . $datastruct{ $params[2] }->{SS} . "\'\'";
+    }
+
+    $a = ("<br><a href=\"$params[0]\">$params[1]</a> $b\n");
+
+    return $a;
+
+}
+
+#********************************************************************************
+# write sql table: &Writesql(sqlfile, keys)
+
+sub Writesql2 {
+    my $fname = $_[0];    # name of sql config/table file
+    my $dir;
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $temp;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    &Openfile( $fname, ">", SQLFILE );
+
+    &Message( "Begin", "Preparing sql file" );
+
+    $sumoffiles = @index;
+    $onepct     = int( $sumoffiles / 100 );
+
+    foreach $index (@index) {
+
+        $dir = $mp3v[ $datastruct{$index}->{DIR} ];
+
+        if ( $OSFLAG == 1 ) {
+            $dir =~ s/\\/\\\\/g;
+        }
+
+        # we have to use escape characters for "'":
+        # substitute "'" by "\'" for the following variables
+        $datastruct{$index}->{NAME}    =~ s/\'/\\\'/g;
+        $dir                           =~ s/\'/\\\'/g;
+        $datastruct{$index}->{TITLE}   =~ s/\'/\\\'/g;
+        $datastruct{$index}->{ARTIST}  =~ s/\'/\\\'/g;
+        $datastruct{$index}->{ALBUM}   =~ s/\'/\\\'/g;
+        $datastruct{$index}->{COMMENT} =~ s/\'/\\\'/g;
+        $datastruct{$index}->{GENRE}   =~ s/\'/\\\'/g;
+
+        $temp = $index;
+        $temp =~ s/\'/\\\'/g;
+
+        $a = join '', $a,
+          (     "INSERT mp3table VALUES (\'" . $temp . "\',\'"
+              . $datastruct{$index}->{NAME} . "\',\'"
+              . $datastruct{$index}->{TITLE} . "\',\'"
+              . $datastruct{$index}->{ARTIST} . "\',\'"
+              . $datastruct{$index}->{ALBUM} . "\',\'"
+              . $datastruct{$index}->{YEAR} . "\',\'"
+              . $datastruct{$index}->{COMMENT} . "\',\'"
+              . $datastruct{$index}->{GENRE} . "\',\'"
+              . $datastruct{$index}->{TRACKNUM} . "\',\'"
+              . $dir . "\',\'"
+              . $datastruct{$index}->{SIZE} . "\',\'"
+              . $datastruct{$index}->{MODTIME} . "\',\'"
+              . $datastruct{$index}->{VBR} . "\',\'"
+              . $datastruct{$index}->{BITRATE} . "\',\'"
+              . $datastruct{$index}->{FREQUENCY} . "\',\'"
+              . $datastruct{$index}->{MM} . "\',\'"
+              . $datastruct{$index}->{SS}
+              . "\');\n" );
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    &Message( "Begin", "Writing sql file" );
+
+    print {SQLFILE} "$a\n";
+
+    &Closefile(SQLFILE);
+}
+
+#********************************************************************************
+# write db file: &Writedb2(filename)
+
+sub Writedb2 {
+    my $param      = $_[0];    # name of file to write
+    my $datastring = "";       # string to store the m3u records
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    &Openfile( $param, ">", DBFILE );
+    &Message( "Begin", "Preparing db file" );
+
+    $sumoffiles = @index;
+    $onepct     = int( $sumoffiles / 100 );
+
+    foreach $index (@index) {
+        $datastring = $datastring . join '@@@ ', $index,
+          $datastruct{$index}->{NAME},   $datastruct{$index}->{TITLE},
+          $datastruct{$index}->{ARTIST}, $datastruct{$index}->{ALBUM},
+          $datastruct{$index}->{YEAR},   $datastruct{$index}->{COMMENT},
+          $datastruct{$index}->{GENRE},  $datastruct{$index}->{TRACKNUM},
+          $mp3v[ $datastruct{$index}->{DIR} ], $datastruct{$index}->{SIZE},
+          $datastruct{$index}->{MODTIME}, $datastruct{$index}->{VBR},
+          $datastruct{$index}->{BITRATE}, $datastruct{$index}->{FREQUENCY},
+          $datastruct{$index}->{MM},      $datastruct{$index}->{SS} . "\n";
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    &Message( "Begin", "Writing db file" );
+    print {DBFILE} "$datastring";
+    &Closefile(DBFILE);
+}
+
+#********************************************************************************
+# write m3u file: &Writem3u(filename)
+
+sub Writem3u2 {
+
+    my $param      = $_[0];    # name of file to write
+    my $datastring = "";       # string to store the m3u records
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $temp_seconds;
+    my $temp_name;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    &Openfile( $param, ">", M3UFILE );
+    &Message( "Begin", "Preparing m3u file" );
+    &Message( "Info",  "Keep in mind to select files for m3u" );
+
+    $sumoffiles = @index;
+    $onepct     = int( $sumoffiles / 100 );
+
+    $datastring = "#EXTM3U\n";
+
+    foreach $index (@index) {
+
+        $temp_seconds = 0;
+        if ( $datastruct{$index}->{MM} ) {
+            $temp_seconds = ( $datastruct{$index}->{MM} ) * 60;
+        }
+        if ( $datastruct{$index}->{SS} ) {
+            $temp_seconds += $datastruct{$index}->{SS};
+        }
+
+        if ( $datastruct{$index}->{ARTIST} && $datastruct{$index}->{TITLE} ) {
+            $temp_name =
+                $datastruct{$index}->{ARTIST} . " - "
+              . $datastruct{$index}->{TITLE};
+        }
+        else {
+            $temp_name = &Deletefileext( $datastruct{$index}->{NAME} );
+        }
+
+        $datastring = join '', $datastring, "#EXTINF:", $temp_seconds, ",",
+          $temp_name, "\n";
+
+        if ( $OSFLAG == 0 ) {
+            $datastring = join '', $datastring,
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME}, "\n";
+        }
+        else {
+            $datastring = join '', $datastring,
+              $mp3v[ $datastruct{$index}->{DIR} ], "\\",
+              $datastruct{$index}->{NAME}, "\n";
+        }
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    print {M3UFILE} "$datastring";
+    &Message( "Begin", "Writing m3u file" );
+    &Closefile(M3UFILE);
+}
+
+#********************************************************************************
+# write pls file: &WritePLS(filename)
+
+sub WritePLS {
+
+    my $param      = $_[0];    # name of file to write
+    my $datastring = "";       # string to store the pls records
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $temp_seconds;
+    my $temp_filenumber = 0;
+    my $temp_name;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    &Openfile( $param, ">", PLSFILE );
+    &Message( "Begin", "Preparing PLS file" );
+    &Message( "Info",  "Keep in mind to select files for PLS-Playlistfile" );
+
+    $sumoffiles = @index;
+    $onepct     = int( $sumoffiles / 100 );
+
+    $datastring = "[playlist]\n";
+
+    foreach $index (@index) {
+
+        $temp_filenumber++;
+
+        $temp_seconds = 0;
+        if ( $datastruct{$index}->{MM} ) {
+            $temp_seconds = ( $datastruct{$index}->{MM} ) * 60;
+        }
+        if ( $datastruct{$index}->{SS} ) {
+            $temp_seconds += $datastruct{$index}->{SS};
+        }
+
+        if ( $datastruct{$index}->{ARTIST} && $datastruct{$index}->{TITLE} ) {
+            $temp_name =
+                $datastruct{$index}->{ARTIST} . " - "
+              . $datastruct{$index}->{TITLE};
+        }
+        else {
+            $temp_name = &Deletefileext( $datastruct{$index}->{NAME} );
+        }
+
+        if ( $OSFLAG == 0 ) {
+            $datastring = join '', $datastring, "File", $temp_filenumber, "=",
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME}, "\n";
+        }
+        else {
+            $datastring = join '', $datastring, "File", $temp_filenumber, "=",
+              $mp3v[ $datastruct{$index}->{DIR} ], "\\",
+              $datastruct{$index}->{NAME}, "\n";
+        }
+        $datastring = join '', $datastring, "Title", $temp_filenumber, "=",
+          $temp_name, "\n";
+        $datastring = join '', $datastring, "Length", $temp_filenumber, "=",
+          $temp_seconds, "\n";
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    $datastring = join '', $datastring,
+      "NumberOfEntries=" . $sumoffiles . "\nVersion=2\n";
+    print {PLSFILE} "$datastring";
+    &Message( "Begin", "Writing PLS file" );
+    &Closefile(PLSFILE);
+}
+
+#********************************************************************************
+# write xml file: &WriteXML(filename)
+
+sub WriteXML {
+
+    my $param      = $_[0];    # name of file to write
+    my $datastring = "";       # string to store the xml records
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $temp_seconds;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    &Openfile( $param, ">", XMLFILE );
+    &Message( "Begin", "Preparing XML file" );
+    &Message( "Info",  "Keep in mind to select files for XML-Playlistfile" );
+
+    $sumoffiles = @index;
+    $onepct     = int( $sumoffiles / 100 );
+
+    $datastring =
+      "<!DOCTYPE XMLPlaylist><playlist version=\"1.0\" client =\"noatun\">\n";
+
+    foreach $index (@index) {
+
+        $temp_seconds = 0;
+        if ( $datastruct{$index}->{MM} ) {
+            $temp_seconds = ( $datastruct{$index}->{MM} ) * 60;
+        }
+        if ( $datastruct{$index}->{SS} ) {
+            $temp_seconds += $datastruct{$index}->{SS};
+        }
+
+        if ( $OSFLAG == 0 ) {
+            $datastring = join '', $datastring, "<item title=\"",
+              $datastruct{$index}->{TITLE}, "\" url=\"file:/",
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME}, "\" local=\"",
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME},    "\" comments=\"",
+              $datastruct{$index}->{COMMENT}, "\" author=\"",
+              $datastruct{$index}->{ARTIST},  "\" length=\"", $temp_seconds,
+              "\" album=\"", $datastruct{$index}->{ALBUM}, "\" date=\"",
+              $datastruct{$index}->{YEAR}, "\" />\n";
+        }
+        else {
+            $datastring = join '', $datastring, "<item title=\"",
+              $datastruct{$index}->{TITLE}, "\" url=\"file:/",
+              $mp3v[ $datastruct{$index}->{DIR} ], "\\",
+              $datastruct{$index}->{NAME}, "\" local=\"",
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME},    "\" comments=\"",
+              $datastruct{$index}->{COMMENT}, "\" author=\"",
+              $datastruct{$index}->{ARTIST},  "\" length=\"", $temp_seconds,
+              "\" album=\"", $datastruct{$index}->{ALBUM}, "\" date=\"",
+              $datastruct{$index}->{YEAR}, "\" />\n";
+        }
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    $datastring = join '', $datastring, "</playlist>\n";
+    print {XMLFILE} "$datastring";
+    &Message( "Begin", "Writing XML file" );
+    &Closefile(XMLFILE);
+}
+
+#********************************************************************************
+# write b4s file: &WriteB4S(filename)
+
+sub WriteB4S {
+
+    my $param      = $_[0];    # name of file to write
+    my $datastring = "";       # string to store the xml records
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $temp_seconds;
+    my $temp_name;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    &Openfile( $param, ">", B4SFILE );
+    &Message( "Begin", "Preparing b4s file" );
+    &Message( "Info",  "Keep in mind to select files for b4s-Playlistfile" );
+
+    $sumoffiles = @index;
+    $onepct     = int( $sumoffiles / 100 );
+
+# $datastring="<?xml version=\"1.0\" encoding=\'UTF-8\' standalone=\"yes\"?>\n";
+
+    foreach $index (@index) {
+
+        $temp_seconds = 0;
+        if ( $datastruct{$index}->{MM} ) {
+            $temp_seconds = ( $datastruct{$index}->{MM} ) * 60;
+        }
+        if ( $datastruct{$index}->{SS} ) {
+            $temp_seconds += $datastruct{$index}->{SS};
+        }
+
+        if ( $datastruct{$index}->{ARTIST} && $datastruct{$index}->{TITLE} ) {
+            $temp_name =
+                $datastruct{$index}->{ARTIST} . " - "
+              . $datastruct{$index}->{TITLE};
+        }
+
+        if ( $OSFLAG == 0 ) {
+
+            # put in under name: artist - title if exists
+            # and under length: m-seconds!!!
+            $datastring = join '', $datastring,
+"<entry Playstring=\"file:$mp3v[$datastruct{$index}->{DIR}]/$datastruct{$index}->{NAME}\">\n<Name>$temp_name</Name>\n<Length>$temp_seconds</Length>\n</entry>\n";
+        }
+        else {
+            $datastring = join '', $datastring,
+"<entry Playstring=\"file:$mp3v[$datastruct{$index}->{DIR}]\\$datastruct{$index}->{NAME}\">\n
+      
+      ";
+        }
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    $datastring = join '',
+"<?xml version=\"1.0\" encoding=\'UTF-8\' standalone=\"yes\"?>\n<WinampXML>\n<!-- Generated by: mp3riot -->\n<playlist num_entries=\"$sumoffiles\" label=\"Work\">\n",
+      $datastring;
+
+    $datastring = join '', $datastring, "<WinampXML>\n";
+    print {B4SFILE} "$datastring";
+    &Message( "Begin", "Writing b4s file" );
+    &Closefile(B4SFILE);
+}
+
+#********************************************************************************
+# Refresh internal data structure: &Refreshinternaldata()
+sub Refreshinternaldata {
+
+    &Message( "Begin", "Refreshing internal data structure" );
+
+    # free tghe hashes that need a refresh
+    %sum_files = 0;
+    %sum_sizes = 0;
+
+    delete $datastruct{""};
+
+    @index = keys %datastruct;
+
+    foreach $index (@index) {
+
+        if ( $NOCSFLAG == 1 ) {
+            $sum_files{ uc( substr( $datastruct{$index}->{NAME}, 0, 1 ) ) }++;
+            $sum_sizes{ uc( substr( $datastruct{$index}->{NAME}, 0, 1 ) ) } +=
+              $datastruct{$index}->{SIZE};
+        }
+        else {
+            $sum_files{ substr( $datastruct{$index}->{NAME}, 0, 1 ) }++;
+            $sum_sizes{ substr( $datastruct{$index}->{NAME}, 0, 1 ) } +=
+              $datastruct{$index}->{SIZE};
+        }
+    }
+}
+
+#********************************************************************************
+# write seperate html file for every chart: &Writesephtml(path)
+# at the moment this sub is a little bit buggy!!! the misc category dos not
+# work very well. so you have to wait ;-) stay tune.
+
+sub Writesephtml2 {
+
+    my $htmlpath = $_[0];    # path to write html files: a.html, b.html .....
+    my $urlname;             # url name that can be corrected
+    my $datastring = "";     # string to store the m3u records
+    my $shownname;           # name that is visible
+    my $firstchar =
+      " ";    # need a character to compare the first char of exery file with
+    my @keysofhash = 0;    # keys for the hashes sum_file and sum_sizes
+
+    #  my $last=0;                   # counter
+    my $sumoffiles = 0;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    &Message( "Begin", "Preparing and writing seperate html files" );
+    if ( $HTMLTEMPLATEFLAG == 1 ) {
+        &Message( "Info",
+            "You are using html templates. This can slow down the process." );
+    }
+
+    @keysofhash = keys %sum_files;
+
+    $sumoffiles = @index;
+    $onepct     = int( $sumoffiles / 100 );
+
+    if ( $HTMLTEMPLATEFLAG == 1 ) {
+        $datastring = join '', $datastring,
+          &Htmltemplate( $html_sep_head, '', '', '', '', '', '', '' );
+    }
+    else { $datastring = join '', $datastring, &Htmlheader; } ### evtl. Sephtmlheader
+
+    foreach $index (@index) {
+
+        $urlname = $mp3v[ $datastruct{$index}->{DIR} ];
+
+        if ( $REPLACEFLAG == 1 ) { $urlname = &Replacelink($urlname) }
+
+        if ( $OSFLAG == 1 ) {
+            $urlname =
+              &Correctpathnames( join '', $urlname, "\\",
+                $datastruct{$index}->{NAME} );
+        }
+        else { $urlname = join '', $urlname, "/", $datastruct{$index}->{NAME}; }
+
+        if ( $DEPTHFLAG == 1 ) { $urlname = &Keeppath( $urlname, $depth ); }
+
+        if ( $HEXFLAG == 1 ) { $urlname = &Correcthexlinks($urlname); }
+
+        if ( $HTTPFLAG == 1 ) { $urlname = $httpaddress . "/" . $urlname; }
+
+        if ( $REMEXTFLAG == 1 ) {
+            $shownname = &Deletefileext( $datastruct{$index}->{NAME} );
+        }
+        else { $shownname = $datastruct{$index}->{NAME}; }
+
+        if (
+            (
+                $NOCSFLAG == 1 &
+                uc( substr( $datastruct{$index}->{NAME}, 0, 1 ) ) ne
+                uc($firstchar)
+            ) | (
+                $NOCSFLAG == 0 &
+                  substr( $datastruct{$index}->{NAME}, 0, 1 ) ne $firstchar
+            )
+          )
+        {
+
+            if ( $firstchar ne " " ) {
+
+                if ( $NOCSFLAG == 1 ) {
+                    if ( $HTMLTEMPLATEFLAG == 1 ) {
+                        $datastring = join '', $datastring,
+                          &Htmltemplate(
+                            $html_footer,
+                            $sum_files{ uc($firstchar) },
+                            int( $sum_sizes{ uc($firstchar) } / 1000000 ),
+                            &Date, '', '', '', '', '', ''
+                          );
+                    }
+                    else {
+                        $datastring = join '', $datastring,
+                          &Htmlfooter( $sum_files{ uc($firstchar) },
+                            int( $sum_sizes{ uc($firstchar) } / 1000000 ),
+                            &Date );
+                    }
+                }
+                else {
+                    if ( $HTMLTEMPLATEFLAG == 1 ) {
+                        $datastring = join '', $datastring,
+                          &Htmltemplate( $html_footer, $sum_files{$firstchar},
+                            int( $sum_sizes{$firstchar} / 1000000 ),
+                            &Date, '', '', '', '', '', '' );
+                    }
+                    else {
+                        $datastring = join '', $datastring,
+                          &Htmlfooter( $sum_files{$firstchar},
+                            int( $sum_sizes{$firstchar} / 1000000 ), &Date );
+                    }
+                }
+
+                print {HTMLFILE} $datastring;
+                close(HTMLFILE);
+                $datastring = "";
+            }
+
+            if ( $NOCSFLAG == 1 ) {
+                $firstchar = uc( substr( $datastruct{$index}->{NAME}, 0, 1 ) );
+            }
+            else { $firstchar = substr( $datastruct{$index}->{NAME}, 0, 1 ); }
+
+            if ( $NOCSFLAG == 1 ) {
+                if ( $OSFLAG == 1 ) {
+                    &Openfile( $htmlpath . "\\" . uc($firstchar) . ".html",
+                        ">", HTMLFILE );
+                }
+                else {
+                    &Openfile( $htmlpath . "/" . uc($firstchar) . ".html",
+                        ">", HTMLFILE );
+                }
+                if ( $HTMLTEMPLATEFLAG == 1 ) {
+                    $datastring = join '', $datastring,
+                      &Htmltemplate(
+                        $html_sep_head, '', '', '',
+                        '',             '', '', '',
+                        uc($firstchar)
+                      );
+                }
+                else { $datastring = &Sephtmlheader( uc($firstchar) ); }
+            }
+            else {
+                if ( $OSFLAG == 1 ) {
+                    &Openfile( $htmlpath . "\\" . $firstchar . ".html",
+                        ">", HTMLFILE );
+                }
+                else {
+                    &Openfile( $htmlpath . "/" . $firstchar . ".html",
+                        ">", HTMLFILE );
+                }
+                if ( $HTMLTEMPLATEFLAG == 1 ) {
+                    $datastring = join '', $datastring,
+                      &Htmltemplate( $html_sep_head, '', '', '', '', '', '', '',
+                        $firstchar );
+                }
+                else { $datastring = &Sephtmlheader($firstchar); }
+            }
+
+        }
+        if ( $HTMLTEMPLATEFLAG == 1 ) {
+            $datastring = join '', $datastring,
+              &Htmltemplate( $html_body, '', '', '', $urlname, $shownname,
+                $index, '', '' );
+        }
+        else {
+            $datastring = join '', $datastring,
+              &Htmlbody2( $urlname, $shownname, $index );
+        }
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+    } ## end of foreach
+
+    if ( $NOCSFLAG == 1 ) {
+        if ( $HTMLTEMPLATEFLAG == 1 ) {
+            $datastring = join '', $datastring,
+              &Htmltemplate(
+                $html_footer,
+                $sum_files{ uc($firstchar) },
+                int( $sum_sizes{ uc($firstchar) } / 1000000 ),
+                &Date, '', '', '', '', '', ''
+              );
+        }
+        else {
+            $datastring = join '', $datastring,
+              &Htmlfooter( $sum_files{ uc($firstchar) },
+                int( $sum_sizes{ uc($firstchar) } / 1000000 ), &Date );
+        }
+    }
+    else {
+        if ( $HTMLTEMPLATEFLAG == 1 ) {
+            $datastring = join '', $datastring,
+              &Htmltemplate( $html_footer, $sum_files{$firstchar},
+                int( $sum_sizes{$firstchar} / 1000000 ),
+                &Date, '', '', '', '', '', '' );
+        }
+        else {
+            $datastring = join '', $datastring,
+              &Htmlfooter( $sum_files{$firstchar},
+                int( $sum_sizes{$firstchar} / 1000000 ), &Date );
+        }
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    #  &Message("Begin","Writing html files");
+    print {HTMLFILE} "$datastring";
+    &Closefile(HTMLFILE);
+
+}
+
+#********************************************************************************
+# load  group table if necessary:  &Loadgrouptable(filename)
+sub Loadgrouptable {
+    my $param = $_[0];    # filename
+    my $line;             # temporary, line to be read in
+    my $a;
+    my $b;
+    my @c;
+    my $type;
+    my %temp
+      ; # needed if TYPE is "EQUAL" to biuld a list of all variantions of TYPE (like all differens DIRs)
+    my @keysoftemp;
+    my $oldkesyoftemp;
+
+    &Openfile( $param, "<", GROUPFILE );
+    &Message( "Begin", "Loading grouping table" );
+
+    while ( $line = <GROUPFILE> ) {
+        chomp($line);
+        $line =~ s/\s*$//;    # remove possible withspaceses at the end
+        ( $a, $type, $b ) = split /=/, $line, 3;
+        (@c) = split /,/, $b;
+
+        if ( $type =~ "EQUAL" ) {
+            @index = keys %datastruct;    # make new index
+            if ( $c[0] =~ "DIR" ) {
+                foreach $index (@index) {
+                    $temp{ $mp3v[ $datastruct{$index}->{DIR} ] } = 1;
+                }
+                @keysoftemp = keys %temp;
+                foreach $keysoftemp (@keysoftemp) {
+                    $oldkeysoftemp = $keysoftemp;
+                    if ( $OSFLAG == 1 ) {
+                        $oldkeysoftemp =~ s/\\/::/g;
+                    }
+                    else {
+                        $oldkeysoftemp =~ s/\//::/g;
+                    }
+                    $grouphash{$oldkeysoftemp}->{TYPE} = $c[0];
+                    push(
+                        @{ $grouphash{$oldkeysoftemp}->{MEMBERS} },
+                        $keysoftemp
+                    );
+                }
+            }
+
+            else {
+                foreach $index (@index) {
+                    if ( $datastruct{$index}->{ $c[0] } ne "" ) {
+                        $temp{ $datastruct{$index}->{ $c[0] } } =
+                          1;    ## vorher statt $a war es $c
+                    }
+                }
+
+                @keysoftemp = keys %temp;
+                foreach $keysoftemp (@keysoftemp) {
+                    $grouphash{$keysoftemp}->{TYPE} = $c[0];
+                    push( @{ $grouphash{$keysoftemp}->{MEMBERS} },
+                        $keysoftemp );
+                }
+            }
+        }
+##############################################################################################################
+
+        # here starts the old variant of grouping
+        else {
+            $grouphash{$a}->{TYPE} = $type;
+            foreach $c (@c) { push( @{ $grouphash{$a}->{MEMBERS} }, $c ); }
+        }
+    }
+
+    &Closefile(GROUPFILE);
+
+}
+
+#********************************************************************************
+# find group members:  &Findgoupmembers()
+
+sub Findgroupmembers {
+    my @a;        # key of %grouphash
+    my @b;        # values of every key of %grouphash
+    my @group;    # list of keys of the new group
+    my $temp;
+
+    &Message( "Begin", "Finding group members" );
+
+    @index = keys %datastruct;    # make new index
+    @a     = keys %grouphash;
+
+    foreach $a (@a) {
+        @b = @{ $grouphash{$a}->{MEMBERS} };
+        $c = $grouphash{$a}->{TYPE};
+
+      FILE: foreach $index (@index) {
+
+# if TYPE is DIR, then we need not the number of the directory, but its real name!!!
+# maybe it is best to substitute the directory number in $datastruct{}->{DIR} by the real name of the directory in Seachengine2 !!!
+            if ( $c =~ /DIR/ ) {
+                $temp = $mp3v[ $datastruct{$index}->{DIR} ];
+            }
+            else {
+                $temp = $datastruct{$index}->{$c};
+            }
+
+            foreach $b (@b) {
+                if ( $temp =~ /^$b/ ) {
+                    push @group, $index;
+                    next FILE;
+                }
+            }
+        }
+
+        if (@group) {    # if group is not empty, else go to the next group
+
+            if ( $HTMLGROUPFLAG == 1 ) {
+                &Writegrouphtml( $a, @group );
+            }            # write html
+            if ( $PLSGROUPFLAG == 1 ) {
+                &WriteGroupPLS( $a, @group );
+            }            # write pls
+            if ( $B4SGROUPFLAG == 1 ) {
+                &WriteGroupB4S( $a, @group );
+            }            # write b4s
+            if ( $XMLGROUPFLAG == 1 ) {
+                &WriteGroupXML( $a, @group );
+            }            # write xml
+            if ( $M3UGROUPFLAG == 1 ) {
+                &WriteGroupM3U( $a, @group );
+            }            # write m3u
+
+            foreach $group (@group) {
+                delete $datastruct{$group};
+            }            # remove elements og @group from %datastruct
+            @index = keys %datastruct;    # make new index
+            @group = ();                  # empty @group;
+        }
+    }
+}
+
+#********************************************************************************
+# write html files for groups:  &Writegrouphtml($groupname,@keys,$SEPHTMLFLAG)
+
+sub Writegrouphtml {
+    my $c = $_[0];                        # the current group
+    my @d;                                # values of actual group
+    my @filesofgroup = @_;    # array of files assigned to the current group
+    my $temp_file;            # name of html file for group
+    my $datastring;           # datastring to store the html code
+    my $sumoffiles = 0;       # sum of files
+
+    #	my $last=0;             # counter
+    my @keysofhash = 0;       # keys for the hashes sum_file and sum_sizes
+    my $sumofmegs  = 0;       # sum of filesizes
+    my $shownname;            # name that is visible
+    my $urlname;              # url name that can be corrected
+    my $firstchar =
+      " ";    # need a character to compare the first char of exery file with
+    my $htmlindex_group
+      ;       # variable containing the htmlindex for the current group
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+    my $newfilename;        # correct the filename
+
+    # build the &Htnlindex for the groups!
+    @d               = @{ $grouphash{$c}->{MEMBERS} };
+    $htmlindex_group = "<a name=\"top\"></a>";
+    foreach $d (@d) {
+        $htmlindex_group = join '', $htmlindex_group,
+          "<a href=\"" . $d . "\">" . $d . "</a>";
+    }
+
+    # remove the first element from group, that is the value of $a
+    shift @filesofgroup;
+
+    if ( $NOCSFLAG == 1 ) {
+        @filesofgroup = sort { lc($a) cmp lc($b) } @filesofgroup;
+    }
+    else {
+        @filesofgroup = sort { $a cmp $b } @filesofgroup;
+    }
+
+    # search and clean newfilename for problematic characters
+    $newfilename = $c;
+    $newfilename =~ s/[\\,\/,',\",´,`,\*,\?,!,\$,&,;,<,>,\|,#]//g;
+
+    if ( $OSFLAG == 1 ) {
+        $temp_file = $grouppath . "\\" . $newfilename . ".html";
+    }
+    else { $temp_file = $grouppath . "/" . $newfilename . ".html"; }
+
+    $sumoffiles = @filesofgroup;
+    $onepct     = int( $sumoffiles / 100 );
+
+    &Message( "Info", "processing group \"$c\"" );
+    if ( $HTMLTEMPLATEFLAG == 1 ) {
+        &Message( "Info",
+            "You are using html templates. This can slow down the process." );
+    }
+    &Openfile( $temp_file, ">", HTMLFILE );
+
+    if ( $HTMLTEMPLATEFLAG == 1 ) {
+        $datastring = join '', $datastring,
+          &Htmltemplate( $html_head, '', '', '', '', '', '', $htmlindex_group,
+            '' );
+    }
+    else { $datastring = join '', $datastring, &Htmlheader; }
+
+    foreach $index (@filesofgroup) {
+
+        $urlname = $mp3v[ $datastruct{$index}->{DIR} ];
+
+        if ( $REPLACEFLAG == 1 ) { $urlname = &Replacelink($urlname) }
+
+        if ( $OSFLAG == 1 ) {
+            $urlname =
+              &Correctpathnames( join '', $urlname, "\\",
+                $datastruct{$index}->{NAME} );
+        }
+        else { $urlname = join '', $urlname, "/", $datastruct{$index}->{NAME}; }
+
+        if ( $DEPTHFLAG == 1 ) { $urlname = &Keeppath( $urlname, $depth ); }
+
+        if ( $HEXFLAG == 1 ) { $urlname = &Correcthexlinks($urlname); }
+
+        if ( $HTTPFLAG == 1 ) {
+            $urlname = join '', $httpaddress, "/", $urlname;
+        }
+
+        if ( $REMEXTFLAG == 1 ) {
+            $shownname = &Deletefileext( $datastruct{$index}->{NAME} );
+        }
+        else { $shownname = $datastruct{$index}->{NAME}; }
+
+        if ( $NOCSFLAG == 1 &
+            lc( substr( $datastruct{$index}->{NAME}, 0, 1 ) ) ne lc($firstchar)
+          )
+        {
+            $firstchar = substr( $datastruct{$index}->{NAME}, 0, 1 );
+            if ( $HTMLTEMPLATEFLAG == 1 ) {
+                $datastring = join '', $datastring,
+                  &Htmltemplate( $html_change, '', '', '', '', '', '', '',
+                    $firstchar );
+            }
+            else {
+                $datastring = join '', $datastring,
+                  &Htmlchange( uc($firstchar) );
+            }
+        }
+        elsif ( $NOCSFLAG == 0 &
+            substr( $datastruct{$index}->{NAME}, 0, 1 ) ne $firstchar )
+        {
+            $firstchar = substr( $datastruct{$index}->{NAME}, 0, 1 );
+            if ( $HTMLTEMPLATEFLAG == 1 ) {
+                $datastring = join '', $datastring,
+                  &Htmltemplate( $html_change, '', '', '', '', '', '', '',
+                    $firstchar );
+            }
+            else {
+                $datastring = join '', $datastring, &Htmlchange($firstchar);
+            }
+        }
+
+        if ( $HTMLTEMPLATEFLAG == 1 ) {
+            $datastring = join '', $datastring,
+              &Htmltemplate( $html_body, '', '', '', $urlname, $shownname,
+                $index, '', '' );
+        }
+        else {
+            $datastring = join '', $datastring,
+              &Htmlbody2( $urlname, $shownname, $index );
+        }
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+        $sumofmegs += $datastruct{$index}->{SIZE};
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    if ( $HTMLTEMPLATEFLAG == 1 ) {
+        $datastring = join '', $datastring,
+          &Htmltemplate( $html_footer, $sumoffiles, int( $sumofmegs / 1000000 ),
+            &Date, '', '', '', '', '', '' );
+    }
+    else {
+        $datastring = join '', $datastring,
+          &Htmlfooter( $sumoffiles, int( $sumofmegs / 1000000 ), &Date );
+    }
+
+    &Message( "Begin", "Writing html file $temp_file for group $c" );
+    print {HTMLFILE} "$datastring";
+    &Closefile(HTMLFILE);
+}
+
+#********************************************************************************
+# write group pls file: &WriteGroupPLS(group, list)
+
+sub WriteGroupPLS {
+
+    my $c = $_[0];    # the current group
+    my @d;            # values of actual group
+    my @filesofgroup = @_;    # array of files assigned to the current group
+    my $temp_file;            # name of pls file for group
+
+    #  my $param = $_[0];               # name of file to write
+    my $datastring = "";      # string to store the pls records
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $temp_seconds;
+    my $temp_filenumber = 0;
+    my $temp_name;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    # remove the first element from group, that is the value of $a
+    shift @filesofgroup;
+
+    if ( $NOCSFLAG == 1 ) {
+        @filesofgroup = sort { lc($a) cmp lc($b) } @filesofgroup;
+    }
+    else {
+        @filesofgroup = sort { $a cmp $b } @filesofgroup;
+    }
+
+    # search and clean newfilename for problematic characters
+    $newfilename = $c;
+    $newfilename =~ s/[\\,\/,',\",´,`,\*,\?,!,\$,&,;,<,>,\|,#]//g;
+
+    if ( $OSFLAG == 1 ) {
+        $temp_file = $grouppath . "\\" . $newfilename . ".pls";
+    }
+    else { $temp_file = $grouppath . "/" . $newfilename . ".pls"; }
+
+    $sumoffiles = @filesofgroup;
+    $onepct     = int( $sumoffiles / 100 );
+
+    &Message( "Info", "processing group \"$c\"" );
+    &Openfile( $temp_file, ">", PLSFILE );
+
+    $datastring = "[playlist]\n";
+
+    foreach $index (@filesofgroup) {
+
+        $temp_filenumber++;
+
+        $temp_seconds = 0;
+        if ( $datastruct{$index}->{MM} ) {
+            $temp_seconds = ( $datastruct{$index}->{MM} ) * 60;
+        }
+        if ( $datastruct{$index}->{SS} ) {
+            $temp_seconds += $datastruct{$index}->{SS};
+        }
+
+        if ( $datastruct{$index}->{ARTIST} && $datastruct{$index}->{TITLE} ) {
+            $temp_name =
+                $datastruct{$index}->{ARTIST} . " - "
+              . $datastruct{$index}->{TITLE};
+        }
+        else {
+            $temp_name = &Deletefileext( $datastruct{$index}->{NAME} );
+        }
+
+        if ( $OSFLAG == 0 ) {
+            $datastring = join '', $datastring, "File", $temp_filenumber, "=",
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME}, "\n";
+        }
+        else {
+            $datastring = join '', $datastring, "File", $temp_filenumber, "=",
+              $mp3v[ $datastruct{$index}->{DIR} ], "\\",
+              $datastruct{$index}->{NAME}, "\n";
+        }
+        $datastring = join '', $datastring, "Title", $temp_filenumber, "=",
+          $temp_name, "\n";
+        $datastring = join '', $datastring, "Length", $temp_filenumber, "=",
+          $temp_seconds, "\n";
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    $datastring = join '', $datastring,
+      "NumberOfEntries=" . $sumoffiles . "\nVersion=2\n";
+    print {PLSFILE} "$datastring";
+    &Message( "Begin", "Writing PLS file" );
+    &Closefile(PLSFILE);
+}
+
+#********************************************************************************
+# write group b4s file: &WriteB4S(group,list)
+
+sub WriteGroupB4S {
+
+    my $c = $_[0];    # the current group
+    my @d;            # values of actual group
+    my @filesofgroup = @_;    # array of files assigned to the current group
+    my $temp_file;            # name of pls file for group
+
+    #  my $param = $_[0];               # name of file to write
+    my $datastring = "";      # string to store the xml records
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $temp_seconds;
+    my $temp_name;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    # remove the first element from group, that is the value of $a
+    shift @filesofgroup;
+
+    if ( $NOCSFLAG == 1 ) {
+        @filesofgroup = sort { lc($a) cmp lc($b) } @filesofgroup;
+    }
+    else {
+        @filesofgroup = sort { $a cmp $b } @filesofgroup;
+    }
+
+    # search and clean newfilename for problematic characters
+    $newfilename = $c;
+    $newfilename =~ s/[\\,\/,',\",´,`,\*,\?,!,\$,&,;,<,>,\|,#]//g;
+
+    if ( $OSFLAG == 1 ) {
+        $temp_file = $grouppath . "\\" . $newfilename . ".b4s";
+    }
+    else { $temp_file = $grouppath . "/" . $newfilename . ".b4s"; }
+
+    $sumoffiles = @filesofgroup;
+    $onepct     = int( $sumoffiles / 100 );
+
+    &Message( "Info", "processing group \"$c\"" );
+    &Openfile( $temp_file, ">", B4SFILE );
+
+# $datastring="<?xml version=\"1.0\" encoding=\'UTF-8\' standalone=\"yes\"?>\n";
+
+    foreach $index (@filesofgroup) {
+
+        $temp_seconds = 0;
+        if ( $datastruct{$index}->{MM} ) {
+            $temp_seconds = ( $datastruct{$index}->{MM} ) * 60;
+        }
+        if ( $datastruct{$index}->{SS} ) {
+            $temp_seconds += $datastruct{$index}->{SS};
+        }
+
+        if ( $datastruct{$index}->{ARTIST} && $datastruct{$index}->{TITLE} ) {
+            $temp_name =
+                $datastruct{$index}->{ARTIST} . " - "
+              . $datastruct{$index}->{TITLE};
+        }
+
+        if ( $OSFLAG == 0 ) {
+
+            # put in under name: artist - title if exists
+            # and under length: m-seconds!!!
+            $datastring = join '', $datastring,
+"<entry Playstring=\"file:$mp3v[$datastruct{$index}->{DIR}]/$datastruct{$index}->{NAME}\">\n<Name>$temp_name</Name>\n<Length>$temp_seconds</Length>\n</entry>\n";
+        }
+        else {
+            $datastring = join '', $datastring,
+"<entry Playstring=\"file:$mp3v[$datastruct{$index}->{DIR}]\\$datastruct{$index}->{NAME}\">\n
+      
+      ";
+        }
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    $datastring = join '',
+"<?xml version=\"1.0\" encoding=\'UTF-8\' standalone=\"yes\"?>\n<WinampXML>\n<!-- Generated by: mp3riot -->\n<playlist num_entries=\"$sumoffiles\" label=\"Work\">\n",
+      $datastring;
+
+    $datastring = join '', $datastring, "<WinampXML>\n";
+    print {B4SFILE} "$datastring";
+    &Message( "Begin", "Writing b4s file" );
+    &Closefile(B4SFILE);
+}
+
+#********************************************************************************
+# write group xml file: &WriteGroupXML(group, list)
+
+sub WriteGroupXML {
+
+    my $c = $_[0];    # the current group
+    my @d;            # values of actual group
+    my @filesofgroup = @_;    # array of files assigned to the current group
+    my $temp_file;            # name of pls file for group
+
+    #  my $param = $_[0];               # name of file to write
+    my $datastring = "";      # string to store the xml records
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $temp_seconds;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    # remove the first element from group, that is the value of $a
+    shift @filesofgroup;
+
+    if ( $NOCSFLAG == 1 ) {
+        @filesofgroup = sort { lc($a) cmp lc($b) } @filesofgroup;
+    }
+    else {
+        @filesofgroup = sort { $a cmp $b } @filesofgroup;
+    }
+
+    # search and clean newfilename for problematic characters
+    $newfilename = $c;
+    $newfilename =~ s/[\\,\/,',\",´,`,\*,\?,!,\$,&,;,<,>,\|,#]//g;
+
+    if ( $OSFLAG == 1 ) {
+        $temp_file = $grouppath . "\\" . $newfilename . ".xml";
+    }
+    else { $temp_file = $grouppath . "/" . $newfilename . ".xml"; }
+
+    $sumoffiles = @filesofgroup;
+    $onepct     = int( $sumoffiles / 100 );
+
+    &Message( "Info", "processing group \"$c\"" );
+    &Openfile( $temp_file, ">", XMLFILE );
+
+    $datastring =
+      "<!DOCTYPE XMLPlaylist><playlist version=\"1.0\" client =\"noatun\">\n";
+
+    foreach $index (@filesofgroup) {
+
+        $temp_seconds = 0;
+        if ( $datastruct{$index}->{MM} ) {
+            $temp_seconds = ( $datastruct{$index}->{MM} ) * 60;
+        }
+        if ( $datastruct{$index}->{SS} ) {
+            $temp_seconds += $datastruct{$index}->{SS};
+        }
+
+        if ( $OSFLAG == 0 ) {
+            $datastring = join '', $datastring, "<item title=\"",
+              $datastruct{$index}->{TITLE}, "\" url=\"file:/",
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME}, "\" local=\"",
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME},    "\" comments=\"",
+              $datastruct{$index}->{COMMENT}, "\" author=\"",
+              $datastruct{$index}->{ARTIST},  "\" length=\"", $temp_seconds,
+              "\" album=\"", $datastruct{$index}->{ALBUM}, "\" date=\"",
+              $datastruct{$index}->{YEAR}, "\" />\n";
+        }
+        else {
+            $datastring = join '', $datastring, "<item title=\"",
+              $datastruct{$index}->{TITLE}, "\" url=\"file:/",
+              $mp3v[ $datastruct{$index}->{DIR} ], "\\",
+              $datastruct{$index}->{NAME}, "\" local=\"",
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME},    "\" comments=\"",
+              $datastruct{$index}->{COMMENT}, "\" author=\"",
+              $datastruct{$index}->{ARTIST},  "\" length=\"", $temp_seconds,
+              "\" album=\"", $datastruct{$index}->{ALBUM}, "\" date=\"",
+              $datastruct{$index}->{YEAR}, "\" />\n";
+        }
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    $datastring = join '', $datastring, "</playlist>\n";
+    print {XMLFILE} "$datastring";
+    &Message( "Begin", "Writing XML file" );
+    &Closefile(XMLFILE);
+}
+
+#********************************************************************************
+# write group m3u file: &WriteGroupM3U(filename)
+
+sub WriteGroupM3U {
+
+    my $c = $_[0];    # the current group
+    my @d;            # values of actual group
+    my @filesofgroup = @_;    # array of files assigned to the current group
+    my $temp_file;            # name of pls file for group
+
+    #  my $param = $_[0];               # name of file to write
+    my $datastring = "";      # string to store the m3u records
+
+    #  my $last=0;
+    my $sumoffiles = 0;
+    my $temp_seconds;
+    my $temp_name;
+    my $spinner = 0;   # spinner displaying progress as percentage of sumoffiles
+    my $onepct;        # how many files are needed for 1% of sumoffiles?
+    my $filecounter = 0;    # counts the file progress
+
+    # remove the first element from group, that is the value of $a
+    shift @filesofgroup;
+
+    if ( $NOCSFLAG == 1 ) {
+        @filesofgroup = sort { lc($a) cmp lc($b) } @filesofgroup;
+    }
+    else {
+        @filesofgroup = sort { $a cmp $b } @filesofgroup;
+    }
+
+    # search and clean newfilename for problematic characters
+    $newfilename = $c;
+    $newfilename =~ s/[\\,\/,',\",´,`,\*,\?,!,\$,&,;,<,>,\|,#]//g;
+
+    if ( $OSFLAG == 1 ) {
+        $temp_file = $grouppath . "\\" . $newfilename . ".m3u";
+    }
+    else { $temp_file = $grouppath . "/" . $newfilename . ".m3u"; }
+
+    $sumoffiles = @filesofgroup;
+    $onepct     = int( $sumoffiles / 100 );
+
+    &Message( "Info", "processing group \"$c\"" );
+    &Openfile( $temp_file, ">", M3UFILE );
+
+    $datastring = "#EXTM3U\n";
+
+    foreach $index (@filesofgroup) {
+
+        $temp_seconds = 0;
+        if ( $datastruct{$index}->{MM} ) {
+            $temp_seconds = ( $datastruct{$index}->{MM} ) * 60;
+        }
+        if ( $datastruct{$index}->{SS} ) {
+            $temp_seconds += $datastruct{$index}->{SS};
+        }
+
+        if ( $datastruct{$index}->{ARTIST} && $datastruct{$index}->{TITLE} ) {
+            $temp_name =
+                $datastruct{$index}->{ARTIST} . " - "
+              . $datastruct{$index}->{TITLE};
+        }
+        else {
+            $temp_name = &Deletefileext( $datastruct{$index}->{NAME} );
+        }
+
+        $datastring = join '', $datastring, "#EXTINF:", $temp_seconds, ",",
+          $temp_name, "\n";
+
+        if ( $OSFLAG == 0 ) {
+            $datastring = join '', $datastring,
+              $mp3v[ $datastruct{$index}->{DIR} ], "/",
+              $datastruct{$index}->{NAME}, "\n";
+        }
+        else {
+            $datastring = join '', $datastring,
+              $mp3v[ $datastruct{$index}->{DIR} ], "\\",
+              $datastruct{$index}->{NAME}, "\n";
+        }
+
+        $spinner++;
+        $filecounter++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+    }
+
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    print {M3UFILE} "$datastring";
+    &Message( "Begin", "Writing m3u file" );
+    &Closefile(M3UFILE);
+}
+
+#********************************************************************************
+# load  unicode table if necessary:  &Loadunicodetable(filename)
+
+sub Loadhextable {
+    my $param = $_[0];    # name of hexfile
+    my $a;                # temporary variable
+    my $b;                # temporary variable
+    my $line;             # temporary, line to be read in
+
+    &Openfile( $param, "<", HEXFILE );
+    &Message( "Begin", "Loading UTF-8 table" );
+
+    while ( $line = <HEXFILE> ) {
+        chomp($line);
+        $line =~ s/\s*$//;    # remove possible withspaceses at the end
+        ( $a, $b ) = split / /, $line, 2;
+        $hexhash{$a} = $b;
+    }
+    &Closefile(HEXFILE);
+}
+
+#********************************************************************************
+# correct hex codes in links: &Correcthexlinks(name)
+
+sub Correcthexlinks {
+    my $param = $_[0];        # paramter of sub routine
+    my $j;                    # counter
+    my $a            = "";    # temopary varibale
+    my $b            = "";    # array to return;
+    my $lenghofparam = 0;     # to mack it faster claculate it once
+
+    $lenghofparam = length($param);
+    for ( $j = 0 ; $j <= $lenghofparam ; $j++ ) {
+        $a = substr( $param, $j, 1 );
+        if ( $hexhash{$a} ) { $a = $hexhash{$a}; }
+
+        #    else{}
+        $b = $b . $a;
+    }
+    return $b;
+}
+
+#********************************************************************************
+# build replacementhash
+
+sub Loadreplacementtable {
+    my $param = $_[0];    # name of file
+    my $a;                # temporary variable
+    my $b;                # temporary variable
+    my $line;             # temporary, line to be read in
+
+    &Openfile( $param, "<", REPLFILE );
+    &Message( "Begin", "Loading replacement table" );
+
+    while ( $line = <REPLFILE> ) {
+        chomp($line);
+        $line =~ s/\s*$//;    # remove possible withspaceses at the end
+        ( $a, $b ) = split /=/, $line, 2;
+        $replhash{$a} = $b;
+    }
+
+    &Closefile(REPLFILE);
+
+}
+
+#********************************************************************************
+# correct links by replacement file: &Replacelink(name)
+
+sub Replacelink {
+
+    my $param = $_[0];    # name of url
+    my @y;                # keys of hash
+    my $a;
+
+    @y = keys %replhash;
+
+    foreach $y (@y) {
+        $param =~ s/^$y/$replhash{$y}/ge;
+    }
+
+    return $param;
+
+}
+
+#********************************************************************************
+# delete file extension:  &Reletefileext(name)
+
+sub Deletefileext {
+
+    my $param = $_[0];    # parameter of sub routine
+
+    $param =~ s/\.*\w*\Z//g;
+
+    return $param;
+}
+
+#********************************************************************************
+# correct path-names for win if html contains http adress; from / to \
+# : &Correctpathname(name)
+
+sub Correctpathnames {
+    my $param = $_[0];    # parameter of sub routine
+
+    $param =~ s/\\/\//g;
+
+    return $param;
+}
+
+#********************************************************************************
+# remove the id3tag: &Removeid3tag(filename)
+
+sub Removeid3tag {
+    my $param = $_[0];    # parameter of sub routine
+
+    remove_mp3tag($param);
+
+}
+
+#********************************************************************************
+# parse vorbis: &vorbis_parse()
+# the original code of vorbis_parse was written by Jens Burkal
+# I took it and modified it
+sub vorbis_parse {
+
+    my $VORBIS_STREAM_ID = 'vorbis';
+
+    my $vorbisdata = shift;
+    my $stream_no  = shift;
+
+    my %vorbis_header_info;
+    my $header_type;
+    my $stream_id;
+
+    my $i;    # counter
+
+    my $offset = 0;
+
+    do {
+
+        ( $header_type, $stream_id ) =
+          unpack( "C a6", substr( $vorbisdata, $offset, 7 ) );
+        $offset += 7;
+
+        # If it is a vorbis-header-package, get basic information
+        if ( ( $header_type == 1 ) and ( $stream_id eq $VORBIS_STREAM_ID ) ) {
+            (
+                $vorbis_header_info{'version'},
+                $vorbis_header_info{'channels'},
+                $vorbis_header_info{'samplerate'},
+                $vorbis_header_info{'bitrate_upper'},
+                $vorbis_header_info{'bitrate_nominal'},
+                $vorbis_header_info{'bitrate_lower'},
+                $vorbis_header_info{'blocksize'}
+              )
+              = unpack( "L C L L L L H2", substr( $vorbisdata, $offset, 22 ) );
+            $offset += 22;
+
+     # If we don't get the end-of-packet signal (0x01), something must be wrong!
+            $offset++;
+
+        }
+
+        # If it is a vorbis-comment-package, get the comments
+        elsif ( ( $header_type == 3 ) and ( $stream_id eq $VORBIS_STREAM_ID ) )
+        {
+
+            # Get the length of the vendor string
+            $vorbis_header_info{'vendor_string_length'} =
+              unpack( "L", substr( $vorbisdata, $offset, 4 ) );
+            $offset += 4;
+
+            # Get the vendor string
+            $vorbis_header_info{'vendor_string'} = unpack(
+                "a*",
+                substr(
+                    $vorbisdata, $offset,
+                    $vorbis_header_info{'vendor_string_length'}
+                )
+            );
+            $offset += $vorbis_header_info{'vendor_string_length'};
+
+            # Get the total number of comments in vorbis-package
+            $vorbis_header_info{'no_comments'} =
+              unpack( "L", substr( $vorbisdata, $offset, 4 ) );
+            $offset += 4;
+
+            for ( $i = 0 ; $i < $vorbis_header_info{'no_comments'} ; $i++ ) {
+                $vorbis_header_info{'comment_length'}[$i] =
+                  unpack( "L", substr( $vorbisdata, $offset, 4 ) );
+                $offset += 4;
+
+                $vorbis_header_info{'comment'}[$i] = unpack(
+                    "a*",
+                    substr(
+                        $vorbisdata, $offset,
+                        $vorbis_header_info{'comment_length'}[$i]
+                    )
+                );
+                $offset += $vorbis_header_info{'comment_length'}[$i];
+
+            }
+            $offset++;
+
+        }
+        else {
+            return 0;
+        }
+
+    } until ( $offset == length($vorbisdata) );
+
+    return %vorbis_header_info;
+}
+
+#********************************************************************************
+# Ogg: &Ogg(filename)
+# the original code of vorbis_parse was written by Jens Burkal
+# I took it and modified it
+sub Ogg {
+
+    my $oggfilename = $_[0];
+    my $self        = {};
+    my %vorbis_header_info;
+
+    # specific variables:
+    my $CAPTURE_PATTERN =
+        chr(0x4f)
+      . chr(0x67)
+      . chr(0x67)
+      . chr(0x53);    # Capture pattern we want to match: OggS
+    my %headerinfo;
+    my $oggheader;
+    my $count;
+    my %ogginfo;
+    my $seg_table;
+    my $total_package_length;
+    my $ogg_payload;
+    my @package_lengths;
+    my %page_id;
+    my $i;            # counter
+
+    &Openfile( $oggfilename, "<", "OGGFILE" );
+
+    $self->{'no_log_bitstreams'} = 0;
+
+    $count = read( OGGFILE, $oggheader, 27 );
+    (
+        $headerinfo{'capture_pattern'}, $headerinfo{'stream_version'},
+        $headerinfo{'header_type'},     $headerinfo{'PCM_abs_pos'},
+        $headerinfo{'stream_serial'},   $headerinfo{'page_seq'},
+        $headerinfo{'page_crc'},        $headerinfo{'page_segments'}
+      )
+      = unpack( "a4 c c H16 i i H8 C", $oggheader );
+
+# If the page is the start of a logical bitstream, let's save the serial-number and other usefull info.
+    if ( $headerinfo{'header_type'} == 2 ) {
+        $self->{'ogg_serial'}[ $self->{'no_log_bitstreams'} ] =
+          $headerinfo{'stream_serial'};
+        $self->{'ogg_version'}[ $self->{'no_log_bitstreams'} ] =
+          $headerinfo{'stream_version'};
+
+# To keep track of which bitstream (based on serial) is which, save it's number in an array.
+        $page_id{ $headerinfo{'stream_serial'} } = $self->{'no_log_bitstreams'};
+        $self->{'no_log_bitstreams'}++;
+    }
+
+    # Read the segmentation table for the page.
+    $count = read( OGGFILE, $seg_table, $headerinfo{'page_segments'} );
+
+    # Unpack and calculate the total length of the data in the packages.
+    @package_lengths = unpack( "C*", $seg_table );
+
+    for ( $i = 0, $total_package_length = 0 ; $i < @package_lengths ; $i++ ) {
+        $total_package_length += $package_lengths[$i];
+    }
+
+    # Read the multimedia-data
+    $count = read( OGGFILE, $ogg_payload, $total_package_length );
+
+    %vorbis_header_info =
+      vorbis_parse( $ogg_payload, $page_id{ $headerinfo{'stream_serial'} } );
+
+    return %vorbis_header_info;
+}
+
+#********************************************************************************
+# open filehandle: &Openfile(filename,mode,filehandle)
+
+sub Openfile {
+    my $filename   = $_[0];    # name of file to open
+    my $filemode   = $_[1];    # mode: read, write, append etc.
+    my $filehandle = $_[2];    # name of filehandle
+
+    open( $filehandle, "$filemode $filename" )
+      || die
+"cannot open $filename! Maybe directory does not exist or has unsufficient rights!";
+
+}
+
+#********************************************************************************
+# close filehandle: &Closefile(handle);
+
+sub Closefile {
+    my $filehandle = $_[0];    # name of filehandle
+
+    close($filehandle) || die "cannot close $filehandle!";
+}
+
+#********************************************************************************
+# here is the definition of the html header
+
+sub Htmlheader {
+
+    my @para = $_[0];  # firstchar not needed here
+    my $temp = "";     # this variable will contain the html code for the header
+    my @y;             # values of hash
+
+    @y = sort( keys %sum_files );
+
+    $temp = ("<html><body><a name=\"top>\"");
+
+    foreach $y (@y) {
+        $temp = join '', $temp, "<a href=\"\#" . $y . "\">" . $y . "</a>";
+    }
+
+    return $temp;
+}
+
+#********************************************************************************
+# here is the definition of the html header
+
+sub Htmlindex {
+
+    my @para = $_[0];    # firstchar not needed here
+    my $temp =
+      "<a name=\"top\"></a>"
+      ;    # this variable will contain the html code for the header
+    my @y; # values of hash
+
+    # sort keys and delete empty ones (a workaround)
+    @y = keys %sum_files;
+    foreach $y (@y) {
+        if ( $sum_files{$y} == 0 ) { delete $sum_files{$y}; }
+    }
+
+    @y = sort ( keys %sum_files );
+
+    #  @y = sort @y;
+
+    foreach $y (@y) {
+        $temp = join '', $temp, "<a href=\"\#" . $y . "\">" . $y . "</a>";
+    }
+
+    return $temp;
+}
+
+#********************************************************************************
+# here is the definition of the html footer
+
+sub Htmlfooter {
+
+    my @params =
+      @_;    # parameters given to this function like sum of files, date etc.
+    my $datastring =
+      "";    # this variable will contain the html code for the header
+
+    $datastring = ( "
+      <BR><P><a href=\"\#top\">back to top</a>
+      </P>Sum of files is $params[0].
+      <br>Sum of megabytes is $params[1].
+      <br>Generated by mp3riot on $params[2],
+      (c)2000-2004 Nikolei Steinhage</body></html>
+    " );
+
+    return $datastring;
+
+}
+
+#********************************************************************************
+# here is the definition of the html char change: &Htmlchange(char)
+
+sub Htmlchange {
+
+    my $param      = $_[0];    # charcater
+    my $datastring =
+      "";    # this variable will contain the html code for the header
+
+    $datastring = (
+"<br><P><a href=\"\#top\">back to top</a></P><br><P><a name=$param>$param</a></P>\n"
+    );
+
+    return $datastring;
+
+}
+
+#********************************************************************************
+# time: &Date
+
+sub Date {
+
+    my @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+    my ( $sec, $min, $hour, $mday, $mon, $yearcomp ) = localtime(time);
+    my $time = sprintf(
+        "%02d/%s/%d, %02d:%02d:%02d",
+        $mday, $months[$mon], $yearcomp + 1900,
+        $hour, $min, $sec
+    );
+
+    return $time;
+
+}
+
+#********************************************************************************
+# write html header for seperate html files: &Sephtmlheader(char)
+# $datastring=&Sephtmlheader($firstchar);
+
+sub Sephtmlheader {
+
+    my $param      = $_[0];    # parameter: should be $firstchar
+    my $datastring = "";       # datastring to store html code in
+
+    $datastring = ( "
+    <html>
+    <body>
+    <p>$param</P>
+  " );
+
+    return $datastring;
+
+}
+
+#********************************************************************************
+# rename files by original name
+
+sub Renamefilesbyorig {
+    my $line;
+    my @temp;
+    my $b = 0;
+
+    &Message( "Begin",
+        "Renaming files by their original name using backup in RENAME.bak" );
+    &Openfile( "RENAME.bak", "<", RENAME );
+
+# when writing to RENAME.bak it has to be checkt, whether it already exists!!!!!
+
+    while ( $line = <RENAME> ) {
+        chomp($line);
+        @temp = split /----->/, $line, 2;
+        ( rename $temp[1], $temp[0] )
+          || &Message( "Info", "File $temp[1] does not exist" );
+        $b++;
+    }
+    &Message( "Info", "$b file(s) renamed" );
+    &Closefile(RENAME);
+
+}
+
+#********************************************************************************
+# rename files by id3tag
+
+sub Renamefilesbyid3 {
+    my $temp    = $_[0];    # name of file
+    my $tempdir = $_[1];    # name of dir
+    my $b;
+    my @title;
+    my $newfilename;        # to return the old name if no renaming took place
+    my $c = 2;
+
+    $b = get_mp3tag($temp);
+
+    if ($rename_template) {
+
+        ##### go and do the renaming using $rename_template!!!!!
+
+        # minimum should be availability of ARTIST and TITLE
+        if ( $b->{ARTIST} && $b->{TITLE} ) {
+
+            $newfilename = $rename_template;
+
+            if ( $b->{TITLE} ) {
+                $newfilename =~ s/(\*\*TITLE\*\*)/$b->{TITLE}/g;
+            }
+            if ( $b->{ARTIST} ) {
+                $newfilename =~ s/(\*\*ARTIST\*\*)/$b->{ARTIST}/g;
+            }
+            if ( $b->{ALBUM} ) {
+                $newfilename =~ s/(\*\*ALBUM\*\*)/$b->{ALBUM}/g;
+            }
+            if ( $b->{YEAR} ) { $newfilename =~ s/(\*\*YEAR\*\*)/$b->{YEAR}/g; }
+            if ( $b->{COMMENT} ) {
+                $newfilename =~ s/(\*\*COMMENT\*\*)/$b->{COMMENT}/g;
+            }
+            if ( $b->{GENRE} ) {
+                $newfilename =~ s/(\*\*GENRE\*\*)/$b->{GENRE}/g;
+            }
+            if ( $b->{TRACKNUM} ) {
+                $newfilename =~ s/(\*\*TRACKNUM\*\*)/$b->{TRACKNUM}/g;
+            }
+
+            # add the fileextension
+            $newfilename = join '', $newfilename,
+              substr( $temp, length($temp) - 4, 4 );
+
+            # search and clean newfilename for problematic characters
+            $newfilename =~ s/[\\,\/,',\",´,`,\*,\?,!,\$,&,;,<,>,\|,#]//g;
+
+            if ( $temp =~ $newfilename ) {
+                &Message( "Info", "File '$temp' has valid name ... skip it" );
+            }
+            elsif ( -e $newfilename ) {
+                &Message( "Info",
+                    "File '$newfilename' already exists ... skip it" );
+            }
+            else {
+                if ( $OSFLAG == 1 ) {
+                    &Storefilenames(
+                        $tempdir . "\\" . $temp,
+                        $tempdir . "\\" . $newfilename
+                    );
+                }
+                else {
+                    &Storefilenames(
+                        $tempdir . "/" . $temp,
+                        $tempdir . "/" . $newfilename
+                    );
+                }
+
+                ( rename $temp, $newfilename )
+                  || &Message( "Info", "Cannot rename $temp in $tempdir" );
+                $global_rename_counter++;
+
+            }
+        }
+
+        else {
+            $newfilename = $temp; # to return at least the oldd name of the file
+        }
+
+    }
+
+    else {
+
+        if ( $b->{ARTIST} && $b->{TITLE} ) {
+
+            $title[0] = $b->{ARTIST};
+            if ( $b->{ALBUM} ) {
+                $title[1] = " - " . $b->{ALBUM};
+                $c++;
+            }
+            if ( $b->{TRACKNUM} ) {
+                if ( ( $b->{TRACKNUM} ) < 10 ) {
+                    $b->{TRACKNUM} = "0" . int( $b->{TRACKNUM} );
+                }
+                $title[2] = " - " . $b->{TRACKNUM};
+                $c++;
+            }
+
+            $title[3] = " - " . $b->{TITLE};
+
+            # add the fileextension
+            $newfilename = join '', @title,
+              substr( $temp, length($temp) - 4, 4 );
+
+            # search and clean newfilename for problematic characters
+            $newfilename =~ s/[\\,\/,',\",´,`,\*,\?,!,\$,&,;,<,>,\|,#]//g;
+
+            if ( $temp =~ tr/-// >= $c ) {
+                &Message( "Info",
+"File '$temp' seems to contain as much info as id3 tag ... skip it"
+                );
+            }
+            elsif ( $temp =~ $newfilename ) {
+                &Message( "Info", "File '$temp' has valid name ... skip it" );
+            }
+            elsif ( -e $newfilename ) {
+                &Message( "Info",
+                    "File '$newfilename' already exists ... skip it" );
+            }
+            else {
+                if ( $OSFLAG == 1 ) {
+                    &Storefilenames(
+                        $tempdir . "\\" . $temp,
+                        $tempdir . "\\" . $newfilename
+                    );
+                }
+                else {
+                    &Storefilenames(
+                        $tempdir . "/" . $temp,
+                        $tempdir . "/" . $newfilename
+                    );
+                }
+
+                ( rename $temp, $newfilename )
+                  || &Message( "Info", "Cannot rename $temp in $tempdir" );
+                $global_rename_counter++;
+
+            }
+        }
+        else {
+            $newfilename = $temp; # to return at least the oldd name of the file
+        }
+
+    }
+
+    return $newfilename;
+
+}
+
+#********************************************************************************
+# &Storefilenames($old,$new)
+
+sub Storefilenames {
+
+    my @temp = @_;
+
+    # do not buffer these thing! here slower means safer!
+    print {RENAME} "$temp[0]----->$temp[1]\n";
+
+}
+
+#********************************************************************************
+# check for dublicates of filenames and print them out
+
+sub Printdoublicates {
+
+    my @temp;
+    my @z;
+
+    &Message( "Begin", "Counting dublicates" );
+
+    @z = keys %dublicates;
+    foreach $z (@z) {
+        if ( $dublicates{$z} > 1 ) {
+            push @temp, join '', $z . " " . $dublicates{$z} . " times";
+        }
+    }
+
+    &Message( "Info", "Dublicates found:" );
+    if ( scalar(@temp) == 0 ) {
+        print "            none\n";
+    }
+    else {
+        foreach $temp (@temp) {
+            print "            $temp\n";
+        }
+    }
+    &Message( "Info",
+        "Look into your html output for the exact location of these files" );
+
+}
+
+#********************************************************************************
+# check for dublicates of filenames and print them out
+
+sub Printdoublicates2 {
+
+    my @temp;
+    my @z;
+    my $dir;
+
+    &Message( "Begin", "Counting dublicates" );
+
+    @z = keys %dublicates;
+    foreach $z (@z) {
+        if ( $dublicates{$z}->{COUNT} > 1 ) {
+            push @temp, join '',
+              $z . " " . $dublicates{$z}->{COUNT} . " times in:";
+            foreach $dir ( @{ $dublicates{$z}->{DIR} } ) {
+                if ( $OSFLAG == 0 ) {
+                    push @temp, join '', $mp3v[$dir] . "/" . $z;
+                }
+                else {
+                    push @temp, join '', $mp3v[$dir] . "\\" . $z;
+                }
+            }
+            push @temp, "\n";
+        }
+    }
+
+    &Message( "Info", "Dublicates found:" );
+    if ( scalar(@temp) == 0 ) {
+        print "            none\n";
+    }
+    else {
+        foreach $temp (@temp) {
+            print "            $temp\n";
+        }
+    }
+##  &Message("Info","Look into your html output for the exact location of these files");
+
+}
+
+#********************************************************************************
+# print files with same md5
+
+sub Printmd5doublicates {
+
+    my $seekvalues =
+      $_[0]
+      ; # it is a list of values seperated by ",". first is no bytes to read, second the bytes to seek (with a + and - for the direction), and the third is the indicates whether to start from the beginning (1) of the end (2) of the file
+    my @seekvalue;
+    my %MD5hash = ();    # hash to store the MD5 of the files in
+    my $digest;
+    my $ctx;
+    my $data;
+    my @temp;
+    my @z;
+    my @b;
+    my $b;
+    my $sumoffiles;
+    my $last = 0;        # counter
+    my $pathandname;
+    my $spinner     = 0;
+    my $filecounter = 0;
+    my $onepct;
+
+#  $seekvalues="1000,-1128,2";  # for testing purposes only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    $seekvalues =
+      "2000,-200128,2"; # for testing purposes only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    &Message( "Info", "Searching for identical files by using md5 sums" );
+
+    if ($seekvalues) {
+        @seekvalue = split /,/, $seekvalues, 3;
+    }
+    else {
+        &Message( "Begin", "You have not defined seekvalues!" );
+        &Message( "Info",  "So the hole file will be read in." );
+        &Message( "",      "This takes a lot of time!" );
+    }
+
+    &Message( "Begin", "Calculating MD5 sums" );
+
+    $sumoffiles = @index;
+
+    $onepct = int( $sumoffiles / 100 );
+
+    foreach $index (@index) {
+
+        $filecounter++;
+
+        if ( !$seekvalues )
+        {    # we need a default here, so lets take the hole file
+            @seekvalue = ( $datastruct{$index}->{SIZE}, 0, 1 );
+        }
+        $ctx = Digest::MD5->new;
+        chdir( $mp3v[ $datastruct{$index}->{DIR} ] );
+        &Openfile( $datastruct{$index}->{NAME}, "<", "DG" );
+        binmode(DG);
+        seek DG, $seekvalue[1], $seekvalue[2];
+        read( DG, $data, $seekvalue[0] );
+        $ctx->add($data);
+        $digest = $ctx->hexdigest;
+        &Closefile(DG);
+
+        #	    push @{$MD5hash{$digest}},$datastruct{$index}->{NAME};
+        if ( $OSFLAG == 1 ) {
+            $pathandname =
+                $mp3v[ $datastruct{$index}->{DIR} ] . "\\"
+              . $datastruct{$index}->{NAME};
+        }
+        else {
+            $pathandname =
+                $mp3v[ $datastruct{$index}->{DIR} ] . "/"
+              . $datastruct{$index}->{NAME};
+        }
+        push @{ $MD5hash{$digest} }, $pathandname;
+
+        $spinner++;
+        if ( $spinner == $onepct ) {
+            printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %",
+              int( ( $filecounter / $sumoffiles ) * 100 );
+            $spinner = 0;
+        }
+
+    }
+    printf {STDERR}
+"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b      Info: Progress %d %\n",
+      int( ( $filecounter / $sumoffiles ) * 100 );
+
+    @z = keys %MD5hash;
+    foreach $z (@z) {
+        @b = @{ $MD5hash{$z} };
+        if ( @b > 1 ) {
+            $b = join "\n            ", @b;
+            &Message( "md5", "[$z]\n            $b\n" );
+        }
+    }
+
+}
+
+#********************************************************************************
+# read parameters from config file: &Configfile(filename)
+
+sub Configfile {
+
+    my $param = $_[0];    # name of config file
+    my $line;             # one line of file
+
+    &Message( "Begin", "Reading config file" );
+
+    &Openfile( $param, "<", CONFFILE );
+
+    while ( $line = <CONFFILE> ) {
+        chomp($line);
+        my (@value) = split /=/, $line, 2;
+
+      SWITCH: {
+
+            if ( $value[0] =~ /^(\#)/ ) {    # skip any comment line
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(o)$/ or $value[0] =~ /^(os)$/ ) {
+                $os = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(Q)$/ or $value[0] =~ /^(sortby)$/ ) {
+                $sortby = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(b)$/ or $value[0] =~ /^(dbfile)$/ ) {
+                $dbfile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(m)$/ or $value[0] =~ /^(m3u)$/ ) {
+                $m3ufile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(X)$/ or $value[0] =~ /^(xml)$/ ) {
+                $xmlfile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(L)$/ or $value[0] =~ /^(pls)$/ ) {
+                $plsfile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(W)$/ or $value[0] =~ /^(b4s)$/ ) {
+                $b4sfile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(t)$/ or $value[0] =~ /^(html)$/ ) {
+                $htmlfile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(a)$/ or $value[0] =~ /^(http)$/ ) {
+                $httpaddress = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(r)$/ or $value[0] =~ /^(remove)$/ ) {
+                $TAGRMFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(i)$/ or $value[0] =~ /^(mp3info)$/ ) {
+                $MP3FLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(s)$/ or $value[0] =~ /^(seperate)$/ ) {
+                $seperatepath = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(c)$/ or $value[0] =~ /^(check)$/ ) {
+                push @checkext, $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(f)$/ or $value[0] =~ /^(filesize)$/ ) {
+                $FILESIZEFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(d)$/ or $value[0] =~ /^(dir)$/ ) {
+                push @mp3v, $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(e)$/ or $value[0] =~ /^(ext)$/ ) {
+                $REMEXTFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(exec)$/ ) {
+                push @execs, $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(z)$/ or $value[0] =~ /^(skip)$/ ) {
+                $depth = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(y)$/ or $value[0] =~ /^(replace)$/ ) {
+                $replacefile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(w)$/ or $value[0] =~ /^(utf8)$/ ) {
+                $hexfile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(q)$/ or $value[0] =~ /^(nocs)$/ ) {
+                $NOCSFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(j)$/ or $value[0] =~ /^(statfile)$/ ) {
+                $STATFILEFLAG = 1;
+                $statfile     = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(g)$/ or $value[0] =~ /^(sql)$/ ) {
+                $SQLFLAG = 1;
+                $sqlfile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(n)$/ or $value[0] =~ /^(doublicates)$/ ) {
+                $DUBLICATEFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(R)$/ or $value[0] =~ /^(rename)$/ ) {
+                $RENAMEFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(B)$/ or $value[0] =~ /^(renameback)$/ ) {
+                $RENAMEBACKFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(T)$/ or $value[0] =~ /^(templates)$/ ) {
+                $HTMLTEMPLATEFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(html_head)$/ ) {
+                $html_head = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(html_body)$/ ) {
+                $html_body = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(html_change)$/ ) {
+                $html_change = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(html_footer)$/ ) {
+                $html_footer = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(html_sep_head)$/ ) {
+                $html_sep_head = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(rename_template)$/ ) {
+                $rename_template = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(G)$/ or $value[0] =~ /^(groupfile)$/ ) {
+                $groupfile = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(P)$/ or $value[0] =~ /^(grouppath)$/ ) {
+                $grouppath = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(O)$/ or $value[0] =~ /^(older)$/ ) {
+                $previoustime = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(Y)$/ or $value[0] =~ /^(younger)$/ ) {
+                $sincetime = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(I)$/ or $value[0] =~ /^(id3tag)$/ ) {
+                $ID3TAGFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(S)$/ or $value[0] =~ /^(random)$/ ) {
+                $random = $value[1];
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(D)$/ or $value[0] =~ /^(md5doublicates)$/ )
+            {
+                $MD5DOUBLICATEFLAG = 1;
+                last SWITCH;
+            }
+
+            elsif ( $value[0] =~ /^(V)$/ or $value[0] =~ /^(seekvalues)$/ ) {
+                $md5doublicateseekvalues = $value[1];
+                last SWITCH;
+            }
+
+            else {
+                &Message( "Info", "Do not know command \"$value[0]\"" );
+                last SWITCH;
+            }
+
+        }    # end of SWITCH
+
+    }
+
+    &Closefile(CONFFILE);
+
+}
+
+#********************************************************************************
+# execute system commmands: &Execsys(parameter)
+
+sub Execsys {
+
+    my $param = $_[0];    # system command
+
+    &Message( "Executing", $execs );
+    system($param);
+}
+
+#********************************************************************************
+# only keep n paths: &Keeppath(path,depth)
+
+sub Keeppath {
+
+    my $pathname = $_[0];    # pathname
+    my $depth    = $_[1];    # depth
+    my $tempname = "";       # temorary variable
+    my @elements;            # elements of tempname
+    my $elementcount;        # count elemets
+    my $i;                   # simple counter
+
+    @elements = split /\//g, $pathname;
+    $elementcount = @elements;
+    for ( $i = $depth + 1 ; $i < $elementcount ; $i++ ) {
+        $tempname = join '/', $tempname, $elements[$i];
+    }
+
+    return $tempname;
+}
+
+#********************************************************************************
+# give out a message on stderr: &Message(1st,2nd)
+
+sub Message {
+    my $category = $_[0];    # category
+    my $message  = $_[1];    # messageinfo
+
+    printf {STDERR} "%10s: %s\n", $category, $message;
+
+}
+
+#********************************************************************************
+# delete / or \ in patname for configs: &Delslash(path,osflag)
+
+sub Delslash {
+    my $pathname = $_[0];
+    my $os       = $_[1];
+
+    # first, remove all whitespaces an tghe end
+    $pathname =~ s/\s*$//;
+    if ( $os == 0 ) { $pathname =~ s/\/\Z//; }
+    else { $pathname =~ s/\\\Z//; }
+
+    return $pathname;
+}
+
+#********************************************************************************
+# write a statistics file: &Writestatfile(filename);
+
+sub Writestatfile {
+
+    my $file       = $_[0];    # filename
+    my $datastring = "";
+    my @y;
+    my $sum = 0;
+    my $temp;
+
+    # sort keys and delete empty ones (a workaround)
+    @y = keys %sum_files;
+    foreach $y (@y) {
+        if ( $sum_files{$y} == 0 ) { delete $sum_files{$y}; }
+    }
+
+    @y = keys %sum_files;
+    @y = sort @y;
+
+    &Message( "Begin", "Writing statistics file" );
+    &Openfile( $file, ">", STATOUT );
+    $datastring = join '', $datastring,
+"<html><body><center><b><u>SOME STATISTICS</u></b><br>&nbsp;<br>&nbsp;<br>";
+
+    ############## number of files per character
+    $datastring = join '', $datastring,
+      "<b>NUMBER OF FILES PER CHARACTER</b><br><table border=1><tr>";
+    foreach $y (@y) {
+        $datastring = join '', $datastring, "<td>" . $y . "</td>";
+    }
+    $datastring = join '', $datastring, "</tr><tr>";
+    foreach $y (@y) {
+        $datastring = join '', $datastring, "<td>" . $sum_files{$y} . "</td>";
+    }
+    $datastring = join '', $datastring, "</tr></table><br>";
+    foreach $y (@y) {
+        $sum += $sum_files{$y};
+    }
+    $datastring = join '', $datastring, "<br>&nbsp;<br>";
+    ###############
+
+    ############## percentage of files per character
+    $datastring = join '', $datastring,
+      "<b>PERCENTAGE OF FILES PER CHARACTER</b><br><table border=1><tr>";
+    foreach $y (@y) {
+        $datastring = join '', $datastring, "<td>" . $y . "</td>";
+    }
+    $datastring = join '', $datastring, "</tr><tr>";
+    foreach $y (@y) {
+        $temp = sprintf "%5.2f", ( ( $sum_files{$y} / $sum ) * 100 );
+
+#      $datastring=join '',$datastring, "<td>". (($sum_files{$y}/$sum)*100) ."</td>"; # $sum has bee built before
+        $datastring = join '', $datastring,
+          "<td>$temp</td>";    # $sum has bee built before
+    }
+    $datastring = join '', $datastring, "</tr></table><br>";
+    $datastring = join '', $datastring,
+      "Overall there are " . $sum . " files.<br>&nbsp;<br>";
+    ###############
+
+    ############## sizes of files per character
+    $datastring = join '', $datastring,
+      "<b>SUM OF SIZES PER CHARACTER IN MEGA BYTES</b><br><table border=1><tr>";
+    foreach $y (@y) {
+        $datastring = join '', $datastring, "<td>" . $y . "</td>";
+    }
+    $datastring = join '', $datastring, "</tr><tr>";
+    foreach $y (@y) {
+        $datastring = join '', $datastring,
+          "<td>" . int( $sum_sizes{$y} / 1000000 ) . "</td>";
+    }
+    $datastring = join '', $datastring, "</tr></table><br>";
+    foreach $y (@y) {
+        $sum += $sum_sizes{$y};
+    }
+    $datastring = join '', $datastring, "<br>&nbsp;<br>";
+    ###############
+
+    ############## percentage of sizes of files per character
+    $datastring = join '', $datastring,
+      "<b>PERCENTAGE OF SIZES PER CHARACTER</b><br><table border=1><tr>";
+    foreach $y (@y) {
+        $datastring = join '', $datastring, "<td>" . $y . "</td>";
+    }
+    $datastring = join '', $datastring, "</tr><tr>";
+    foreach $y (@y) {
+        $temp = sprintf "%5.2f", ( ( $sum_sizes{$y} / $sum ) * 100 );
+
+#      $datastring=join '',$datastring, "<td>". int(($sum_sizes{$y}/$sum)*100)."</td>"; # $sum has bee built before
+        $datastring = join '', $datastring,
+          "<td>$temp</td>";    # $sum has bee built before
+    }
+    $datastring = join '', $datastring, "</tr></table><br>";
+    $datastring = join '', $datastring,
+      "Overall there are "
+      . int( $sum / 1000000 )
+      . " mb of files.<br>&nbsp;<br>";
+    ###############
+
+    $datastring = join '', $datastring, "<br>Generated by mp3riot on " . &Date
+      . ", (c)2000-2004 Nikolei Steinhage </center></body></html>";
+
+    print {STATOUT} "$datastring";
+
+    &Closefile(STATOUT);
+
+}
+
+#********************************************************************************
+# print a line: &Line();
+sub Line {
+    print
+"\n----------------------------------------------------------------------\n";
+    print
+"----------------------------------------------------------------------\n";
+}
+
+#********************************************************************************
+# write a configfile: Write_Configfile();
+sub Write_Configfile {
+
+    my $x;          # temporary variable
+    my $y;          # temporary variable
+    my @configs;    # array for lines of configfile!
+    my $param;      # filename
+
+    print "\nThis is a tool that will help you to write a custom";
+    print "\nconfiguration file for mp3riot.";
+    print "\nIf you want to skip an option, just press RETURN";
+    print "\nTo abort, press CTRL-c";
+    print "\n\n\nPress Return to continue ....";
+    $x = <STDIN>;
+
+    &Line();
+
+    print "\nGive the name (and the absolute path if necessary)";
+    print "\nfor/of the config file:";
+    chomp( $param = <STDIN> );
+    if ( !$param ) {
+        print "\nNo filename was given!";
+        exit 1;
+    }
+
+    push @configs, "# This is a config file for mp3riot generated on " . &Date;
+    push @configs, "# I hope that this little proggy is useful for you.";
+    push @configs,
+      "# If you want to test a program, then run it on a sample data set!";
+
+    &Line();
+
+    # --os, specify the os
+    print "\nYou can specify the operating system perl is running on.";
+    print "\nFor example:";
+    print "\nIf you want to use Windows (whatever version): win";
+    print "\nOtherwise just press RETURN.";
+    print "\nDefine your operating system or use se default (unix):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(win)/ ) {
+        push @configs, "# operating system to be used";
+        push @configs, "os=win";
+        print "\n------> You are using Windows.\n";
+    }
+    else { print "\n-----> You are using Linux or so.\n"; }
+
+    &Line();
+
+    # --sortby, sort by another criteria
+    print "\nYou can sort the fles by other criteria than their filenames.";
+    print "\nPossible criterias are:";
+    print "\nURLNAME, SHOWNAME, DIR, NAME, TITLE, ARTIST,";
+    print "\nALBUM, YEAR, COMMENT, GENRE, TRACKNUM, SIZE,";
+    print "\nMODTIME, VBR, BITRATE, FREQUENCY, MINUTES, SECONDS, FIRSTCHAR.";
+    print "\nDefine are criteria or just press RETURN for unsing the default:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs, "# sort files by ...";
+        push @configs, join '', "sortby=" . $x;
+    }
+
+    &Line();
+
+    # --dir, specify directory
+    $x = "yes";
+    while ( $x =~ /^(y)|(yes)$/ ) {
+        print "\nYou can specify a directory to search recursively for files.";
+        print "\nFor example:";
+        print "\n    For Windows: c:\\music";
+        print "\n    For Linux: /home/nikolei/music";
+        print "\nGive the absolute path of the directory:";
+        chomp( $x = <STDIN> );
+        if ($x) {
+            push @configs, "# a directory to search in recursively for files";
+            push @configs, join '', "dir=" . $x;
+        }
+        print "\nDo you want to specify an other directory? (yes,no):";
+        chomp( $x = <STDIN> );
+    }
+
+    &Line();
+
+    # --html, specify html file
+    print "\nYou can specify a html file to store your file information in.";
+    print "\nIf you want to write a seperate html file for every first";
+    print "\ncharacter of your file names, then just press RETURN";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\myfiles.html";
+    print "\n     For Linux: /home/nikolei/myfiles.html";
+    print
+"\nGive the name of the html file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+
+    if ($x) {
+        push @configs,
+          "# a html file into which the file information is written";
+        push @configs, join '', "html=" . $x;
+    }
+    else { print "\n------> You have not specified any html file.\n"; }
+
+    &Line();
+
+    # --seperate
+    print "\nYou can specify a path to store your file information in.";
+    print "\nThe program will write a seperate html file for every first";
+    print "\ncharacter of your file names.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\myfiles.html";
+    print "\n     For Linux: /home/nikolei/myfiles.html";
+    print "\nIf you have already defined a html file (option before!)";
+    print "\nto store all file informations in, the just say no here";
+    print "\nor press RETURN.";
+    print
+"\nGive the name of the directory and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+
+    if ($x) {
+        push @configs,
+"# a directory into which a seperate html file for every different character of filenames is written";
+        push @configs, join '', "html=" . $x;
+    }
+    else { print "\n------> You have not specified any html file.\n"; }
+
+    &Line();
+
+    # --m3u, specify m3u file
+    print "\nYou can specify a m3u file to list your mp3 files in.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\myfiles.m3u";
+    print "\n     For Linux: /home/nikolei/myfiles.m3u";
+    print
+"\nGive the name of the m3u file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs, "# the name of a playlistfile (e.g. for winamp)";
+        push @configs, join '', "m3u=" . $x;
+    }
+    else { print "\n------> You have not specified any m3u file.\n"; }
+
+    &Line();
+
+    # --xml, specify xml file
+    print "\nYou can specify a xml file to list your mp3 files in.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\myfiles.xml";
+    print "\n     For Linux: /home/nikolei/myfiles.xml";
+    print
+"\nGive the name of the xml file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs, "# the name of a playlistfile (e.g. for winamp)";
+        push @configs, join '', "xml=" . $x;
+    }
+    else { print "\n------> You have not specified any xml file.\n"; }
+
+    &Line();
+
+    # --pls, specify pls file
+    print "\nYou can specify a pls file to list your mp3 files in.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\myfiles.pls";
+    print "\n     For Linux: /home/nikolei/myfiles.pls";
+    print
+"\nGive the name of the pls file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs, "# the name of a playlistfile (e.g. for winamp)";
+        push @configs, join '', "pls=" . $x;
+    }
+    else { print "\n------> You have not specified any pls file.\n"; }
+
+    &Line();
+
+    # --b4s, specify b4s file
+    print "\nYou can specify a b4s file to list your mp3 files in.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\myfiles.b4s";
+    print "\n     For Linux: /home/nikolei/myfiles.b4s";
+    print
+"\nGive the name of the b4s file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs, "# the name of a playlistfile (e.g. for winamp)";
+        push @configs, join '', "b4s=" . $x;
+    }
+    else { print "\n------> You have not specified any pls file.\n"; }
+
+    &Line();
+
+    # --dbfile, specify a db file
+    print "\nYou can specify a db file to list your file information in.";
+    print "\nIn this file information is seperated by a special character.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\myfiles.db";
+    print "\n     For Linux: /home/nikolei/myfiles.db";
+    print "\nNormally you would say no here.";
+    print
+"\nGive the name of the db file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+
+    if ($x) {
+        push @configs, "# the name for a special db file";
+        push @configs, join '', "dbfile=" . $x;
+    }
+    else { print "\n------> You have not specified any db file.\n"; }
+
+    &Line();
+
+    # --statfile, specify a html file for statistics
+    print "\nYou can specify a html file for statistics about your files.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\statistics.html";
+    print "\n     For Linux: /home/nikolei/statistics.html";
+    print
+"\nGive the name of the html file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs,
+          "# the name for html file for summary statistics of the found files";
+        push @configs, join '', "statfile=" . $x;
+    }
+    else { print "\n------> You have not specified any stat file.\n"; }
+
+    &Line();
+
+    # --hexfile, specify a hex file
+    print "\nYou can specify a utf-8 file that will be used to replace";
+    print "\nspecial characters.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\utf.dat";
+    print "\n     For Linux: /home/nikolei/utf.dat";
+    print
+"\nGive the name of the hex file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+
+    if ($x) {
+        push @configs,
+"# the name of a file where utf code for replacements in urls is stored in";
+        push @configs, join '', "utf8=" . $x;
+    }
+    else { print "\n------> You have not specified any utf8 file.\n"; }
+
+    &Line();
+
+    # --replace, specify a replacement file
+    print "\nYou can specify a replacement file for string replacements.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\replace.dat";
+    print "\n     For Linux: /home/nikolei/replace.dat";
+    print
+"\nGive the name of the replacement file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs,
+"# the name for a file where strings are stored in that should be replaced by other strings";
+        push @configs, join '', "replace=" . $x;
+    }
+    else { print "\n------> You have not specified any replacement file.\n"; }
+
+    &Line();
+
+    # --sql, specify a sql file
+    print "\nYou can specify a sql file to list your mp3 files in.";
+    print "\nFor example:";
+    print "\n     For Windows: c:\\windows\\Desktop\\myfiles.sql";
+    print "\n     For Linux: /home/nikolei/myfiles.sql";
+    print
+"\nGive the name of the sql file and it's absolute path or just just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs,
+          "# the name for a file to store data for a sql database in";
+        push @configs, join '', "sql=" . $x;
+    }
+    else { print "\n------> You have not specified any sql file.\n"; }
+
+    &Line();
+
+    # --http
+    print "\nYou can specify a url for your html files.";
+    print "\nThe url will be added to the links for the files.";
+    print "\nFor example:";
+    print "\n     instead of <a href=\"/music/testfile.mp3\">";
+    print "\n     you can define here http://mydomain.de and you will get";
+    print "\n     <a href=\"http://mydomain.de/music/testfile.mp3\">";
+    print "\nGive the name of the url or just just press RETURN:";
+    chomp( $x = <STDIN> );
+
+    if ($x) {
+        push @configs,
+          "# predessor for the url in a html file, e.g. a domain name";
+        push @configs, join '', "http=" . $x;
+    }
+    else { print "\n------> You have not specified any url.\n"; }
+
+    &Line();
+
+    # --remove
+    print "\nYou can remove all id3 tags from your mp3/ogg files.";
+    print "\nIf you want to do this, answer with yes, otherwise";
+    print "\nwith no or just press RETURN. Normally you would answer";
+    print "\nno here";
+    print "\nTo avoid mistakes, if the option is set, it will be";
+    print "\ncommented out in the config file, so you will have";
+    print "\nedit it.";
+    print "\nDo you want to remove all id3 tags? (yes,no):";
+    chomp( $x = <STDIN> );
+
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# remove all id3 tags";
+        push @configs, "#remove";
+    }
+    else { print "\n-----> Id3 tags will not be removed.\n"; }
+
+    &Line();
+
+    # --mp3info
+    print "\nYou can use extendet information of  your";
+    print "\nmp3/ogg files for your html files.";
+    print "\nThis information is about bitrate, freqency, length etc.";
+    print "\nDo you want to use this information? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# use mp3/ogg infos for html output";
+        push @configs, "mp3info";
+    }
+    else { print "\n-----> Mp3/ogg infos will not be used.\n"; }
+
+    &Line();
+
+    # --id3tag
+    print "\nYou can use id3tag information of your";
+    print "\nmp3/ogg files for your html/sql files.";
+    print "\nDo you want to use this information? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# use id3tag infos for html/sql output";
+        push @configs, "id3tag";
+    }
+    else { print "\n-----> id3tag infos will not be used.\n"; }
+
+    &Line();
+
+    # --doublicates
+    print "\nYou can search for doublicates of file names.";
+    print "\nDo you want to search for doublicates? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# search for doublicates of file names";
+        push @configs, "doublicates";
+    }
+    else { print "\n-----> Will not search for doublicates.\n"; }
+
+    &Line();
+
+    print "\nYou can search for doublicates by using md5 sums of file names.";
+    print "\nDo you want to search for doublicates? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# search for doublicates by using md5 sums";
+        push @configs, "md5doublicates";
+        print "\nYou can define seekvalues for the calculation of md5 sums.";
+        print "\nFor mp3s a reasonable choice isthe combination: 1000,-1028,2";
+        print "\nType in your choice:";
+        chomp( $x = <STDIN> );
+        if ($x) {
+            push @configs, "seekvalues=$x";
+        }
+    }
+    else { print "\n-----> Will not search for doublicates.\n"; }
+
+    &Line();
+
+    # --ext
+    print "\nYou can remove the file extensions for displayed file names";
+    print "\nin your html files.";
+    print "\nDo you want to remove the file extension? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs,
+          "# do not use file extensions for displayed filenames in html output";
+        push @configs, "ext";
+    }
+    else { print "\n-----> File extensions will not be removed.\n"; }
+
+    &Line();
+
+    # --filesize
+    print "\nYou can use the file size of the files for your html files.";
+    print "\nDo you want to use the filesize? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# use the filesize for html output";
+        push @configs, "filesize";
+    }
+    else { print "\n-----> File size will not be used.\n"; }
+
+    &Line();
+
+    # --nocs
+    print "\nYou can make the program to sort not case sensitive, so that";
+    print "\nMYFILE and myfile are ranked equal within sorting.";
+    print "\nDo you want to use not case sensitive sorting? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# do filename sorting not case sensitive";
+        push @configs, "nocs";
+        print "\n------> The program will not sort case sensitive.\n";
+    }
+    else { print "\n-----> The program will sort case sensitive.\n"; }
+
+    &Line();
+
+    # --rename
+    print
+      "\nYou can rename the files using their id3tag in a way that it becomes:";
+    print "\nARTIST - ALBUM - TRACKNUMER - TITLE.mp3";
+    print "\nDo you want to do that? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# rename files using their id3tag";
+        push @configs, "rename";
+        print "\n------> The program will rename files using their id3tags.\n";
+
+        # --rename_template
+        print "\nYou can use templates for renaming. ";
+        print "\nDo you want to do that? (yes,no):";
+        chomp( $x = <STDIN> );
+        if ( $x =~ /^(yes)|(y)$/ ) {
+            push @configs, "# Using template for renaming";
+            print
+              "\nThe variables for the template are pre-filled per default.";
+            print "\nYou can cahnge the varibales.";
+            push @configs,
+"rename_template=**ARTIST** - **ALBUM** - **TRACKNUM** - **TITLE**";
+        }
+        else {
+            print "\n-----> The program will not use templates for renaming.\n";
+        }
+
+    }
+    else { print "\n-----> The program will not rename files.\n"; }
+
+    &Line();
+
+    # --renameback
+    print
+      "\nYou can rename the files back using the information in 'RENAME.bak'";
+    print "\nso that they get their original file names back.";
+    print "\nDo you want to do that? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# rename files back using 'RENAME.bak'";
+        push @configs, "renameback";
+        print
+"\n------> The program will rename files back using their 'RENAME.bak'.\n";
+    }
+    else { print "\n-----> The program will not rename files back.\n"; }
+
+    &Line();
+
+    # --groupfile
+    print
+"\nYou can define a group file to collapse some files under a group name.";
+    print "\nIn the systax of the groupfile is:";
+    print "\n<groupname1>=<TYPE>=<string1>,<string2>,...";
+    print
+"\nmp3riot checks whether a filename (or an other type) starts with a specified string,";
+    print
+"\nand then puts this file into the specified group. For every group, a html";
+    print
+"\nis written out into the path defined by --grouppath, and has the name:";
+    print "\n<group>.html.";
+    print "\nGive the name of the gropup file or just just press RETURN:";
+    chomp( $x = <STDIN> );
+
+    if ($x) {
+        push @configs, "# here the file containing the groupings is defined";
+        push @configs, join '', "groupfile=" . $x;
+        while ( !$y ) {
+            print
+"\nYou also have to give a path, where to write the html file for the groups:";
+            chomp( $y = <STDIN> );
+            push @configs,
+"# here the path is defined, into which the html files for the groups are written";
+            push @configs, join '', "groupfile=" . $x;
+        }
+    }
+    else { print "\n-----> The program will use groupings\n"; }
+
+    &Line();
+
+    # --skip
+    print "\nYou skip one or more levels of the directory of a file";
+    print "\nin the url in the html files. This option might usefull";
+    print "\ntogether with the option http or if you define a special";
+    print "\ndata directory for your files within the http server";
+    print "\nFor example:";
+    print "\n     skip=2 will make from c:\\music\\foo\\myfile.mp3";
+    print "\n     <a href=\"/foo/myfile.mp3\">";
+    print "\n     and will make from /home/nikolei/music/myfile.mp3";
+    print "\n     <a href=\"/music/myfile.mp3\">";
+    print "\nGive a value vor skip or just press RETURN:";
+    chomp( $x = <STDIN> );
+
+    if ($x) {
+        push @configs,
+"# skip the first n elements of the directory for urls in the html output or just just press RETURN";
+        push @configs, "skip=" . $x;
+    }
+    else { print "\n-----> The program will not use the skip option.\n"; }
+
+    &Line();
+
+    # --random
+    print "\nYou can select files by random. Just select the percentage";
+    print
+      "\nof files you want, e.g. 50 for every secong file (= 50% of files).";
+    print "\nEnter the number or just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs, "# selecte n% of the files randomly";
+        push @configs, "random=" . $x;
+    }
+    else { print "\n-----> The program will not use the random option.\n"; }
+
+    &Line();
+
+    # --older
+    print "\nYou can select files that are older than n-days from today";
+    print "\nEnter the number of days or just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs, "# only select files that are older than n-days";
+        push @configs, "older=" . $x;
+    }
+    else { print "\n-----> The program will not use the older option.\n"; }
+
+    &Line();
+
+    # --younger
+    print "\nYou can select files that are younger than n-days from today";
+    print "\nIt is possible to use this function together with the function";
+    print "\nolder in order to select files falling into one time period.";
+    print "\nEnter the number of days or just press RETURN:";
+    chomp( $x = <STDIN> );
+    if ($x) {
+        push @configs, "# only select files that are younger than n-days";
+        push @configs, "younger=" . $x;
+    }
+    else { print "\n-----> The program will not use the younger option.\n"; }
+
+    &Line();
+
+    # --check
+    $x = "yes";
+    while ( $x =~ /^(y)|(yes)$/ ) {
+        print "\nYou can select file with specific file extensions.";
+        print "\nFor example:";
+        print "\n    mp3 and MP3 will match all files with these extensions";
+        print "\n    like foo.mp3 and bar.MP3";
+        print "\nGive a file extension or just just press RETURN:";
+        chomp( $x = <STDIN> );
+        if ($x) {
+            push @configs,
+              "# only files with the following file extension are selected";
+            push @configs, join '', "check=" . $x;
+        }
+        print "\nDo you want to specify an other extension? (yes,no):";
+        chomp( $x = <STDIN> );
+    }
+
+    &Line();
+
+    # --templates
+    print "\nYou can use html templates for html output.";
+    print "\nDo you want to do that? (yes,no):";
+    chomp( $x = <STDIN> );
+    if ( $x =~ /^(yes)|(y)$/ ) {
+        push @configs, "# Using html templates";
+        print "\nThe variables for html templates are pre-filled per default.";
+        print
+          "\nYou can cahnge the varibales html_head, html_change, html_body,";
+        print "\nhtml_footer, html_sep_head in the config file.";
+        push @configs, "html_head=<html><body>**HTMLINDEX**<br>";
+        push @configs,
+"html_change=<P><A HREF=\"\#top\">back to top</A></P><P><A NAME=\"**FIRSTCHAR**\">**FIRSTCHAR**</A></P>";
+        push @configs,
+"html_body=<BR><A HREF=\"**URLNAME**\">**SHOWNAME**</A> **SIZE** kb **MINUTES**\' **SECONDS**\'\'";
+        push @configs,
+"html_footer=<BR><P><A HREF=\"\#top\">back to top</a></P><P>Sum of files is **SUMOFFILES**.<br>Sum of megabytes is **SUMOFMEGS**.<br>Generated by mp3riot on **DATE**, (c)2000-2004 Nikolei Steinhage</P></body></html>";
+        push @configs, "html_sep_head=<HTML><BODY><P><B></B>**FIRSTCHAR**</P>";
+    }
+    else { print "\n-----> The program will not use the templates option.\n"; }
+
+    &Line();
+
+    # --exec
+    $x = "yes";
+    while ( $x =~ /^(y)|(yes)$/ ) {
+        print "\nYou can let the program execute other programs or scrips.";
+        print "\nFor example you can copy files to an other locations";
+        print "\nor whatever.";
+        print "\n    For example: copy foo bar";
+        print "\nGive the command to execute:";
+        chomp( $x = <STDIN> );
+        if ($x) {
+            push @configs, "# execute the following command";
+            push @configs, join '', "exec=" . $x;
+        }
+        print "\nDo you want to specify an other command? (yes,no):";
+        chomp( $x = <STDIN> );
+    }
+
+    push @configs, "## here is an example for own html code and templates!";
+    push @configs, "#templates";
+    push @configs, "#html_head=<html><body>**HTMLINDEX**<br>";
+    push @configs,
+"#html_change=<P><A HREF=\"#top\">back to top</A></P><P><A NAME=\"**FIRSTCHAR**\">**FIRSTCHAR**</A></P>";
+    push @configs,
+"#html_body=<BR><A HREF=\"**URLNAME**\">**SHOWNAME**</A> **SIZE** kb **MINUTES**' **SECONDS**''";
+    push @configs,
+"#html_footer=<BR><P><A HREF=\"#top\">back to top</a></P><P>Sum of files is **SUMOFFILES**.<br>Sum of megabytes is **SUMOFMEGS**.<br>Generated by mp3riot on **DATE**, (c)2000-2004 Nikolei Steinhage</P></body></html>";
+    push @configs, "#html_sep_head=<HTML><BODY><P><B></B>**FIRSTCHAR**</P>";
+
+    &Openfile( $param, ">", CONFFILE );
+    foreach $configs (@configs) {
+        print {CONFFILE} "$configs\n";
+    }
+    &Closefile(CONFFILE);
+
+    exit 1;
+}

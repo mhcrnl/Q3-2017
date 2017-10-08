@@ -1,0 +1,16 @@
+TODO
+
+
+- option for buffered/unbuffered write
+- an example for skip option with http + samba in MANUAL
+- statistics: number of directories
+- rename ID3FLAG in INFOFLAG or so!!!
+- htmlfiles per directory
+- htmlfiles per subdirectories
+- implement other file formats
+- use information in replacement file (-y) also for sql, db, m3u
+- utf8 support for sql should be optional
+- implement id3tag v2 support
+- implement support for mpeg riff avi ....
+- reimplement ogg support
+- new manual

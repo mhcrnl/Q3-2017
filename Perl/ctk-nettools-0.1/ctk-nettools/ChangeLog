@@ -1,0 +1,7 @@
+2000-09-14  root  <cyril@bouthors.org>
+
+	* nettools.pm.in: added loglevel from autoconf
+
+	* configure.in: added loglevel
+
+	* .cvsignore: added install.back to ignore list

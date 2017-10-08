@@ -1,0 +1,51 @@
+% Template for Disc-Cover
+% Author: J.I. van Hemert
+% Erweiterung von Lothar Schweikle-Droll
+% Date: 2003/01/09
+% Erweiterung-Date: 2005/03/03
+% Description: paper-box for cd (Papierhuelle für CDs)
+\enlargethispage{5\baselineskip}
+
+\noindent
+\vspace{2.5mm}
+\framebox{\rotatebox{180}{\parbox[c][5.5mm][t]{11.5cm}
+{
+    \hspace*{\fill}\raisebox{-0.2mm}[3.25mm][2.5mm]{KLEBER/GLUTEN}\hspace*{\fill}
+}}}
+
+\noindent
+\vspace{-120.7mm}
+\hspace{-133.5mm}
+\framebox{\rotatebox{90}{\parbox[c][5.5mm][t]{11.5cm}
+{
+    \hspace*{\fill}\raisebox{-0.2mm}[3.25mm][2.5mm]{KLEBER/GLUTEN}\hspace*{\fill}
+}}}
+
+\noindent
+\vspace{-0.5mm}
+\framebox{\parbox[c][122mm][t]{122mm}
+{
+		\rotatebox{-90}{\parbox[c][118mm][t]{\linewidth}{
+			\vspace{2\baselineskip}
+			\DCformattedhead{0.9\linewidth}
+			\vspace*{\fill}
+			\begin{center}
+			\DCpicture
+			\vspace*{\fill}
+			\parbox{0.9\linewidth}{{\footnotesize\sffamily\DCdiscinfo}}
+			\\
+			\end{center}
+		}}
+}}
+
+\noindent
+\vspace{-0.5mm}
+\framebox{\parbox[c][122mm][t]{122mm}
+{
+	\rotatebox{-90}{\parbox[c][118mm][t]{\linewidth}{
+	\DCformattedhead{0.97\linewidth}
+	\vspace{0.25\baselineskip}
+	\DCtracks
+	}}
+}}
+

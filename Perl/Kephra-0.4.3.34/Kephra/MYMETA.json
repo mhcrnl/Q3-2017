@@ -1,0 +1,68 @@
+{
+   "abstract" : "crossplatform GUI-Texteditor along Perl alike Paradigms",
+   "author" : [
+      "Herbert Breunung <lichtkind@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Install, CPAN::Meta::Converter version 2.150005",
+   "license" : [
+      "gpl_2"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Kephra",
+   "no_index" : {
+      "directory" : [
+         "inc",
+         "share",
+         "t"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.42",
+            "Test::Exception" : "0",
+            "Test::More" : "0.47",
+            "Test::NoWarnings" : "0",
+            "Test::Script" : "0.01"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Config::General" : "2.4",
+            "Cwd" : "0",
+            "Encode::Guess" : "0",
+            "File::UserConfig" : "0",
+            "POSIX" : "0",
+            "Text::Wrap" : "0",
+            "Wx" : "0.94",
+            "Wx::Perl::ProcessStream" : "0.25",
+            "YAML::Tiny" : "0.31",
+            "perl" : "5.006"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=Kephra"
+      },
+      "homepage" : "http://kephra.sourceforge.net",
+      "license" : [
+         "http://www.gnu.org/licenses/gpl-2.0.txt"
+      ],
+      "repository" : {
+         "url" : "http://sourceforge.net/scm/?type=svn&group_id=169747"
+      }
+   },
+   "version" : "0.4.3.34",
+   "x_serialization_backend" : "JSON::PP version 2.27400"
+}

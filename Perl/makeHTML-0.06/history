@@ -1,0 +1,58 @@
+
+
+ History list for makehtml.pl
+ ++++++++++++++++++++++++++++
+
+  file:         history.txt
+  author:       Jan Theofel, jan@theofel.de
+  last changed: 2000-03-12
+
+ v0.01 (1999-08-27)     * basic functions like title, html version, meta tags
+                          and simple (horizontal, one-line-menus)
+ v0.02 (1999-09-09)     * includes now JavaScript for Rollovereffect
+ v0.03 (1999-09-14 -    * includes now autosize for GIFs
+        1999-09-27)     * bugfix for the title-tag
+                        * includes now table formats
+ v0.04 (1999-09-28 -    * includes gfx addition in javascript
+        1999-09-29)     * includes font formats
+                        * allows include-command (includes other make files)
+                        * little bugfixes and speed ups
+                        * includes users javascript (from makefile)
+                        * includes correction settings for $count_gfx
+                        * includes highlight additions for non-menu graphics
+                        * commands are no longer case sensitive
+                        * meta tags can be reused in others by "=metaname"
+ v0.05 (1999-10-22 -    * bugfix for the meta-tags
+        1999-11-05      * support now imagemaps with all shapes including
+                          alt-attribute and relative coords (+/-)
+                        * supports now single files with the menu
+			* bugfix for size of the dummy graphic (fixed width)
+			* creates now a logfile (homepage.log)
+			* learned about warnings (which were errors in older
+			  versions)
+			* beatified HTML source output
+			* search for tags in the content file is no longer
+			  case sensitive
+			* a documentation was added
+			* supports now including graphics easily
+v0.06 		- 'htmlpath' replaced obsolete 'relgfxpath'
+(2000-02-13	- several minor bugfixes:
+ 2000-03-12)	- new internal data structures (faster, easier to understand)
+		- added command line parameters: --help and --version
+		- warns now about unclosed fonts and/or tables 
+		- meta tags are now listed in the same order as in the source
+		- source optimisation
+		- checks for correct given htmlpath, gfxfilename, 
+		  gfxhlfilename and gfxhl2filename
+		- tables accept any option (simply add it to deftable wit name
+		  and value, like 'fuzzy_border 100')
+		- tables can now use a font without giving it in tdstart and 
+		  tdend by simply using 'font xxx' where xxx is a defined font
+		  (defined by deffont) or 'auto' for the surrounding font
+		- warnings which appear in content files, print now out the
+		  content file name and the line the error appeared
+		- default fonts can now be set ('set default font xxx where
+		  xxx is defined using deffont)
+		- checks if all fonts/tables were used and warns if this is not
+		  the case
+

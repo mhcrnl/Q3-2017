@@ -1,0 +1,2939 @@
+File_manager de l'instance 139721057673616 (Editor)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 10, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13481b1120)
+FILE_NAME  : tmp/Editor.pl_trace.trc
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 2119
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+===> Dans read_ à partir de seek_start = 0 (lu sur fichier)
+	who = I0, text = Subroutine demo8 redefined at Editor.pl line 493.
+Texte de la ligne 1 : |Subroutine demo8 redefined at Editor.pl line 493.|
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 10, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13481b1120)
+FILE_NAME  : tmp/Editor.pl_trace.trc
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 2119
+FIRST      : ARRAY(0x7f13481bd748)
+LAST       : ARRAY(0x7f13481bd748)
+================================================================================
+	Level 1 : ARRAY(0x7f13481bd748)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 50
+	TEXT       : Subroutine demo8 redefined at Editor.pl line 493.
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13481bd748)
+
+Le dump a renvoyé 0 erreurs
+
+Dans next_ de ARRAY(0x7f13481bd748)
+Parent 2119| segment précédant 50
+===> Dans read_ à partir de seek_start = 50 (lu sur fichier)
+Segment next lu : seek_end = 147
+Dans next_ de ARRAY(0x7f13481c65e0)
+Parent 2119| segment précédant 147
+===> Dans read_ à partir de seek_start = 147 (lu sur fichier)
+Segment next lu : seek_end = 166
+Dans next_ de ARRAY(0x7f13481bdac0)
+Parent 2119| segment précédant 166
+===> Dans read_ à partir de seek_start = 166 (lu sur fichier)
+Segment next lu : seek_end = 200
+Dans update_growing : taille actuelle 2663, ancienne : 2119
+Appel à growing_check, nouvelle taille 2663
+Previous à blanc demandé
+Dans dump_file_manager : tid = 10, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13481b1120)
+FILE_NAME  : tmp/Editor.pl_trace.trc
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a91e0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init_eval de Search.pm .. HASH(0x7f13790a1c80), 139721057863832
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f1370190dd8)
+EVAL _TJREAD = 13
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans bind_key_global
+Dans Comm, mort du thread 6
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 2663
+FIRST      : ARRAY(0x7f13481bd748)
+LAST       : ARRAY(0x7f13481276d8)
+================================================================================
+	Level 1 : ARRAY(0x7f13481bd748)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 50
+	TEXT       : Subroutine demo8 redefined at Editor.pl line 493.
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 1
+	NEXT       : ARRAY(0x7f13481c65e0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c65e0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bd748)
+	SEEK_START : 50
+	SEEK_END   : 147
+	TEXT       : Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 2
+	NEXT       : ARRAY(0x7f13481bdac0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481bdac0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c65e0)
+	SEEK_START : 147
+	SEEK_END   : 166
+	TEXT       : Fichiers trouvés :
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 3
+	NEXT       : ARRAY(0x7f13481276d8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481276d8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bdac0)
+	SEEK_START : 166
+	SEEK_END   : 200
+	TEXT       :     lib/Text/Editor/Easy/Abstract.pm
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 4
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13481276d8)
+
+Le dump a renvoyé 0 erreurs
+
+Dans last_ de segment_ref ARRAY(0x7f13481b1120)
+Création d'un nouveau segment : ARRAY(0x7f13481d21e8)
+Dans read_previous de line_ref ARRAY(0x7f13481d21e8)
+Début de prev_line 2663
+position > 0
+Decrement 50
+Après première boucle : 2614
+pos A = 2614
+pos A = 2635
+Fin de prev_line 2635 |Dans Comm, mort du thread 6
+| 2663
+Il faut créer une ligne vide supplémentaire (fin de fichier)
+On a lu seek_start 2663 et text 
+line_ref trouvé = ARRAY(0x7f13481d21e8)
+Previous de 5 demandé
+Line ref trouvée : ARRAY(0x7f13481d21e8)
+Dans read_previous de line_ref ARRAY(0x7f13481d2350)
+Début de prev_line 2663
+position > 0
+Decrement 50
+Après première boucle : 2614
+pos A = 2614
+pos A = 2635
+Fin de prev_line 2635 |Dans Comm, mort du thread 6
+| 2663
+On a lu seek_start 2635 et text Dans Comm, mort du thread 6
+Previous de 6 demandé
+Line ref trouvée : ARRAY(0x7f13481d2350)
+Dans read_previous de line_ref ARRAY(0x7f13481cb3a0)
+Début de prev_line 2635
+position > 0
+Decrement 50
+Après première boucle : 2593
+pos A = 2593
+pos A = 2614
+Fin de prev_line 2614 |Dans bind_key_global
+| 2635
+On a lu seek_start 2614 et text Dans bind_key_global
+Previous de 7 demandé
+Line ref trouvée : ARRAY(0x7f13481cb3a0)
+Dans read_previous de line_ref ARRAY(0x7f1348012848)
+Début de prev_line 2614
+position > 0
+Decrement 50
+Après première boucle : 2572
+pos A = 2572
+pos A = 2593
+Fin de prev_line 2593 |Dans bind_key_global
+| 2614
+On a lu seek_start 2593 et text Dans bind_key_global
+Dans next_ de ARRAY(0x7f13481d21e8)
+Avant appel next_ de ARRAY(0x7f13481b1120), seek_end = 2663
+Dans next_ de ARRAY(0x7f13481b1120)
+Pas de segment parent : seek_end = 2663
+PAs de ligne suivante trouvée derrière 5
+SEEK START de cette dernière ligne 2663
+SEEK END de cette dernière ligne 2663
+Dans update_growing : taille actuelle 2827, ancienne : 2663
+Appel à growing_check, nouvelle taille 2827
+Previous à blanc demandé
+Dans dump_file_manager : tid = 10, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13481b1120)
+FILE_NAME  : tmp/Editor.pl_trace.trc
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a91e0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init_eval de Search.pm .. HASH(0x7f13790a1c80), 139721057863832
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f1370190dd8)
+EVAL _TJREAD = 13
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans bind_key_global
+Dans Comm, mort du thread 6
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 2827
+FIRST      : ARRAY(0x7f13481bd748)
+LAST       : ARRAY(0x7f13481d21e8)
+================================================================================
+	Level 1 : ARRAY(0x7f13481bd748)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 50
+	TEXT       : Subroutine demo8 redefined at Editor.pl line 493.
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 1
+	NEXT       : ARRAY(0x7f13481c65e0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c65e0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bd748)
+	SEEK_START : 50
+	SEEK_END   : 147
+	TEXT       : Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 2
+	NEXT       : ARRAY(0x7f13481bdac0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481bdac0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c65e0)
+	SEEK_START : 147
+	SEEK_END   : 166
+	TEXT       : Fichiers trouvés :
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 3
+	NEXT       : ARRAY(0x7f13481276d8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481276d8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bdac0)
+	SEEK_START : 166
+	SEEK_END   : 200
+	TEXT       :     lib/Text/Editor/Easy/Abstract.pm
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 4
+	NEXT       : ARRAY(0x7f1348012848)
+	================================================================================
+	Level 1 : ARRAY(0x7f1348012848)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481276d8)
+	SEEK_START : 2593
+	SEEK_END   : 2614
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 8
+	NEXT       : ARRAY(0x7f13481cb3a0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cb3a0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f1348012848)
+	SEEK_START : 2614
+	SEEK_END   : 2635
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 7
+	NEXT       : ARRAY(0x7f13481d2350)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2350)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cb3a0)
+	SEEK_START : 2635
+	SEEK_END   : 2663
+	TEXT       : Dans Comm, mort du thread 6
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 6
+	NEXT       : ARRAY(0x7f13481d21e8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d21e8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d2350)
+	SEEK_START : 2663
+	SEEK_END   : 2741
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 5
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13481d21e8)
+
+Le dump a renvoyé 0 erreurs
+
+Dans last_ de segment_ref ARRAY(0x7f13481b1120)
+Création d'un nouveau segment : ARRAY(0x7f13481cee30)
+Dans read_previous de line_ref ARRAY(0x7f13481cee30)
+Début de prev_line 2827
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 2741
+pos A = 2741
+pos A = 2765
+Fin de prev_line 2765 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 2827
+Il faut créer une ligne vide supplémentaire (fin de fichier)
+On a lu seek_start 2827 et text 
+line_ref trouvé = ARRAY(0x7f13481cee30)
+Previous de 9 demandé
+Line ref trouvée : ARRAY(0x7f13481cee30)
+Dans read_previous de line_ref ARRAY(0x7f13481cef98)
+Début de prev_line 2827
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 2741
+pos A = 2741
+pos A = 2765
+Fin de prev_line 2765 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 2827
+On a lu seek_start 2765 et text Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Previous de 10 demandé
+Line ref trouvée : ARRAY(0x7f13481cef98)
+Dans read_previous de line_ref ARRAY(0x7f13481d1b10)
+Début de prev_line 2765
+position > 0
+Decrement 50
+Après première boucle : 2741
+pos A = 2741
+Fin de prev_line 2741 |LAST MODIF = 1248602490
+| 2765
+On a lu seek_start 2741 et text LAST MODIF = 1248602490
+Previous de 11 demandé
+Line ref trouvée : ARRAY(0x7f13481d1b10)
+Dans last_ de segment_ref ARRAY(0x7f13481d21e8)
+Dans next_ de ARRAY(0x7f13481cee30)
+Avant appel next_ de ARRAY(0x7f13481b1120), seek_end = 2827
+Dans next_ de ARRAY(0x7f13481b1120)
+Pas de segment parent : seek_end = 2827
+PAs de ligne suivante trouvée derrière 9
+SEEK START de cette dernière ligne 2827
+SEEK END de cette dernière ligne 2827
+Dans update_growing : taille actuelle 2827, ancienne : 2827
+Dans update_growing : taille actuelle 2827, ancienne : 2827
+Dans update_growing : taille actuelle 2827, ancienne : 2827
+Dans update_growing : taille actuelle 2827, ancienne : 2827
+Dans update_growing : taille actuelle 2827, ancienne : 2827
+Dans update_growing : taille actuelle 2827, ancienne : 2827
+Dans update_growing : taille actuelle 2827, ancienne : 2827
+Dans update_growing : taille actuelle 2827, ancienne : 2827
+Dans update_growing : taille actuelle 2827, ancienne : 2827
+Dans update_growing : taille actuelle 2991, ancienne : 2827
+Appel à growing_check, nouvelle taille 2991
+Previous à blanc demandé
+Dans dump_file_manager : tid = 10, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13481b1120)
+FILE_NAME  : tmp/Editor.pl_trace.trc
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a91e0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init_eval de Search.pm .. HASH(0x7f13790a1c80), 139721057863832
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f1370190dd8)
+EVAL _TJREAD = 13
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans bind_key_global
+Dans Comm, mort du thread 6
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 2991
+FIRST      : ARRAY(0x7f13481bd748)
+LAST       : ARRAY(0x7f13481cee30)
+================================================================================
+	Level 1 : ARRAY(0x7f13481bd748)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 50
+	TEXT       : Subroutine demo8 redefined at Editor.pl line 493.
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 1
+	NEXT       : ARRAY(0x7f13481c65e0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c65e0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bd748)
+	SEEK_START : 50
+	SEEK_END   : 147
+	TEXT       : Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 2
+	NEXT       : ARRAY(0x7f13481bdac0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481bdac0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c65e0)
+	SEEK_START : 147
+	SEEK_END   : 166
+	TEXT       : Fichiers trouvés :
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 3
+	NEXT       : ARRAY(0x7f13481276d8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481276d8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bdac0)
+	SEEK_START : 166
+	SEEK_END   : 200
+	TEXT       :     lib/Text/Editor/Easy/Abstract.pm
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 4
+	NEXT       : ARRAY(0x7f1348012848)
+	================================================================================
+	Level 1 : ARRAY(0x7f1348012848)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481276d8)
+	SEEK_START : 2593
+	SEEK_END   : 2614
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 8
+	NEXT       : ARRAY(0x7f13481cb3a0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cb3a0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f1348012848)
+	SEEK_START : 2614
+	SEEK_END   : 2635
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 7
+	NEXT       : ARRAY(0x7f13481d2350)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2350)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cb3a0)
+	SEEK_START : 2635
+	SEEK_END   : 2663
+	TEXT       : Dans Comm, mort du thread 6
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 6
+	NEXT       : ARRAY(0x7f13481d21e8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d21e8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d2350)
+	SEEK_START : 2663
+	SEEK_END   : 2741
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 5
+	NEXT       : ARRAY(0x7f13481d1b10)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1b10)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d21e8)
+	SEEK_START : 2741
+	SEEK_END   : 2765
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 11
+	NEXT       : ARRAY(0x7f13481cef98)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cef98)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1b10)
+	SEEK_START : 2765
+	SEEK_END   : 2827
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 10
+	NEXT       : ARRAY(0x7f13481cee30)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cee30)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cef98)
+	SEEK_START : 2827
+	SEEK_END   : 2905
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 9
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13481cee30)
+
+Le dump a renvoyé 0 erreurs
+
+Dans last_ de segment_ref ARRAY(0x7f13481b1120)
+Création d'un nouveau segment : ARRAY(0x7f13481d2068)
+Dans read_previous de line_ref ARRAY(0x7f13481d2068)
+Début de prev_line 2991
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 2905
+pos A = 2905
+pos A = 2929
+Fin de prev_line 2929 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 2991
+Il faut créer une ligne vide supplémentaire (fin de fichier)
+On a lu seek_start 2991 et text 
+line_ref trouvé = ARRAY(0x7f13481d2068)
+Previous de 12 demandé
+Line ref trouvée : ARRAY(0x7f13481d2068)
+Dans read_previous de line_ref ARRAY(0x7f13481d1f30)
+Début de prev_line 2991
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 2905
+pos A = 2905
+pos A = 2929
+Fin de prev_line 2929 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 2991
+On a lu seek_start 2929 et text Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Previous de 13 demandé
+Line ref trouvée : ARRAY(0x7f13481d1f30)
+Dans read_previous de line_ref ARRAY(0x7f13481cefe0)
+Début de prev_line 2929
+position > 0
+Decrement 50
+Après première boucle : 2905
+pos A = 2905
+Fin de prev_line 2905 |LAST MODIF = 1248602490
+| 2929
+On a lu seek_start 2905 et text LAST MODIF = 1248602490
+Previous de 14 demandé
+Line ref trouvée : ARRAY(0x7f13481cefe0)
+Dans last_ de segment_ref ARRAY(0x7f13481cee30)
+Dans next_ de ARRAY(0x7f13481d2068)
+Avant appel next_ de ARRAY(0x7f13481b1120), seek_end = 2991
+Dans next_ de ARRAY(0x7f13481b1120)
+Pas de segment parent : seek_end = 2991
+PAs de ligne suivante trouvée derrière 12
+SEEK START de cette dernière ligne 2991
+SEEK END de cette dernière ligne 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 2991, ancienne : 2991
+Dans update_growing : taille actuelle 3155, ancienne : 2991
+Appel à growing_check, nouvelle taille 3155
+Previous à blanc demandé
+Dans dump_file_manager : tid = 10, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13481b1120)
+FILE_NAME  : tmp/Editor.pl_trace.trc
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a91e0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init_eval de Search.pm .. HASH(0x7f13790a1c80), 139721057863832
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f1370190dd8)
+EVAL _TJREAD = 13
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans bind_key_global
+Dans Comm, mort du thread 6
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 3155
+FIRST      : ARRAY(0x7f13481bd748)
+LAST       : ARRAY(0x7f13481d2068)
+================================================================================
+	Level 1 : ARRAY(0x7f13481bd748)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 50
+	TEXT       : Subroutine demo8 redefined at Editor.pl line 493.
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 1
+	NEXT       : ARRAY(0x7f13481c65e0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c65e0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bd748)
+	SEEK_START : 50
+	SEEK_END   : 147
+	TEXT       : Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 2
+	NEXT       : ARRAY(0x7f13481bdac0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481bdac0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c65e0)
+	SEEK_START : 147
+	SEEK_END   : 166
+	TEXT       : Fichiers trouvés :
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 3
+	NEXT       : ARRAY(0x7f13481276d8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481276d8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bdac0)
+	SEEK_START : 166
+	SEEK_END   : 200
+	TEXT       :     lib/Text/Editor/Easy/Abstract.pm
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 4
+	NEXT       : ARRAY(0x7f1348012848)
+	================================================================================
+	Level 1 : ARRAY(0x7f1348012848)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481276d8)
+	SEEK_START : 2593
+	SEEK_END   : 2614
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 8
+	NEXT       : ARRAY(0x7f13481cb3a0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cb3a0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f1348012848)
+	SEEK_START : 2614
+	SEEK_END   : 2635
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 7
+	NEXT       : ARRAY(0x7f13481d2350)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2350)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cb3a0)
+	SEEK_START : 2635
+	SEEK_END   : 2663
+	TEXT       : Dans Comm, mort du thread 6
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 6
+	NEXT       : ARRAY(0x7f13481d21e8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d21e8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d2350)
+	SEEK_START : 2663
+	SEEK_END   : 2741
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 5
+	NEXT       : ARRAY(0x7f13481d1b10)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1b10)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d21e8)
+	SEEK_START : 2741
+	SEEK_END   : 2765
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 11
+	NEXT       : ARRAY(0x7f13481cef98)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cef98)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1b10)
+	SEEK_START : 2765
+	SEEK_END   : 2827
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 10
+	NEXT       : ARRAY(0x7f13481cee30)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cee30)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cef98)
+	SEEK_START : 2827
+	SEEK_END   : 2905
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 9
+	NEXT       : ARRAY(0x7f13481cefe0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cefe0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cee30)
+	SEEK_START : 2905
+	SEEK_END   : 2929
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 14
+	NEXT       : ARRAY(0x7f13481d1f30)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1f30)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cefe0)
+	SEEK_START : 2929
+	SEEK_END   : 2991
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 13
+	NEXT       : ARRAY(0x7f13481d2068)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2068)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1f30)
+	SEEK_START : 2991
+	SEEK_END   : 3069
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 12
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13481d2068)
+
+Le dump a renvoyé 0 erreurs
+
+Dans last_ de segment_ref ARRAY(0x7f13481b1120)
+Création d'un nouveau segment : ARRAY(0x7f13481d6ac8)
+Dans read_previous de line_ref ARRAY(0x7f13481d6ac8)
+Début de prev_line 3155
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 3069
+pos A = 3069
+pos A = 3093
+Fin de prev_line 3093 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 3155
+Il faut créer une ligne vide supplémentaire (fin de fichier)
+On a lu seek_start 3155 et text 
+line_ref trouvé = ARRAY(0x7f13481d6ac8)
+Previous de 15 demandé
+Line ref trouvée : ARRAY(0x7f13481d6ac8)
+Dans read_previous de line_ref ARRAY(0x7f13481c6928)
+Début de prev_line 3155
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 3069
+pos A = 3069
+pos A = 3093
+Fin de prev_line 3093 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 3155
+On a lu seek_start 3093 et text Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Previous de 16 demandé
+Line ref trouvée : ARRAY(0x7f13481c6928)
+Dans read_previous de line_ref ARRAY(0x7f13481c3018)
+Début de prev_line 3093
+position > 0
+Decrement 50
+Après première boucle : 3069
+pos A = 3069
+Fin de prev_line 3069 |LAST MODIF = 1248602490
+| 3093
+On a lu seek_start 3069 et text LAST MODIF = 1248602490
+Previous de 17 demandé
+Line ref trouvée : ARRAY(0x7f13481c3018)
+Dans last_ de segment_ref ARRAY(0x7f13481d2068)
+Dans next_ de ARRAY(0x7f13481d6ac8)
+Avant appel next_ de ARRAY(0x7f13481b1120), seek_end = 3155
+Dans next_ de ARRAY(0x7f13481b1120)
+Pas de segment parent : seek_end = 3155
+PAs de ligne suivante trouvée derrière 15
+SEEK START de cette dernière ligne 3155
+SEEK END de cette dernière ligne 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3155, ancienne : 3155
+Dans update_growing : taille actuelle 3343, ancienne : 3155
+Appel à growing_check, nouvelle taille 3343
+Previous à blanc demandé
+Dans dump_file_manager : tid = 10, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13481b1120)
+FILE_NAME  : tmp/Editor.pl_trace.trc
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a91e0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init_eval de Search.pm .. HASH(0x7f13790a1c80), 139721057863832
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f1370190dd8)
+EVAL _TJREAD = 13
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans bind_key_global
+Dans Comm, mort du thread 6
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d1020)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+LAST MODIF = 1248602490
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d6ea8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 3343
+FIRST      : ARRAY(0x7f13481bd748)
+LAST       : ARRAY(0x7f13481d6ac8)
+================================================================================
+	Level 1 : ARRAY(0x7f13481bd748)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 50
+	TEXT       : Subroutine demo8 redefined at Editor.pl line 493.
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 1
+	NEXT       : ARRAY(0x7f13481c65e0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c65e0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bd748)
+	SEEK_START : 50
+	SEEK_END   : 147
+	TEXT       : Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 2
+	NEXT       : ARRAY(0x7f13481bdac0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481bdac0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c65e0)
+	SEEK_START : 147
+	SEEK_END   : 166
+	TEXT       : Fichiers trouvés :
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 3
+	NEXT       : ARRAY(0x7f13481276d8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481276d8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bdac0)
+	SEEK_START : 166
+	SEEK_END   : 200
+	TEXT       :     lib/Text/Editor/Easy/Abstract.pm
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 4
+	NEXT       : ARRAY(0x7f1348012848)
+	================================================================================
+	Level 1 : ARRAY(0x7f1348012848)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481276d8)
+	SEEK_START : 2593
+	SEEK_END   : 2614
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 8
+	NEXT       : ARRAY(0x7f13481cb3a0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cb3a0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f1348012848)
+	SEEK_START : 2614
+	SEEK_END   : 2635
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 7
+	NEXT       : ARRAY(0x7f13481d2350)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2350)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cb3a0)
+	SEEK_START : 2635
+	SEEK_END   : 2663
+	TEXT       : Dans Comm, mort du thread 6
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 6
+	NEXT       : ARRAY(0x7f13481d21e8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d21e8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d2350)
+	SEEK_START : 2663
+	SEEK_END   : 2741
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 5
+	NEXT       : ARRAY(0x7f13481d1b10)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1b10)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d21e8)
+	SEEK_START : 2741
+	SEEK_END   : 2765
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 11
+	NEXT       : ARRAY(0x7f13481cef98)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cef98)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1b10)
+	SEEK_START : 2765
+	SEEK_END   : 2827
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 10
+	NEXT       : ARRAY(0x7f13481cee30)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cee30)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cef98)
+	SEEK_START : 2827
+	SEEK_END   : 2905
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 9
+	NEXT       : ARRAY(0x7f13481cefe0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cefe0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cee30)
+	SEEK_START : 2905
+	SEEK_END   : 2929
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 14
+	NEXT       : ARRAY(0x7f13481d1f30)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1f30)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cefe0)
+	SEEK_START : 2929
+	SEEK_END   : 2991
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 13
+	NEXT       : ARRAY(0x7f13481d2068)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2068)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1f30)
+	SEEK_START : 2991
+	SEEK_END   : 3069
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 12
+	NEXT       : ARRAY(0x7f13481c3018)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c3018)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d2068)
+	SEEK_START : 3069
+	SEEK_END   : 3093
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 17
+	NEXT       : ARRAY(0x7f13481c6928)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c6928)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c3018)
+	SEEK_START : 3093
+	SEEK_END   : 3155
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 16
+	NEXT       : ARRAY(0x7f13481d6ac8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d6ac8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c6928)
+	SEEK_START : 3155
+	SEEK_END   : 3233
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d1020)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 15
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13481d6ac8)
+
+Le dump a renvoyé 0 erreurs
+
+Dans last_ de segment_ref ARRAY(0x7f13481b1120)
+Création d'un nouveau segment : ARRAY(0x7f13481b1150)
+Dans read_previous de line_ref ARRAY(0x7f13481b1150)
+Début de prev_line 3343
+position > 0
+Decrement 50
+Après première boucle : 3319
+pos A = 3319
+Fin de prev_line 3319 |LAST MODIF = 1248602490
+| 3343
+Il faut créer une ligne vide supplémentaire (fin de fichier)
+On a lu seek_start 3343 et text 
+line_ref trouvé = ARRAY(0x7f13481b1150)
+Previous de 18 demandé
+Line ref trouvée : ARRAY(0x7f13481b1150)
+Dans read_previous de line_ref ARRAY(0x7f13481d1d98)
+Début de prev_line 3343
+position > 0
+Decrement 50
+Après première boucle : 3319
+pos A = 3319
+Fin de prev_line 3319 |LAST MODIF = 1248602490
+| 3343
+On a lu seek_start 3319 et text LAST MODIF = 1248602490
+Previous de 19 demandé
+Line ref trouvée : ARRAY(0x7f13481d1d98)
+Dans read_previous de line_ref ARRAY(0x7f13481d67b0)
+Début de prev_line 3319
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 3233
+pos A = 3233
+pos A = 3257
+Fin de prev_line 3257 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 3319
+On a lu seek_start 3257 et text Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Previous de 20 demandé
+Line ref trouvée : ARRAY(0x7f13481d67b0)
+Dans read_previous de line_ref ARRAY(0x7f13481cf418)
+Début de prev_line 3257
+position > 0
+Decrement 50
+Après première boucle : 3233
+pos A = 3233
+Fin de prev_line 3233 |LAST MODIF = 1248602490
+| 3257
+On a lu seek_start 3233 et text LAST MODIF = 1248602490
+Dans next_ de ARRAY(0x7f13481b1150)
+Avant appel next_ de ARRAY(0x7f13481b1120), seek_end = 3343
+Dans next_ de ARRAY(0x7f13481b1120)
+Pas de segment parent : seek_end = 3343
+PAs de ligne suivante trouvée derrière 18
+SEEK START de cette dernière ligne 3343
+SEEK END de cette dernière ligne 3343
+Dans update_growing : taille actuelle 3483, ancienne : 3343
+Appel à growing_check, nouvelle taille 3483
+Previous à blanc demandé
+Dans dump_file_manager : tid = 10, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13481b1120)
+FILE_NAME  : tmp/Editor.pl_trace.trc
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a91e0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init_eval de Search.pm .. HASH(0x7f13790a1c80), 139721057863832
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f1370190dd8)
+EVAL _TJREAD = 13
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans bind_key_global
+Dans Comm, mort du thread 6
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d1020)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+LAST MODIF = 1248602490
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d6ea8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 3483
+FIRST      : ARRAY(0x7f13481bd748)
+LAST       : ARRAY(0x7f13481b1150)
+================================================================================
+	Level 1 : ARRAY(0x7f13481bd748)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 50
+	TEXT       : Subroutine demo8 redefined at Editor.pl line 493.
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 1
+	NEXT       : ARRAY(0x7f13481c65e0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c65e0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bd748)
+	SEEK_START : 50
+	SEEK_END   : 147
+	TEXT       : Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 2
+	NEXT       : ARRAY(0x7f13481bdac0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481bdac0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c65e0)
+	SEEK_START : 147
+	SEEK_END   : 166
+	TEXT       : Fichiers trouvés :
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 3
+	NEXT       : ARRAY(0x7f13481276d8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481276d8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bdac0)
+	SEEK_START : 166
+	SEEK_END   : 200
+	TEXT       :     lib/Text/Editor/Easy/Abstract.pm
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 4
+	NEXT       : ARRAY(0x7f1348012848)
+	================================================================================
+	Level 1 : ARRAY(0x7f1348012848)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481276d8)
+	SEEK_START : 2593
+	SEEK_END   : 2614
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 8
+	NEXT       : ARRAY(0x7f13481cb3a0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cb3a0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f1348012848)
+	SEEK_START : 2614
+	SEEK_END   : 2635
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 7
+	NEXT       : ARRAY(0x7f13481d2350)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2350)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cb3a0)
+	SEEK_START : 2635
+	SEEK_END   : 2663
+	TEXT       : Dans Comm, mort du thread 6
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 6
+	NEXT       : ARRAY(0x7f13481d21e8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d21e8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d2350)
+	SEEK_START : 2663
+	SEEK_END   : 2741
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 5
+	NEXT       : ARRAY(0x7f13481d1b10)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1b10)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d21e8)
+	SEEK_START : 2741
+	SEEK_END   : 2765
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 11
+	NEXT       : ARRAY(0x7f13481cef98)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cef98)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1b10)
+	SEEK_START : 2765
+	SEEK_END   : 2827
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 10
+	NEXT       : ARRAY(0x7f13481cee30)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cee30)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cef98)
+	SEEK_START : 2827
+	SEEK_END   : 2905
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 9
+	NEXT       : ARRAY(0x7f13481cefe0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cefe0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cee30)
+	SEEK_START : 2905
+	SEEK_END   : 2929
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 14
+	NEXT       : ARRAY(0x7f13481d1f30)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1f30)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cefe0)
+	SEEK_START : 2929
+	SEEK_END   : 2991
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 13
+	NEXT       : ARRAY(0x7f13481d2068)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2068)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1f30)
+	SEEK_START : 2991
+	SEEK_END   : 3069
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 12
+	NEXT       : ARRAY(0x7f13481c3018)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c3018)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d2068)
+	SEEK_START : 3069
+	SEEK_END   : 3093
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 17
+	NEXT       : ARRAY(0x7f13481c6928)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c6928)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c3018)
+	SEEK_START : 3093
+	SEEK_END   : 3155
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 16
+	NEXT       : ARRAY(0x7f13481d6ac8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d6ac8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c6928)
+	SEEK_START : 3155
+	SEEK_END   : 3233
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d1020)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 15
+	NEXT       : ARRAY(0x7f13481cf418)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cf418)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d6ac8)
+	SEEK_START : 3233
+	SEEK_END   : 3257
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 21
+	NEXT       : ARRAY(0x7f13481d67b0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d67b0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cf418)
+	SEEK_START : 3257
+	SEEK_END   : 3319
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 20
+	NEXT       : ARRAY(0x7f13481d1d98)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1d98)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d67b0)
+	SEEK_START : 3319
+	SEEK_END   : 3343
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 19
+	NEXT       : ARRAY(0x7f13481b1150)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481b1150)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1d98)
+	SEEK_START : 3343
+	SEEK_END   : 3421
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d6ea8)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 18
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13481b1150)
+
+Le dump a renvoyé 0 erreurs
+
+Dans last_ de segment_ref ARRAY(0x7f13481b1120)
+Création d'un nouveau segment : ARRAY(0x7f13481cbad8)
+Dans read_previous de line_ref ARRAY(0x7f13481cbad8)
+Début de prev_line 3483
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 3421
+pos A = 3421
+Fin de prev_line 3421 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 3483
+Il faut créer une ligne vide supplémentaire (fin de fichier)
+On a lu seek_start 3483 et text 
+line_ref trouvé = ARRAY(0x7f13481cbad8)
+Previous de 22 demandé
+Line ref trouvée : ARRAY(0x7f13481cbad8)
+Dans read_previous de line_ref ARRAY(0x7f13481cf160)
+Début de prev_line 3483
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 3421
+pos A = 3421
+Fin de prev_line 3421 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 3483
+On a lu seek_start 3421 et text Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Previous de 23 demandé
+Line ref trouvée : ARRAY(0x7f13481cf160)
+Dans last_ de segment_ref ARRAY(0x7f13481b1150)
+Previous de 18 demandé
+Line ref trouvée : ARRAY(0x7f13481b1150)
+Dans last_ de segment_ref ARRAY(0x7f13481d1d98)
+Dans next_ de ARRAY(0x7f13481cbad8)
+Avant appel next_ de ARRAY(0x7f13481b1120), seek_end = 3483
+Dans next_ de ARRAY(0x7f13481b1120)
+Pas de segment parent : seek_end = 3483
+PAs de ligne suivante trouvée derrière 22
+SEEK START de cette dernière ligne 3483
+SEEK END de cette dernière ligne 3483
+Dans next_ de ARRAY(0x7f13481d1d98)
+Dans next_ de ARRAY(0x7f13481b1150)
+Dans next_ de ARRAY(0x7f13481cf160)
+Dans next_ de ARRAY(0x7f13481cbad8)
+Avant appel next_ de ARRAY(0x7f13481b1120), seek_end = 3483
+Dans next_ de ARRAY(0x7f13481b1120)
+Pas de segment parent : seek_end = 3483
+PAs de ligne suivante trouvée derrière 22
+SEEK START de cette dernière ligne 3483
+SEEK END de cette dernière ligne 3483
+Previous de 19 demandé
+Line ref trouvée : ARRAY(0x7f13481d1d98)
+Dans last_ de segment_ref ARRAY(0x7f13481d67b0)
+Previous de 20 demandé
+Line ref trouvée : ARRAY(0x7f13481d67b0)
+Dans last_ de segment_ref ARRAY(0x7f13481cf418)
+Previous de 21 demandé
+Line ref trouvée : ARRAY(0x7f13481cf418)
+Dans last_ de segment_ref ARRAY(0x7f13481d6ac8)
+Previous de 15 demandé
+Line ref trouvée : ARRAY(0x7f13481d6ac8)
+Dans last_ de segment_ref ARRAY(0x7f13481c6928)
+Previous de 16 demandé
+Line ref trouvée : ARRAY(0x7f13481c6928)
+Dans last_ de segment_ref ARRAY(0x7f13481c3018)
+Previous de 17 demandé
+Line ref trouvée : ARRAY(0x7f13481c3018)
+Dans last_ de segment_ref ARRAY(0x7f13481d2068)
+Previous de 12 demandé
+Line ref trouvée : ARRAY(0x7f13481d2068)
+Dans last_ de segment_ref ARRAY(0x7f13481d1f30)
+Previous de 13 demandé
+Line ref trouvée : ARRAY(0x7f13481d1f30)
+Dans last_ de segment_ref ARRAY(0x7f13481cefe0)
+Previous de 14 demandé
+Line ref trouvée : ARRAY(0x7f13481cefe0)
+Dans last_ de segment_ref ARRAY(0x7f13481cee30)
+Previous de 9 demandé
+Line ref trouvée : ARRAY(0x7f13481cee30)
+Dans last_ de segment_ref ARRAY(0x7f13481cef98)
+Previous de 10 demandé
+Line ref trouvée : ARRAY(0x7f13481cef98)
+Dans last_ de segment_ref ARRAY(0x7f13481d1b10)
+Previous de 11 demandé
+Line ref trouvée : ARRAY(0x7f13481d1b10)
+Dans last_ de segment_ref ARRAY(0x7f13481d21e8)
+Previous de 5 demandé
+Line ref trouvée : ARRAY(0x7f13481d21e8)
+Dans last_ de segment_ref ARRAY(0x7f13481d2350)
+Dans update_growing : taille actuelle 3483, ancienne : 3483
+Dans next_ de ARRAY(0x7f13481bd748)
+Dans next_ de ARRAY(0x7f13481c65e0)
+Dans next_ de ARRAY(0x7f13481bdac0)
+Dans next_ de ARRAY(0x7f13481276d8)
+Parent 3483| segment précédant 200
+===> Dans read_ à partir de seek_start = 200 (lu sur fichier)
+Segment next lu : seek_end = 230
+Dans next_ de ARRAY(0x7f13481cb3e8)
+Parent 3483| segment précédant 230
+===> Dans read_ à partir de seek_start = 230 (lu sur fichier)
+Segment next lu : seek_end = 255
+Dans next_ de ARRAY(0x7f13481d16f0)
+Parent 3483| segment précédant 255
+===> Dans read_ à partir de seek_start = 255 (lu sur fichier)
+Segment next lu : seek_end = 313
+Dans next_ de ARRAY(0x7f13481d6c48)
+Parent 3483| segment précédant 313
+===> Dans read_ à partir de seek_start = 313 (lu sur fichier)
+Segment next lu : seek_end = 411
+Dans next_ de ARRAY(0x7f13481d6b40)
+Parent 3483| segment précédant 411
+===> Dans read_ à partir de seek_start = 411 (lu sur fichier)
+Segment next lu : seek_end = 469
+Dans next_ de ARRAY(0x7f13481d1c90)
+Parent 3483| segment précédant 469
+===> Dans read_ à partir de seek_start = 469 (lu sur fichier)
+Segment next lu : seek_end = 519
+Dans next_ de ARRAY(0x7f13481d15b8)
+Parent 3483| segment précédant 519
+===> Dans read_ à partir de seek_start = 519 (lu sur fichier)
+Segment next lu : seek_end = 577
+Dans next_ de ARRAY(0x7f13481d1c78)
+Parent 3483| segment précédant 577
+===> Dans read_ à partir de seek_start = 577 (lu sur fichier)
+Segment next lu : seek_end = 657
+Dans next_ de ARRAY(0x7f13481cb3e8)
+Parent 3483| segment précédant 657
+===> Dans read_ à partir de seek_start = 657 (lu sur fichier)
+Segment next lu : seek_end = 715
+Dans next_ de ARRAY(0x7f13481d16f0)
+Parent 3483| segment précédant 715
+===> Dans read_ à partir de seek_start = 715 (lu sur fichier)
+Segment next lu : seek_end = 754
+Dans next_ de ARRAY(0x7f13481d6c48)
+Parent 3483| segment précédant 754
+===> Dans read_ à partir de seek_start = 754 (lu sur fichier)
+Segment next lu : seek_end = 812
+Dans next_ de ARRAY(0x7f13481d6b40)
+Parent 3483| segment précédant 812
+===> Dans read_ à partir de seek_start = 812 (lu sur fichier)
+Segment next lu : seek_end = 882
+Dans next_ de ARRAY(0x7f13481d1c90)
+Parent 3483| segment précédant 882
+===> Dans read_ à partir de seek_start = 882 (lu sur fichier)
+Segment next lu : seek_end = 940
+Dans next_ de ARRAY(0x7f13481d15b8)
+Parent 3483| segment précédant 940
+===> Dans read_ à partir de seek_start = 940 (lu sur fichier)
+Segment next lu : seek_end = 961
+Dans next_ de ARRAY(0x7f13481d1c78)
+Parent 3483| segment précédant 961
+===> Dans read_ à partir de seek_start = 961 (lu sur fichier)
+Segment next lu : seek_end = 1013
+Dans next_ de ARRAY(0x7f13481cb3e8)
+Parent 3483| segment précédant 1013
+===> Dans read_ à partir de seek_start = 1013 (lu sur fichier)
+Segment next lu : seek_end = 1080
+Dans next_ de ARRAY(0x7f13481d16f0)
+Parent 3483| segment précédant 1080
+===> Dans read_ à partir de seek_start = 1080 (lu sur fichier)
+Segment next lu : seek_end = 1081
+Dans next_ de ARRAY(0x7f13481d6c48)
+Parent 3483| segment précédant 1081
+===> Dans read_ à partir de seek_start = 1081 (lu sur fichier)
+Segment next lu : seek_end = 1147
+Dans next_ de ARRAY(0x7f13481c33d8)
+Parent 3483| segment précédant 1147
+===> Dans read_ à partir de seek_start = 1147 (lu sur fichier)
+Segment next lu : seek_end = 1209
+Dans next_ de ARRAY(0x7f13481d1c90)
+Parent 3483| segment précédant 1209
+===> Dans read_ à partir de seek_start = 1209 (lu sur fichier)
+Segment next lu : seek_end = 1287
+Dans next_ de ARRAY(0x7f13481d15b8)
+Parent 3483| segment précédant 1287
+===> Dans read_ à partir de seek_start = 1287 (lu sur fichier)
+Segment next lu : seek_end = 1349
+Dans next_ de ARRAY(0x7f13481d6b40)
+Parent 3483| segment précédant 1349
+===> Dans read_ à partir de seek_start = 1349 (lu sur fichier)
+Segment next lu : seek_end = 1420
+Dans next_ de ARRAY(0x7f13481cb3e8)
+Parent 3483| segment précédant 1420
+===> Dans read_ à partir de seek_start = 1420 (lu sur fichier)
+Segment next lu : seek_end = 1472
+Dans next_ de ARRAY(0x7f13481d16f0)
+Parent 3483| segment précédant 1472
+===> Dans read_ à partir de seek_start = 1472 (lu sur fichier)
+Segment next lu : seek_end = 1550
+Dans next_ de ARRAY(0x7f13481d6c48)
+Parent 3483| segment précédant 1550
+===> Dans read_ à partir de seek_start = 1550 (lu sur fichier)
+Segment next lu : seek_end = 1574
+Dans next_ de ARRAY(0x7f13481c33d8)
+Parent 3483| segment précédant 1574
+===> Dans read_ à partir de seek_start = 1574 (lu sur fichier)
+Segment next lu : seek_end = 1636
+Dans next_ de ARRAY(0x7f13481d1c90)
+Parent 3483| segment précédant 1636
+===> Dans read_ à partir de seek_start = 1636 (lu sur fichier)
+Segment next lu : seek_end = 1657
+Dans next_ de ARRAY(0x7f13481d15b8)
+Parent 3483| segment précédant 1657
+===> Dans read_ à partir de seek_start = 1657 (lu sur fichier)
+Segment next lu : seek_end = 1678
+Dans next_ de ARRAY(0x7f13481d6b40)
+Parent 3483| segment précédant 1678
+===> Dans read_ à partir de seek_start = 1678 (lu sur fichier)
+Segment next lu : seek_end = 1749
+Dans next_ de ARRAY(0x7f13481cb3e8)
+Parent 3483| segment précédant 1749
+===> Dans read_ à partir de seek_start = 1749 (lu sur fichier)
+Segment next lu : seek_end = 1801
+Dans next_ de ARRAY(0x7f13481d16f0)
+Parent 3483| segment précédant 1801
+===> Dans read_ à partir de seek_start = 1801 (lu sur fichier)
+Segment next lu : seek_end = 1879
+Dans next_ de ARRAY(0x7f13481d6c48)
+Parent 3483| segment précédant 1879
+===> Dans read_ à partir de seek_start = 1879 (lu sur fichier)
+Segment next lu : seek_end = 1941
+Dans next_ de ARRAY(0x7f13481c33d8)
+Parent 3483| segment précédant 1941
+===> Dans read_ à partir de seek_start = 1941 (lu sur fichier)
+Segment next lu : seek_end = 2041
+Dans next_ de ARRAY(0x7f13481d1c90)
+Parent 3483| segment précédant 2041
+===> Dans read_ à partir de seek_start = 2041 (lu sur fichier)
+Segment next lu : seek_end = 2119
+Dans next_ de ARRAY(0x7f13481d15b8)
+Parent 3483| segment précédant 2119
+===> Dans read_ à partir de seek_start = 2119 (lu sur fichier)
+Segment next lu : seek_end = 2143
+Dans next_ de ARRAY(0x7f13481d6b40)
+Parent 3483| segment précédant 2143
+===> Dans read_ à partir de seek_start = 2143 (lu sur fichier)
+Segment next lu : seek_end = 2205
+Dans next_ de ARRAY(0x7f13481cb3e8)
+Parent 3483| segment précédant 2205
+===> Dans read_ à partir de seek_start = 2205 (lu sur fichier)
+Segment next lu : seek_end = 2283
+Dans next_ de ARRAY(0x7f13481d16f0)
+Parent 3483| segment précédant 2283
+===> Dans read_ à partir de seek_start = 2283 (lu sur fichier)
+Segment next lu : seek_end = 2345
+Dans next_ de ARRAY(0x7f13481bddd8)
+Parent 3483| segment précédant 2345
+===> Dans read_ à partir de seek_start = 2345 (lu sur fichier)
+Segment next lu : seek_end = 2414
+Dans next_ de ARRAY(0x7f13481c33d8)
+Parent 3483| segment précédant 2414
+===> Dans read_ à partir de seek_start = 2414 (lu sur fichier)
+Segment next lu : seek_end = 2492
+Dans next_ de ARRAY(0x7f13481d1c90)
+Parent 3483| segment précédant 2492
+===> Dans read_ à partir de seek_start = 2492 (lu sur fichier)
+Segment next lu : seek_end = 2510
+Dans next_ de ARRAY(0x7f13481d6c48)
+Parent 3483| segment précédant 2510
+===> Dans read_ à partir de seek_start = 2510 (lu sur fichier)
+Segment next lu : seek_end = 2572
+Dans next_ de ARRAY(0x7f13481d6b40)
+Parent 3483| segment précédant 2572
+===> Dans read_ à partir de seek_start = 2572 (lu sur fichier)
+Segment next lu : seek_end = 2593
+Dans next_ de ARRAY(0x7f13481cb3e8)
+Dans next_ de ARRAY(0x7f1348012848)
+Dans next_ de ARRAY(0x7f13481cb3a0)
+Dans next_ de ARRAY(0x7f13481bd748)
+Dans next_ de ARRAY(0x7f13481c65e0)
+Dans next_ de ARRAY(0x7f13481bdac0)
+Dans next_ de ARRAY(0x7f13481276d8)
+Parent 3483| segment précédant 200
+===> Dans read_ à partir de seek_start = 200 (lu sur fichier)
+Segment next lu : seek_end = 230
+Dans next_ de ARRAY(0x7f13481d6fd8)
+Parent 3483| segment précédant 230
+===> Dans read_ à partir de seek_start = 230 (lu sur fichier)
+Segment next lu : seek_end = 255
+Dans next_ de ARRAY(0x7f13481d1ea0)
+Parent 3483| segment précédant 255
+===> Dans read_ à partir de seek_start = 255 (lu sur fichier)
+Segment next lu : seek_end = 313
+Dans next_ de ARRAY(0x7f13481d2218)
+Parent 3483| segment précédant 313
+===> Dans read_ à partir de seek_start = 313 (lu sur fichier)
+Segment next lu : seek_end = 411
+Dans next_ de ARRAY(0x7f13481cb640)
+Parent 3483| segment précédant 411
+===> Dans read_ à partir de seek_start = 411 (lu sur fichier)
+Segment next lu : seek_end = 469
+Dans next_ de ARRAY(0x7f13481cfbc8)
+Parent 3483| segment précédant 469
+===> Dans read_ à partir de seek_start = 469 (lu sur fichier)
+Segment next lu : seek_end = 519
+Dans next_ de ARRAY(0x7f13481d1fa8)
+Parent 3483| segment précédant 519
+===> Dans read_ à partir de seek_start = 519 (lu sur fichier)
+Segment next lu : seek_end = 577
+Dans next_ de ARRAY(0x7f13481d1d08)
+Parent 3483| segment précédant 577
+===> Dans read_ à partir de seek_start = 577 (lu sur fichier)
+Segment next lu : seek_end = 657
+Dans next_ de ARRAY(0x7f13481d6fd8)
+Parent 3483| segment précédant 657
+===> Dans read_ à partir de seek_start = 657 (lu sur fichier)
+Segment next lu : seek_end = 715
+Dans next_ de ARRAY(0x7f13481d1ea0)
+Parent 3483| segment précédant 715
+===> Dans read_ à partir de seek_start = 715 (lu sur fichier)
+Segment next lu : seek_end = 754
+Dans next_ de ARRAY(0x7f13481d2218)
+Parent 3483| segment précédant 754
+===> Dans read_ à partir de seek_start = 754 (lu sur fichier)
+Segment next lu : seek_end = 812
+Dans next_ de ARRAY(0x7f13481cb640)
+Parent 3483| segment précédant 812
+===> Dans read_ à partir de seek_start = 812 (lu sur fichier)
+Segment next lu : seek_end = 882
+Dans next_ de ARRAY(0x7f13481cfbc8)
+Parent 3483| segment précédant 882
+===> Dans read_ à partir de seek_start = 882 (lu sur fichier)
+Segment next lu : seek_end = 940
+Dans next_ de ARRAY(0x7f13481d1fa8)
+Parent 3483| segment précédant 940
+===> Dans read_ à partir de seek_start = 940 (lu sur fichier)
+Segment next lu : seek_end = 961
+Dans next_ de ARRAY(0x7f13481d1d08)
+Parent 3483| segment précédant 961
+===> Dans read_ à partir de seek_start = 961 (lu sur fichier)
+Segment next lu : seek_end = 1013
+Dans next_ de ARRAY(0x7f13481d6fd8)
+Parent 3483| segment précédant 1013
+===> Dans read_ à partir de seek_start = 1013 (lu sur fichier)
+Segment next lu : seek_end = 1080
+Dans next_ de ARRAY(0x7f13481d1ea0)
+Parent 3483| segment précédant 1080
+===> Dans read_ à partir de seek_start = 1080 (lu sur fichier)
+Segment next lu : seek_end = 1081
+Dans next_ de ARRAY(0x7f13481d2218)
+Parent 3483| segment précédant 1081
+===> Dans read_ à partir de seek_start = 1081 (lu sur fichier)
+Segment next lu : seek_end = 1147
+Dans next_ de ARRAY(0x7f13481cbb38)
+Parent 3483| segment précédant 1147
+===> Dans read_ à partir de seek_start = 1147 (lu sur fichier)
+Segment next lu : seek_end = 1209
+Dans next_ de ARRAY(0x7f13481cfbc8)
+Parent 3483| segment précédant 1209
+===> Dans read_ à partir de seek_start = 1209 (lu sur fichier)
+Segment next lu : seek_end = 1287
+Dans next_ de ARRAY(0x7f13481d1fa8)
+Parent 3483| segment précédant 1287
+===> Dans read_ à partir de seek_start = 1287 (lu sur fichier)
+Segment next lu : seek_end = 1349
+Dans next_ de ARRAY(0x7f13481cb640)
+Parent 3483| segment précédant 1349
+===> Dans read_ à partir de seek_start = 1349 (lu sur fichier)
+Segment next lu : seek_end = 1420
+Dans next_ de ARRAY(0x7f13481d6fd8)
+Parent 3483| segment précédant 1420
+===> Dans read_ à partir de seek_start = 1420 (lu sur fichier)
+Segment next lu : seek_end = 1472
+Dans next_ de ARRAY(0x7f13481d1ea0)
+Parent 3483| segment précédant 1472
+===> Dans read_ à partir de seek_start = 1472 (lu sur fichier)
+Segment next lu : seek_end = 1550
+Dans next_ de ARRAY(0x7f13481d2218)
+Parent 3483| segment précédant 1550
+===> Dans read_ à partir de seek_start = 1550 (lu sur fichier)
+Segment next lu : seek_end = 1574
+Dans next_ de ARRAY(0x7f13481cbb38)
+Parent 3483| segment précédant 1574
+===> Dans read_ à partir de seek_start = 1574 (lu sur fichier)
+Segment next lu : seek_end = 1636
+Dans next_ de ARRAY(0x7f13481cfbc8)
+Parent 3483| segment précédant 1636
+===> Dans read_ à partir de seek_start = 1636 (lu sur fichier)
+Segment next lu : seek_end = 1657
+Dans next_ de ARRAY(0x7f13481d1fa8)
+Parent 3483| segment précédant 1657
+===> Dans read_ à partir de seek_start = 1657 (lu sur fichier)
+Segment next lu : seek_end = 1678
+Dans next_ de ARRAY(0x7f13481cb640)
+Parent 3483| segment précédant 1678
+===> Dans read_ à partir de seek_start = 1678 (lu sur fichier)
+Segment next lu : seek_end = 1749
+Dans next_ de ARRAY(0x7f13481d6fd8)
+Parent 3483| segment précédant 1749
+===> Dans read_ à partir de seek_start = 1749 (lu sur fichier)
+Segment next lu : seek_end = 1801
+Dans next_ de ARRAY(0x7f13481d1ea0)
+Parent 3483| segment précédant 1801
+===> Dans read_ à partir de seek_start = 1801 (lu sur fichier)
+Segment next lu : seek_end = 1879
+Dans next_ de ARRAY(0x7f13481d2218)
+Parent 3483| segment précédant 1879
+===> Dans read_ à partir de seek_start = 1879 (lu sur fichier)
+Segment next lu : seek_end = 1941
+Dans next_ de ARRAY(0x7f13481cbb38)
+Parent 3483| segment précédant 1941
+===> Dans read_ à partir de seek_start = 1941 (lu sur fichier)
+Segment next lu : seek_end = 2041
+Dans next_ de ARRAY(0x7f13481cfbc8)
+Parent 3483| segment précédant 2041
+===> Dans read_ à partir de seek_start = 2041 (lu sur fichier)
+Segment next lu : seek_end = 2119
+Dans next_ de ARRAY(0x7f13481d1fa8)
+Parent 3483| segment précédant 2119
+===> Dans read_ à partir de seek_start = 2119 (lu sur fichier)
+Segment next lu : seek_end = 2143
+Dans next_ de ARRAY(0x7f13481cb640)
+Parent 3483| segment précédant 2143
+===> Dans read_ à partir de seek_start = 2143 (lu sur fichier)
+Segment next lu : seek_end = 2205
+Dans next_ de ARRAY(0x7f13481d6fd8)
+Parent 3483| segment précédant 2205
+===> Dans read_ à partir de seek_start = 2205 (lu sur fichier)
+Segment next lu : seek_end = 2283
+Dans next_ de ARRAY(0x7f13481d1ea0)
+Parent 3483| segment précédant 2283
+===> Dans read_ à partir de seek_start = 2283 (lu sur fichier)
+Segment next lu : seek_end = 2345
+Dans next_ de ARRAY(0x7f13481d7200)
+Parent 3483| segment précédant 2345
+===> Dans read_ à partir de seek_start = 2345 (lu sur fichier)
+Segment next lu : seek_end = 2414
+Dans next_ de ARRAY(0x7f13481cbb38)
+Parent 3483| segment précédant 2414
+===> Dans read_ à partir de seek_start = 2414 (lu sur fichier)
+Segment next lu : seek_end = 2492
+Dans next_ de ARRAY(0x7f13481cfbc8)
+Parent 3483| segment précédant 2492
+===> Dans read_ à partir de seek_start = 2492 (lu sur fichier)
+Segment next lu : seek_end = 2510
+Dans next_ de ARRAY(0x7f13481d2218)
+Parent 3483| segment précédant 2510
+===> Dans read_ à partir de seek_start = 2510 (lu sur fichier)
+Segment next lu : seek_end = 2572
+Dans next_ de ARRAY(0x7f13481cb640)
+Parent 3483| segment précédant 2572
+===> Dans read_ à partir de seek_start = 2572 (lu sur fichier)
+Segment next lu : seek_end = 2593
+Dans next_ de ARRAY(0x7f13481d6fd8)
+Dans next_ de ARRAY(0x7f1348012848)
+Dans next_ de ARRAY(0x7f13481cb3a0)
+Dans next_ de ARRAY(0x7f13481d2350)
+Dans next_ de ARRAY(0x7f13481d21e8)
+Dans next_ de ARRAY(0x7f13481d1b10)
+Dans next_ de ARRAY(0x7f13481cef98)
+Dans next_ de ARRAY(0x7f13481cee30)
+Dans next_ de ARRAY(0x7f13481cefe0)
+Dans next_ de ARRAY(0x7f13481d1f30)
+Dans next_ de ARRAY(0x7f13481d2068)
+Dans next_ de ARRAY(0x7f13481c3018)
+Dans next_ de ARRAY(0x7f13481c6928)
+Dans next_ de ARRAY(0x7f13481d6ac8)
+Dans next_ de ARRAY(0x7f13481cf418)
+Dans next_ de ARRAY(0x7f13481d67b0)
+Dans next_ de ARRAY(0x7f13481d1d98)
+Dans next_ de ARRAY(0x7f13481b1150)
+Dans next_ de ARRAY(0x7f13481cf160)
+Dans next_ de ARRAY(0x7f13481bd748)
+Dans next_ de ARRAY(0x7f13481c65e0)
+Dans next_ de ARRAY(0x7f13481bdac0)
+Dans next_ de ARRAY(0x7f13481276d8)
+Parent 3483| segment précédant 200
+===> Dans read_ à partir de seek_start = 200 (lu sur fichier)
+Segment next lu : seek_end = 230
+Dans next_ de ARRAY(0x7f13481d1be8)
+Parent 3483| segment précédant 230
+===> Dans read_ à partir de seek_start = 230 (lu sur fichier)
+Segment next lu : seek_end = 255
+Dans next_ de ARRAY(0x7f13481d7200)
+Parent 3483| segment précédant 255
+===> Dans read_ à partir de seek_start = 255 (lu sur fichier)
+Segment next lu : seek_end = 313
+Dans next_ de ARRAY(0x7f13481c61c0)
+Parent 3483| segment précédant 313
+===> Dans read_ à partir de seek_start = 313 (lu sur fichier)
+Segment next lu : seek_end = 411
+Dans next_ de ARRAY(0x7f13481cefc8)
+Parent 3483| segment précédant 411
+===> Dans read_ à partir de seek_start = 411 (lu sur fichier)
+Segment next lu : seek_end = 469
+Dans next_ de ARRAY(0x7f13481cba90)
+Parent 3483| segment précédant 469
+===> Dans read_ à partir de seek_start = 469 (lu sur fichier)
+Segment next lu : seek_end = 519
+Dans next_ de ARRAY(0x7f13481cee78)
+Parent 3483| segment précédant 519
+===> Dans read_ à partir de seek_start = 519 (lu sur fichier)
+Segment next lu : seek_end = 577
+Dans next_ de ARRAY(0x7f13481cfa60)
+Parent 3483| segment précédant 577
+===> Dans read_ à partir de seek_start = 577 (lu sur fichier)
+Segment next lu : seek_end = 657
+Dans next_ de ARRAY(0x7f13481d1be8)
+Parent 3483| segment précédant 657
+===> Dans read_ à partir de seek_start = 657 (lu sur fichier)
+Segment next lu : seek_end = 715
+Dans next_ de ARRAY(0x7f13481d7200)
+Parent 3483| segment précédant 715
+===> Dans read_ à partir de seek_start = 715 (lu sur fichier)
+Segment next lu : seek_end = 754
+Dans next_ de ARRAY(0x7f13481c61c0)
+Parent 3483| segment précédant 754
+===> Dans read_ à partir de seek_start = 754 (lu sur fichier)
+Segment next lu : seek_end = 812
+Dans next_ de ARRAY(0x7f13481cefc8)
+Parent 3483| segment précédant 812
+===> Dans read_ à partir de seek_start = 812 (lu sur fichier)
+Segment next lu : seek_end = 882
+Dans next_ de ARRAY(0x7f13481cba90)
+Parent 3483| segment précédant 882
+===> Dans read_ à partir de seek_start = 882 (lu sur fichier)
+Segment next lu : seek_end = 940
+Dans next_ de ARRAY(0x7f13481cee78)
+Parent 3483| segment précédant 940
+===> Dans read_ à partir de seek_start = 940 (lu sur fichier)
+Segment next lu : seek_end = 961
+Dans next_ de ARRAY(0x7f13481cfa60)
+Parent 3483| segment précédant 961
+===> Dans read_ à partir de seek_start = 961 (lu sur fichier)
+Segment next lu : seek_end = 1013
+Dans next_ de ARRAY(0x7f13481d1be8)
+Parent 3483| segment précédant 1013
+===> Dans read_ à partir de seek_start = 1013 (lu sur fichier)
+Segment next lu : seek_end = 1080
+Dans next_ de ARRAY(0x7f13481d7200)
+Parent 3483| segment précédant 1080
+===> Dans read_ à partir de seek_start = 1080 (lu sur fichier)
+Segment next lu : seek_end = 1081
+Dans next_ de ARRAY(0x7f13481c61c0)
+Parent 3483| segment précédant 1081
+===> Dans read_ à partir de seek_start = 1081 (lu sur fichier)
+Segment next lu : seek_end = 1147
+Dans next_ de ARRAY(0x7f13481d22c0)
+Parent 3483| segment précédant 1147
+===> Dans read_ à partir de seek_start = 1147 (lu sur fichier)
+Segment next lu : seek_end = 1209
+Dans next_ de ARRAY(0x7f13481cba90)
+Parent 3483| segment précédant 1209
+===> Dans read_ à partir de seek_start = 1209 (lu sur fichier)
+Segment next lu : seek_end = 1287
+Dans next_ de ARRAY(0x7f13481cee78)
+Parent 3483| segment précédant 1287
+===> Dans read_ à partir de seek_start = 1287 (lu sur fichier)
+Segment next lu : seek_end = 1349
+Dans next_ de ARRAY(0x7f13481cefc8)
+Parent 3483| segment précédant 1349
+===> Dans read_ à partir de seek_start = 1349 (lu sur fichier)
+Segment next lu : seek_end = 1420
+Dans next_ de ARRAY(0x7f13481d1be8)
+Parent 3483| segment précédant 1420
+===> Dans read_ à partir de seek_start = 1420 (lu sur fichier)
+Segment next lu : seek_end = 1472
+Dans next_ de ARRAY(0x7f13481d7200)
+Parent 3483| segment précédant 1472
+===> Dans read_ à partir de seek_start = 1472 (lu sur fichier)
+Segment next lu : seek_end = 1550
+Dans next_ de ARRAY(0x7f13481c61c0)
+Parent 3483| segment précédant 1550
+===> Dans read_ à partir de seek_start = 1550 (lu sur fichier)
+Segment next lu : seek_end = 1574
+Dans next_ de ARRAY(0x7f13481d22c0)
+Parent 3483| segment précédant 1574
+===> Dans read_ à partir de seek_start = 1574 (lu sur fichier)
+Segment next lu : seek_end = 1636
+Dans next_ de ARRAY(0x7f13481cba90)
+Parent 3483| segment précédant 1636
+===> Dans read_ à partir de seek_start = 1636 (lu sur fichier)
+Segment next lu : seek_end = 1657
+Dans next_ de ARRAY(0x7f13481cee78)
+Parent 3483| segment précédant 1657
+===> Dans read_ à partir de seek_start = 1657 (lu sur fichier)
+Segment next lu : seek_end = 1678
+Dans next_ de ARRAY(0x7f13481cefc8)
+Parent 3483| segment précédant 1678
+===> Dans read_ à partir de seek_start = 1678 (lu sur fichier)
+Segment next lu : seek_end = 1749
+Dans next_ de ARRAY(0x7f13481d1be8)
+Parent 3483| segment précédant 1749
+===> Dans read_ à partir de seek_start = 1749 (lu sur fichier)
+Segment next lu : seek_end = 1801
+Dans next_ de ARRAY(0x7f13481d7200)
+Parent 3483| segment précédant 1801
+===> Dans read_ à partir de seek_start = 1801 (lu sur fichier)
+Segment next lu : seek_end = 1879
+Dans next_ de ARRAY(0x7f13481c61c0)
+Parent 3483| segment précédant 1879
+===> Dans read_ à partir de seek_start = 1879 (lu sur fichier)
+Segment next lu : seek_end = 1941
+Dans next_ de ARRAY(0x7f13481d22c0)
+Parent 3483| segment précédant 1941
+===> Dans read_ à partir de seek_start = 1941 (lu sur fichier)
+Segment next lu : seek_end = 2041
+Dans next_ de ARRAY(0x7f13481cba90)
+Parent 3483| segment précédant 2041
+===> Dans read_ à partir de seek_start = 2041 (lu sur fichier)
+Segment next lu : seek_end = 2119
+Dans next_ de ARRAY(0x7f13481cee78)
+Parent 3483| segment précédant 2119
+===> Dans read_ à partir de seek_start = 2119 (lu sur fichier)
+Segment next lu : seek_end = 2143
+Dans next_ de ARRAY(0x7f13481cefc8)
+Parent 3483| segment précédant 2143
+===> Dans read_ à partir de seek_start = 2143 (lu sur fichier)
+Segment next lu : seek_end = 2205
+Dans next_ de ARRAY(0x7f13481d1be8)
+Parent 3483| segment précédant 2205
+===> Dans read_ à partir de seek_start = 2205 (lu sur fichier)
+Segment next lu : seek_end = 2283
+Dans next_ de ARRAY(0x7f13481d7200)
+Parent 3483| segment précédant 2283
+===> Dans read_ à partir de seek_start = 2283 (lu sur fichier)
+Segment next lu : seek_end = 2345
+Dans next_ de ARRAY(0x7f13481cbb38)
+Parent 3483| segment précédant 2345
+===> Dans read_ à partir de seek_start = 2345 (lu sur fichier)
+Segment next lu : seek_end = 2414
+Dans next_ de ARRAY(0x7f13481d22c0)
+Parent 3483| segment précédant 2414
+===> Dans read_ à partir de seek_start = 2414 (lu sur fichier)
+Segment next lu : seek_end = 2492
+Dans next_ de ARRAY(0x7f13481cba90)
+Parent 3483| segment précédant 2492
+===> Dans read_ à partir de seek_start = 2492 (lu sur fichier)
+Segment next lu : seek_end = 2510
+Dans next_ de ARRAY(0x7f13481c61c0)
+Parent 3483| segment précédant 2510
+===> Dans read_ à partir de seek_start = 2510 (lu sur fichier)
+Segment next lu : seek_end = 2572
+Dans next_ de ARRAY(0x7f13481cefc8)
+Parent 3483| segment précédant 2572
+===> Dans read_ à partir de seek_start = 2572 (lu sur fichier)
+Segment next lu : seek_end = 2593
+Dans next_ de ARRAY(0x7f13481d1be8)
+Dans next_ de ARRAY(0x7f1348012848)
+Dans next_ de ARRAY(0x7f13481cb3a0)
+Dans next_ de ARRAY(0x7f13481bd748)
+Dans next_ de ARRAY(0x7f13481c65e0)
+Dans next_ de ARRAY(0x7f13481bdac0)
+Dans next_ de ARRAY(0x7f13481276d8)
+Parent 3483| segment précédant 200
+===> Dans read_ à partir de seek_start = 200 (lu sur fichier)
+Segment next lu : seek_end = 230
+Dans next_ de ARRAY(0x7f13481c62e0)
+Parent 3483| segment précédant 230
+===> Dans read_ à partir de seek_start = 230 (lu sur fichier)
+Segment next lu : seek_end = 255
+Dans next_ de ARRAY(0x7f13481d1d08)
+Parent 3483| segment précédant 255
+===> Dans read_ à partir de seek_start = 255 (lu sur fichier)
+Segment next lu : seek_end = 313
+Dans next_ de ARRAY(0x7f13481cf2e0)
+Parent 3483| segment précédant 313
+===> Dans read_ à partir de seek_start = 313 (lu sur fichier)
+Segment next lu : seek_end = 411
+Dans next_ de ARRAY(0x7f13481d6ba0)
+Parent 3483| segment précédant 411
+===> Dans read_ à partir de seek_start = 411 (lu sur fichier)
+Segment next lu : seek_end = 469
+Dans next_ de ARRAY(0x7f13481d1960)
+Parent 3483| segment précédant 469
+===> Dans read_ à partir de seek_start = 469 (lu sur fichier)
+Segment next lu : seek_end = 519
+Dans next_ de ARRAY(0x7f13481cf100)
+Parent 3483| segment précédant 519
+===> Dans read_ à partir de seek_start = 519 (lu sur fichier)
+Segment next lu : seek_end = 577
+Dans next_ de ARRAY(0x7f13481cf0a0)
+Parent 3483| segment précédant 577
+===> Dans read_ à partir de seek_start = 577 (lu sur fichier)
+Segment next lu : seek_end = 657
+Dans next_ de ARRAY(0x7f13481c62e0)
+Parent 3483| segment précédant 657
+===> Dans read_ à partir de seek_start = 657 (lu sur fichier)
+Segment next lu : seek_end = 715
+Dans next_ de ARRAY(0x7f13481d1d08)
+Parent 3483| segment précédant 715
+===> Dans read_ à partir de seek_start = 715 (lu sur fichier)
+Segment next lu : seek_end = 754
+Dans next_ de ARRAY(0x7f13481cf2e0)
+Parent 3483| segment précédant 754
+===> Dans read_ à partir de seek_start = 754 (lu sur fichier)
+Segment next lu : seek_end = 812
+Dans next_ de ARRAY(0x7f13481d6ba0)
+Parent 3483| segment précédant 812
+===> Dans read_ à partir de seek_start = 812 (lu sur fichier)
+Segment next lu : seek_end = 882
+Dans next_ de ARRAY(0x7f13481d1960)
+Parent 3483| segment précédant 882
+===> Dans read_ à partir de seek_start = 882 (lu sur fichier)
+Segment next lu : seek_end = 940
+Dans next_ de ARRAY(0x7f13481cf100)
+Parent 3483| segment précédant 940
+===> Dans read_ à partir de seek_start = 940 (lu sur fichier)
+Segment next lu : seek_end = 961
+Dans next_ de ARRAY(0x7f13481cf0a0)
+Parent 3483| segment précédant 961
+===> Dans read_ à partir de seek_start = 961 (lu sur fichier)
+Segment next lu : seek_end = 1013
+Dans next_ de ARRAY(0x7f13481c62e0)
+Parent 3483| segment précédant 1013
+===> Dans read_ à partir de seek_start = 1013 (lu sur fichier)
+Segment next lu : seek_end = 1080
+Dans next_ de ARRAY(0x7f13481d1d08)
+Parent 3483| segment précédant 1080
+===> Dans read_ à partir de seek_start = 1080 (lu sur fichier)
+Segment next lu : seek_end = 1081
+Dans next_ de ARRAY(0x7f13481cf2e0)
+Parent 3483| segment précédant 1081
+===> Dans read_ à partir de seek_start = 1081 (lu sur fichier)
+Segment next lu : seek_end = 1147
+Dans next_ de ARRAY(0x7f13481d1d68)
+Parent 3483| segment précédant 1147
+===> Dans read_ à partir de seek_start = 1147 (lu sur fichier)
+Segment next lu : seek_end = 1209
+Dans next_ de ARRAY(0x7f13481d1960)
+Parent 3483| segment précédant 1209
+===> Dans read_ à partir de seek_start = 1209 (lu sur fichier)
+Segment next lu : seek_end = 1287
+Dans next_ de ARRAY(0x7f13481cf100)
+Parent 3483| segment précédant 1287
+===> Dans read_ à partir de seek_start = 1287 (lu sur fichier)
+Segment next lu : seek_end = 1349
+Dans next_ de ARRAY(0x7f13481d6ba0)
+Parent 3483| segment précédant 1349
+===> Dans read_ à partir de seek_start = 1349 (lu sur fichier)
+Segment next lu : seek_end = 1420
+Dans next_ de ARRAY(0x7f13481c62e0)
+Parent 3483| segment précédant 1420
+===> Dans read_ à partir de seek_start = 1420 (lu sur fichier)
+Segment next lu : seek_end = 1472
+Dans next_ de ARRAY(0x7f13481d1d08)
+Parent 3483| segment précédant 1472
+===> Dans read_ à partir de seek_start = 1472 (lu sur fichier)
+Segment next lu : seek_end = 1550
+Dans next_ de ARRAY(0x7f13481cf2e0)
+Parent 3483| segment précédant 1550
+===> Dans read_ à partir de seek_start = 1550 (lu sur fichier)
+Segment next lu : seek_end = 1574
+Dans next_ de ARRAY(0x7f13481d1d68)
+Parent 3483| segment précédant 1574
+===> Dans read_ à partir de seek_start = 1574 (lu sur fichier)
+Segment next lu : seek_end = 1636
+Dans next_ de ARRAY(0x7f13481d1960)
+Parent 3483| segment précédant 1636
+===> Dans read_ à partir de seek_start = 1636 (lu sur fichier)
+Segment next lu : seek_end = 1657
+Dans next_ de ARRAY(0x7f13481cf100)
+Parent 3483| segment précédant 1657
+===> Dans read_ à partir de seek_start = 1657 (lu sur fichier)
+Segment next lu : seek_end = 1678
+Dans next_ de ARRAY(0x7f13481d6ba0)
+Parent 3483| segment précédant 1678
+===> Dans read_ à partir de seek_start = 1678 (lu sur fichier)
+Segment next lu : seek_end = 1749
+Dans next_ de ARRAY(0x7f13481c62e0)
+Parent 3483| segment précédant 1749
+===> Dans read_ à partir de seek_start = 1749 (lu sur fichier)
+Segment next lu : seek_end = 1801
+Dans next_ de ARRAY(0x7f13481d1d08)
+Parent 3483| segment précédant 1801
+===> Dans read_ à partir de seek_start = 1801 (lu sur fichier)
+Segment next lu : seek_end = 1879
+Dans next_ de ARRAY(0x7f13481cf2e0)
+Parent 3483| segment précédant 1879
+===> Dans read_ à partir de seek_start = 1879 (lu sur fichier)
+Segment next lu : seek_end = 1941
+Dans next_ de ARRAY(0x7f13481d1d68)
+Parent 3483| segment précédant 1941
+===> Dans read_ à partir de seek_start = 1941 (lu sur fichier)
+Segment next lu : seek_end = 2041
+Dans next_ de ARRAY(0x7f13481d1960)
+Parent 3483| segment précédant 2041
+===> Dans read_ à partir de seek_start = 2041 (lu sur fichier)
+Segment next lu : seek_end = 2119
+Dans next_ de ARRAY(0x7f13481cf100)
+Parent 3483| segment précédant 2119
+===> Dans read_ à partir de seek_start = 2119 (lu sur fichier)
+Segment next lu : seek_end = 2143
+Dans next_ de ARRAY(0x7f13481d6ba0)
+Parent 3483| segment précédant 2143
+===> Dans read_ à partir de seek_start = 2143 (lu sur fichier)
+Segment next lu : seek_end = 2205
+Dans next_ de ARRAY(0x7f13481c62e0)
+Parent 3483| segment précédant 2205
+===> Dans read_ à partir de seek_start = 2205 (lu sur fichier)
+Segment next lu : seek_end = 2283
+Dans next_ de ARRAY(0x7f13481d1d08)
+Parent 3483| segment précédant 2283
+===> Dans read_ à partir de seek_start = 2283 (lu sur fichier)
+Segment next lu : seek_end = 2345
+Dans next_ de ARRAY(0x7f13481cb490)
+Parent 3483| segment précédant 2345
+===> Dans read_ à partir de seek_start = 2345 (lu sur fichier)
+Segment next lu : seek_end = 2414
+Dans next_ de ARRAY(0x7f13481d1d68)
+Parent 3483| segment précédant 2414
+===> Dans read_ à partir de seek_start = 2414 (lu sur fichier)
+Segment next lu : seek_end = 2492
+Dans next_ de ARRAY(0x7f13481d1960)
+Parent 3483| segment précédant 2492
+===> Dans read_ à partir de seek_start = 2492 (lu sur fichier)
+Segment next lu : seek_end = 2510
+Dans next_ de ARRAY(0x7f13481cf2e0)
+Parent 3483| segment précédant 2510
+===> Dans read_ à partir de seek_start = 2510 (lu sur fichier)
+Segment next lu : seek_end = 2572
+Dans next_ de ARRAY(0x7f13481d6ba0)
+Parent 3483| segment précédant 2572
+===> Dans read_ à partir de seek_start = 2572 (lu sur fichier)
+Segment next lu : seek_end = 2593
+Dans next_ de ARRAY(0x7f13481c62e0)
+Dans next_ de ARRAY(0x7f1348012848)
+Dans next_ de ARRAY(0x7f13481cb3a0)
+Dans next_ de ARRAY(0x7f13481d2350)
+Dans next_ de ARRAY(0x7f13481d21e8)
+Dans next_ de ARRAY(0x7f13481d1b10)
+Dans next_ de ARRAY(0x7f13481cef98)
+Dans next_ de ARRAY(0x7f13481cee30)
+Dans next_ de ARRAY(0x7f13481cefe0)
+Dans next_ de ARRAY(0x7f13481d1f30)
+Dans next_ de ARRAY(0x7f13481d2068)
+Dans next_ de ARRAY(0x7f13481c3018)
+Dans next_ de ARRAY(0x7f13481c6928)
+Dans next_ de ARRAY(0x7f13481d6ac8)
+Dans next_ de ARRAY(0x7f13481cf418)
+Dans next_ de ARRAY(0x7f13481d67b0)
+Dans next_ de ARRAY(0x7f13481d1d98)
+Dans next_ de ARRAY(0x7f13481b1150)
+Dans next_ de ARRAY(0x7f13481cf160)
+Dans update_growing : taille actuelle 3483, ancienne : 3483
+Dans update_growing : taille actuelle 3483, ancienne : 3483
+Dans update_growing : taille actuelle 3483, ancienne : 3483
+Dans update_growing : taille actuelle 3811, ancienne : 3483
+Appel à growing_check, nouvelle taille 3811
+Previous à blanc demandé
+Dans dump_file_manager : tid = 10, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13481b1120)
+FILE_NAME  : tmp/Editor.pl_trace.trc
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a91e0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init_eval de Search.pm .. HASH(0x7f13790a1c80), 139721057863832
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f1370190dd8)
+EVAL _TJREAD = 13
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans bind_key_global
+Dans Comm, mort du thread 6
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d1020)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+LAST MODIF = 1248602490
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d6ea8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701f3638)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+LAST MODIF = 1248602490
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7550)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 3811
+FIRST      : ARRAY(0x7f13481bd748)
+LAST       : ARRAY(0x7f13481cbad8)
+================================================================================
+	Level 1 : ARRAY(0x7f13481bd748)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 50
+	TEXT       : Subroutine demo8 redefined at Editor.pl line 493.
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 1
+	NEXT       : ARRAY(0x7f13481c65e0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c65e0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bd748)
+	SEEK_START : 50
+	SEEK_END   : 147
+	TEXT       : Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 2
+	NEXT       : ARRAY(0x7f13481bdac0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481bdac0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c65e0)
+	SEEK_START : 147
+	SEEK_END   : 166
+	TEXT       : Fichiers trouvés :
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 3
+	NEXT       : ARRAY(0x7f13481276d8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481276d8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481bdac0)
+	SEEK_START : 166
+	SEEK_END   : 200
+	TEXT       :     lib/Text/Editor/Easy/Abstract.pm
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 4
+	NEXT       : ARRAY(0x7f1348012848)
+	================================================================================
+	Level 1 : ARRAY(0x7f1348012848)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481276d8)
+	SEEK_START : 2593
+	SEEK_END   : 2614
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 8
+	NEXT       : ARRAY(0x7f13481cb3a0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cb3a0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f1348012848)
+	SEEK_START : 2614
+	SEEK_END   : 2635
+	TEXT       : Dans bind_key_global
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 7
+	NEXT       : ARRAY(0x7f13481d2350)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2350)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cb3a0)
+	SEEK_START : 2635
+	SEEK_END   : 2663
+	TEXT       : Dans Comm, mort du thread 6
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 6
+	NEXT       : ARRAY(0x7f13481d21e8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d21e8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d2350)
+	SEEK_START : 2663
+	SEEK_END   : 2741
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 5
+	NEXT       : ARRAY(0x7f13481d1b10)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1b10)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d21e8)
+	SEEK_START : 2741
+	SEEK_END   : 2765
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 11
+	NEXT       : ARRAY(0x7f13481cef98)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cef98)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1b10)
+	SEEK_START : 2765
+	SEEK_END   : 2827
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 10
+	NEXT       : ARRAY(0x7f13481cee30)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cee30)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cef98)
+	SEEK_START : 2827
+	SEEK_END   : 2905
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 9
+	NEXT       : ARRAY(0x7f13481cefe0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cefe0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cee30)
+	SEEK_START : 2905
+	SEEK_END   : 2929
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 14
+	NEXT       : ARRAY(0x7f13481d1f30)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1f30)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cefe0)
+	SEEK_START : 2929
+	SEEK_END   : 2991
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 13
+	NEXT       : ARRAY(0x7f13481d2068)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d2068)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1f30)
+	SEEK_START : 2991
+	SEEK_END   : 3069
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 12
+	NEXT       : ARRAY(0x7f13481c3018)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c3018)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d2068)
+	SEEK_START : 3069
+	SEEK_END   : 3093
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 17
+	NEXT       : ARRAY(0x7f13481c6928)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481c6928)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c3018)
+	SEEK_START : 3093
+	SEEK_END   : 3155
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 16
+	NEXT       : ARRAY(0x7f13481d6ac8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d6ac8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481c6928)
+	SEEK_START : 3155
+	SEEK_END   : 3233
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d1020)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 15
+	NEXT       : ARRAY(0x7f13481cf418)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cf418)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d6ac8)
+	SEEK_START : 3233
+	SEEK_END   : 3257
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 21
+	NEXT       : ARRAY(0x7f13481d67b0)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d67b0)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cf418)
+	SEEK_START : 3257
+	SEEK_END   : 3319
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 20
+	NEXT       : ARRAY(0x7f13481d1d98)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481d1d98)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d67b0)
+	SEEK_START : 3319
+	SEEK_END   : 3343
+	TEXT       : LAST MODIF = 1248602490
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 19
+	NEXT       : ARRAY(0x7f13481b1150)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481b1150)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481d1d98)
+	SEEK_START : 3343
+	SEEK_END   : 3421
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d6ea8)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 18
+	NEXT       : ARRAY(0x7f13481cf160)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cf160)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481b1150)
+	SEEK_START : 3421
+	SEEK_END   : 3483
+	TEXT       : Pas de configuration trouvée pour l'affichage de LINE REF = 1
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 23
+	NEXT       : ARRAY(0x7f13481cbad8)
+	================================================================================
+	Level 1 : ARRAY(0x7f13481cbad8)
+	TYPE       : 'line'
+	PREVIOUS   : ARRAY(0x7f13481cf160)
+	SEEK_START : 3483
+	SEEK_END   : 3561
+	TEXT       : Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701f3638)
+	PARENT       : ARRAY(0x7f13481b1120)
+	REF          : 22
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13481cbad8)
+
+Le dump a renvoyé 0 erreurs
+
+Dans last_ de segment_ref ARRAY(0x7f13481b1120)
+Création d'un nouveau segment : ARRAY(0x7f13481d6a50)
+Dans read_previous de line_ref ARRAY(0x7f13481d6a50)
+Début de prev_line 3811
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 3749
+pos A = 3749
+Fin de prev_line 3749 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 3811
+Il faut créer une ligne vide supplémentaire (fin de fichier)
+On a lu seek_start 3811 et text 
+line_ref trouvé = ARRAY(0x7f13481d6a50)
+Previous de 24 demandé
+Line ref trouvée : ARRAY(0x7f13481d6a50)
+Dans read_previous de line_ref ARRAY(0x7f13481d1be8)
+Début de prev_line 3811
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 3749
+pos A = 3749
+Fin de prev_line 3749 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 3811
+On a lu seek_start 3749 et text Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Previous de 25 demandé
+Line ref trouvée : ARRAY(0x7f13481d1be8)
+Dans read_previous de line_ref ARRAY(0x7f13481cba18)
+Début de prev_line 3749
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 3671
+pos A = 3671
+Fin de prev_line 3671 |Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7550)
+| 3749
+On a lu seek_start 3671 et text Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7550)
+Previous de 26 demandé
+Line ref trouvée : ARRAY(0x7f13481cba18)
+Dans read_previous de line_ref ARRAY(0x7f13481d1f90)
+Début de prev_line 3671
+position > 0
+Decrement 50
+Après première boucle : 3647
+pos A = 3647
+Fin de prev_line 3647 |LAST MODIF = 1248602490
+| 3671
+On a lu seek_start 3647 et text LAST MODIF = 1248602490
+Previous de 27 demandé
+Line ref trouvée : ARRAY(0x7f13481d1f90)
+Dans read_previous de line_ref ARRAY(0x7f13481d2050)
+Début de prev_line 3647
+position > 0
+Decrement 50
+Decrement 100
+Après première boucle : 3561
+pos A = 3561
+pos A = 3585
+Fin de prev_line 3585 |Pas de configuration trouvée pour l'affichage de LINE REF = 1
+| 3647
+On a lu seek_start 3585 et text Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Previous de 28 demandé
+Line ref trouvée : ARRAY(0x7f13481d2050)
+Dans read_previous de line_ref ARRAY(0x7f13481ceff8)
+Début de prev_line 3585
+position > 0
+Decrement 50
+Après première boucle : 3561
+pos A = 3561
+Fin de prev_line 3561 |LAST MODIF = 1248602490
+| 3585
+On a lu seek_start 3561 et text LAST MODIF = 1248602490
+Previous de 29 demandé
+Line ref trouvée : ARRAY(0x7f13481ceff8)
+Dans last_ de segment_ref ARRAY(0x7f13481cbad8)
+Previous de 22 demandé
+Line ref trouvée : ARRAY(0x7f13481cbad8)
+Dans last_ de segment_ref ARRAY(0x7f13481cf160)
+Previous de 23 demandé
+Line ref trouvée : ARRAY(0x7f13481cf160)
+Dans last_ de segment_ref ARRAY(0x7f13481b1150)
+Previous de 18 demandé
+Line ref trouvée : ARRAY(0x7f13481b1150)
+Dans last_ de segment_ref ARRAY(0x7f13481d1d98)
+Previous de 19 demandé
+Line ref trouvée : ARRAY(0x7f13481d1d98)
+Dans last_ de segment_ref ARRAY(0x7f13481d67b0)
+Previous de 20 demandé
+Line ref trouvée : ARRAY(0x7f13481d67b0)
+Dans last_ de segment_ref ARRAY(0x7f13481cf418)
+Previous de 21 demandé
+Line ref trouvée : ARRAY(0x7f13481cf418)
+Dans last_ de segment_ref ARRAY(0x7f13481d6ac8)
+Previous de 15 demandé
+Line ref trouvée : ARRAY(0x7f13481d6ac8)
+Dans last_ de segment_ref ARRAY(0x7f13481c6928)
+Previous de 16 demandé
+Line ref trouvée : ARRAY(0x7f13481c6928)
+Dans last_ de segment_ref ARRAY(0x7f13481c3018)
+Previous de 17 demandé
+Line ref trouvée : ARRAY(0x7f13481c3018)
+Dans last_ de segment_ref ARRAY(0x7f13481d2068)
+Previous de 12 demandé
+Line ref trouvée : ARRAY(0x7f13481d2068)
+Dans last_ de segment_ref ARRAY(0x7f13481d1f30)
+Dans next_ de ARRAY(0x7f13481d6a50)
+Avant appel next_ de ARRAY(0x7f13481b1120), seek_end = 3811
+Dans next_ de ARRAY(0x7f13481b1120)
+Pas de segment parent : seek_end = 3811
+PAs de ligne suivante trouvée derrière 24
+SEEK START de cette dernière ligne 3811
+SEEK END de cette dernière ligne 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811
+Dans update_growing : taille actuelle 3811, ancienne : 3811

@@ -1,0 +1,616 @@
+File_manager de l'instance 139721600299128 (demo2.pl)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 17, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x28a5fd0)
+FILE_NAME  : ./demo2.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# Here is an example of
+# "one thread" Text::Editor::Easy object creation
+#
+# Once "Text::Editor::Easy->manage_event" is
+# called, the program is pending
+# on this instruction
+# until the user quit the window.
+#
+# To execute it, press F5 :
+# a window will open and you
+# will be able to ... edit text.
+# Quite standard for an editor.
+
+use strict;
+use lib 'lib';
+
+use Text::Editor::Easy;
+
+my $editor = Text::Editor::Easy->new(
+    {
+        'focus'    => 'yes',
+    }
+);
+
+my @lines = $editor->insert("This text is inserted\nafter instance creation ...\n\n...but before being displayed");
+
+print "The content of the second line is ==> ", $lines[1]->text, "\n";
+
+
+# To "run" graphic and have things displayed
+Text::Editor::Easy->manage_event;
+
+print "The user have closed the window\n";
+
+# Even for this simple example, there is
+# in fact more than one thread
+# created. Still, the program seems
+# to dispose of none.
+#
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 920
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+===> Dans read_ à partir de seek_start = 0 (lu sur fichier)
+	who = I0, text = #
+Texte de la ligne 1 : |#|
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 17, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x28a5fd0)
+FILE_NAME  : ./demo2.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# Here is an example of
+# "one thread" Text::Editor::Easy object creation
+#
+# Once "Text::Editor::Easy->manage_event" is
+# called, the program is pending
+# on this instruction
+# until the user quit the window.
+#
+# To execute it, press F5 :
+# a window will open and you
+# will be able to ... edit text.
+# Quite standard for an editor.
+
+use strict;
+use lib 'lib';
+
+use Text::Editor::Easy;
+
+my $editor = Text::Editor::Easy->new(
+    {
+        'focus'    => 'yes',
+    }
+);
+
+my @lines = $editor->insert("This text is inserted\nafter instance creation ...\n\n...but before being displayed");
+
+print "The content of the second line is ==> ", $lines[1]->text, "\n";
+
+
+# To "run" graphic and have things displayed
+Text::Editor::Easy->manage_event;
+
+print "The user have closed the window\n";
+
+# Even for this simple example, there is
+# in fact more than one thread
+# created. Still, the program seems
+# to dispose of none.
+#
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 920
+FIRST      : ARRAY(0x2a59c20)
+LAST       : ARRAY(0x2a59c20)
+================================================================================
+	Level 1 : ARRAY(0x2a59c20)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 2
+	TEXT       : #
+	PARENT       : ARRAY(0x28a5fd0)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x2a59c20)
+
+Le dump a renvoyé 0 erreurs
+
+Dans next_ de ARRAY(0x2a59c20)
+Parent 920| segment précédant 2
+===> Dans read_ à partir de seek_start = 2 (lu sur fichier)
+Segment next lu : seek_end = 26
+Dans next_ de ARRAY(0x2a62f88)
+Parent 920| segment précédant 26
+===> Dans read_ à partir de seek_start = 26 (lu sur fichier)
+Segment next lu : seek_end = 76
+Dans next_ de ARRAY(0x2a63510)
+Parent 920| segment précédant 76
+===> Dans read_ à partir de seek_start = 76 (lu sur fichier)
+Segment next lu : seek_end = 78
+Dans next_ de ARRAY(0x2a4d810)
+Parent 920| segment précédant 78
+===> Dans read_ à partir de seek_start = 78 (lu sur fichier)
+Segment next lu : seek_end = 123
+Dans next_ de ARRAY(0x2a63108)
+Parent 920| segment précédant 123
+===> Dans read_ à partir de seek_start = 123 (lu sur fichier)
+Segment next lu : seek_end = 156
+Dans next_ de ARRAY(0x2a5a3b8)
+Parent 920| segment précédant 156
+===> Dans read_ à partir de seek_start = 156 (lu sur fichier)
+Segment next lu : seek_end = 178
+Dans next_ de ARRAY(0x2a5e6a0)
+Parent 920| segment précédant 178
+===> Dans read_ à partir de seek_start = 178 (lu sur fichier)
+Segment next lu : seek_end = 212
+Dans next_ de ARRAY(0x2a4d990)
+Parent 920| segment précédant 212
+===> Dans read_ à partir de seek_start = 212 (lu sur fichier)
+Segment next lu : seek_end = 214
+Dans next_ de ARRAY(0x2a59e30)
+Parent 920| segment précédant 214
+===> Dans read_ à partir de seek_start = 214 (lu sur fichier)
+Segment next lu : seek_end = 242
+Dans next_ de ARRAY(0x2a5fb98)
+Parent 920| segment précédant 242
+===> Dans read_ à partir de seek_start = 242 (lu sur fichier)
+Segment next lu : seek_end = 271
+Dans next_ de ARRAY(0x2a5f8e0)
+Parent 920| segment précédant 271
+===> Dans read_ à partir de seek_start = 271 (lu sur fichier)
+Segment next lu : seek_end = 304
+Dans next_ de ARRAY(0x2a5f100)
+Parent 920| segment précédant 304
+===> Dans read_ à partir de seek_start = 304 (lu sur fichier)
+Segment next lu : seek_end = 336
+Dans next_ de ARRAY(0x2a62820)
+Parent 920| segment précédant 336
+===> Dans read_ à partir de seek_start = 336 (lu sur fichier)
+Segment next lu : seek_end = 337
+Dans next_ de ARRAY(0x2a62b68)
+Parent 920| segment précédant 337
+===> Dans read_ à partir de seek_start = 337 (lu sur fichier)
+Segment next lu : seek_end = 349
+Dans next_ de ARRAY(0x2a5e5c8)
+Parent 920| segment précédant 349
+===> Dans read_ à partir de seek_start = 349 (lu sur fichier)
+Segment next lu : seek_end = 364
+Dans next_ de ARRAY(0x2a62ec8)
+Parent 920| segment précédant 364
+===> Dans read_ à partir de seek_start = 364 (lu sur fichier)
+Segment next lu : seek_end = 365
+Dans next_ de ARRAY(0x2a5a130)
+Parent 920| segment précédant 365
+===> Dans read_ à partir de seek_start = 365 (lu sur fichier)
+Segment next lu : seek_end = 389
+Dans next_ de ARRAY(0x29993c0)
+Parent 920| segment précédant 389
+===> Dans read_ à partir de seek_start = 389 (lu sur fichier)
+Segment next lu : seek_end = 390
+Dans next_ de ARRAY(0x2999900)
+Parent 920| segment précédant 390
+===> Dans read_ à partir de seek_start = 390 (lu sur fichier)
+Segment next lu : seek_end = 428
+Dans next_ de ARRAY(0x2a62850)
+Parent 920| segment précédant 428
+===> Dans read_ à partir de seek_start = 428 (lu sur fichier)
+Segment next lu : seek_end = 434
+Dans next_ de ARRAY(0x2a5ef98)
+Parent 920| segment précédant 434
+===> Dans read_ à partir de seek_start = 434 (lu sur fichier)
+Segment next lu : seek_end = 463
+Dans next_ de ARRAY(0x29999a8)
+Parent 920| segment précédant 463
+===> Dans read_ à partir de seek_start = 463 (lu sur fichier)
+Segment next lu : seek_end = 469
+Dans next_ de ARRAY(0x2999828)
+Parent 920| segment précédant 469
+===> Dans read_ à partir de seek_start = 469 (lu sur fichier)
+Segment next lu : seek_end = 472
+Dans next_ de ARRAY(0x2999f78)
+Parent 920| segment précédant 472
+===> Dans read_ à partir de seek_start = 472 (lu sur fichier)
+Segment next lu : seek_end = 473
+Dans next_ de ARRAY(0x299a158)
+Parent 920| segment précédant 473
+===> Dans read_ à partir de seek_start = 473 (lu sur fichier)
+Segment next lu : seek_end = 589
+Dans next_ de ARRAY(0x2999fa8)
+Parent 920| segment précédant 589
+===> Dans read_ à partir de seek_start = 589 (lu sur fichier)
+Segment next lu : seek_end = 590
+Dans next_ de ARRAY(0x29994c8)
+Parent 920| segment précédant 590
+===> Dans read_ à partir de seek_start = 590 (lu sur fichier)
+Segment next lu : seek_end = 661
+Dans next_ de ARRAY(0x2abcd00)
+Parent 920| segment précédant 661
+===> Dans read_ à partir de seek_start = 661 (lu sur fichier)
+Segment next lu : seek_end = 662
+Dans next_ de ARRAY(0x2abcaa8)
+Parent 920| segment précédant 662
+===> Dans read_ à partir de seek_start = 662 (lu sur fichier)
+Segment next lu : seek_end = 663
+Dans next_ de ARRAY(0x29da6f8)
+Parent 920| segment précédant 663
+===> Dans read_ à partir de seek_start = 663 (lu sur fichier)
+Segment next lu : seek_end = 708
+Dans next_ de ARRAY(0x2abcd30)
+Parent 920| segment précédant 708
+===> Dans read_ à partir de seek_start = 708 (lu sur fichier)
+Segment next lu : seek_end = 742
+Dans next_ de ARRAY(0x2999360)
+Parent 920| segment précédant 742
+===> Dans read_ à partir de seek_start = 742 (lu sur fichier)
+Segment next lu : seek_end = 743
+Dans next_ de ARRAY(0x2999e10)
+Parent 920| segment précédant 743
+===> Dans read_ à partir de seek_start = 743 (lu sur fichier)
+Segment next lu : seek_end = 786
+Dans next_ de ARRAY(0x2abd2a0)
+Parent 920| segment précédant 786
+===> Dans read_ à partir de seek_start = 786 (lu sur fichier)
+Segment next lu : seek_end = 787
+Dans next_ de ARRAY(0x2abd390)
+Parent 920| segment précédant 787
+===> Dans read_ à partir de seek_start = 787 (lu sur fichier)
+Segment next lu : seek_end = 828
+Dans next_ de ARRAY(0x2abd330)
+Parent 920| segment précédant 828
+===> Dans read_ à partir de seek_start = 828 (lu sur fichier)
+Segment next lu : seek_end = 859
+Dans next_ de ARRAY(0x2999ff0)
+Parent 920| segment précédant 859
+===> Dans read_ à partir de seek_start = 859 (lu sur fichier)
+Segment next lu : seek_end = 895
+Dans next_ de ARRAY(0x2abd2e8)
+Parent 920| segment précédant 895
+===> Dans read_ à partir de seek_start = 895 (lu sur fichier)
+Segment next lu : seek_end = 917
+Dans next_ de ARRAY(0x2abd750)
+Parent 920| segment précédant 917
+===> Dans read_ à partir de seek_start = 917 (lu sur fichier)
+Segment next lu : seek_end = 919
+Dans next_ de ARRAY(0x2abd198)
+Parent 920| segment précédant 919
+===> Dans read_ à partir de seek_start = 919 (lu sur fichier)
+Segment next lu : seek_end = 920
+Dans next_ de ARRAY(0x2999bb8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+Encore une ligne : one_more_line = 920!
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Dans next_ de ARRAY(0x2abcdd8)
+Avant appel next_ de ARRAY(0x28a5fd0), seek_end = 920
+Dans next_ de ARRAY(0x28a5fd0)
+Pas de segment parent : seek_end = 920
+PAs de ligne suivante trouvée derrière 42
+SEEK START de cette dernière ligne 920
+SEEK END de cette dernière ligne 920
+Previous de 25 demandé
+Line ref trouvée : ARRAY(0x299a158)
+Dans last_ de segment_ref ARRAY(0x2999f78)
+Previous de 24 demandé
+Line ref trouvée : ARRAY(0x2999f78)
+Dans last_ de segment_ref ARRAY(0x2999828)
+Previous de 23 demandé
+Line ref trouvée : ARRAY(0x2999828)
+Dans last_ de segment_ref ARRAY(0x29999a8)
+Previous de 22 demandé
+Line ref trouvée : ARRAY(0x29999a8)
+Dans last_ de segment_ref ARRAY(0x2a5ef98)
+Previous de 21 demandé
+Line ref trouvée : ARRAY(0x2a5ef98)
+Dans last_ de segment_ref ARRAY(0x2a62850)
+Previous de 20 demandé
+Line ref trouvée : ARRAY(0x2a62850)
+Dans last_ de segment_ref ARRAY(0x2999900)
+Previous de 19 demandé
+Line ref trouvée : ARRAY(0x2999900)
+Dans last_ de segment_ref ARRAY(0x29993c0)
+Previous de 18 demandé
+Line ref trouvée : ARRAY(0x29993c0)
+Dans last_ de segment_ref ARRAY(0x2a5a130)
+Previous de 17 demandé
+Line ref trouvée : ARRAY(0x2a5a130)
+Dans last_ de segment_ref ARRAY(0x2a62ec8)
+Previous de 16 demandé
+Line ref trouvée : ARRAY(0x2a62ec8)
+Dans last_ de segment_ref ARRAY(0x2a5e5c8)
+Previous de 15 demandé
+Line ref trouvée : ARRAY(0x2a5e5c8)
+Dans last_ de segment_ref ARRAY(0x2a62b68)
+Previous de 14 demandé
+Line ref trouvée : ARRAY(0x2a62b68)
+Dans last_ de segment_ref ARRAY(0x2a62820)
+Previous de 13 demandé
+Line ref trouvée : ARRAY(0x2a62820)
+Dans last_ de segment_ref ARRAY(0x2a5f100)
+Previous de 12 demandé
+Line ref trouvée : ARRAY(0x2a5f100)
+Dans last_ de segment_ref ARRAY(0x2a5f8e0)
+Previous de 11 demandé
+Line ref trouvée : ARRAY(0x2a5f8e0)
+Dans last_ de segment_ref ARRAY(0x2a5fb98)
+Previous de 10 demandé
+Line ref trouvée : ARRAY(0x2a5fb98)
+Dans last_ de segment_ref ARRAY(0x2a59e30)
+Previous de 9 demandé
+Line ref trouvée : ARRAY(0x2a59e30)
+Dans last_ de segment_ref ARRAY(0x2a4d990)
+Previous de 8 demandé
+Line ref trouvée : ARRAY(0x2a4d990)
+Dans last_ de segment_ref ARRAY(0x2a5e6a0)
+Previous de 7 demandé
+Line ref trouvée : ARRAY(0x2a5e6a0)
+Dans last_ de segment_ref ARRAY(0x2a5a3b8)
+Previous de 6 demandé
+Line ref trouvée : ARRAY(0x2a5a3b8)
+Dans last_ de segment_ref ARRAY(0x2a63108)
+Previous de 5 demandé
+Line ref trouvée : ARRAY(0x2a63108)
+Dans last_ de segment_ref ARRAY(0x2a4d810)
+Previous de 4 demandé
+Line ref trouvée : ARRAY(0x2a4d810)
+Dans last_ de segment_ref ARRAY(0x2a63510)
+Previous de 3 demandé
+Line ref trouvée : ARRAY(0x2a63510)
+Dans last_ de segment_ref ARRAY(0x2a62f88)
+Previous de 2 demandé
+Line ref trouvée : ARRAY(0x2a62f88)
+Dans last_ de segment_ref ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x2a59c20)

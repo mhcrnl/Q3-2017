@@ -1,0 +1,517 @@
+File_manager de l'instance 139721393804448 (demo4.pl)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 18, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f133037b628)
+FILE_NAME  : ./demo4.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# Syntax highlighting with own sub :
+#    1) generated output
+#
+# Here, the example is very simple
+# and fulfils its need.
+# Let's imagine that the file "account.hst"
+# is a generated one (by calculation on
+# other files) :
+# the lines are sure (apart from the bugs)
+# to be correctly formatted
+#
+# To execute it ... press F5, again !
+#
+
+use strict;
+use lib 'lib';
+
+use Text::Editor::Easy;
+
+# Start from a distant path
+use File::Basename;
+my ($file_name, $file_path ) = fileparse($0);
+
+Text::Editor::Easy->new(
+    {
+        'file'      => "${file_path}account.hst",
+        'highlight' => { 'sub' => 'highlight', },
+        'font_size' => 10,
+        'width' => 600,
+        'height' => 400,
+    }
+);
+
+Text::Editor::Easy->manage_event();
+
+sub highlight {
+    my ($text) = @_;
+
+    if ( $text =~ /^(#|$)/ ) {
+        return [ $text, "comment" ];
+    }
+    if ( length($text) < 57 ) {
+        print "Incorrect : $text\n";
+        return [ $text, "black" ];
+    }
+
+    # The interface with module "Abstract.pm" will be completely modified
+    # This is only a demo
+    #
+    return (
+        [ substr( $text, 0,  3 ),  "dark purple" ],    # jour
+        [ substr( $text, 3,  3 ),  "dark green" ],     # mois
+        [ substr( $text, 6,  5 ),  "dark red" ],
+        [ substr( $text, 11, 11 ), "black" ],
+        [ substr( $text, 22, 11 ), "red" ],
+        [ substr( $text, 33, 12 ), "dark blue" ],
+        [ substr( $text, 45, 12 ), "dark green" ],     # jj mm ssaa
+        [ substr( $text, 57 ), "comment" ],
+    );
+}
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 1517
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+===> Dans read_ à partir de seek_start = 0 (lu sur fichier)
+	who = I0, text = #
+Texte de la ligne 1 : |#|
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 18, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f133037b628)
+FILE_NAME  : ./demo4.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# Syntax highlighting with own sub :
+#    1) generated output
+#
+# Here, the example is very simple
+# and fulfils its need.
+# Let's imagine that the file "account.hst"
+# is a generated one (by calculation on
+# other files) :
+# the lines are sure (apart from the bugs)
+# to be correctly formatted
+#
+# To execute it ... press F5, again !
+#
+
+use strict;
+use lib 'lib';
+
+use Text::Editor::Easy;
+
+# Start from a distant path
+use File::Basename;
+my ($file_name, $file_path ) = fileparse($0);
+
+Text::Editor::Easy->new(
+    {
+        'file'      => "${file_path}account.hst",
+        'highlight' => { 'sub' => 'highlight', },
+        'font_size' => 10,
+        'width' => 600,
+        'height' => 400,
+    }
+);
+
+Text::Editor::Easy->manage_event();
+
+sub highlight {
+    my ($text) = @_;
+
+    if ( $text =~ /^(#|$)/ ) {
+        return [ $text, "comment" ];
+    }
+    if ( length($text) < 57 ) {
+        print "Incorrect : $text\n";
+        return [ $text, "black" ];
+    }
+
+    # The interface with module "Abstract.pm" will be completely modified
+    # This is only a demo
+    #
+    return (
+        [ substr( $text, 0,  3 ),  "dark purple" ],    # jour
+        [ substr( $text, 3,  3 ),  "dark green" ],     # mois
+        [ substr( $text, 6,  5 ),  "dark red" ],
+        [ substr( $text, 11, 11 ), "black" ],
+        [ substr( $text, 22, 11 ), "red" ],
+        [ substr( $text, 33, 12 ), "dark blue" ],
+        [ substr( $text, 45, 12 ), "dark green" ],     # jj mm ssaa
+        [ substr( $text, 57 ), "comment" ],
+    );
+}
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 1517
+FIRST      : ARRAY(0x7f1330387c28)
+LAST       : ARRAY(0x7f1330387c28)
+================================================================================
+	Level 1 : ARRAY(0x7f1330387c28)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 2
+	TEXT       : #
+	PARENT       : ARRAY(0x7f133037b628)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f1330387c28)
+
+Le dump a renvoyé 0 erreurs
+
+Dans next_ de ARRAY(0x7f1330387c28)
+Parent 1517| segment précédant 2
+===> Dans read_ à partir de seek_start = 2 (lu sur fichier)
+Segment next lu : seek_end = 39
+Dans next_ de ARRAY(0x7f1330390d38)
+Parent 1517| segment précédant 39
+===> Dans read_ à partir de seek_start = 39 (lu sur fichier)
+Segment next lu : seek_end = 64
+Dans next_ de ARRAY(0x7f1330387d60)
+Parent 1517| segment précédant 64
+===> Dans read_ à partir de seek_start = 64 (lu sur fichier)
+Segment next lu : seek_end = 66
+Dans next_ de ARRAY(0x7f133038d1c0)
+Parent 1517| segment précédant 66
+===> Dans read_ à partir de seek_start = 66 (lu sur fichier)
+Segment next lu : seek_end = 101
+Dans next_ de ARRAY(0x7f1330390270)
+Parent 1517| segment précédant 101
+===> Dans read_ à partir de seek_start = 101 (lu sur fichier)
+Segment next lu : seek_end = 125
+Dans next_ de ARRAY(0x7f1330390ed0)
+Parent 1517| segment précédant 125
+===> Dans read_ à partir de seek_start = 125 (lu sur fichier)
+Segment next lu : seek_end = 169
+Dans next_ de ARRAY(0x7f133038d850)
+Parent 1517| segment précédant 169
+===> Dans read_ à partir de seek_start = 169 (lu sur fichier)
+Segment next lu : seek_end = 209
+Dans next_ de ARRAY(0x7f1330387c10)
+Parent 1517| segment précédant 209
+===> Dans read_ à partir de seek_start = 209 (lu sur fichier)
+Segment next lu : seek_end = 226
+Dans next_ de ARRAY(0x7f133038cc08)
+Parent 1517| segment précédant 226
+===> Dans read_ à partir de seek_start = 226 (lu sur fichier)
+Segment next lu : seek_end = 269
+Dans next_ de ARRAY(0x7f133038cb30)
+Parent 1517| segment précédant 269
+===> Dans read_ à partir de seek_start = 269 (lu sur fichier)
+Segment next lu : seek_end = 297
+Dans next_ de ARRAY(0x7f1330307818)
+Parent 1517| segment précédant 297
+===> Dans read_ à partir de seek_start = 297 (lu sur fichier)
+Segment next lu : seek_end = 299
+Dans next_ de ARRAY(0x7f133037aff8)
+Parent 1517| segment précédant 299
+===> Dans read_ à partir de seek_start = 299 (lu sur fichier)
+Segment next lu : seek_end = 337
+Dans next_ de ARRAY(0x7f13303902a0)
+Parent 1517| segment précédant 337
+===> Dans read_ à partir de seek_start = 337 (lu sur fichier)
+Segment next lu : seek_end = 339
+Dans next_ de ARRAY(0x7f133038c188)
+Parent 1517| segment précédant 339
+===> Dans read_ à partir de seek_start = 339 (lu sur fichier)
+Segment next lu : seek_end = 340
+Dans next_ de ARRAY(0x7f13303903c0)
+Parent 1517| segment précédant 340
+===> Dans read_ à partir de seek_start = 340 (lu sur fichier)
+Segment next lu : seek_end = 352
+Dans next_ de ARRAY(0x7f1330395640)
+Parent 1517| segment précédant 352
+===> Dans read_ à partir de seek_start = 352 (lu sur fichier)
+Segment next lu : seek_end = 367
+Dans next_ de ARRAY(0x7f1330387b68)
+Parent 1517| segment précédant 367
+===> Dans read_ à partir de seek_start = 367 (lu sur fichier)
+Segment next lu : seek_end = 368
+Dans next_ de ARRAY(0x7f13303956d0)
+Parent 1517| segment précédant 368
+===> Dans read_ à partir de seek_start = 368 (lu sur fichier)
+Segment next lu : seek_end = 392
+Dans next_ de ARRAY(0x7f1330395b80)
+Parent 1517| segment précédant 392
+===> Dans read_ à partir de seek_start = 392 (lu sur fichier)
+Segment next lu : seek_end = 393
+Dans next_ de ARRAY(0x7f1330395b68)
+Parent 1517| segment précédant 393
+===> Dans read_ à partir de seek_start = 393 (lu sur fichier)
+Segment next lu : seek_end = 421
+Dans next_ de ARRAY(0x7f1330387898)
+Parent 1517| segment précédant 421
+===> Dans read_ à partir de seek_start = 421 (lu sur fichier)
+Segment next lu : seek_end = 441
+Dans next_ de ARRAY(0x7f1330395ad8)
+Parent 1517| segment précédant 441
+===> Dans read_ à partir de seek_start = 441 (lu sur fichier)
+Segment next lu : seek_end = 487
+Dans next_ de ARRAY(0x7f1330395b20)
+Parent 1517| segment précédant 487
+===> Dans read_ à partir de seek_start = 487 (lu sur fichier)
+Segment next lu : seek_end = 488
+Dans next_ de ARRAY(0x7f13303959e8)
+Parent 1517| segment précédant 488
+===> Dans read_ à partir de seek_start = 488 (lu sur fichier)
+Segment next lu : seek_end = 513
+Dans next_ de ARRAY(0x7f1330390768)
+Parent 1517| segment précédant 513
+===> Dans read_ à partir de seek_start = 513 (lu sur fichier)
+Segment next lu : seek_end = 519
+Dans next_ de ARRAY(0x7f13303960f0)
+Parent 1517| segment précédant 519
+===> Dans read_ à partir de seek_start = 519 (lu sur fichier)
+Segment next lu : seek_end = 569
+Dans next_ de ARRAY(0x7f13303963c0)
+Parent 1517| segment précédant 569
+===> Dans read_ à partir de seek_start = 569 (lu sur fichier)
+Segment next lu : seek_end = 619
+Dans next_ de ARRAY(0x7f1330395580)
+Parent 1517| segment précédant 619
+===> Dans read_ à partir de seek_start = 619 (lu sur fichier)
+Segment next lu : seek_end = 646
+Dans next_ de ARRAY(0x7f1330396378)
+Parent 1517| segment précédant 646
+===> Dans read_ à partir de seek_start = 646 (lu sur fichier)
+Segment next lu : seek_end = 670
+Dans next_ de ARRAY(0x7f133039d3e0)
+Parent 1517| segment précédant 670
+===> Dans read_ à partir de seek_start = 670 (lu sur fichier)
+Segment next lu : seek_end = 695
+Dans next_ de ARRAY(0x7f133039d6b0)
+Parent 1517| segment précédant 695
+===> Dans read_ à partir de seek_start = 695 (lu sur fichier)
+Segment next lu : seek_end = 701
+Dans next_ de ARRAY(0x7f13303962a0)
+Parent 1517| segment précédant 701
+===> Dans read_ à partir de seek_start = 701 (lu sur fichier)
+Segment next lu : seek_end = 704
+Dans next_ de ARRAY(0x7f1330395e68)
+Parent 1517| segment précédant 704
+===> Dans read_ à partir de seek_start = 704 (lu sur fichier)
+Segment next lu : seek_end = 705
+Dans next_ de ARRAY(0x7f1330395c10)
+Parent 1517| segment précédant 705
+===> Dans read_ à partir de seek_start = 705 (lu sur fichier)
+Segment next lu : seek_end = 741
+Dans next_ de ARRAY(0x7f133039d4a0)
+Parent 1517| segment précédant 741
+===> Dans read_ à partir de seek_start = 741 (lu sur fichier)
+Segment next lu : seek_end = 742
+Dans next_ de ARRAY(0x7f133039d7e8)
+Parent 1517| segment précédant 742
+===> Dans read_ à partir de seek_start = 742 (lu sur fichier)
+Segment next lu : seek_end = 758
+Dans next_ de ARRAY(0x7f133039dae8)
+Parent 1517| segment précédant 758
+===> Dans read_ à partir de seek_start = 758 (lu sur fichier)
+Segment next lu : seek_end = 779
+Dans next_ de ARRAY(0x7f133039d8d8)
+Parent 1517| segment précédant 779
+===> Dans read_ à partir de seek_start = 779 (lu sur fichier)
+Segment next lu : seek_end = 780
+Dans next_ de ARRAY(0x7f1330395af0)
+Parent 1517| segment précédant 780
+===> Dans read_ à partir de seek_start = 780 (lu sur fichier)
+Segment next lu : seek_end = 811
+Dans next_ de ARRAY(0x7f133039d620)
+Parent 1517| segment précédant 811
+===> Dans read_ à partir de seek_start = 811 (lu sur fichier)
+Segment next lu : seek_end = 848
+Dans next_ de ARRAY(0x7f133039ddb8)
+Parent 1517| segment précédant 848
+===> Dans read_ à partir de seek_start = 848 (lu sur fichier)
+Segment next lu : seek_end = 854
+Dans next_ de ARRAY(0x7f133039dbc0)
+Parent 1517| segment précédant 854
+===> Dans read_ à partir de seek_start = 854 (lu sur fichier)
+Segment next lu : seek_end = 886
+Dans next_ de ARRAY(0x7f133039df80)
+Parent 1517| segment précédant 886
+===> Dans read_ à partir de seek_start = 886 (lu sur fichier)
+Segment next lu : seek_end = 923
+Dans next_ de ARRAY(0x7f133039d4d0)
+Parent 1517| segment précédant 923
+===> Dans read_ à partir de seek_start = 923 (lu sur fichier)
+Segment next lu : seek_end = 958
+Dans next_ de ARRAY(0x7f1330396120)
+Parent 1517| segment précédant 958
+===> Dans read_ à partir de seek_start = 958 (lu sur fichier)
+Segment next lu : seek_end = 964
+Dans next_ de ARRAY(0x7f133039e280)
+Parent 1517| segment précédant 964
+===> Dans read_ à partir de seek_start = 964 (lu sur fichier)
+Segment next lu : seek_end = 965
+Dans next_ de ARRAY(0x7f13303a0b08)
+Parent 1517| segment précédant 965
+===> Dans read_ à partir de seek_start = 965 (lu sur fichier)
+Segment next lu : seek_end = 1039
+Dans next_ de ARRAY(0x7f133039e310)
+Parent 1517| segment précédant 1039
+===> Dans read_ à partir de seek_start = 1039 (lu sur fichier)
+Segment next lu : seek_end = 1065
+Dans next_ de ARRAY(0x7f133039df68)
+Parent 1517| segment précédant 1065
+===> Dans read_ à partir de seek_start = 1065 (lu sur fichier)
+Segment next lu : seek_end = 1071
+Dans next_ de ARRAY(0x7f133039de18)
+Parent 1517| segment précédant 1071
+===> Dans read_ à partir de seek_start = 1071 (lu sur fichier)
+Segment next lu : seek_end = 1084
+Dans next_ de ARRAY(0x7f13303a0910)
+Parent 1517| segment précédant 1084
+===> Dans read_ à partir de seek_start = 1084 (lu sur fichier)
+Segment next lu : seek_end = 1146
+Dans next_ de ARRAY(0x7f13303a0d00)
+Parent 1517| segment précédant 1146
+===> Dans read_ à partir de seek_start = 1146 (lu sur fichier)
+Segment next lu : seek_end = 1208
+Dans next_ de ARRAY(0x7f13303a09b8)
+Parent 1517| segment précédant 1208
+===> Dans read_ à partir de seek_start = 1208 (lu sur fichier)
+Segment next lu : seek_end = 1257
+Dans next_ de ARRAY(0x7f13303a10d8)
+Parent 1517| segment précédant 1257
+===> Dans read_ à partir de seek_start = 1257 (lu sur fichier)
+Segment next lu : seek_end = 1303
+Dans next_ de ARRAY(0x7f133039dd70)
+Parent 1517| segment précédant 1303
+===> Dans read_ à partir de seek_start = 1303 (lu sur fichier)
+Segment next lu : seek_end = 1347
+Dans next_ de ARRAY(0x7f13303a1210)
+Parent 1517| segment précédant 1347
+===> Dans read_ à partir de seek_start = 1347 (lu sur fichier)
+Segment next lu : seek_end = 1397
+Dans next_ de ARRAY(0x7f13303a11c8)
+Parent 1517| segment précédant 1397
+===> Dans read_ à partir de seek_start = 1397 (lu sur fichier)
+Segment next lu : seek_end = 1465
+Dans next_ de ARRAY(0x7f13303a0fa0)
+Parent 1517| segment précédant 1465
+===> Dans read_ à partir de seek_start = 1465 (lu sur fichier)
+Segment next lu : seek_end = 1509
+Dans next_ de ARRAY(0x7f13303a12d0)
+Parent 1517| segment précédant 1509
+===> Dans read_ à partir de seek_start = 1509 (lu sur fichier)
+Segment next lu : seek_end = 1516
+Dans next_ de ARRAY(0x7f13303a1018)
+Parent 1517| segment précédant 1516
+===> Dans read_ à partir de seek_start = 1516 (lu sur fichier)
+Segment next lu : seek_end = 1517
+Dans next_ de ARRAY(0x7f13303a1060)
+Avant appel next_ de ARRAY(0x7f133037b628), seek_end = 1517
+Dans next_ de ARRAY(0x7f133037b628)
+Pas de segment parent : seek_end = 1517
+PAs de ligne suivante trouvée derrière 61
+SEEK START de cette dernière ligne 1516
+SEEK END de cette dernière ligne 1517
+Dans next_ de ARRAY(0x7f1330387c28)
+Dans next_ de ARRAY(0x7f1330390d38)
+Dans next_ de ARRAY(0x7f1330387d60)
+Dans next_ de ARRAY(0x7f133038d1c0)
+Dans next_ de ARRAY(0x7f1330390270)
+Dans next_ de ARRAY(0x7f1330390ed0)
+Dans next_ de ARRAY(0x7f133038d850)
+Dans next_ de ARRAY(0x7f1330387c10)
+Dans next_ de ARRAY(0x7f133038cc08)
+Dans next_ de ARRAY(0x7f133038cb30)
+Dans next_ de ARRAY(0x7f1330307818)
+Dans next_ de ARRAY(0x7f133037aff8)
+Dans next_ de ARRAY(0x7f13303902a0)
+Dans next_ de ARRAY(0x7f133038c188)
+Dans next_ de ARRAY(0x7f13303903c0)
+Dans next_ de ARRAY(0x7f1330395640)
+Dans next_ de ARRAY(0x7f1330387b68)
+Dans next_ de ARRAY(0x7f13303956d0)
+Dans next_ de ARRAY(0x7f1330395b80)
+Dans next_ de ARRAY(0x7f1330395b68)
+Dans next_ de ARRAY(0x7f1330387898)
+Dans next_ de ARRAY(0x7f1330395ad8)
+Dans next_ de ARRAY(0x7f1330395b20)
+Dans next_ de ARRAY(0x7f13303959e8)
+Dans next_ de ARRAY(0x7f1330390768)
+Dans next_ de ARRAY(0x7f13303960f0)
+Dans next_ de ARRAY(0x7f13303963c0)
+Dans next_ de ARRAY(0x7f1330395580)
+Dans next_ de ARRAY(0x7f1330396378)
+Dans next_ de ARRAY(0x7f133039d3e0)
+Dans next_ de ARRAY(0x7f133039d6b0)
+Dans next_ de ARRAY(0x7f13303962a0)
+Dans next_ de ARRAY(0x7f1330395e68)
+Dans next_ de ARRAY(0x7f1330395c10)
+Dans next_ de ARRAY(0x7f133039d4a0)
+Dans next_ de ARRAY(0x7f133039d7e8)
+Dans next_ de ARRAY(0x7f133039dae8)
+Dans next_ de ARRAY(0x7f133039d8d8)
+Dans next_ de ARRAY(0x7f1330395af0)
+Dans next_ de ARRAY(0x7f133039d620)
+Dans next_ de ARRAY(0x7f133039ddb8)
+Dans next_ de ARRAY(0x7f133039dbc0)
+Dans next_ de ARRAY(0x7f133039df80)
+Dans next_ de ARRAY(0x7f1330387c28)
+Dans next_ de ARRAY(0x7f1330390d38)
+Dans next_ de ARRAY(0x7f1330387d60)
+Dans next_ de ARRAY(0x7f133038d1c0)
+Dans next_ de ARRAY(0x7f1330390270)
+Dans next_ de ARRAY(0x7f1330390ed0)
+Dans next_ de ARRAY(0x7f133038d850)
+Dans next_ de ARRAY(0x7f1330387c10)
+Dans next_ de ARRAY(0x7f133038cc08)
+Dans next_ de ARRAY(0x7f133038cb30)
+Dans next_ de ARRAY(0x7f1330307818)
+Dans next_ de ARRAY(0x7f133037aff8)
+Dans next_ de ARRAY(0x7f13303902a0)
+Dans next_ de ARRAY(0x7f133038c188)
+Dans next_ de ARRAY(0x7f13303903c0)
+Dans next_ de ARRAY(0x7f1330395640)
+Dans next_ de ARRAY(0x7f1330387b68)
+Dans next_ de ARRAY(0x7f13303956d0)
+Dans next_ de ARRAY(0x7f1330395b80)
+Dans next_ de ARRAY(0x7f1330395b68)
+Dans next_ de ARRAY(0x7f1330387898)
+Dans next_ de ARRAY(0x7f1330395ad8)
+Dans next_ de ARRAY(0x7f1330395b20)
+Dans next_ de ARRAY(0x7f13303959e8)
+Dans next_ de ARRAY(0x7f1330390768)
+Dans next_ de ARRAY(0x7f13303960f0)
+Dans next_ de ARRAY(0x7f13303963c0)
+Dans next_ de ARRAY(0x7f1330395580)
+Dans next_ de ARRAY(0x7f1330396378)
+Dans next_ de ARRAY(0x7f133039d3e0)
+Dans next_ de ARRAY(0x7f133039d6b0)
+Dans next_ de ARRAY(0x7f13303962a0)
+Dans next_ de ARRAY(0x7f1330395e68)
+Dans next_ de ARRAY(0x7f1330395c10)
+Dans next_ de ARRAY(0x7f133039d4a0)
+Dans next_ de ARRAY(0x7f133039d7e8)
+Dans next_ de ARRAY(0x7f133039dae8)
+Dans next_ de ARRAY(0x7f133039d8d8)
+Dans next_ de ARRAY(0x7f1330395af0)
+Dans next_ de ARRAY(0x7f133039d620)
+Dans next_ de ARRAY(0x7f133039ddb8)
+Dans next_ de ARRAY(0x7f133039dbc0)
+Dans next_ de ARRAY(0x7f133039df80)
+Dans next_ de ARRAY(0x7f133039d4d0)
+Dans next_ de ARRAY(0x7f1330396120)
+Dans next_ de ARRAY(0x7f133039e280)
+Dans next_ de ARRAY(0x7f13303a0b08)
+Dans next_ de ARRAY(0x7f133039e310)
+Dans next_ de ARRAY(0x7f133039df68)
+Dans next_ de ARRAY(0x7f133039de18)
+Dans next_ de ARRAY(0x7f13303a0910)
+Dans next_ de ARRAY(0x7f13303a0d00)
+Dans next_ de ARRAY(0x7f13303a09b8)
+Dans next_ de ARRAY(0x7f13303a10d8)
+Dans next_ de ARRAY(0x7f133039dd70)
+Dans next_ de ARRAY(0x7f13303a1210)
+Dans next_ de ARRAY(0x7f13303a11c8)
+Dans next_ de ARRAY(0x7f13303a0fa0)
+Dans next_ de ARRAY(0x7f13303a12d0)
+Dans next_ de ARRAY(0x7f13303a1018)

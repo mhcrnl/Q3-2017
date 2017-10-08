@@ -1,0 +1,81 @@
+File_manager de l'instance 139721057863832 (Eval)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 11, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f134c012800)
+undefined FILE_NAME
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+	who = I0, text = 
+Texte de la ligne 1 : ||
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 11, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f134c012800)
+undefined FILE_NAME
+SEEK_START : 0
+SEEK_END   : 0
+FIRST      : ARRAY(0x7f134c1c1c10)
+LAST       : ARRAY(0x7f134c1c1c10)
+================================================================================
+	Level 1 : ARRAY(0x7f134c1c1c10)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 0
+	TEXT       : 
+	PARENT       : ARRAY(0x7f134c012800)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f134c1c1c10)
+
+Le dump a renvoyé 0 erreurs
+
+Dans next_ de ARRAY(0x7f134c1c1c10)
+Avant appel next_ de ARRAY(0x7f134c012800), seek_end = 0
+Dans next_ de ARRAY(0x7f134c012800)
+Pas de segment parent : seek_end = 0
+PAs de ligne suivante trouvée derrière 1
+SEEK START de cette dernière ligne 0
+SEEK END de cette dernière ligne 0
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f134c1c1c10)
+Dans next_ de ARRAY(0x7f134c1c1c10)
+Avant appel next_ de ARRAY(0x7f134c012800), seek_end = 0
+Dans next_ de ARRAY(0x7f134c012800)
+Pas de segment parent : seek_end = 0
+PAs de ligne suivante trouvée derrière 1
+SEEK START de cette dernière ligne 0
+SEEK END de cette dernière ligne 0
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f134c1c1c10)
+Dans next_ de ARRAY(0x7f134c1c1c10)
+Avant appel next_ de ARRAY(0x7f134c012800), seek_end = 0
+Dans next_ de ARRAY(0x7f134c012800)
+Pas de segment parent : seek_end = 0
+PAs de ligne suivante trouvée derrière 1
+SEEK START de cette dernière ligne 0
+SEEK END de cette dernière ligne 0
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f134c1c1c10)
+Dans next_ de ARRAY(0x7f134c1c1c10)
+Avant appel next_ de ARRAY(0x7f134c012800), seek_end = 0
+Dans next_ de ARRAY(0x7f134c012800)
+Pas de segment parent : seek_end = 0
+PAs de ligne suivante trouvée derrière 1
+SEEK START de cette dernière ligne 0
+SEEK END de cette dernière ligne 0
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f134c1c1c10)
+Dans next_ de ARRAY(0x7f134c1c1c10)
+Avant appel next_ de ARRAY(0x7f134c012800), seek_end = 0
+Dans next_ de ARRAY(0x7f134c012800)
+Pas de segment parent : seek_end = 0
+PAs de ligne suivante trouvée derrière 1
+SEEK START de cette dernière ligne 0
+SEEK END de cette dernière ligne 0

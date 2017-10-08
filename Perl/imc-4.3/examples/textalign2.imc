@@ -1,0 +1,17 @@
+ORIGIN bottom
+#include "grid200x200.imc"
+
+TEXTSIZE tiny
+LINECOLOR x11 blue
+
+CIRCLE 20  20  3; TEXTAT 20  20 "Bot left" ALIGN bottom left
+CIRCLE 100 20  3; TEXTAT 100 20 "Bot center" ALIGN bottom center
+CIRCLE 180 20  3; TEXTAT 180 20 "Bot right" ALIGN bottom right
+
+CIRCLE 20  100 3; TEXTAT 20  100 "Mid left" ALIGN middle left
+CIRCLE 100 100 3; TEXTAT 100 100 "Mid center" ALIGN middle center
+CIRCLE 180 100 3; TEXTAT 180 100 "Mid right" ALIGN middle right
+
+CIRCLE 20  180 3; TEXTAT 20  180 "Top left" ALIGN top left
+CIRCLE 100 180 3; TEXTAT 100 180 "Top center" ALIGN top center
+CIRCLE 180 180 3; TEXTAT 180 180 "Top right" ALIGN top right

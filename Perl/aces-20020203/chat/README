@@ -1,0 +1,31 @@
+-- README -- ACES IRC Perl Modules --
+
+This is the README for ACES cvs.
+
+The PROJECT is in HEAVY development; nothing is stable (not excluding the API)
+so don't rely on interfaces staying the same.
+
+-- Running the test program... --
+
+In the directory of gui3.pl, there should be the IRC directory with Stream.pm
+inside. Create a file .gui3rc containing something like:
+  irc.server: irc.openprojects.net
+  irc.port: 6667
+  session.buddyList: ircbuddies
+These are the values that the program will use when running. The
+session.buddyList value is the name of the file that contains a plain text
+list of users for whom the program should check the online status (the names
+should be separated by newlines).
+
+Windows may not close by themselves, so it is necessary to use buttons and the
+such of the window manager in order to close them. Additionally, the "about"
+box, as well as the "reply" dialogues all make the main window inaccessible
+until the dialogues are closed (by clicking either of the buttons).
+
+-- Other Info --
+
+For more information, please see <http://aces.sourceforge.net>.
+
+--
+(c) 2001, Jin-Ho King <acramon1@users.sourceforge.net>
+

@@ -1,0 +1,240 @@
+#!/ctk/bin/perl
+
+# $Header: /cvsroot/ctk-cgi-chkurl/ctk-nettools/nettools.pm.in,v 1.1.1.1 2000/11/03 15:18:41 cyrilb Exp $
+
+# ctk-nettools: a perl module to deal with templates by http
+# Copyright (C) 2000 Cyril Bouthors (cyril@bouthors.org)
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+package nettools;
+
+use strict vars;
+use strict subs;
+
+
+BEGIN { push(@INC,
+	     '/ctk/lib/ctk',
+	     '/ctk/etc',
+	     '' ); }
+
+
+use LWP;
+use LWP::Simple;
+use Unix::Syslog qw(:macros);
+use Unix::Syslog qw(:subs);
+use Mail::Mailer;
+use DB_File;
+use POSIX;
+
+
+
+@nettools::ISA = qw(Exporter);
+@nettools::EXPORT = qw(printtpl httpreadfile sendAMail mylog getValDB ctk_date);
+
+my $templates_url = '@TEMPLATES_URL@';
+
+my $log_level_max = @loglevel@;
+my $cache_dir = '@cache_dir@';
+
+
+sub printtpl {
+    my ($template, %assoc) = @_;
+    
+    my $template_path = "$templates_url/".$template;
+   
+	mylog("asking for template $template_path","ctk-nettools::printtpl",2);
+   
+#    my $includespath = "http://www.chez.com/include/";
+
+    my($key);
+
+    my @headers = getHeader("$templates_url/$template");
+    my $date = $headers[2];
+    my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks) = stat($cache_dir.'/'.$template);
+
+    mylog ("url_date= $date cache_date=$mtime","ctk-syscgi::libsyscgi",0);
+
+#if cache newer get it
+
+    my $content;
+
+    if(($date eq '') && ($mtime eq ''))
+    {
+    
+    	return ("404 File Not Found");
+    };
+
+    if (($mtime ne '') && ($date > $mtime))
+    {
+    	$content= httpreadfile ($template_path);
+    }
+    else
+    {
+    	$content= readFile("$cache_dir/$template");
+    
+    };
+    
+    foreach $key (keys(%assoc)) {
+	$content =~ s/$key/$assoc{$key}/g;
+    }
+
+    my $file;
+    my $include;
+
+    
+    if (!($mtime))
+    {
+    	writeFile("$cache_dir","$template",$content);
+    
+    };
+    
+    return $content;
+}
+
+
+
+
+sub httpreadfile {
+    my ($adresse) = @_;
+
+    my $hdrs = new HTTP::Headers('Accept' => 'text/plain',
+			      'User-Agent' => 'ChezCGI/1.0');
+    my $url = new URI::URL($adresse);
+    my $req = new HTTP::Request('GET', $url, $hdrs);
+    my $ua = new LWP::UserAgent;
+    my $resp = $ua->request($req);
+    if ($resp->is_success) {
+	return ($resp->content);
+    } else {
+	return ($resp->message);
+    }
+}
+
+sub getHeader
+{
+   my($adresse) = @_;
+
+    my @headers = head($adresse);
+   return @headers;                    
+	  
+}
+
+
+sub sendAMail
+{
+  my ($from,$to,$subject,$msg)=@_;
+ 
+  my $mailer = Mail::Mailer->new("");
+  $mailer->open({ From => $from,
+                To   => $to,
+                Subject => $subject
+            });
+  print $mailer $msg;
+ 
+  #print("sendAMail to $to\n");
+  $mailer->close();
+}
+
+sub readFile
+{
+        my ($filename)=@_;
+        my $line;
+        my $out;
+
+   mylog("Using dir_cache $filename","ctk-syscgi::libsyscgi",0);
+        open (F,$filename) || die "cannot open $filename for reading !!!!";
+        while($line = <F>)
+        {
+                #chop $line;
+                $out = $out . $line;
+        };
+
+        close F;
+        return($out);
+}
+
+
+sub writeFile
+{
+        my ($dir,$filename,$data)=@_;
+        
+        if (!(-e $dir))
+        {
+          my $ret = `mkdir -p $dir`;
+          mylog("mkdir $dir :$ret","ctk-syscgi::libsyscgi",0);          
+        
+        };
+        
+        open (FSOR,"> $dir/$filename") or die ("Cannot open $filename for writing !!!!");
+
+        print (FSOR "$data");
+        close FSOR;
+
+        mylog("Writing cache in $dir/$filename","ctk-syscgi::libsyscgi",0);
+}
+
+
+
+
+sub mylog {
+    my ($log,$prog_name,$level) = @_;
+
+    if ( defined $level && ($level ne '') && ($level < $log_level_max ))
+	{
+    openlog ($prog_name,LOG_PID,LOG_INFO);
+
+   #dbg;
+    syslog(LOG_INFO,"$log\n", "normal");
+
+
+    closelog();
+    };
+}
+
+sub getValDB {
+	my ($key,$db)=@_;
+	
+
+	my %db;
+ 
+
+	tie %db, 'DB_File', $db, O_RDONLY, 0, $DB_BTREE or tie %db, 'DB_File', $db, O_RDONLY or die "$0 tie DB_File $db: $!";
+
+	if (exists $db{$key}) {
+	    return $db{$key};
+	}
+
+	untie %db;
+	return "";
+
+
+}
+
+sub ctk_date
+{
+	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+	$mon++;
+	#cyrilb 31aug99
+	$year+=1900; #we are y2k complient ... NOW
+	return "$mon-$mday-$year";
+
+
+}
+
+
+1;
+

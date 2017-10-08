@@ -1,0 +1,327 @@
+File_manager de l'instance 139721393829888 (demo9.pl)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 22, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f134c387eb0)
+FILE_NAME  : ./demo9.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# What about an interactive test of perl regexp ?
+#
+# Search implementation is not yet finished, but here is an other possibility
+# of what a perl Editor could be used to. Interactive tutorials are a more
+# friendly way to learn than a text file. If there are more funny ways to learn
+# perl, maybe there will be more perl programmers and less wasted time
+# to learn other inefficient langages !
+# 
+# As usual, press F5 to insert search code in the macro panel
+# You can then press the arrows "Up" or "Down" to navigate into
+# the different expressions to be searched.
+# You can also put your own expression in the second line of the macro
+# instructions.
+# 
+# You'll notice that, for the $exp variable, you can put a string for an
+# exact match (not a regular expression search) or a regexp with the perl
+# syntax : qr/regexp/modifiers
+#
+
+{
+    'F5' => sub {
+        my ( $editor, $info_ref ) = @_;
+        
+        $editor->bind_key({ 
+            'sub_ref' => $info_ref->{'up_key'},
+            'key' => 'Up'
+        } );
+        $editor->bind_key({ 
+            'sub_ref' => $info_ref->{'down_key'},
+            'key' => 'Down'
+        } );
+        
+        my $stack_ed = Text::Editor::Easy->whose_name('call_stack');
+        $stack_ed->empty;
+        my @exp = ( 
+            'qr/e.+s/', 
+            'qr/e.+?s/', 
+            '\'is\'', 
+            'qr/\\bis\\b/', 
+            'qr/F.*n/', 
+            'qr/F.*n/i', 
+            'qr/f[er]+[^e]+/'
+        );
+        my $exp = undef;
+        for ( @exp ) {
+            $exp .= "$_\n";
+        }
+        chomp $exp;
+        $stack_ed->insert( $exp );
+        my $first = $stack_ed->number(1);
+        $first->select;
+        $stack_ed->cursor->set( 0, $first);
+        
+        my $macro = Text::Editor::Easy->whose_name('macro');
+        $macro->empty;
+        $macro->insert( $info_ref->{'macro'} );
+    },
+    
+    'macro' => << 'macro'
+my $editor = Text::Editor::Easy->whose_name('demo9.pl');
+my $exp = qr/e.+s/;
+my ( $line, $start, $end, $regexp ) = $editor->search($exp);
+$editor->deselect;
+return if ( ! defined $line );
+$line->select($start, $end);
+$editor->visual_search( $regexp, $line, $end);
+macro
+    ,
+    
+    'up_key' => sub {
+        my $editor = Editor->whose_name('call_stack');
+        
+        my ( $line ) = $editor->cursor->get;
+        #print "Dans up_demo9 : trouvé $line | ", $line->text, "\n";
+        if ( my $previous = $line->previous ) {
+            $editor->deselect;
+            my $exp = $previous->select;
+            $editor->cursor->set(0, $previous);
+            my $macro_ed = Editor->whose_name('macro');
+    
+    # Hoping the automatic inserted lines are still there and in the right order !
+    # ==> the line number 2 of the macro editor will be set to "my \$exp = $exp;" and this will cause
+    # new execution of the macro instructions
+            $macro_ed->number(2)->set("my \$exp = $exp;");
+        }
+    },
+    
+    'down_key' => sub {
+        my $editor = Editor->whose_name('call_stack');
+        my ( $line ) = $editor->cursor->get;
+        #print "Dans down_demo9 : trouvé $line | ", $line->text, "\n";
+        if ( my $next = $line->next ) {
+            $editor->deselect;
+            my $exp = $next->select;
+            $editor->cursor->set(0, $next);
+            my $macro_ed = Editor->whose_name('macro');
+    
+    # Hoping the automatic inserted lines are still there and in the right order !
+    # ==> the line number 2 of the macro editor will be set to "my \$exp = $exp;" and this will cause
+    # new execution of the macro instructions
+            $macro_ed->number(2)->set("my \$exp = $exp;");
+        }
+    },
+}
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 3635
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+===> Dans read_ à partir de seek_start = 0 (lu sur fichier)
+	who = I0, text = #
+Texte de la ligne 1 : |#|
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 22, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f134c387eb0)
+FILE_NAME  : ./demo9.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# What about an interactive test of perl regexp ?
+#
+# Search implementation is not yet finished, but here is an other possibility
+# of what a perl Editor could be used to. Interactive tutorials are a more
+# friendly way to learn than a text file. If there are more funny ways to learn
+# perl, maybe there will be more perl programmers and less wasted time
+# to learn other inefficient langages !
+# 
+# As usual, press F5 to insert search code in the macro panel
+# You can then press the arrows "Up" or "Down" to navigate into
+# the different expressions to be searched.
+# You can also put your own expression in the second line of the macro
+# instructions.
+# 
+# You'll notice that, for the $exp variable, you can put a string for an
+# exact match (not a regular expression search) or a regexp with the perl
+# syntax : qr/regexp/modifiers
+#
+
+{
+    'F5' => sub {
+        my ( $editor, $info_ref ) = @_;
+        
+        $editor->bind_key({ 
+            'sub_ref' => $info_ref->{'up_key'},
+            'key' => 'Up'
+        } );
+        $editor->bind_key({ 
+            'sub_ref' => $info_ref->{'down_key'},
+            'key' => 'Down'
+        } );
+        
+        my $stack_ed = Text::Editor::Easy->whose_name('call_stack');
+        $stack_ed->empty;
+        my @exp = ( 
+            'qr/e.+s/', 
+            'qr/e.+?s/', 
+            '\'is\'', 
+            'qr/\\bis\\b/', 
+            'qr/F.*n/', 
+            'qr/F.*n/i', 
+            'qr/f[er]+[^e]+/'
+        );
+        my $exp = undef;
+        for ( @exp ) {
+            $exp .= "$_\n";
+        }
+        chomp $exp;
+        $stack_ed->insert( $exp );
+        my $first = $stack_ed->number(1);
+        $first->select;
+        $stack_ed->cursor->set( 0, $first);
+        
+        my $macro = Text::Editor::Easy->whose_name('macro');
+        $macro->empty;
+        $macro->insert( $info_ref->{'macro'} );
+    },
+    
+    'macro' => << 'macro'
+my $editor = Text::Editor::Easy->whose_name('demo9.pl');
+my $exp = qr/e.+s/;
+my ( $line, $start, $end, $regexp ) = $editor->search($exp);
+$editor->deselect;
+return if ( ! defined $line );
+$line->select($start, $end);
+$editor->visual_search( $regexp, $line, $end);
+macro
+    ,
+    
+    'up_key' => sub {
+        my $editor = Editor->whose_name('call_stack');
+        
+        my ( $line ) = $editor->cursor->get;
+        #print "Dans up_demo9 : trouvé $line | ", $line->text, "\n";
+        if ( my $previous = $line->previous ) {
+            $editor->deselect;
+            my $exp = $previous->select;
+            $editor->cursor->set(0, $previous);
+            my $macro_ed = Editor->whose_name('macro');
+    
+    # Hoping the automatic inserted lines are still there and in the right order !
+    # ==> the line number 2 of the macro editor will be set to "my \$exp = $exp;" and this will cause
+    # new execution of the macro instructions
+            $macro_ed->number(2)->set("my \$exp = $exp;");
+        }
+    },
+    
+    'down_key' => sub {
+        my $editor = Editor->whose_name('call_stack');
+        my ( $line ) = $editor->cursor->get;
+        #print "Dans down_demo9 : trouvé $line | ", $line->text, "\n";
+        if ( my $next = $line->next ) {
+            $editor->deselect;
+            my $exp = $next->select;
+            $editor->cursor->set(0, $next);
+            my $macro_ed = Editor->whose_name('macro');
+    
+    # Hoping the automatic inserted lines are still there and in the right order !
+    # ==> the line number 2 of the macro editor will be set to "my \$exp = $exp;" and this will cause
+    # new execution of the macro instructions
+            $macro_ed->number(2)->set("my \$exp = $exp;");
+        }
+    },
+}
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 3635
+FIRST      : ARRAY(0x7f134c390e38)
+LAST       : ARRAY(0x7f134c390e38)
+================================================================================
+	Level 1 : ARRAY(0x7f134c390e38)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 2
+	TEXT       : #
+	PARENT       : ARRAY(0x7f134c387eb0)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f134c390e38)
+
+Le dump a renvoyé 0 erreurs
+
+Dans next_ de ARRAY(0x7f134c390e38)
+Parent 3635| segment précédant 2
+===> Dans read_ à partir de seek_start = 2 (lu sur fichier)
+Segment next lu : seek_end = 52
+Dans next_ de ARRAY(0x7f134c390898)
+Parent 3635| segment précédant 52
+===> Dans read_ à partir de seek_start = 52 (lu sur fichier)
+Segment next lu : seek_end = 54
+Dans next_ de ARRAY(0x7f134c37b808)
+Parent 3635| segment précédant 54
+===> Dans read_ à partir de seek_start = 54 (lu sur fichier)
+Segment next lu : seek_end = 132
+Dans next_ de ARRAY(0x7f134c1d9b58)
+Parent 3635| segment précédant 132
+===> Dans read_ à partir de seek_start = 132 (lu sur fichier)
+Segment next lu : seek_end = 207
+Dans next_ de ARRAY(0x7f134c38e0c0)
+Parent 3635| segment précédant 207
+===> Dans read_ à partir de seek_start = 207 (lu sur fichier)
+Segment next lu : seek_end = 287
+Dans next_ de ARRAY(0x7f134c38d700)
+Parent 3635| segment précédant 287
+===> Dans read_ à partir de seek_start = 287 (lu sur fichier)
+Segment next lu : seek_end = 358
+Dans next_ de ARRAY(0x7f134c37bcd0)
+Parent 3635| segment précédant 358
+===> Dans read_ à partir de seek_start = 358 (lu sur fichier)
+Segment next lu : seek_end = 398
+Dans next_ de ARRAY(0x7f134c389970)
+Parent 3635| segment précédant 398
+===> Dans read_ à partir de seek_start = 398 (lu sur fichier)
+Segment next lu : seek_end = 401
+Dans next_ de ARRAY(0x7f134c391150)
+Parent 3635| segment précédant 401
+===> Dans read_ à partir de seek_start = 401 (lu sur fichier)
+Segment next lu : seek_end = 463
+Dans next_ de ARRAY(0x7f134c388978)
+Parent 3635| segment précédant 463
+===> Dans read_ à partir de seek_start = 463 (lu sur fichier)
+Segment next lu : seek_end = 527
+Dans next_ de ARRAY(0x7f134c38c808)
+Parent 3635| segment précédant 527
+===> Dans read_ à partir de seek_start = 527 (lu sur fichier)
+Segment next lu : seek_end = 571
+Dans next_ de ARRAY(0x7f134c38e0f0)
+Parent 3635| segment précédant 571
+===> Dans read_ à partir de seek_start = 571 (lu sur fichier)
+Segment next lu : seek_end = 642
+Dans next_ de ARRAY(0x7f134c388318)
+Parent 3635| segment précédant 642
+===> Dans read_ à partir de seek_start = 642 (lu sur fichier)
+Segment next lu : seek_end = 658
+Dans next_ de ARRAY(0x7f134c3913c0)
+Parent 3635| segment précédant 658
+===> Dans read_ à partir de seek_start = 658 (lu sur fichier)
+Segment next lu : seek_end = 661
+Dans next_ de ARRAY(0x7f134c38d718)
+Parent 3635| segment précédant 661
+===> Dans read_ à partir de seek_start = 661 (lu sur fichier)
+Segment next lu : seek_end = 734
+Dans next_ de ARRAY(0x7f134c388228)
+Parent 3635| segment précédant 734
+===> Dans read_ à partir de seek_start = 734 (lu sur fichier)
+Segment next lu : seek_end = 808
+Dans next_ de ARRAY(0x7f134c390e50)
+Parent 3635| segment précédant 808
+===> Dans read_ à partir de seek_start = 808 (lu sur fichier)
+Segment next lu : seek_end = 839
+Dans next_ de ARRAY(0x7f134c390880)
+Parent 3635| segment précédant 839
+===> Dans read_ à partir de seek_start = 839 (lu sur fichier)
+Segment next lu : seek_end = 841

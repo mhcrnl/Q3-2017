@@ -1,0 +1,26 @@
+
+2000-03-05
+
+TODO - Disc-Cover (Por hacer - Disc-Cover)
+
+- Arreglar el problema de las entradas multiples de cddb con el mismo discid.
+
+- ¡Esperar la nueva definicion de cddb2 para ver que hay nuevo!
+
+- Soporte para los titulos de cancion muy largos (¿Cortarlos?, ¿Dejarlos
+  intactos?)
+
+- Gui (¿gtk?, ¿python?) que muestre informacion y permita la edicion.
+
+- Usar modelos para las portadas.
+
+- Idea: hacer un plugin de gimp para que el usuario pueda manipular el resultado
+  mas facilmente.
+
+- Idea: conseguir las letras y producir un pequeño libreto.
+
+
+J.I. van Hemert
+  
+Traduccion por Javier M. de Lucas Cruz <restauracion@arrakis.es>
+Acentos omitidos voluntariamente.

@@ -1,0 +1,521 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+use File::Copy;
+use File::Basename;
+
+require TestDriver;
+require abuild_test_utils;
+
+chdir("abuild-misc") or die;
+
+my $td = new TestDriver("miscellaneous");
+test_setup();
+
+my $top = get_top();
+my $filters = get_filters();
+my $native_out = get_native_out();
+
+# This test suite is a place where we dump additional random tests to
+# exercise very specific features or to exercise previously detected
+# bugs.
+
+setup($td);
+
+cd("work/codegen-wrapper");
+
+for my $i (1, 2)
+{
+    my $description = "codegen-wrapper: " .
+	($i == 1 ? "run command" : "use cached");
+
+    $td->runtest($description,
+		 {$td->COMMAND => "abuild",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/codegen-wrapper$i.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+
+    if (! in_windows())
+    {
+	$td->runtest("check executable permission",
+		     {$td->STRING =>
+			  (-x "abuild-indep/b/out1" ? "yes\n" : "no\n")},
+		     {$td->STRING => "yes\n"});
+    }
+
+    foreach my $f (qw(out1 b/out1 out2))
+    {
+	my $out = "codegen-wrapper-$f.out";
+	$out =~ s,/,-,g;
+	$td->runtest("check $f",
+		     {$td->FILE => "abuild-indep/$f"},
+		     {$td->FILE => "$top/$out"},
+		     $td->NORMALIZE_NEWLINES);
+    }
+
+    # no NORMALIZE_NEWLINES
+    $td->runtest("check cache",
+		 {$td->COMMAND => "find cache -type f -print | LANG=C sort"},
+		 {$td->FILE => "$top/cache-contents.out",
+		  $td->EXIT_STATUS => 0});
+
+    if ($i == 2)
+    {
+	sleep 1;
+	open(F, "<in2.in") or die;
+	my @lines = <F>;
+	close(F);
+	die if (grep { m/\r/ } @lines);
+	for (@lines)
+	{
+	    s/\n/\r\n/g;
+	}
+	die unless (grep { m/\r/ } @lines);
+	open(F, ">in2.in") or die;
+	for (@lines)
+	{
+	    print F;
+	}
+	close(F);
+
+	$td->runtest("line endings changed",
+		     {$td->COMMAND => "abuild COPY=false",
+		      $td->FILTER => "perl $filters/filter-abuild.pl"},
+		     {$td->FILE => "$top/codegen-wrapper-command-failure.out",
+		      $td->EXIT_STATUS => 2},
+		     $td->NORMALIZE_NEWLINES);
+
+	$td->runtest("ignore line endings",
+		     {$td->COMMAND => "abuild COPY=false IGNORE_NEWLINES=1",
+		      $td->FILTER => "perl $filters/filter-abuild.pl"},
+		     {$td->FILE => "$top/codegen-wrapper-newlines-changed.out",
+			  $td->EXIT_STATUS => 0},
+		     $td->NORMALIZE_NEWLINES);
+
+	sleep 1;
+	# Update input file
+	open(F, ">>in2.in") or die;
+	print F "append\n";
+	close(F);
+
+	$td->runtest("tool failure",
+		     {$td->COMMAND => "abuild COPY=false",
+		      $td->FILTER => "perl $filters/filter-abuild.pl"},
+		     {$td->FILE => "$top/codegen-wrapper-command-failure.out",
+		      $td->EXIT_STATUS => 2},
+		     $td->NORMALIZE_NEWLINES);
+
+	$td->runtest("input changed",
+		     {$td->COMMAND => "abuild",
+		      $td->FILTER => "perl $filters/filter-abuild.pl"},
+		     {$td->FILE => "$top/codegen-wrapper-input-changed.out",
+		      $td->EXIT_STATUS => 0},
+		     $td->NORMALIZE_NEWLINES);
+    }
+
+    $td->runtest("clean",
+		 {$td->COMMAND => "abuild clean",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/codegen-wrapper-clean.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+cd("work/windows-nl");
+if (! in_windows())
+{
+    # Detect windows line endings in list_platforms
+    $td->runtest("detect windows line endings",
+		 {$td->COMMAND => "abuild",
+		  $td->FILTER =>
+		      "perl $filters/filter-abuild.pl" .
+		      "| perl $top/filter-list-platforms.pl"},
+		 {$td->FILE => "$top/windows-nl-list_platforms.out",
+		  $td->EXIT_STATUS => 2},
+		 $td->NORMALIZE_NEWLINES);
+}
+else
+{
+    # Windows line endings don't cause a problem in Windows.
+    fake_qtc($td, '^Abuild-init windows nl in list_platforms');
+    system("(tar cf - . | cat > /dev/null)");
+}
+
+# Test built-in code generator support.  We don't bother with these if
+# we're on Windows since we'd most likely be finding cygwin versions
+# of the commands and compiling with in a native Windows environment,
+# which isn't a particular useful thing to test even if it might work
+# fine in some cases.
+
+cd("work/rpc");
+my $rpcgen = find_in_path('rpcgen');
+my $have_rpcgen = ((! in_windows()) && (defined $rpcgen));
+if ($have_rpcgen)
+{
+    $td->runtest("build rpc files",
+		 {$td->COMMAND => "abuild",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/rpc-build.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+    my $files = join(' ', sort map { basename($_) } (<$native_out/*.[ch]>));
+    $td->runtest("check generated files",
+		 {$td->STRING => $files},
+		 {$td->STRING => "complex_rpc.h complex_rpc_clnt.c" .
+		      " complex_rpc_svc.c complex_rpc_xdr.c"});
+}
+else
+{
+    $td->runtest("rpcgen not found; skipping tests",
+		 {$td->STRING => ""},
+		 {$td->STRING => ""});
+    system("(tar cf - . | cat > /dev/null)");
+}
+
+cd("work/flex-bison");
+my $flex = find_in_path('flex');
+my $bison = find_in_path('bison');
+my $have_flex_bison = (((defined $flex) && (defined $bison)) ? 1 : 0);
+if ($have_flex_bison)
+{
+    chop(my $bison_version = `bison --version | head -1`);
+    if ($bison_version =~ m/1\.875$/)
+    {
+	# This version of bison, present on some Solaris systems, is
+	# broken and produces code that doesn't compile in some cases,
+	# including our test suite.  If we need a more general check
+	# in the future, we can add one.
+	$have_flex_bison = 0;
+    }
+}
+
+if ($have_flex_bison)
+{
+    for my $i (1..3)
+    {
+	my $description = "flex/bison: " .
+	    (($i == 1) ? "build" :
+	     ($i == 2) ? "use cached" :
+	     ($i == 3) ? "ignore cache" : "oops");
+
+	my $cmd = "abuild";
+	if ($i == 3)
+	{
+	    $cmd .= " IGNORE_CACHE=1";
+	}
+
+	$td->runtest($description,
+		     {$td->COMMAND => $cmd,
+		      $td->FILTER =>
+			  "grep -v '^fbtest' | perl $filters/filter-abuild.pl"},
+		     {$td->FILE => "$top/flex-bison-build$i.out",
+		      $td->EXIT_STATUS => 0},
+		     $td->NORMALIZE_NEWLINES);
+
+	$td->runtest("clean",
+		     {$td->COMMAND => "abuild clean",
+		      $td->FILTER => "perl $filters/filter-abuild.pl"},
+		     {$td->FILE => "$top/flex-bison-clean.out",
+		      $td->EXIT_STATUS => 0},
+		     $td->NORMALIZE_NEWLINES);
+    }
+
+    $td->runtest("check cache",
+		 {$td->COMMAND =>
+		      "find fcache bcache -type f -print | LANG=C sort"},
+		 {$td->FILE => "$top/flex-bison-cache-contents.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+else
+{
+    $td->runtest("flex/bison not found; skipping tests",
+		 {$td->STRING => ""},
+		 {$td->STRING => ""});
+    system("(tar cf - . | cat > /dev/null)");
+}
+
+cd("work/autoconf");
+
+$td->runtest("autoconf compiler invocation",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/autoconf.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/plugin-anywhere");
+
+# tree1 has "plugin".  tree2 has tree1 as an external and declares
+# "plugin" as a plugin.  tree3 has both tree1 and tree2 in that order
+# as externals and does not declare "plugin" as a plugin.  abuild 1.0
+# had a bug that caused plugin's interface to not get created.
+$td->runtest("plugin-anywhere",
+	     {$td->COMMAND => "abuild -C tree3",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/plugin-anywhere.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/pre-plugin/user");
+$td->runtest("plugin-anywhere",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/pre-plugin.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# Dependency on multiple instances of an interface.  "a" depends on
+# two different platforms instances of "b".
+
+cd("work/double-dep/good");
+
+$td->runtest("double dependency on an item",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/double-dependency.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/double-dep/bad");
+
+$td->runtest("double dependency error",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/double-dependency-error.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+# Build set construction cases that require multiple passes of
+# resolving traits, build-also directives, etc.
+
+cd("work/multipass/a");
+
+$td->runtest("multipass build-also explicit targets",
+	     {$td->COMMAND => "abuild -d check",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/multipass.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build-also and related-by-traits",
+	     {$td->COMMAND => "abuild -d check --related-by-traits trait",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/multipass.build-also-traits.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/multipass");
+
+$td->runtest("build-also and only-with-traits",
+	     {$td->COMMAND => "abuild -b all check --only-with-traits trait",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/multipass.only-with-traits.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("clean",
+	     {$td->COMMAND => "abuild -c all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/multipass.clean.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+validate_dump_data($td);
+
+cd("work/non-recursive");
+
+$td->runtest("non-recursive interface variable",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/non-recursive-interface.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/ro-rw-path");
+
+$td->runtest("ro-rw-path: none specified",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/ro-rw-default.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("ro-rw-path: ro only",
+	     {$td->COMMAND => "abuild -b all --ro-path=a",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/ro-a.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("ro-rw-path: clean ro only",
+	     {$td->COMMAND => "abuild -c all --ro-path=a",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/ro-a-clean.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("ro-rw-path: rw only",
+	     {$td->COMMAND => "abuild -b all --rw-path=p/q",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/rw-p-q.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("ro-rw-path: clean rw only",
+	     {$td->COMMAND => "abuild -c all --rw-path=p/q",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/rw-p-q-clean.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+cd("work");
+
+$td->runtest("ro-rw-path: ro on top",
+	     {$td->COMMAND => "abuild -b all -C ro-rw-path" .
+		  " --ro-path=a --rw-path=a/b --ro-path=a/b/c",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/ro-a-rw-b-ro-c.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("ro-rw-path: rw on top",
+	     {$td->COMMAND => "abuild -b all -C ro-rw-path" .
+		  " --rw-path=p --ro-path=p/q --rw-path=a/b/c",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/rw-p-ro-q-rw-c.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("ro-rw-path: errors",
+	     {$td->COMMAND => "abuild -b all -C ro-rw-path" .
+		  " --rw-path=p --ro-path=a --rw-path=w",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/ro-rw-errors.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/optional-deps");
+
+for (my $i = 1; $i <= 2; ++$i)
+{
+    my $suf = ($i == 1 ? "no-t3" : "t3");
+
+    $td->runtest("optional deps ($suf)",
+		 {$td->COMMAND => "abuild -C t1/a",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/optional-$suf.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+    $td->runtest("dumpdata",
+		 {$td->COMMAND => "abuild --dump-data",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/optional-$suf-dumpdata.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+    validate_dump_data($td);
+
+    copy("Abuild-with-t3.conf", "Abuild.conf") or die;
+}
+
+# This test checks a case where the all, desc, local, deptrees, and
+# descdeptrees build sets are all different from each other.
+#
+#  * Four trees: a, b, c, d
+#  * a depends on b and c but not d; d depends on a
+#  * c and d are under a, but b is not
+#  * an item in a depends on an item in b but not all items in b
+#
+# We run from a subdirectory of a such that there are items in a not
+# below that directory but that c and d are below that directory.
+#
+#  * all gets all items in all trees
+#  * local gets all items in a with dependencies in b
+#  * desc gets all items in c and d and those in a below the current directory
+#  * deptrees gets all items in a, b, and c but not those in d
+#  * descdeptrees gets the same as desc except not items in d
+
+cd("work/set-details/a/a1");
+foreach my $set (qw(all local deptrees desc descdeptrees))
+{
+    $td->runtest("build set details: $set",
+		 {$td->COMMAND => "abuild -b $set no-op",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/set-details-build-$set.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+    $td->runtest("clean set details: $set",
+		 {$td->COMMAND => "abuild -c $set",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/set-details-clean-$set.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+cd("work/global-plugin");
+
+# Make sure global plugins work backwards across tree dependencies
+$td->runtest("global plugin in reverse tree-dep",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/global-plugin.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/symlink-ext");
+
+if (! in_windows())
+{
+    symlink "target", "link" or die;
+    symlink "ext.target", "ext" or die;
+    $td->runtest("symlinked externals",
+		 {$td->COMMAND => "abuild --compat-level=1.0 --dump-data",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/symlinked-external.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+else
+{
+    system("(tar cf - . | cat > /dev/null)");
+}
+
+cd("work/make-jobs");
+
+validate_dump_data($td);
+$td->runtest("serial attribute",
+	     {$td->COMMAND => "abuild --dump-data",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/serial-attribute-dumpdata.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+foreach my $d (['serial', 'serial', ''],
+	       ['2 jobs', 'parallel', '--make-jobs=2'],
+	       ['unlimited jobs', 'parallel', '--make-jobs'])
+{
+    my ($description, $out, $args) = @$d;
+
+    $td->runtest("make-jobs: $description",
+		 {$td->COMMAND => "abuild -b all -k $args",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/make-jobs-$out.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+    $td->runtest("clean",
+		 {$td->COMMAND => "abuild -c all",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/make-jobs-clean.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+cd("work/env-and-parameter");
+$td->runtest("environment variables and parameters",
+	     {$td->COMMAND => "E1=E1-value abuild P1=P1-value",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/env-and-parameter.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+check_work_accessed($td, "not-accessed.out");
+
+$td->report(62 +
+	    (in_windows() ? 0 : 4) +
+	    ($have_rpcgen ? 2 : 1) +
+	    ($have_flex_bison ? 7 : 1));

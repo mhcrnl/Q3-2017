@@ -1,0 +1,512 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+use File::Copy;
+
+require TestDriver;
+require abuild_test_utils;
+
+chdir("abuild-traversal") or die;
+
+my $td = new TestDriver("traversal");
+test_setup();
+
+my $top = get_top();
+my $filters = get_filters();
+my $native_out = get_native_out();
+
+# These tests the traversal algorithm and the various issues
+# surrounding 1.0 to 1.1 changes.  They also test the upgrade process.
+
+# We create a rather elaborate scenario that tries to exercise the
+# traversal system as fully as possible.  The easiest way to explain
+# this is to present it as a series of events in time.  This tree is
+# constructed using abuild 1.0 features, though we may still speak
+# about forests and tree names for illustrative purposes.
+
+# Supporting this, we have a forest called PLUGINS that contains a
+# single build item, "rules", which provides indep echo rules.  This
+# is referenced as a plugin in all other trees and is not otherwise
+# mentioned below.
+
+# To start off with, we have a project, "proj", that has two
+# capabilities, "c1" and "c2".  Each capability is divided into an
+# interface tree and an implementation tree.  The c1 and c2 trees each
+# depend on their interface trees.  The implementation trees also
+# depend on their interface trees.  In addition, c2's implementation
+# depends on c1's interface.  Then there is an integration test that
+# depends on the two implementations.  This stand-alone,
+# self-contained forest is called "PROJ0".  Directories whose names
+# appear in parentheses are not tree roots.  Other directories are
+# tree roots.
+
+#   (proj)               [PROJ0]
+#     c1 -ext-> ifc
+#       ifc
+#       impl -ext-> ../ifc
+#     c2 -ext-> ifc
+#       ifc
+#       impl -ext-> ../ifc, ../../c1
+#     (tests)
+#       int -ext-> ../../c1/impl, ../../c2/impl
+
+
+# Entirely separate from this, there is a tree that implements some
+# stand-alone features.  We'll call this tree "util".  It implements
+# two features, "f1" and "f2".  There is also a test tree that depends
+# on both "f2" and "f2".  This stand-alone, self-contained forest is
+# called "UTIL0".
+
+#   (util)      [UTIL0]
+#     f1
+#     f2
+#     (tests)
+#       int -ext-> ../../f1, ../../f2
+
+# In a separate, sparsely popuated area, we modify c2 in proj to make
+# use of f2 in util.  This includes taking some of the build items
+# from the c2 implementation tree and moving them into the f2 tree, so
+# we have build items that belong to a different tree in the main area
+# from in the backing area.  We call this forest C2F2.  It is
+# populated with c2's implementation, f2, and both original forests'
+# integration test areas.  The various subtrees back to PROJ0 or UTIL0
+# as needed.  Only new externals are shown here, but all existing ones
+# still apply.
+
+#                (proj)           [C2F2]
+# PROJ0 <-back-    c2
+# PROJ0 <-back-      impl -ext-> ../../../util/f2
+#                  (tests)
+# PROJ0 <-back-      int
+#                (util)
+# UTIL0 <-back-    f2
+#                  (tests)
+# UTIL0 <-back-      int
+
+
+# Finally, we have a tree (C3) in which we are going to add a third
+# capability to proj.  This capability, c3, will make use of c2's
+# interfaces.  We will also modify c1's and c2's implementations here.
+# The integration test will also be modified to make use of c3's
+# implementation.  c2's implementation tree will be backed to the C2F2
+# forest (which is in turn backed to PROJ0) while c1's implementation
+# will be backed directly to PROJ0 since there is no instance of it in
+# C2F2.
+
+#                (proj)            [C3]
+# PROJ0 <-back-    c1
+# PROJ0 <-back-      impl
+# PROJ0 <-back-    c2
+# C2F2  <-back-      impl
+#                  c3 -ext-> ifc
+#                    ifc
+#                    impl -ext-> ../ifc, ../../c2
+#                  (tests)
+# C2F2  <-back-      int -ext-> ../../c3/impl
+
+# Basic test strategy:
+#
+#  * Set up 1.0 tree.
+#
+#  * Make sure everything works and carefully validated dump data.
+#
+#  * Use conversion program to generate 1.1 tree.
+#
+#  * Make sure results are identical.
+#
+#  * Try various manually hybrid 1.0/1.1 trees including upgrading
+#    PROJ but not UTIL and/or the other way around.
+
+setup($td);
+
+$ENV{'ABUILD_COMPAT_LEVEL'} = '1.0';
+
+# errors
+
+cd("work/errors/cycle");
+
+$td->runtest("backing cycle",
+	     {$td->COMMAND => "abuild -C a",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/backing-cycle.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("external cycle",
+	     {$td->COMMAND => "abuild -C c",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/external-cycle.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("backed external cycle",
+	     {$td->COMMAND => "abuild -C e",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/backed-external-cycle.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/errors/cycle");
+
+$td->runtest("backing area loop",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/backing-area-loop.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+copy("$top/external-cycle.in", "abuild.upgrade-data") or die;
+
+$td->runtest("upgrade external cycle",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/external-cycle-upgrade.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/errors/ext-not-root");
+
+$td->runtest("external not root",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/external-not-root.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("upgrade",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/external-not-root-upgrade.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/errors/ext-no-conf");
+
+$td->runtest("external lacks conf",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/external-no-conf.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/errors/ext-not-found/a");
+
+$td->runtest("can't resolve external",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/external-not-found.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("upgrade",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/external-not-found-upgrade.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/errors/integrity");
+
+$td->runtest("shadowed deps and plugins",
+	     {$td->COMMAND => "abuild -C f2/main -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/integrity.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/errors/back-to-self/t1");
+
+$td->runtest("external backs into forest",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/back-to-self.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/errors/bad-root");
+
+$td->runtest("bad forest root",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-forest-root.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/errors/interleaved-forests");
+
+$td->runtest("interleaved forests",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/interleaved-forests.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+# Traverse a 1.0-style tree with complex externals and backing areas.
+
+cd("work/1.0");
+
+check_tree("isolated tree", "forest0/PROJ0/proj/c1/ifc", "PROJ0-c1-ifc");
+check_tree("PROJ0 all", "forest0/PROJ0/proj/tests/int", "PROJ0");
+check_tree("UTIL0 all", "forest0/UTIL0/util/tests/int", "UTIL0");
+check_tree("F2C2 proj", "forest1/F2C2/proj/tests/int", "F2C2-proj");
+check_tree("F2C2 util", "forest1/F2C2/util/tests/int", "F2C2-util");
+check_tree("C3 all", "forest2/C3/proj/tests/int", "C3-proj");
+
+# Test upgrade
+
+cd("work/1.0/forest0/PROJ0/proj/c1/impl/a");
+
+$td->runtest("start too low",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/upgrade-too-low.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/1.0/forest1");
+
+$td->runtest("unresolved backed externals",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest1-upgrade-1.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/forest1-upgrade-data-1.out"},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/1.0/forest0/UTIL0");
+
+$td->runtest("partial upgrade pass 1",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/UTIL0-upgrade-1.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/UTIL0-upgrade-data-1.out"},
+	     $td->NORMALIZE_NEWLINES);
+
+copy("$top/UTIL0-upgrade-data-errors.in", "abuild.upgrade-data") or die;
+$td->runtest("upgrade-data errors",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/UTIL0-upgrade-errors.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+copy("$top/UTIL0-upgrade-data-2.in", "abuild.upgrade-data") or die;
+$td->runtest("successful partial upgrade",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/UTIL0-upgrade-2.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/UTIL0-upgrade-data-2.out"},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/1.0");
+
+check_tree("UTIL0 all", "forest0/UTIL0/util/tests/int", "UTIL0-u1");
+
+cd("work/1.0/forest0");
+
+$td->runtest("all but c2 pass 1",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest0-upgrade-1.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/forest0-upgrade-data-1.out"},
+	     $td->NORMALIZE_NEWLINES);
+copy("$top/forest0-upgrade-data-2.in", "abuild.upgrade-data") or die;
+$td->runtest("all but c2 pass 2",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest0-upgrade-2.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/forest0-upgrade-data-2.out"},
+	     $td->NORMALIZE_NEWLINES);
+copy("$top/forest0-upgrade-data-errors.in", "abuild.upgrade-data") or die;
+$td->runtest("upgrade data errors",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest0-upgrade-errors.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+copy("$top/forest0-upgrade-data-3.in", "abuild.upgrade-data") or die;
+$td->runtest("all but c2",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest0-upgrade-3.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/forest0-upgrade-data-3.in"}, # unchanged
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/1.0");
+check_tree("forest0 all", "forest0", "forest0-u1");
+
+cd("work/1.0/forest0");
+unlink "abuild.upgrade-data" or die;
+
+$td->runtest("rest of forest0 pass 1",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest0-upgrade-4.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/forest0-upgrade-data-4.out"},
+	     $td->NORMALIZE_NEWLINES);
+copy("$top/forest0-upgrade-data-5.in", "abuild.upgrade-data") or die;
+$td->runtest("rest of forest0",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest0-upgrade-5.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/forest0-upgrade-data-5.in"}, # unchanged
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/1.0/forest0");
+unlink "abuild.upgrade-data" or die;
+$td->runtest("no upgrade required",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest0-upgrade-6.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/1.0/forest1");
+$td->runtest("forest1",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest1-upgrade-2.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/forest1-upgrade-data-2.out"},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/1.0/forest2");
+$td->runtest("forest2 pass 1",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest2-upgrade-1.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/forest2-upgrade-data-1.out"},
+	     $td->NORMALIZE_NEWLINES);
+copy("$top/forest2-upgrade-data-2.in", "abuild.upgrade-data") or die;
+$td->runtest("forest2",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/forest2-upgrade-2.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/forest2-upgrade-data-2.in"}, # unchanged
+	     $td->NORMALIZE_NEWLINES);
+
+# Backing area deprecation warning
+cd("work/1.0/forest1/F2C2");
+rename "Abuild.backing", "Abuild.backing.safe", or die;
+open(F, ">Abuild.backing") or die;
+print F "../../forest0\n";
+close(F);
+cd("work/1.0");
+check_tree("forest1 with deprecated backing", "forest1/F2C2",
+	   "forest1-u1-deprecated-backing");
+cd("work/1.0/forest1/F2C2");
+unlink "Abuild.backing" or die;
+rename "Abuild.backing.safe", "Abuild.backing", or die;
+
+# Check trees after upgrading.
+
+cd("work/1.0");
+foreach my $v (qw(1.0 1.1))
+{
+    $ENV{'ABUILD_COMPAT_LEVEL'} = $v;
+    check_tree("forest0 all", "forest0", "forest0-u2");
+    check_tree("forest1 all", "forest1/F2C2", "forest1-u1");
+    check_tree("forest2 all", "forest2/C3/proj", "forest2-u1");
+}
+
+# Check additional cases that can't start with a pure 1.0 forest.
+
+cd("work/only-externals");
+
+$td->runtest("previously upgraded without externals",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/only-externals.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/deleted-trees");
+
+$td->runtest("local backing area",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/local-backing.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/local-backing-upgrade-data.out"},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/deleted-trees/main");
+
+$td->runtest("deleted trees",
+	     {$td->COMMAND => "abuild --upgrade-trees",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/deleted-trees.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("check upgrade data",
+	     {$td->FILE => "abuild.upgrade-data"},
+	     {$td->FILE => "$top/deleted-trees-upgrade-data.out"},
+	     $td->NORMALIZE_NEWLINES);
+
+check_work_accessed($td);
+
+$td->report(76);
+
+sub check_tree
+{
+    my ($description, $path, $out) = @_;
+
+    $td->runtest($description,
+		 {$td->COMMAND => "abuild -C $path -b all",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/$out.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+
+    $td->runtest("dump data",
+		 {$td->COMMAND => "abuild -C $path --dump-data",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/$out-dumpdata.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}

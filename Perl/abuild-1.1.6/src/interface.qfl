@@ -1,0 +1,109 @@
+/* -*- text -*- */
+
+/* Note: we automatically generate a flex file from this list of
+ * tokens by generating rules for the tokens defined below.
+ */
+
+%{
+#include <nt_all.hh>
+#include <interface.tab.hh>
+#include <Token.hh>
+#include <FlexCaller.hh>
+#include <InterfaceParser.hh>
+%}
+
+%option prefix="yy_interface_"
+%option extra-type="Parser *"
+%option noyywrap reentrant nounistd never-interactive
+
+/*
+ * Identifiers may contain alphanumerics, dash, underscore, and
+ * period.  We repeat [_[:alnum:]\.-]+ below for this purpose as
+ * needed.  Note that we put _ first to avoid having two consecutive
+ * "[" characters, which is rejected by m4 which flex uses starting at
+ * version 2.5.30.
+ *
+ * Note that the C++ code that receives tokens recognized here shares
+ * knowledge with this file about the nature of the tokens.  Finer
+ * parsing is done there using regular expressions.
+ *
+ * Whitespace handling is tricky in our grammar.  It's significant in
+ * some places but not in others, more or less like how make variables
+ * are assigned.  Unfortunately, regular words that happen to match
+ * keywords are recognized as their special tokens in some contexts
+ * where they shouldn't be.  We can't use start states to prevent this
+ * because the lexer can't tell when to switch in and out, so we have
+ * to deal with that specially in the grammar.  To help, we use
+ * tok_kw_ as the prefix for any token that just matches identifier
+ * characters.
+ */
+
+/* comments, as a special case, are consumed by the lexer */
+tok_comment	^[ \t]*#.*\n
+
+/* be flexible about line terminators */
+tok_newline	\r?\n
+
+/* Trailing backslash followed by a newline is a line continuation
+ * character and is embedded in the tok_spaces token.  Any other
+ * character preceded by a backslash will be treated as that
+ * character.  That catches all use of backslash except a trailing
+ * backslash as the last character in the file, which will be
+ * recognized as tok_other. */
+
+tok_quotedchar	\\.
+
+/* operators */
+tok_equal	=
+tok_comma	[ \t]*,
+tok_clope	[ \t]*\)
+
+/* keywords that would otherwise parse as functions */
+tok_if		if[ \t]*+\([ \t]*
+tok_elseif	[ \t]*elseif[ \t]*+\([ \t]*
+
+/* Ideally, else and endif should be tok_kw keywords, but removing the
+ * leading whitespace of these as well as elseif and handling them in
+ * the grammar create shift/reduce conflicts.  We could probably
+ * resolve them by restructuring the grammar, but it doesn't seem
+ * worth it when people can just quote characters if they have bare
+ * words in their interface files that start with "else" or "endif".
+ * The basic difficulty in the grammar is that the parser can't tell
+ * whether a space inside an if block belongs to the else or endif or
+ * whether it belongs to the next statement.  I'd rather make people
+ * use a backslash before a letter in else or endif than either change
+ * the syntax (adding braces or something), use a glr grammar, or
+ * doing major rework of the grammar and moving logic into the
+ * semantic section of the parser.
+ */
+tok_else		[ \t]*else
+tok_endif		[ \t]*endif
+
+/* keywords that would otherwise parse as identifiers -- these must
+ * start with tok_kw and be part of the keywords nonterminal. */
+tok_kw_reset		reset
+tok_kw_reset_all	reset-all
+tok_kw_no_reset		no-reset
+tok_kw_override		override
+tok_kw_fallback		fallback
+tok_kw_flag		flag
+tok_kw_declare		declare
+tok_kw_boolean		boolean
+tok_kw_string		string
+tok_kw_filename		filename
+tok_kw_list		list
+tok_kw_append		append
+tok_kw_prepend		prepend
+tok_kw_nonrecursive	non-recursive
+tok_kw_local		local
+tok_kw_afterbuild	after-build
+tok_kw_targettype	target-type
+
+/* remaining syntax */
+tok_function	[_[:alnum:]\.-]+[ \t]*+\([ \t]*
+tok_identifier	[_[:alnum:]\.-]+
+tok_variable	\$\([_[:alnum:]\.-]+\)
+tok_environment	\$\(ENV:[_[:alnum:]]+(:[^ \t\(\)]*)?\)
+tok_parameter	\$\(PARAM:[_[:alnum:]]+(:[^ \t\(\)]*)?\)
+tok_spaces	([ \t]|\\\r?\n)([ \t]*|(\\\r?\n))*
+tok_other	.

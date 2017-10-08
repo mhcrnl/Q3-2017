@@ -1,0 +1,344 @@
+Appel de editor on_top pour zone = out_tab_zone
+Dans abstract on_top : zone = out_tab_zone, Editor=SCALAR(0x203c308)|139884404112664|
+Dans reference_zone_event zone1,on_top_editor_change, on_main_editor_change37219736
+Appel de editor on_top pour zone = zone1
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x34c6878)|139884065014016|
+Création locale l'éditeur correspondant au Tab 37219736
+Trouvé demo1.pl en position 1, de 0 à 8
+On main editor change : demo1.pl
+Dans change title : demo1.pl
+key_code =CODE(0x2587b68)
+Dans reference_zone_event zone2,on_top_editor_change, on_top_editor_change139884404112664
+FALSE METHOD init_set 3|139884070316360|
+Appel de editor on_top pour zone = zone3
+Dans abstract on_top : zone = zone3, Editor=SCALAR(0x38dc240)|139884070316360|
+GROWING FILE ..1
+FALSE METHOD init_move 3|139884070313168|
+Appel de editor on_top pour zone = zone2
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Création locale l'éditeur correspondant au Tab 139884404112664
+PAs trouvé le nom de tmp/Editor.pl_trace.trcAppel de editor on_top pour zone = zone2
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+PAs trouvé le nom de FALSE METHOD init_eval 3|139884075320664|
+============>INIT de Search .. HASH(0x30b5780), 139884075170952
+Appel de editor on_top pour zone = zone5
+FIN DE INIT EVAL = 13
+Dans abstract on_top : zone = zone5, Editor=SCALAR(0x37f2068)|139884075320664|
+Move text : 325|364|
+Appel de editor on_top pour zone = zone1
+Dans AUTOLOAD  |demo2.pl|Editor=SCALAR(0x32331c8)|52638152|
+Appel pour thread 0 : |52638152|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x37f4aa0)|52638152|
+Trouvé demo2.pl en position 2, de 9 à 17
+On main editor change : demo2.pl
+Dans change title : demo2.pl
+Dans AUTOLOAD  |demo2.pl|Editor=SCALAR(0x3233f60)|52638152|
+Appel pour thread 0 : |52638152|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x37f4aa0)|52638152|
+Move text : 172|21|
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c8249d8)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 207|13|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395cf0b678)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 207|13|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c0099b8)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 206|14|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c03a0f8)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 163|10|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c03a9b0)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Trouvé tmp/Editor.pl_trace.trc en position 1, de 0 à 10
+Move text : 73|6|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395cf0bcd8)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 72|8|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395cf0bf78)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c98e838)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 71|12|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c036cc0)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 71|12|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c0367b0)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 72|12|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c038860)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 73|12|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c039df8)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 175|22|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395cf0ba50)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Trouvé  en position 2, de 11 à 19
+Move text : 175|21|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c824ff0)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 176|21|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395cf0b978)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 189|17|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395cf0c008)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c01c3e0)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395cf0ba08)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 138|12|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c03a3e0)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Trouvé tmp/Editor.pl_trace.trc en position 1, de 0 à 10
+Move text : 89|8|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c8248b8)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 66|18|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c01c3e0)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 55|19|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c98e880)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c0097a8)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 84|19|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c824468)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 163|24|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c0367b0)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Trouvé  en position 2, de 11 à 19
+Move text : 164|23|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395cf0c2a8)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 168|23|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c009538)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 182|21|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c036330)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 194|9|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c98dde8)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c824588)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 707|1|
+Appel de editor on_top pour zone = zone1
+Dans AUTOLOAD  |demo4.pl|Editor=SCALAR(0x7f395c038518)|139884333597976|
+Appel pour thread 0 : |139884333597976|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x353d998)|139884333597976|
+Trouvé demo4.pl en position 4, de 27 à 35
+On main editor change : demo4.pl
+Dans change title : demo4.pl
+Move text : 197|13|
+Dans AUTOLOAD  |demo2.pl|Editor=SCALAR(0x7f395c034950)|52638152|
+Appel pour thread 0 : |52638152|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x37f4aa0)|52638152|
+Trouvé demo2.pl en position 2, de 9 à 17
+On main editor change : demo2.pl
+Dans change title : demo2.pl
+Dans AUTOLOAD  |demo2.pl|Editor=SCALAR(0x7f395cf0bc18)|52638152|
+Appel pour thread 0 : |52638152|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x37f4aa0)|52638152|
+Dans AUTOLOAD  |demo2.pl|Editor=SCALAR(0x7f395cf0b8d0)|52638152|
+Appel pour thread 0 : |52638152|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x37f4aa0)|52638152|
+Move text : 207|4|
+Dans AUTOLOAD  |demo2.pl|Editor=SCALAR(0x7f395c039c30)|52638152|
+Appel pour thread 0 : |52638152|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x37f4aa0)|52638152|
+Move text : 153|21|
+Dans AUTOLOAD  |demo2.pl|Editor=SCALAR(0x7f395c03b760)|52638152|
+Appel pour thread 0 : |52638152|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x37f4aa0)|52638152|
+Move text : 155|18|
+Dans AUTOLOAD  |demo2.pl|Editor=SCALAR(0x7f395cf0c2f0)|52638152|
+Appel pour thread 0 : |52638152|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x37f4aa0)|52638152|
+Move text : 169|13|
+Dans AUTOLOAD  |demo2.pl|Editor=SCALAR(0x7f395c824618)|52638152|
+Appel pour thread 0 : |52638152|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x37f4aa0)|52638152|
+Move text : 703|4|
+Appel de editor on_top pour zone = zone1
+Dans AUTOLOAD  |demo7.pl|Editor=SCALAR(0x7f395c03b1c0)|139884333609408|
+Appel pour thread 0 : |139884333609408|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x39d72c8)|139884333609408|
+Trouvé demo7.pl en position 7, de 54 à 62
+On main editor change : demo7.pl
+Dans change title : demo7.pl
+Dans AUTOLOAD  |demo7.pl|Editor=SCALAR(0x7f395c824e58)|139884333609408|
+Appel pour thread 0 : |139884333609408|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x39d72c8)|139884333609408|
+Move text : 704|15|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c98e538)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Trouvé tmp/Editor.pl_trace.trc en position 1, de 0 à 10
+Move text : 69|16|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c03b370)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c824ff0)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 178|1|
+Move text : 234|22|
+Move text : 309|11|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395cf0c140)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Trouvé  en position 2, de 11 à 19
+Move text : 1063|17|
+Dans AUTOLOAD  ||Editor=SCALAR(0x350ce70)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 350|58|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c8248a0)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 179|4|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395ced8530)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Trouvé tmp/Editor.pl_trace.trc en position 1, de 0 à 10
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395c824330)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Dans AUTOLOAD  |tmp/Editor.pl_trace.trc|Editor=SCALAR(0x7f395ced82c0)|139884070313168|
+Appel pour thread 0 : |139884070313168|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x353d5d8)|139884070313168|
+Move text : 118|33|
+Move text : 138|65|
+Move text : 145|69|
+Move text : 148|67|
+Move text : 166|55|
+Move text : 216|34|
+Move text : 250|24|
+Move text : 332|15|
+Move text : 352|13|
+Appel de editor on_top pour zone = zone1
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x3a103a0)|139884341907344|
+PAs trouvé le nom de Editor.pmOn main editor change : Editor.pm
+Dans change title : Editor.pm
+Move text : 317|101|
+Move text : 492|14|
+Move text : 507|3|
+Move text : 520|19|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c038920)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Trouvé  en position 2, de 11 à 19
+Move text : 1204|14|
+Dans AUTOLOAD  |Editor.pm|Editor=SCALAR(0x7f395c03a338)|139884341907344|
+Appel pour thread 0 : |139884341907344|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x3a103a0)|139884341907344|
+Move text : 1216|16|
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c038b60)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Move text : 473|33|
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Use of uninitialized value $d in numeric eq (==) at Easy/Abstract.pm line 1622.
+Dans AUTOLOAD  ||Editor=SCALAR(0x7f395c98ead8)|139884075170952|
+Appel pour thread 0 : |139884075170952|
+Dans abstract on_top : zone = zone2, Editor=SCALAR(0x31467d8)|139884075170952|
+Dans AUTOLOAD  |Editor.pm|Editor=SCALAR(0x7f395c0315d8)|139884341907344|
+Appel pour thread 0 : |139884341907344|
+Dans abstract on_top : zone = zone1, Editor=SCALAR(0x3a103a0)|139884341907344|
+Appel de editor on_top pour zone = zone4
+Dans abstract on_top : zone = zone4, Editor=SCALAR(0x237ed98)|37219736|
+Usage $widget->place(...) at /usr/lib64/perl5/vendor_perl/Tk/Widget.pm line 1199.
+ at Easy/Graphic/Tk_glue.pm line 392.
+Perl exited with active threads:
+	17 running and unjoined
+	1 finished and unjoined
+	0 running and detached

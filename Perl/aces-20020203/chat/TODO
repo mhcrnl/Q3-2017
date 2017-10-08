@@ -1,0 +1,4 @@
+TODO:
+
+	* gui3.pl: have fewer windows pop up
+	* IRC/Stream.pm: more types returned (such as login info)

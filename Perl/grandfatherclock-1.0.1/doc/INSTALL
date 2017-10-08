@@ -1,0 +1,28 @@
+This file describes the step for installation of grandfatherclock(6).
+
+Conventional Installation:
+1. Expand the package contents in an empty directory.
+	> cd /opt
+	> tar -zcvf <package>
+	> mv grandfatherclock-1.0.0 grandfatherclock
+2. Install the man pages.
+	> cd grandfatherclock
+	> gzip doc/grandfatherclock.6
+	> ln -s $(pwd)/doc/grandfatherclock.6.gz /usr/man/man6
+3. Install the binary
+	> ln -s $(pwd)/bin/grandfatherclock /usr/bin
+4. Install the configuration
+	> mkdir /etc/grandfatherclock
+	> cp $(pwd)/etc/grandfatherclockrc /etc/grandfatherclock
+
+rpm(1) Installation:
+1. rpm -i <relocations> <package>
+	Optionally relocate as necessary
+	--relocate /usr/bin=<bindir>
+	--relocate /usr/man=<mandir>
+	--relocate /etc/grandfatherclock=<configdir>
+
+Configuration:
+1. See grandfatherclock(6) for details.
+2. Adjust /etc/grandfatherclock/grandfatherclockrc.
+3. Install grandfatherclock as a cron job.

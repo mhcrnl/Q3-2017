@@ -1,0 +1,249 @@
+2005-04-03  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* release 4.3
+
+2005-04-01  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* imc.dist: Reimplement lexer, to be able to support semicolon and
+	double quotes embedded in string.
+
+	* imc.dist: Re-added input/output of GIF files (if the GD module
+	supports it).
+
+2005-03-31  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* acinclude.m4: Avoid warning of underquoted definition.
+
+2003-05-01  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* release 4.2
+
+	* imc.dist: Origin should default to 0,0.
+
+2002-01-27  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* release 4.1
+
+	* restructure make check
+
+	* imc.dist: Add input/output of JPEG files.
+
+2002-01-26  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* imc.dist: Call the pre-processor with a full path name (in case
+	it doesn't live in /bin or /usr/bin).
+
+	* configure.in, imc.dist: Remove the use of the -P option for the
+	pre-processor, to solve a problem with disappearing newlines.
+
+1999-11-09  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* release of version 4.0.
+
+1999-11-08  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* doc/: updated documentation.
+
+	* imc.1: updated man page.
+
+	* examples/gifcmp.pl: renamed to imcmp.pl; changed to support PNG
+	instead of GIF files.
+
+	* configure.in: Changes to support PNG instead of GIF files.
+
+	* imc.dist: Changes in image loading and writing functions to support
+	PNG instead of GIF files.  From now on, GIF files are not supported
+	anymore.  XPM files can now be loaded with the IMAGE command (next to
+	PNG and XBM files).
+
+	* imc.dist (do_image): Factored out the actual loading of the image
+	(new functions do_input_image and supported_input_types).
+
+	* imc.dist (init_program): Added detection of type of desired output
+	image.  New functions get_image_type and supported_output_types.
+
+	* imc.dist (output_gif): Renamed to output_image.  Factored out the
+	actual writing of the image to the function do_output_image.
+
+	* all: Changed name of the program from 'gifc' to 'imc'.  This will
+	be version 4.0 (I'm not going back to 1.0, because it is essentially
+	the same program).
+
+1999-09-11  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* release of version 3.1.
+
+	* gifc.dist (do_arc): Bugfix for filling of 180 degree (or close) arc.
+
+1999-05-23  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* configure.in: corrected test for version of GD perl module (previous
+	test didn't check anything in fact...).
+
+1999-04-23  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* release of version 3.0.
+
+1999-04-21  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* examples/: Final gifc test scripts.
+
+1999-04-19  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* gifc.dist (rotate_and_mirror_image): Bugfix: don't multiply again
+	with $angledirection: this must be done at the time of specification,
+	not execution.
+
+	* examples/ref/: New directory; moved all reference GIF files from
+	examples directory to here; created examples/ref/Makefile.am; changes
+	in configure.in, examples/Makefile.am and README.
+
+	* examples/: Still more gifc test scripts.
+
+	* gifc.dist (do_import_image): Bugfix: point with highest coordinate
+	was calculated in a wrong way.
+
+1999-04-18  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* gifc.dist (do_text, do_image): Factored out common part to
+	new function do_import_image.
+
+	* gifc.dist (do_text, do_image): Found MAJOR bug in text and image
+	alignment: horizontal and vertical alignment were interchanged (with
+	respect to their logical meaning).  And that already since the
+	beginning !!! Fixed the bug, but I'd better make it a major version
+	change now (3.0)...
+
+	* gifc.dist (do_arc): Bugfix: Corrected condition for drawing
+	closing lines + round off the coordinates for the arc end points
+	correctly.
+
+	* gifc.dist (split_arc): Bugfix: both start and end angle small
+	negative was not handled properly (and other fixes).
+
+	* gifc.dist (do_arc): Bugfix: give $closedarc initial value 0.
+
+	* examples/gifcmp.pl: Bugfix for transparent colors.
+
+	* examples/: Bugfixes in Makefile.am for VPATH build.
+
+	* doc/: Added note in gifc.txt and gifc.html that xv does not take
+	transparency into account and may show the GIF wrongly.
+
+	* gifc.dist (get_color): Bugfix: if TRANSPARENT asked: return
+	transparent color if available.
+
+	* gifc.dist (process_input): Bugfix: remove comments *before*
+	splitting the line in commands.
+
+	* gifc.dist (do_image): Bugfix in the check whether the filename
+	is a subcommand: possibly no filename given.
+
+	* gifc.dist (do_text): Corrected bug in alignment of text when
+	rotated of 90 degrees (residue from release 2.6 in correction for
+	origin at bottom).
+
+	* examples/: Various new gifc test scripts.
+
+1999-04-17  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* NEWS: added entries for the very first versions of gifc (1.0
+	and 1.1).
+
+	* README: update for new files.
+
+	* acinclude.m4: New file (the macros that were formerly defined
+	in configure.in).
+
+	* examples/gifcmp.pl: Compare script for GIFs, to be used in
+	make check.
+
+	* configure.in: Enhancements related to examples.
+
+	* examples/: Further enhancements in Makefile.am for checking
+	multiple gifc files.
+
+1999-04-14  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* README: update for new directories.
+
+	* doc/: New directory; gifc.html, gifc.txt and gifc.ref moved to
+	doc; Makefile.am in directory doc; 'disthook' target splitted
+	between Makefile.am and doc/Makefile.am.
+
+	* examples/: New directory; example.gifc moved to
+	examples/piechart.gifc; Makefile.am in directory examples;
+	'check' target moved from Makefile.am to examples/Makefile.am.
+
+1999-04-12  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* gifc.dist (rotate_and_mirror_image): Optimizations.
+
+	* gifc.dist (init_program): Put the copyright string in the
+	configure script for easier maintainability.
+
+	* gifc.dist (do_rectangle): Corrected some error strings.
+
+	* gifc.dist (do_imagemirror): Removed erroneous argument $mirror.
+
+	* gifc.dist (do_textmirror): Removed erroneous argument $mirror.
+
+	* gifc.dist (do_image): Use $command instead of literal "IMAGE" in
+	check of subcommands.
+
+	* configure.in: message whether to use pre-processor or not.
+
+1999-04-11  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* documentation files: updates
+
+	* gifc.dist: Implemented general rotation and mirroring of text: new
+	command TEXTMIRROR; new TEXT subcommands ROTATE and MIRROR; new
+	subroutines 'do_textrotate' and 'do_textmirror'; changes in 'do_text';
+	initializations in 'init_image'.
+
+	* gifc.dist: Implemented general rotation and mirroring of images: new
+	subroutine 'rotate_and_mirror_image'; new command IMAGEMIRROR; new
+	IMAGE subcommands ROTATE and MIRROR; new subroutines 'do_imagerotate'
+	and 'do_imagemirror'; changes in 'do_image'; initializations in
+	'init_image'.
+
+	* gifc.dist (do_image): Corrected bug: check if the filename is
+	a subcommand (more generally than presently done) before accepting
+	it.
+
+	* gifc.dist (get_unique_color): Changed to get the image as parameter
+	(so that it can be called on other images); all calls to this
+	function hence must get this parameter.
+
+	* gifc.dist (do_image): Corrected bug: image should be scaled first,
+	then the boundaries should be calculated (for image aligning).
+
+1999-04-10  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* gifc.dist: Added subroutine 'round', to replace ad-hoc roundings in
+	the code.
+
+1999-04-08  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* gifc.dist (process_input): Removed 'chdir $inputdir': not
+	necessary and sometimes completely wrong.
+
+	* all files: Change to autoconf/automake system.  The option
+	-with-pp=ARG is removed (pre-processor is normally in standard
+	place, no?)
+
+1999-03-20  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* gifc.dist: Implemented INTERLACED command: new entry in the hash
+	%keyword_proc; new subroutine 'do_interlaced'.
+
+	* gifc.dist: Implemented closed segments: changes in do_sub_closed
+	and do_arc; $closedarc is 1 for PIE and 2 for SEGMENT.
+
+1999-03-13  Peter Verthez  <Peter.Verthez@advalvas.be>
+
+	* release of version 2.6.
+	
+The basis for this change log file is release 2.6.
+See the NEWS file for earlier (less detailed) changes.

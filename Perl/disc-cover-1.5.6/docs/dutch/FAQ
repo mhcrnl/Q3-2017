@@ -1,0 +1,94 @@
+
+
+2000-12-20
+
+FAQ - Disc-Cover
+
+
+Veel Gestelde Vragen.
+
+
+Q. Ik krijg de volgende fout, wat is er mis?
+
+"Can't locate HTTP/Request.pm in @INC (@INC contains:
+/usr/lib/perl5/5.00502/i586-linux /usr/lib/perl5/5.00502
+/usr/lib/perl5/site_perl/5.005/i586-linux /usr/lib/perl5/site_perl/5.005 .)
+at ./disc-cover line 811.
+BEGIN failed--compilation aborted at ./disc-cover line 811."
+
+A. Installeer de Perl modules genaamd libwww-perl, HTML-Parser, URI, en
+MIME-Base64, deze kun je vinden op www.cpan.org of in de 'more stuff...'
+directory op de homepage van Disc-Cover. Zie bet bestand INSTALL voor verdere
+details.
+
+
+
+Q. Ik krijg de volgende fout, wat is er mis?
+
+"Can't locate HTML/HeadParser.pm in @INC (@INC contains:                         
+/usr/lib/perl5/5.00503/i386-linux                                               
+/usr/lib/perl5/5.00503 /usr/lib/perl5/site_perl/5.005/i386-linux                
+/usr/lib/perl5/site_perl/5.005 .) at                                            
+/usr/lib/perl5/site_perl/5.005/LWP/Protocol.pm line 46.                         
+BEGIN failed--compilation aborted at                                            
+/usr/lib/perl5/site_perl/5.005/LWP/UserAgent.pm line 103.                       
+BEGIN failed--compilation aborted at ./disc-cover line 893."
+
+A. Installeer de Perl modules genaamd libwww-perl, HTML-Parser, URI, en
+MIME-Base64, deze kun je vinden op www.cpan.org of in de 'more stuff...'
+directory op de homepage van Disc-Cover. Zie bet bestand INSTALL voor verdere
+details.
+
+
+
+Q. Hoe maak ik hoesjes voor zelfgemaakte cds?
+
+A. Volg de volgende stappen:
+
+  1. Plaats de cd in de cdrom-speler.
+  
+  2. Start disc-cover als volgt:
+     > disc-cover -t cddb -o myfile.cddb
+     
+  3. Pas de myfile.cddb aan met een texteditor, de tracks zijn allemaal
+     "Unknown" genoemd. Dit is heel makkelijk.
+     
+  4. Voor printbare hoes gebruik je weer disc-cover:
+     > disc-cover -f myfile.cddb
+
+
+
+Q. Tip: how snij je de hoesjes?
+
+A. Dit is mijn manier, gewoon één manier om het te doen. Ik begin met de
+voorkant. Deze snij ik langs de breedte van het papier in twee keer. Het
+resultaat is twee stukken papier aan de zijkanten van de voorhoes. Deze worden
+naar achter gevouwen zodat het hoesje beter in het doosje blijft zitten. De
+achterkant wordt losgesneden zoals verwacht, in vier keer.
+
+
+
+Q. Ik gebruik Disc-Cover en het produceert een hoesje dat niet klopt, wat is
+er mis?
+
+A. Geen idee! Als je mij het probleem e-mailt dan kan ik met misschien
+repareren. Denk bij het e-mailen eraan het probleem zo exact mogelijk te
+beschrijven en stuur een kopie van de cddb entry mee (kun je krijgen met
+'disc-cover -t cddb'). Verder zijn er twee 'debug' opties (-R en -V). Met
+-V krijg je te zien wat het programma aan het doen is. Dat helpt mij jou
+te helpen bij het opsporen van een probleem.
+
+
+
+Q. Als ik mijn hoesjes print in PDF vanuit de Acrobat Reader dan krijg ik te
+kleine hoesjes. Hoe kan dat?
+
+A. Hendrik Neumann <h-n@gmx.net>: Het probleem is de optie 'Fit to page' die
+er voor zorgt dat Acrobat Reader the pagina verkleint voordat het gaat printen.
+Zet deze optie uit.
+
+
+
+J.I. van Hemert
+
+

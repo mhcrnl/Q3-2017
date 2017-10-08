@@ -1,0 +1,13 @@
+Package: ctk-nettools
+Author: Herimamy RATEFIARIVONY
+Contact: heri@zehc.net
+
+This package is a part of the Chez.com ToolKit for personnal web pages
+hosting service.
+
+This package provides functions to deal with templates in Perl. It
+also provides other functions to do log, to get value from db-file
+(Btree or Hash) and to get the date.  The principle of the templates
+handling is to use an HTTP server to serve the templates. There's also
+a cache handling to speed up templates loading and to have a copy in
+case of a crash of the templates server.

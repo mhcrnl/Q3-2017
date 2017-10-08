@@ -1,0 +1,519 @@
+Next
+====
+
+ * If you have a.c and a.o in the source directory, abuild will find
+   ../a.o to satisfy the bin dependency because of vpath but will use
+   a.o in the link command, which will fail.  Reproduce: create a bin
+   target with a .c file and create the .o file in the source
+   directory.  Abuild fails:
+
+   g++: a.o: No such file or directory
+
+   Fix?  Keep in mind that being able to put a .o file in the source
+   directory is kind of intentional, but current behavior is clearly
+   bad...
+
+   Report from Ben Muzal
+
+ * When abuild reports a case of a build item depending on an unknown
+   build item or a tree depending on an unknown tree AND the top level
+   Abuild.conf file is below a directory with an Abuild.conf file that
+   does not reference it as a child, abuild could suggest that perhaps
+   the user has failed to reference the top-level file as a child.
+   Sometimes people add a new directory and forget to hook it in.  The
+   error message that it references an unknown item doesn't usually
+   steer them to the actual problem.
+
+ * Some kind of progress report during a large build might be nice.
+   This is especially tempting with the numbered prefixes in a -jn
+   build.  Consider a --progress flag that causes something like
+
+   abuild: item (output-dir) [k of n]: ...
+
+   to be printed for each item.  Ideally, n should be the total number
+   of items that will actually build, but maybe it's okay to be sloppy
+   and count interface-only items.  Unlike job numbers used as
+   prefixes, these numbers are non-deterministic for a multithreaded
+   build since they will be assigned as an item is built.  If we count
+   all items that have job numbers and increment the counter whenever
+   itemBuilder is invoked but print the number only in buildItem, it
+   will still give us a good idea of progress and will have very light
+   impact on the code (an item counter, and a flag indicating whether
+   we print its value).  One potential problem would be confusion over
+   the fact that k would almost never match the prefix in a
+   multithreaded build.  A less confusing option might be to give a
+   percentage of items that have completed.  Round down to the nearest
+   integer so we never exceed 99%.  Yet another option would be to not
+   care that the actual order may not match the prefix and to just
+   always use the prefix as k and not care that they come out of
+   order.
+
+ * In >= 1.2, make duplicated dependencies and tree dependencies
+   errors instead of warnings.  This can't be done in 1.1.x because it
+   breaks compatibility.
+
+
+Abuild Lint
+===========
+
+ * Upgrade abuild-lint to make it useful and then include it in
+   abuild-contrib or as its own release.
+
+ * Detect -- in build item names and warn about not meaning private
+   anymore.
+
+ * Notice Rules.mk and any other deprecated files.
+
+ * Detect path duplicated within a file, consider detecting two build
+   items exporting libraries with the same name or with a name that
+   conflicts with something on the system.
+
+ * Make abuild-lint's output more like lintian with a table of error
+   messages and optional explanations.  Have abuild-lint gather up all
+   error messages and, at the top of its output, provide detailed
+   descriptions of each one that it's going to write out.
+
+ * Make sure the override syntax requires an explanation for the
+   override.
+
+ * All uses of $(ENV:...) or $(PARAM:...) in interface files should
+   generate warnings.  People should be explicitly required to
+   override these cases with justification.
+
+
+GUI
+===
+
+Command Builder
+---------------
+
+ * It would be fairly easy to create a GUI for launching abuild akin
+   to what was in Xenon.  Use a fancy dialog to construct an abuild
+   command.  Ideally, it should be possible to select build items from
+   a list for being added to the build set.
+
+Monitor/Inspector
+-----------------
+
+Have an option for abuild to pop up a GUI after traversal.  We would
+be able to do the following things:
+
+ * In pure inspection mode, see a graphical depiction of the
+   dependency graph.  We could possibly present this either in
+   graphical form or in tabular form.  In all cases, we should be able
+   to analyze the graph to find collections of items such that all
+   paths going into the collection pass through a particular edge (as
+   in with a proxy item that depends on private names within itself).
+   This helps us to decrease the visible portions of the graph.  Such
+   a graphical mode should be interactive, allowing things to be
+   expanded and collapsed, and allowing people to trace through
+   forward and reverse dependencies.
+
+ * In montored mode, each node should have a color indicating its
+   dependency runner state (waiting, ready, running, completed,
+   failed, depfailed) so one can watch the overall build progress.
+
+ * Using error/output prefixes and interleaved mode, we could actually
+   associate the output of each build item's build with the item and
+   even show error messages in a different color or otherwise
+   highlighted.
+
+Probably the best way to implement these would be through a
+swing-based GUI that could be started from a Java (or maybe Groovy or
+Groovy + Java) program that would communicate with abuild through a
+socket.
+
+Dependency Visualization
+------------------------
+
+In any dependency visualization, whether static or as part of
+monitoring, it's useful to provide ways to collapse self-contained
+groups of nodes.  There are approaches in graph theory to deal with
+this.  In particular, a node X dominates a node Y if all paths from
+the root to Y cross through X.  Node X is said to be an immediate
+dominator of node Y if X dominates Y but doesn't dominate any other
+node that dominates Y.  (It is the closest dominator to Y.)  A
+dominator tree is a tree in which each node's children are the nodes
+it immediately dominates.  There's good discussion of this on
+Wikipedia under "Dominator (graph theory)".  There's also a paper that
+discusses use of dominator trees in visualization of software
+dependencies Google search for "The Dominance Tree in Visualizing
+Software Dependencies" for a good paper on this.
+
+It turns out that Boost.Graph actually contains an implementation of
+the Lengauer Tarjan Fast Dominator Tree algorithm.
+
+If we compute a dominator tree for the build graph or item graph,
+would visually represent the graph such that all nodes that dominate
+other nodes can be collapsed.
+
+
+Windows Issues
+==============
+
+ * There are some Windows path issues.  You can't use absolute paths
+   in Windows as long as cygwin is in use because cygwin gnu make will
+   not interpret absolute paths in the same way that Windows will for
+   purposes of dependencies in .dep files, library dependencies, etc.
+   Relative paths should work, but they don't always work because
+   Windows seems to have limits on the number of times .. may appear
+   in a path (among possibly other things), and besides, there is no
+   way to construct a relative path to a file under another drive
+   letter.  Ideally, we should be using something like msys and/or
+   gnuwin32 rather than cygwin, along with supporting ActivePerl, but
+   this has major implications since qtest doesn't currently work
+   without cygwin, not to mention the fact that the test suite makes
+   free use of unix constructs.  I believe this problem is also a
+   contributor to the lack of good mingw support, and is certainly
+   the cause of builds not being able to work properly with files
+   spanning multiple drive letters.
+
+ * gen_deps: rewrite in C++ so that it doesn't force a runtime
+   dependency on perl.  It should be a fallback for cases when
+   compilers can't generate dependency information.  With gcc, use -MD
+   -MF -MP to generate proper .dep files.  xlc: "-M -MF a.dep" works,
+   but there is no equivalent to -MP, so we'll need to postprocess.
+   VC: there seems to be a /showIncludes option that we may be able to
+   exploit.  Not sure what versions of VC++ have this.  This will be
+   worth doing if we can remove a runtime dependency on Cygwin for
+   Windows/C++.  For non-Windows systems, requiring perl is not a big
+   deal.
+
+ * There is some kind of Win32 Job API used by the perl Win32::Job
+   classes (CreateJobObject).  This may provide a better solution than
+   our current CTRL-C handling.  As of version boost version 1.38,
+   there is nothing in boost that can do this.
+
+
+Information Extraction
+======================
+
+ * Provide arguments for querying abuild's state, such as listing all
+   trees with locations and dependencies, summarizing the state of all
+   plugin information (which items are plugins in any tree, which tree
+   provides the plugin, and which trees use the plugin), etc.  The
+   --dump-data option will always be available for providing full
+   information, but providing a more human-readable format for
+   commonly needed information will help.  Or maybe provide some
+   sample xslt scripts to the above.
+
+ * Provide a way to get --dump-data's output into a relational
+   database.  Ideally, we shouldn't have to link with sqlite.  Maybe
+   have an option that causes --dump-data to generate a script file
+   that can be used with sqlite3 rather than generating XML data.
+   Alternatively, we can create xsl/perl code that loads directly into
+   a sqlite database or that creates the input file.  It's probably
+   okay if we create the SQL such that an erroneous dumpdata won't
+   load.  For example, the SQL can enforce uniqueness and referential
+   integrity constraints even though they may not be satisfied when
+   there are errors.
+
+
+Compiler/Platform Configuration
+===============================
+
+There is a general problem with compiler options, 32-bit and 64-bit
+compilers, project-specific configuration, supporting compilers that
+aren't known in advance, etc.  This is kind of what toolset was
+designed to handle.  The following items are possibly contradictory or
+interdependent and need to be sorted out better.  These items all
+imply certain things that may need to be done very early in abuild's
+life even before private/bin/get_native_platform_data is called.
+
+ * Need a more flexible way of handling compiler options.  It should
+   be possible to create plugins that add compiler options to
+   internally supported compilers, and options should be able to be
+   meaningfully selected in groups.  For example, it should be
+   possible to add {m32, m64} that can't be specified together and
+   {debug, release} that can't be specified together while allowing
+   debug+m32 or release+m64 or other permutations.  This implies the
+   need for a canonical form.
+
+ * We need some way for people to change the toolset portion of the
+   platform string in a global way for a particular collection of
+   build trees.  Right now, it can only be done for "native" by
+   editing private/bin/get_native_platform_data.
+
+ * Use of ABUILD_FORCE{32,64}_BIT is close for 32/64-bit
+   configurations, but it doesn't always make the platform consistent
+   without the object file format.  For example, ppc64 on rhel5 is
+   32-bit by default, and on Solaris, the platform name doesn't change
+   depending on 32- or 64-bit.  Adding another field to the platform
+   seems like overkill, though generating smarter CPU strings might be
+   worth doing.
+
+ * Perhaps the concept of parent platform types could be genearlized
+   to extend the idea of compatible platform types.
+
+ * Cross compiler support is not fully thought out.  It would be nice
+   to be able to support a cross compiler for something that is cross
+   on one platform and native on another.  For example, we should be
+   able to create a Windows cross compiler for Linux or even a Linux
+   cross compiler that builds for once CPU type on host of another CPU
+   type.  For that matter, we could support 32-bit systems that can
+   build 64-bit code and 32-bit code at the same time even though it
+   could only run the 32-bit code, while having a 64-bit system build
+   both and treat both as native.
+
+ * Since Abuild.interface files are always evaluated in the context of
+   the item providing the interface, it makes it hard to set up a
+   build item whose interface does something conditionally upon the
+   platform type (or platform) of the item using the interface.  With
+   parent platform types and cross-platform dependencies, people can
+   often fall into the trap of coding something in an interface file
+   forgetting that the platform variables are from the context of the
+   dependent node in the build graph rather than the context of the
+   intended end user of the build item.
+
+
+Platform Conditionals
+=====================
+
+There are some problems with this proposal...
+
+The goal is to support some kind of platform-based conditional
+dependency while preserving the fundamental design goal of having a
+static build graph.  We will support this only for build items of type
+native.  Here's how it would work:
+
+ * Native build items can specify some kind of platform-based
+   inclusion/exclusion rules in Abuild.conf.  Maybe we'll add keywords
+   build-if-platform-matches and build-unless-platform-matches, each
+   of which takes arguments of the form a.b.c.d.  Each field can be a
+   fixed string or * and is matched against the corresponding field of
+   the platform identifier.  If both keywords appear, platform strings
+   have to satisfy both.  For example,
+
+   build-if-platform-matches: linux.*.*.gcc *.*.*.xlc
+   build-unless-platform-matches: windows.*.*.*
+
+   would mean to build on linux with gcc and everywhere except windows
+   on xlc.
+
+ * Abuild will first construct and validate the build graph
+   disregarding platform restrictions.  This ensures that the build
+   graph can't be invalid for some combination of available platforms
+   and not for others.
+
+ * Once the build graph is validated, abuild will traverse the build
+   graph again and prune the graph at each node whose platform doesn't
+   satisfy the platform restrictions.
+
+There are several possible implications to think through.  What
+happens with build items that get built "as needed" to satisfy
+platform constraints but then are no longer needed after pruning?  It
+may be that we have to create two build graphs, one that disregards
+platform restrictions and one that doesn't.  The second build graph
+should always be a proper subset of the first one, so there should be
+no possibility of errors existing in the second one.
+
+But actually, it's worse than that.  What about items that get added
+to the build set just to satisfy dependencies that are no longer
+required?  Do we want those?  It's like we have to mark build items as
+explicit or implicit and then prune any unreferenced implicit items
+after paying attention to platform restrictions.
+
+Consider native build items:
+
+a: b c
+b: d
+
+b is 'windows only'
+
+When doing abuild -d from a on a non-windows platform, we only want to
+build a and c, but when doing abuild -b all on a non-windows platform,
+we want a, c, and d.  In the first case, d is an implicit member of
+the build set, and in the second case, d is an explicit member.  For
+the build graph, we can mark things as explicit if they are explicit
+items on selected platforms.  Explicit items on as-needed platforms
+are implicit.  To detect unreferenced implicit members, we could
+traverse the pruned build graph starting from each explicit node and
+mark things as seen when we encounter them.  Then, anything that's not
+seen can be removed.  We'll need to test cases with platform-specific
+dependencies to make sure the logic is sound.  Also consider whether
+the special failure build item used to implement recovery from certain
+types of cycle errors should be explicit.
+
+It would also be nice if this could enable us to express "I want the
+version of X built with compiler A on platform P but the default
+compiler everywhere else."  Try to work that in.
+
+
+Java Problems
+=============
+
+ * Wrapper generation for both groovy and ant creates
+   platform-specific files in the abuild-java directory.  The wrapper
+   is platform-specific because Windows and UNIX need different
+   scripts because of different path formats.  Even if they didn't,
+   the wrapper may have system-specific paths in it.  This means that
+   doing a of a java item on Windows and running the test suite on
+   UNIX, or vice versa, may not work properly.
+
+ * Reconsider using depends task for compile in abuild.xml.
+
+ * Our default java compile rule doesn't notice if a .java file was
+   removed.  Maybe we want to force full recompilation if the list of
+   files changed, or maybe we want to delete class files that appear
+   to have come from non-existent java files.  I'm not sure what
+   happens with nested/inner classes that disappeared....does javac
+   automatically remove the corresponding class files?  This would be
+   an easy experiment to try.
+
+ * Ant seems to not complain when populating an ear file from a
+   classpath that contains non-existent items.  In general, there may
+   be an issue with not getting any notification of non-existent
+   classpath items.  Note that, sometimes, you want to try to create
+   an ear even of some of its contents aren't there, so this may not
+   really be a problem worth fixing.  If we can fix it, we should be
+   able to control on a per-build-item basis whether it is an error
+   condition or just a warning, probably having "error" be the
+   default.
+
+ * Since abuild's java side loads lots of classes (through ant with
+   both backends), it is prone to running out of PermGen space.  This
+   may only be an issue with Sun's JDK.  We have studied the issue and
+   believe that abuild itself is not leaking PermGen space, but it's
+   possible that some ant tasks might be.  Either way, even without
+   leaks, the default 64M is insufficient.  Starting with version
+   1.1.2, abuild invokes java with a higher PermGen space, but it does
+   so using an unsupported extension that is subject to change.
+
+   If PermGen space becomes a problem, abuild's java-builder could
+   monitor its use of PermGen space and try to restart when it is
+   running low.  There are two parts to this: monitoring PermGen space
+   and cleanly restarting in the middle of a build.
+
+   To monitor PermGen space, you can use something like the following:
+
+    import java.lang.management.ManagementFactory;
+    import java.lang.management.MemoryPoolMXBean;
+    import java.lang.management.MemoryUsage;
+    import java.util.List;
+
+    public class PermGen
+    {
+        public static void main(String[] args)
+        {
+            List<MemoryPoolMXBean> poolbeans =
+                ManagementFactory.getMemoryPoolMXBeans();
+            for (MemoryPoolMXBean bean: poolbeans)
+            {
+                if ("PS Perm Gen".equals(bean.getName()))
+                {
+                    MemoryUsage usage = bean.getUsage();
+                    long used = usage.getUsed();
+                    long max = usage.getMax();
+                    long available = max - used;
+                    System.out.println("perm gen available: " + available);
+                }
+            }
+        }
+    }
+
+   The above is fragile and implementation specific.  It is known to
+   work with Sun's JDK 1.6.  It doesn't do anything with the IBM JDK
+   since there is no pool called "PS Perm Gen" and a quick glance
+   doesn't expose any pools that seem to serve the same function.
+   However, just iterating through the list and looking at
+   bean.getName() and bean.toString() may reveal additional
+   information.  Then there's still the question of when to monitor
+   and when to restart.  But all the information is there.
+
+   To handle restart, we will have to extend the protocol between
+   abuild and java-builder to allow a restart.  java-builder will have
+   to send a message back to abuild that says that it has to shut down
+   and can't accept any more jobs.  Then abuild will have to block
+   waiting for java-builder to exit.  The next job will automatically
+   restart it.  This will temporarily serialize the build (at least
+   with respect to Java jobs), but it is probably better than starting
+   a second instance of the java builder, though I suppose that's also
+   an option.  In any case, it will add extra complexity to the
+   already fragile JavaBuilder.cc code and would be best avoided if
+   possible.
+
+
+Known Bugs
+==========
+
+ * Piping ANSI color stuff through ant on Windows doesn't work.  When
+   running qtest from ant on Windows, qtest correctly generates the
+   ansi color codes, but they don't get displayed right through ant,
+   at least in cygwin.
+
+ * With ant 1.7.1, the jar task is not idempotent when multiple
+   filesets add the same directory.  This is reported:
+   https://issues.apache.org/bugzilla/show_bug.cgi?id=45902
+
+ * With ant 1.8.0, there are sometimes extraneous newlines in the
+   output of the exec task.  This was fixed for ant 1.8.1, but the bug
+   was subsequently reopened as additional problems were found.
+   https://issues.apache.org/bugzilla/show_bug.cgi?id=48746
+
+
+Issues, Enhancement Ideas
+=========================
+
+See also "Known Limitations" in the documentation.
+
+ * ../../misc/boost-process contains an implementation of
+   ProcessHandler that uses the Boost.Process library.  This library
+   was a candidate for inclusion in boost as of February, 2011.
+   Consider switching to the Boost.Process implementation if it is
+   accepted into boost and we are ready to move up the minimum boost
+   version requirement.
+
+ * Think about implementing a dependency analyzer that would look at
+   first-level includes to figure out what the correct list of direct
+   dependencies should be.
+
+ * Consider having an abuild template generator that can run if no
+   Abuild.conf or other files are present.  This would spit out
+   commented template files.  Alternatively, could be a command-line
+   wizard or something.
+
+ * It would be nice if there were a mechanism for providing
+   documentation on traits so that --list-traits could tell the user
+   how each trait was intended to be used.
+
+ * Clean up ~/source/examples/java/native/abuild and use as JNI
+   example
+
+ * ccxx: Consider enforcing that no object file may appear both as a
+   program and a library object file and that no object file may be
+   generated from more than one source file (with different suffixes).
+   This would break some existing builds.
+
+ * In the manual, it would be nice if we could use higher resolution
+   figures for the PDF than for the HTML.  There is plenty of material
+   in the sagehill.net DocBook XSL guide about this.  The best
+   solution would be to convert the figures to SVG.  It may work to
+   use graphviz to generate the SVG.
+
+ * Orphan target detection in make won't find orphan targets in
+   subdirectories.  This is very hard to fix in general.  We could
+   search directories represented in the source lists, but that
+   wouldn't help if we removed the last file from a subdirectory.  For
+   now, we'll just not handle this case.
+
+ * Mingw support isn't that complete: see known limitations in the
+   documentation and comments in private/list_platforms.  If it is
+   improved, consider improving support for recognizing it so that the
+   user doesn't have to set MINGW=1.  Search for mingw in the
+   documentation and adjust as needed.
+
+ * Consider adding a trouble shooting section to the documentation,
+   web site, or wiki
+
+    - example: library name inconsistency between Abuild.mk and
+      Abuild.interface
+
+ * abuild_contrib: include a generic UNIX compiler configurable plugin
+   for which the user can set up the compliation commands using
+   autoconf.  Consider including a libtool configurable plugin or
+   using libtool in this plugin.
+
+ * Interface parser handles all reserved words as regular text where
+   appropriate except else, elseif, and endif.  See comments in
+   interface.qfl.  Workaround: just quote one of the characters.  See
+   "keywords" in the interface-parser test suite.

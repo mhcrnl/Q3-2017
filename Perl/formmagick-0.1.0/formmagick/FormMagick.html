@@ -1,0 +1,340 @@
+<HTML>
+<HEAD>
+<TITLE>FormMagick - easily create CGI form-based applications</TITLE>
+<LINK REV="made" HREF="mailto:none">
+</HEAD>
+
+<BODY>
+
+<!-- INDEX BEGIN -->
+
+<UL>
+
+	<LI><A HREF="#NAME">NAME</A>
+	<LI><A HREF="#SYNOPSIS">SYNOPSIS</A>
+	<LI><A HREF="#DESCRIPTION">DESCRIPTION</A>
+	<UL>
+
+		<LI><A HREF="#WARNING_VAPOURWARE">WARNING: VAPOURWARE</A>
+		<LI><A HREF="#How_it_works_">How it works:</A>
+		<LI><A HREF="#Form_descriptions">Form descriptions</A>
+		<UL>
+
+			<LI><A HREF="#Sample_form_description">Sample form description</A>
+			<LI><A HREF="#Notes_on_form_descriptions">Notes on form descriptions</A>
+		</UL>
+
+		<LI><A HREF="#Sample_HTML_template">Sample HTML template</A>
+		<LI><A HREF="#Validation_routines_provided_">Validation routines provided:</A>
+		<LI><A HREF="#Localisation_L10N_">Localisation (L10N)</A>
+	</UL>
+
+	<LI><A HREF="#BUGS">BUGS</A>
+	<LI><A HREF="#AUTHOR">AUTHOR</A>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<H1><A NAME="NAME">NAME</A></H1>
+<P>
+FormMagick - easily create CGI form-based applications
+
+<P>
+<HR>
+<H1><A NAME="SYNOPSIS">SYNOPSIS</A></H1>
+<P>
+<PRE>  use FormMagick;
+</PRE>
+<P>
+<PRE>  my $f = new FormMagick(TYPE =&gt; FILE,  SOURCE =&gt; 'myform.xml')
+  my $f = new FormMagick(TYPE =&gt; STRING,  SOURCE =&gt; $myform)
+</PRE>
+<P>
+<PRE>  $f-&gt;display();
+</PRE>
+<P>
+<HR>
+<H1><A NAME="DESCRIPTION">DESCRIPTION</A></H1>
+<P>
+<HR>
+<H2><A NAME="WARNING_VAPOURWARE">WARNING: VAPOURWARE</A></H2>
+<P>
+This entire application is vapourware. This documentation is provided
+merely as a description of what I hope to implement.
+
+<P>
+<HR>
+<H2><A NAME="How_it_works_">How it works:</A></H2>
+<P>
+You (the developer) provide at least:
+
+<UL>
+<LI>
+<P>
+Form descriptions (XML)
+
+<LI>
+<P>
+HTML templates (Text::Template?)
+
+</UL>
+<P>
+And may optionally provide:
+
+<UL>
+<LI>
+<P>
+Existing data (in a database of some kind)
+
+<LI>
+<P>
+L10N lexicons (Locale::Maketext)
+
+<LI>
+<P>
+Validation routines (Perl)
+
+</UL>
+<P>
+FM brings them together to create a web-based CGI forms interface.
+
+<P>
+<HR>
+<H2><A NAME="Form_descriptions">Form descriptions</A></H2>
+<P>
+<HR>
+<H3><A NAME="Sample_form_description">Sample form description</A></H3>
+<P>
+<PRE>  &lt;form title=&quot;My form application&quot; header=&quot;myform_header.tmpl&quot; 
+    footer=&quot;myform_footer.tmpl&quot; post-event=&quot;submit_order&quot;&gt;
+    &lt;page title=&quot;Personal details&quot; template=&quot;myform_page.tmpl&quot;&gt;
+      &lt;field id=&quot;firstname&quot; label=&quot;Your first name&quot; type=&quot;text&quot; 
+        validation=&quot;nonblank&quot;/&gt;
+      &lt;field id=&quot;lastname&quot; label=&quot;Your surname&quot; type=&quot;text&quot; 
+        validation=&quot;nonblank&quot;/&gt;
+      &lt;field id=&quot;username&quot; label=&quot;Choose a username&quot; type=&quot;text&quot; 
+        validation=&quot;username, length(4)&quot;/&gt;
+    &lt;/page&gt;
+    &lt;page title=&quot;Payment details&quot;&gt;
+      &lt;field id=&quot;cardtype&quot; label=&quot;Credit card type&quot; type=&quot;select&quot; 
+        options=&quot;list_credit_card_types&quot; validation=&quot;credit_card_type&quot;/&gt;
+      &lt;field id=&quot;cardnumber&quot; label=&quot;Credit card number&quot; type=&quot;text&quot; 
+        validation=&quot;credit_card_number&quot;/&gt;
+      &lt;field id=&quot;cardexpiry&quot; label=&quot;Expiry date (MM/YY)&quot; type=&quot;text&quot; 
+        validation=&quot;credit_card_expiry&quot;/&gt;
+    &lt;/page&gt;
+  &lt;/form&gt;
+</PRE>
+<P>
+<HR>
+<H3><A NAME="Notes_on_form_descriptions">Notes on form descriptions</A></H3>
+<P>
+* = compulsory
+
+<P>
+Form
+
+<DL>
+<DT><STRONG><A NAME="item__">[*] title (text)</A></STRONG><DD>
+<DT><STRONG><A NAME="item_header">header template (name of template)</A></STRONG><DD>
+<DT><STRONG><A NAME="item_footer">footer template (name of template)</A></STRONG><DD>
+<DT><STRONG><A NAME="item_pre">pre event (subroutine name)</A></STRONG><DD>
+<DT><STRONG><A NAME="item_post">post event  (subroutine name)</A></STRONG><DD>
+</DL>
+<P>
+Page
+
+<DL>
+<DT><STRONG>[*] title</STRONG><DD>
+<DT><STRONG><A NAME="item_description">description (text)</A></STRONG><DD>
+<DT><STRONG><A NAME="item_template">template (name of template)</A></STRONG><DD>
+<DT><STRONG>pre event (subroutine name)</STRONG><DD>
+<DT><STRONG>post event  (subroutine name)</STRONG><DD>
+</DL>
+<P>
+Field
+
+<DL>
+<DT><STRONG>[*] id</STRONG><DD>
+<DT><STRONG><A NAME="item_label">label (text)</A></STRONG><DD>
+<DT><STRONG><A NAME="item_value">value (text or subroutine name)</A></STRONG><DD>
+<DT><STRONG><A NAME="item_type">type (text)</A></STRONG><DD>
+<DL>
+<DT><STRONG><A NAME="item_optional">optional add-ons for various types</A></STRONG><DD>
+<DT><STRONG><A NAME="item_options">options (list or subroutine)</A></STRONG><DD>
+<DT><STRONG><A NAME="item_size">size (number (or subroutine?))</A></STRONG><DD>
+<DT><STRONG><A NAME="item_etc">etc</A></STRONG><DD>
+</DL>
+<DT><STRONG><A NAME="item_validation">validation (subroutine name)</A></STRONG><DD>
+</DL>
+<P>
+<HR>
+<H2><A NAME="Sample_HTML_template">Sample HTML template</A></H2>
+<P>
+<PRE>  &lt;table&gt;
+  {
+    foreach $f (@fields) {
+      $OUT .= qq(
+        &lt;tr&gt;
+          &lt;td&gt;$f-&gt;{label}&lt;/td&gt;
+          &lt;td&gt;&lt;input type=&quot;$f-&gt;{type}&quot; name=&quot;$f-&gt;{id}&quot;&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+      );
+  }
+  &lt;/table&gt;
+</PRE>
+<P>
+<HR>
+<H2><A NAME="Validation_routines_provided_">Validation routines provided:</A></H2>
+<DL>
+<DT><STRONG><A NAME="item_nonblank">nonblank</A></STRONG><DD>
+<P>
+The data is not an empty string: <CODE>$data ne &quot;&quot;</CODE>
+
+
+
+<DT><STRONG><A NAME="item_number">number</A></STRONG><DD>
+<P>
+The data is a number (strictly speaking, data is a positive number): <CODE>$data =~ /^[0-9.]$/</CODE>
+
+
+
+<DT><STRONG><A NAME="item_word">word</A></STRONG><DD>
+<P>
+The data looks like a word: <CODE>$data !~ /\W/</CODE>
+
+
+
+<DT><STRONG><A NAME="item_length">length(n)</A></STRONG><DD>
+<P>
+The data is at least <CODE>n</CODE> characters long: <CODE>length($data) &amp;gt;= $n</CODE>
+
+
+
+<DT><STRONG><A NAME="item_url">url</A></STRONG><DD>
+<P>
+The data looks like a (normalish) URL: <CODE>$data =~ m!(http|ftp)://[\w/.-/)!</CODE>
+
+
+
+<DT><STRONG><A NAME="item_email">email</A></STRONG><DD>
+<P>
+The data looks more or less like an internet email address:
+<CODE>$data =~ /\@/</CODE>
+
+
+
+<DT><STRONG><A NAME="item_domain_name">domain_name</A></STRONG><DD>
+<P>
+The data looks like an internet domain name.
+
+<DT><STRONG><A NAME="item_ip_number">ip_number</A></STRONG><DD>
+<P>
+The data looks like a valid IP number.
+
+<DT><STRONG><A NAME="item_username">username</A></STRONG><DD>
+<P>
+The data looks like a good, valid username
+
+<DT><STRONG><A NAME="item_password">password</A></STRONG><DD>
+<P>
+The data looks like a good password
+
+<DT><STRONG><A NAME="item_date">date</A></STRONG><DD>
+<P>
+The data looks like a date.
+
+<DT><STRONG><A NAME="item_country">country</A></STRONG><DD>
+<P>
+The data is a standard 2-letter country code
+
+<DT><STRONG><A NAME="item_US_state">US_state</A></STRONG><DD>
+<P>
+The data is a standard 2-letter US state abbreviation
+
+<DT><STRONG><A NAME="item_US_zipcode">US_zipcode</A></STRONG><DD>
+<P>
+The data looks like a valid US zipcode
+
+<DT><STRONG><A NAME="item_credit_card_type">credit_card_type</A></STRONG><DD>
+<P>
+The data looks like a valid type of credit card (eg Visa, Mastercard)
+
+<DT><STRONG><A NAME="item_credit_card_number">credit_card_number</A></STRONG><DD>
+<P>
+The data looks like a valid credit card number
+
+<DT><STRONG><A NAME="item_credit_card_expiry">credit_card_expiry</A></STRONG><DD>
+<P>
+The data looks like a valid credit card expiry date
+
+</DL>
+<P>
+These validation routines may be overridden, and others may be added on a
+per-application basis.
+
+<P>
+<HR>
+<H2><A NAME="Localisation_L10N_">Localisation (L10N)</A></H2>
+<P>
+FormMagick uses the <CODE>Locale::Maketext</CODE> module for L10N. L10N lexicons are kept in an L10N subdirectory and given
+names like L10N/fr.pm. The lexicons take the form of a Perl hash:
+
+<P>
+<PRE>  %Lexicon = (
+        &quot;Hello&quot;         =&gt; &quot;Bonjour&quot;,
+        &quot;Click here&quot;    =&gt; &quot;Appuyez ici&quot;
+  );
+</PRE>
+<P>
+Localisation preferences are picked up from the HTTP_ACCEPT_LANGUAGE
+environment variable passed by the user's browser.
+
+<P>
+Localisation is performed on:
+
+<UL>
+<LI>
+<P>
+Form titles
+
+<LI>
+<P>
+Page titles and descriptions
+
+<LI>
+<P>
+Field labels
+
+<LI>
+<P>
+Validation error messages
+
+</UL>
+<P>
+If you wish to localise other textual information such as your HTML
+Templates, you will have to explicitly call the l10n routines.
+
+<P>
+<HR>
+<H1><A NAME="BUGS">BUGS</A></H1>
+<P>
+Probably some in the sample code in this docco, but there's no real code
+yet.
+
+<P>
+<HR>
+<H1><A NAME="AUTHOR">AUTHOR</A></H1>
+<P>
+Kirrily ``Skud'' Robert &lt;<A
+HREF="mailto:skud@infotrope.net">skud@infotrope.net</A>&gt;
+
+<P>
+More information about FormMagick may be found at <A
+HREF="http://infotrope.net/opensource/software/fm/">http://infotrope.net/opensource/software/fm/</A>
+
+
+</BODY>
+
+</HTML>

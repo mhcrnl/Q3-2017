@@ -1,0 +1,23 @@
+imc THANKS file
+
+imc has originally been written by me, Peter Verthez, under impulse of a
+contest written out by my former sysadmin at work, Martin Robinson, who
+also submitted the original requirements for the program and suggested
+various improvements afterwards (note however that the program was not
+written under work hours, and so is unrelated to my employer).  And if it
+wasn't for my competitor, Donny Janssens, it may not have grown so big so
+quickly...
+
+The following people have influenced the later releases of imc, by
+reporting problems, suggesting improvements or submitting actual code:
+
+- Francois Lorho (francois.lorho@sandwich.pfizer.com)
+- Erik Maryniak (e.maryniak@pobox.com)
+- Jean-Dominique Dessaint (jdd@hptnodur.grenoble.hp.com)
+- Masuo Gates (zaphod@ipninc.com)
+- Kevin Burtch (kburtch@bellsouth.net)
+- Weidung Chuang (WChuang@longboard.com)
+- Tina Marie (tina@tripacerdriver.com)
+
+Still others have suggested improvements that have not been incorporated
+yet.  Maybe later...

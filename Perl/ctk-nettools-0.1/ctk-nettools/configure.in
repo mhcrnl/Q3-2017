@@ -1,0 +1,58 @@
+# ctk-nettools: a perl module to deal with templates by http
+# Copyright (C) 2000 Cyril Bouthors (cyril@bouthors.org)
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+AC_INIT(Makefile.in)
+
+AC_ARG_WITH(TEMPLATES_URL, [--with-TEMPLATES_URL=<url>], [TEMPLATES_URL=$withval], [TEMPLATES_URL=http://template.chez.com])
+AC_MSG_CHECKING(TEMPLATES_URL)
+TEMPLATES_URL=${TEMPLATES_URL%/}
+AC_SUBST(TEMPLATES_URL)
+AC_MSG_RESULT($TEMPLATES_URL)
+
+AC_ARG_WITH(loglevel, [--with-loglevel=[0-9]+], [loglevel=$withval], [loglevel=1])
+AC_MSG_CHECKING(loglevel)
+AC_SUBST(loglevel)
+AC_MSG_RESULT($loglevel)
+
+prefix=${prefix%/}/
+
+AC_ARG_WITH(perl_dir, [--with-perl_dir=<PATH>], [perl_dir=$withval], [perl_dir=$prefix"lib/site_perl"])
+AC_MSG_CHECKING(perl_dir)
+AC_SUBST(perl_dir)
+AC_MSG_RESULT($perl_dir)
+
+AC_ARG_WITH(bin_perl, [--with-bin_perl=<PATH>], [bin_perl=$withval], [bin_perl=/ctk/bin/perl])
+AC_MSG_CHECKING(bin_perl)
+AC_SUBST(bin_perl)
+AC_MSG_RESULT($bin_perl)
+
+
+AC_ARG_WITH(cache_dir, [--with-cache_dir=<PATH>], [cache_dir=$withval], [cache_dir="/var/tmp"])
+AC_MSG_CHECKING(cache_dir)
+AC_SUBST(cache_dir)
+AC_MSG_RESULT($cache_dir)
+
+
+
+AC_OUTPUT(
+Template.pm
+Time.pm
+DBUtils.pm
+Log.pm
+Makefile
+)

@@ -1,0 +1,39 @@
+#include "grid200x200.imc"
+
+MOVETO 20 10
+TEXT "Normal text"
+
+TEXTCOLOR X11 blue
+MOVETO 20 25
+TEXT "Blue text"
+
+MOVETO 20 40
+TEXT "Red text" COLOR X11 red
+
+MOVETO 20 55
+TEXT "Tiny violet text" COLOR X11 violet SIZE tiny
+
+MOVETO 20 70
+TEXT "Medium black text" SIZE medium COLOR RGB 0 0 0
+
+MOVETO 20 85
+TEXTSIZE LARGE
+TEXT "Large purple text" COLOR X11 purple
+
+MOVETO 20 105
+TEXTCOLOR X11 black
+TEXT "Giant black text" SIZE giant
+
+MOVETO 20 125
+TEXT "Another medium text" SIZE 7x13
+
+MOVETO 20 140
+TEXTSIZE 5x8
+TEXT "Another tiny text" COLOUR x11 NavyBlue
+
+MOVETO 20 160
+TEXT "Text with semi-colon; OK?"
+
+MOVETO 20 180
+TEXT "Text with special \cases: \" \\"
+

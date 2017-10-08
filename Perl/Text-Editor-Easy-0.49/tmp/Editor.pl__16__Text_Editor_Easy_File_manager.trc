@@ -1,0 +1,249 @@
+File_manager de l'instance 139721599598776 (demo3.pl)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 16, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f1358207d00)
+FILE_NAME  : ./demo3.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# Here is an example of
+# Text::Editor::Easy object creation with
+# a way to make actions on it
+# (a new "client thread" have been
+# created to execute your sub).
+#
+# The first argument of the sub is
+# the newly created Text::Editor::Easy object.
+#
+# "Text::Editor::Easy->manage_event" is called
+# internally (by the initial thread).
+#
+# To execute it, still press F5 and
+# wait a few seconds for actions
+# to be performed...
+#
+
+use strict;
+use lib 'lib';
+
+use Text::Editor::Easy;
+
+my $editor_thread_0 = Text::Editor::Easy->new(
+    {
+        'sub'      => 'main',    # Sub for action
+    }
+);
+
+print "The user have closed the window\n";
+if ( -f "Uninteresting_data.txt" ) {
+    print "File \"Uninteresting_data.txt\" will be removed\n";
+    $editor_thread_0->close;
+    if ( !unlink("Uninteresting_data.txt") ) {
+        print "Can't remove file \"Uninteresting_data.txt\" : $!\n";
+    }
+}
+
+sub main {
+    my ($editor) = @_;
+
+    # You can now act on the Text::Editor::Easy object with your program and
+    # the user can edit things too !
+    # Dangerous, isn't it ?
+
+    $editor->focus;    # To see the cursor position, not mandatory
+    $editor->insert("\$editor = $editor\n");
+    $editor->insert("Second line if user is slower than me\n");
+    $editor->insert("\nother line ...\n\nother line");
+
+    my $line = $editor->number(4);
+    $line->select( 1, 5 );
+    sleep 1;
+
+    $editor->cursor->set( 3, $line );
+    $editor->deselect;
+    sleep 1;
+
+    $editor->insert( $line->text . " : copied\n" );
+    sleep 1;
+
+    $editor->erase(3);
+    $editor->save("Uninteresting_data.txt");
+}
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 1590
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+===> Dans read_ à partir de seek_start = 0 (lu sur fichier)
+	who = I0, text = #
+Texte de la ligne 1 : |#|
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 16, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f1358207d00)
+FILE_NAME  : ./demo3.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# Here is an example of
+# Text::Editor::Easy object creation with
+# a way to make actions on it
+# (a new "client thread" have been
+# created to execute your sub).
+#
+# The first argument of the sub is
+# the newly created Text::Editor::Easy object.
+#
+# "Text::Editor::Easy->manage_event" is called
+# internally (by the initial thread).
+#
+# To execute it, still press F5 and
+# wait a few seconds for actions
+# to be performed...
+#
+
+use strict;
+use lib 'lib';
+
+use Text::Editor::Easy;
+
+my $editor_thread_0 = Text::Editor::Easy->new(
+    {
+        'sub'      => 'main',    # Sub for action
+    }
+);
+
+print "The user have closed the window\n";
+if ( -f "Uninteresting_data.txt" ) {
+    print "File \"Uninteresting_data.txt\" will be removed\n";
+    $editor_thread_0->close;
+    if ( !unlink("Uninteresting_data.txt") ) {
+        print "Can't remove file \"Uninteresting_data.txt\" : $!\n";
+    }
+}
+
+sub main {
+    my ($editor) = @_;
+
+    # You can now act on the Text::Editor::Easy object with your program and
+    # the user can edit things too !
+    # Dangerous, isn't it ?
+
+    $editor->focus;    # To see the cursor position, not mandatory
+    $editor->insert("\$editor = $editor\n");
+    $editor->insert("Second line if user is slower than me\n");
+    $editor->insert("\nother line ...\n\nother line");
+
+    my $line = $editor->number(4);
+    $line->select( 1, 5 );
+    sleep 1;
+
+    $editor->cursor->set( 3, $line );
+    $editor->deselect;
+    sleep 1;
+
+    $editor->insert( $line->text . " : copied\n" );
+    sleep 1;
+
+    $editor->erase(3);
+    $editor->save("Uninteresting_data.txt");
+}
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 1590
+FIRST      : ARRAY(0x7f1358219a18)
+LAST       : ARRAY(0x7f1358219a18)
+================================================================================
+	Level 1 : ARRAY(0x7f1358219a18)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 2
+	TEXT       : #
+	PARENT       : ARRAY(0x7f1358207d00)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f1358219a18)
+
+Le dump a renvoyé 0 erreurs
+
+Dans next_ de ARRAY(0x7f1358219a18)
+Parent 1590| segment précédant 2
+===> Dans read_ à partir de seek_start = 2 (lu sur fichier)
+Segment next lu : seek_end = 26
+Dans next_ de ARRAY(0x7f13582148a0)
+Parent 1590| segment précédant 26
+===> Dans read_ à partir de seek_start = 26 (lu sur fichier)
+Segment next lu : seek_end = 68
+Dans next_ de ARRAY(0x7f13582147f8)
+Parent 1590| segment précédant 68
+===> Dans read_ à partir de seek_start = 68 (lu sur fichier)
+Segment next lu : seek_end = 98
+Dans next_ de ARRAY(0x7f1358221b88)
+Parent 1590| segment précédant 98
+===> Dans read_ à partir de seek_start = 98 (lu sur fichier)
+Segment next lu : seek_end = 133
+Dans next_ de ARRAY(0x7f1358219a18)
+Dans next_ de ARRAY(0x7f13582148a0)
+Dans next_ de ARRAY(0x7f13582147f8)
+Dans next_ de ARRAY(0x7f1358221b88)
+Dans next_ de ARRAY(0x7f1358218928)
+Parent 1590| segment précédant 133
+===> Dans read_ à partir de seek_start = 133 (lu sur fichier)
+Segment next lu : seek_end = 165
+Dans next_ de ARRAY(0x7f1358214420)
+Parent 1590| segment précédant 165
+===> Dans read_ à partir de seek_start = 165 (lu sur fichier)
+Segment next lu : seek_end = 167
+Dans next_ de ARRAY(0x7f1358219808)
+Parent 1590| segment précédant 167
+===> Dans read_ à partir de seek_start = 167 (lu sur fichier)
+Segment next lu : seek_end = 202
+Dans next_ de ARRAY(0x7f135821ce50)
+Parent 1590| segment précédant 202
+===> Dans read_ à partir de seek_start = 202 (lu sur fichier)
+Segment next lu : seek_end = 249
+Dans next_ de ARRAY(0x7f1358214480)
+Parent 1590| segment précédant 249
+===> Dans read_ à partir de seek_start = 249 (lu sur fichier)
+Segment next lu : seek_end = 251
+Dans next_ de ARRAY(0x7f13582188e0)
+Parent 1590| segment précédant 251
+===> Dans read_ à partir de seek_start = 251 (lu sur fichier)
+Segment next lu : seek_end = 298
+Dans next_ de ARRAY(0x7f135821ccd0)
+Parent 1590| segment précédant 298
+===> Dans read_ à partir de seek_start = 298 (lu sur fichier)
+Segment next lu : seek_end = 336
+Dans next_ de ARRAY(0x7f135821d2b8)
+Parent 1590| segment précédant 336
+===> Dans read_ à partir de seek_start = 336 (lu sur fichier)
+Segment next lu : seek_end = 338
+Dans next_ de ARRAY(0x7f1358219868)
+Parent 1590| segment précédant 338
+===> Dans read_ à partir de seek_start = 338 (lu sur fichier)
+Segment next lu : seek_end = 374
+Dans next_ de ARRAY(0x7f135821d828)
+Parent 1590| segment précédant 374
+===> Dans read_ à partir de seek_start = 374 (lu sur fichier)
+Segment next lu : seek_end = 407
+Dans next_ de ARRAY(0x7f1358219940)
+Parent 1590| segment précédant 407
+===> Dans read_ à partir de seek_start = 407 (lu sur fichier)
+Segment next lu : seek_end = 428
+Dans next_ de ARRAY(0x7f13582193e8)
+Parent 1590| segment précédant 428
+===> Dans read_ à partir de seek_start = 428 (lu sur fichier)
+Segment next lu : seek_end = 430
+Dans next_ de ARRAY(0x7f1358219e98)
+Parent 1590| segment précédant 430
+===> Dans read_ à partir de seek_start = 430 (lu sur fichier)
+Segment next lu : seek_end = 431
+Dans next_ de ARRAY(0x7f1358221f00)
+Parent 1590| segment précédant 431
+===> Dans read_ à partir de seek_start = 431 (lu sur fichier)
+Segment next lu : seek_end = 443

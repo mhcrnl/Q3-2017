@@ -1,0 +1,44 @@
+% Author: J.I. van Hemert
+% Date: 2003/03/07
+% Description: slim case for TDK
+\enlargethispage{5\baselineskip}
+\noindent
+\vspace{-0.5mm}
+\framebox{\parbox[c][11mm][t]{12.0cm}
+{
+	\DCflaptext~
+}}
+
+\noindent
+\vspace{-0.5mm}
+\framebox{\rotatebox{180}{\parbox[c][0.5mm][t]{12.0cm}
+{
+    \hspace*{\fill}\raisebox{-0.2mm}[1.25mm][2.5mm]{\small\DCsidetext}\hspace*{\fill}
+}}}
+
+\noindent
+\vspace{-0.5mm}
+\framebox{\parbox[c][112mm][t]{112mm}
+{
+		\rotatebox{-90}{\parbox[c][112mm][t]{\linewidth}{
+			\vspace{2\baselineskip}
+			\DCformattedhead{0.9\linewidth}
+			\vspace*{\fill}
+			\DCpicture
+			\parbox{\linewidth}{\begin{center}
+				\parbox{0.8\linewidth}{{\footnotesize\sffamily\DCdiscinfo}}
+			\end{center}}
+		}}
+}}
+
+\noindent
+\vspace{-0.5mm}
+\framebox{\parbox[c][112mm][t]{112mm}
+{
+	\rotatebox{-90}{\parbox[c][112mm][t]{\linewidth}{
+	\DCformattedhead{0.97\linewidth}
+	\vspace{0.25\baselineskip}
+	\DCtracks
+	}}
+}}
+

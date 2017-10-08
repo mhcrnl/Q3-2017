@@ -1,0 +1,20 @@
+abuild: build starting
+abuild: old (abuild-java): all
+Buildfile: --abuild.xml--
+[deprecate] *** DEPRECATION WARNING *** (abuild version 1.1): abuild.use-local-hooks is no longer needed; abuild now always behaves as if this is set
+
+init:
+    [mkdir] Created dir: --topdir--/hook-build-items/old/abuild-java/empty
+    [mkdir] Created dir: --topdir--/hook-build-items/old/abuild-java/classes
+    [mkdir] Created dir: --topdir--/hook-build-items/old/abuild-java/dist
+    [mkdir] Created dir: --topdir--/hook-build-items/old/abuild-java/src/java
+    [mkdir] Created dir: --topdir--/hook-build-items/old/abuild-java/src/resources
+    [mkdir] Created dir: --topdir--/hook-build-items/old/abuild-java/src/web
+    [mkdir] Created dir: --topdir--/hook-build-items/old/abuild-java/src/conf
+
+-pre-compile:
+     [echo] pre-compile hook
+
+BUILD SUCCESSFUL
+Total time: <time>
+abuild: build complete

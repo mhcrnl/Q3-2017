@@ -1,0 +1,26 @@
+2001-05-14 Jin-Ho King <acramon1@users.sourceforge.net>
+	* IRC/Stream.pm: added sign on type
+	* IRC/Stream.pm: fixed logout error
+	* gui3.pl: a Perl/Tk user interface - awesome! (well, kinda)
+	* README: slightly updated
+
+2001-04-01 Jin-Ho King <acramon1@users.sourceforge.net>
+	* IRC/Stream.pm: now works completely without ircbase!
+	* IRC/Stream.pm: fixed the annoying bug that made characters disappear
+
+2001-03-31 Jin-Ho King <acramon1@users.sourceforge.net>
+	* IRC/Stream.pm: rewriting to remove dependency on ircbase!
+
+2001-03-12 Jin-Ho King <acramon1@users.sourceforge.net>
+
+	* IRC/Stream.pm: buddy list stuff added
+	* basetest.pl: demonstrates buddy list stuff now
+
+2001-03-11 Jin-Ho King <acramon1@users.sourceforge.net>
+
+	* IRC/Stream.pm: works! works! yippee!
+
+2001-03-10 Jin-Ho King <acramon1@users.sourceforge.net>
+
+	* IRC/Stream.pm: changing interface, might not work
+	* IRC/Stream.pm: added documentation

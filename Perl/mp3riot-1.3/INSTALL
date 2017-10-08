@@ -1,0 +1,11 @@
+You can copy this program to any directory. 
+
+In order to execute it, you need perl. 
+
+If you have not installed the perl module MP3::Info.pm yet,
+then you have to copy it into your perl module directory.
+
+If you want to use the option md5doublicates, the you also need Digest::MD5.
+
+See the MANUAL for further details.
+

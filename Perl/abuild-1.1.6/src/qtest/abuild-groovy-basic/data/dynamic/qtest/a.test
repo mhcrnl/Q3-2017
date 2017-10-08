@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+require 5.008;
+BEGIN { $^W = 1; }
+use strict;
+
+require TestDriver;
+
+my $td = new TestDriver('demo');
+
+my %exp = ('VAR1' => 'first value',
+	   'VAR2' => 'second value',
+	   'POTATO' => 'one two three',
+	   'SPACKLE' => 'four five six',
+	   'TRUTH1' => '1');
+
+foreach my $v (sort keys %exp)
+{
+    $td->runtest("$v",
+		 {$td->STRING => $ENV{$v} . "\n"},
+		 {$td->STRING => $exp{$v} . "\n"},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+$td->runtest("test coverage",
+	     {$td->COMMAND => "abuild -C .. tctest"},
+	     {$td->REGEXP => "abuild:.*: tctest\\b.*", $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->report(6);

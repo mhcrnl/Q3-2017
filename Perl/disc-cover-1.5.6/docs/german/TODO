@@ -1,0 +1,24 @@
+
+2000-03-05
+
+TODO - Disc-Cover
+
+- Korrigieren des Problems, dass mehrerer Einträge im cddb Cache, die
+  gleiche DiscID haben.
+
+- Warten auf die neue cddb2 Spezifikation und sehen was es Neues gibt!
+
+- Möglichkeiten für Stücke mit sehr langen Titeln (Abkürzen? Intakt lassen?).
+
+- Grafische Benutzeroberfläche (gtk? python?), die Informationen anzeigt und
+  ein Editieren ermöglicht.
+
+- Templates für das Formatieren der Cover verwenden.
+
+- Idee: ein GIMP-Plugin erstellen, damit der Benutzer das Resultat leichter
+  anpassen kann.
+
+- Idee: Besorgen von Liedertexten und Erstellen kleiner Broschüren.
+
+
+J.I. van Hemert

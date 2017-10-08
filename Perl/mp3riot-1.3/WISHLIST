@@ -1,0 +1,13 @@
+Wishlist for the upcomming version 1.3 of mp3riot:
+
+### done! - extend grouping also for other outputformats like m3u, pls etc
+### done! - rename special characters in filenames for groupings!!!!
+### done! - b4s (playlistformat) output
+
+- extend grouping in a way to select one file to more than on group
+
+### done! - sort filelist by values (criteria like GENRE, ARTIST, BITRATE etc.)
+
+- print doublicate filenames with their directories
+ 
+### done! - add md5doublicates and seekvalues to the config wizard

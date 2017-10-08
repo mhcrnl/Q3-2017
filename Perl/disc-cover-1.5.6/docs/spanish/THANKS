@@ -1,0 +1,42 @@
+
+2000-03-05
+
+THANKS - Disc-Cover
+
+Mi agradecimiento a las siguientes personas:
+  - Alexander Werner por una lista correcta de modulos perl.
+  - Bart Warmderdam por la creacion del paquete para debian y por indicar diversos errores.
+  - Barton C Massey por el archivo cddb para arreglar el problema con los titulos *muy* largos.
+  - Christian Delbaere por la sugerencia de una mejor distribucion para las portadas.
+  - Christian Perrier por la 'colour patch'.
+  - Colin Marquardt por algunas sugerencias, principalmente el truco \emph sobre LaTeX y las sugerencias para el formato PDF.
+  - Dieter Faulbaum por un mejor manejo del nombre de ficcheros.
+  - Gianluca Granero por crear los paquetes para RedHat.
+  - Grant por la mejor dependencia de Cdcd.
+  - Javier M. de Lucas Cruz por traducir la documentacion al español.
+  - Jean-Michel Rouet por arreglar dos bugs en la parte que ejecuta LaTeX.
+  - Joerg Plate por enviarme tantos parches.
+  - Maarten Lamers por la idea del nombre.
+  - Marc LeMaire por encontrar el orden de compilacion de los modulos de Perl.
+  - Marcel Mol por los formatos ascii y cdlabelgen y muchos, muchos otros arreglos y cambios.
+  - Martin Schrode por encontrar un numero de errores.
+  - Nick Stephen por la idea de tener un formato de disposicion distinta.
+  - Oliver Kirchkam por su ayuda y por proporcionar una cuenta de pruebas para superar los problemas de los numeros diskid.
+  - Peter Crystal por codigo de soporte de proxys.
+  - Ralf Uhlig por el parche del enlace a la cache cddb y por darse  cuenta de que dos diskids iguales pueden existir en la cache.
+  - Richard Martin por la sugerencia y el script de Perl para usar los ficheros cddb.
+  - Richard Sloeserwij por mencionar el cambio de artista/titulo en los laterales.
+  - Roland ? por la sugerencia (y parche parcial) para conseguir unos numeros de pista mas bonitos.
+  - Stefan Volker por señalar muchos problemmas y por la pagina man.
+  - Steffen Klupsch por la mejora del soporte de latin1.
+  - Stephane Raimbault por una bonita linea de puntos tras el nombre de la pista.
+
+Muchas, muchisimas personas por sus sugerencias, informes de errores, ideas,
+y montones de bonitos comentarios sobre mi programa. Si no estas en la lista,
+aun estas en mi carpeta de correo de disc-cover. ¡Gracias!
+
+
+J.I. van Hemert
+
+Traduccion por Javier M. de Lucas Cruz <restauracion@arrakis.es>
+Acentos omitidos voluntariamente.

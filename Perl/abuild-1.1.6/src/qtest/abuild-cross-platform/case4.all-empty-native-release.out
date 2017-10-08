@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<build-graph version="1">
+ <item name="item" platform="<native>.release"/>
+ <item name="java" platform="java"/>
+ <item name="a" platform="indep">
+  <dep name="item" platform="<native>.release"/>
+  <dep name="java" platform="java"/>
+ </item>
+ <item name="item" platform="<native>"/>
+ <item name="b" platform="indep">
+  <dep name="item" platform="<native>"/>
+ </item>
+ <item name="c" platform="indep">
+  <dep name="item" platform="<native>"/>
+ </item>
+ <item name="d" platform="indep">
+  <dep name="item" platform="<native>.release"/>
+ </item>
+ <item name="item" platform="zz_os.cpu.toolset.other"/>
+ <item name="e" platform="zz_os.cpu.toolset.other">
+  <dep name="item" platform="zz_os.cpu.toolset.other"/>
+ </item>
+</build-graph>

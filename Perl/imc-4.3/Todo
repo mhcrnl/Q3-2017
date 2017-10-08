@@ -1,0 +1,16 @@
+The following issues are on my list of things to do in one of the
+next versions:
+
+- Background images (default, fit, tile, center).
+
+- Make proper installation procedure for CGI script.
+
+- Text font handling.
+
+- Improved security (when the script is used as CGI script).
+
+- Check out the GNU plottools.  Maybe use libplot instead of (or together
+  with) the gd library.
+
+- Arbitrary origin, with rectangular or polar coordinates.
+

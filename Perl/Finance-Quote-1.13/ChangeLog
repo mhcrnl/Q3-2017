@@ -1,0 +1,416 @@
+2007-01-07  David Hampton  <hampton@employees.org>
+
+	* CVSTAG: finance_quote_1_13
+
+	* lib/Finance/Quote.pm: Update version to 1.13.
+
+	* lib/Finance/Quote.pm: Update the store_date() function for the
+	case when the year isn't explicitly stated.  If the specified
+	month would put the quote in the future, then consider this a
+	quite from last year.  manly intended to handle the rollover from
+	December to January on web sites that don't specify the year.
+	Suggestion from Christian Lupien.
+
+	* lib/Finance/Quote/BMONesbittBurns.pm: Enhance module to support
+	mutual fund quotes (which have less data than stock quotes).
+	Correct date format parsing.  Fix from Christian Lupien <lupien at
+	users.sourceforge.net>.
+
+	* lib/Finance/Quote/StockHouseCanada.pm: The fund name seems to be
+	a moving target. Search all tables of depth one looking for it.
+
+2007-01-01  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/FTPortfolios.pm: Rewrite this module for the
+	new web site design.
+
+	* lib/Finance/Quote/TSP.pm: Strip spaces around the dollar values.
+
+	* lib/Finance/Quote/FinanceCanada.pm: Rewrite this module for the
+	new web site design.
+
+	* test/*.t: Some restructuring of tests.  Add a couple more tests
+	on dates.  Replace a couple of test stocks that are no longer
+	valid.
+
+	* test/*.t: Accept last year as a valid date.  Comes in hand when
+	testing modules at the start of the new year.
+
+	* lib/Finance/Quote/ZA.pm: Update for changes in the display of
+	the web site.
+
+2006-12-31  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/StockHouseCanada.pm:
+	* test/stockhousecanada.t: New module for getting Canadian Mutual
+	fund quotes from Chris Carton <ctcarton@gmail.com>.
+
+	* lib/Finance/Quote/Deka.pm: Update for changes in the display
+	of the web site.  Now uses an https url.
+
+	* lib/Finance/Quote/LeRevenu.pm: Updates from Dominique Corbex for
+	changes in the display of the web site.
+
+	* lib/Finance/Quote/Trustnet.pm: Update for changes in the display
+	of the web site.
+
+2006-09-11  David Hampton  <hampton@employees.org>
+
+	* Move AIA.pm to AIAHK.pm since AIA has sites in multiple
+	countries.
+
+2006-09-10  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/AIA.pm:
+	* test/aia.pm: New module to access American International
+	Assurance fund information.  Based on perl script from Wouter van
+	Marle <wouter@squirrel-systems.com>.
+
+	* lib/Finance/Quote/Bourso.pm: Update the URL to track changes on
+	the web site.
+
+2006-07-10  David Hampton  <hampton@cisco.com>
+
+	* lib/Finance/Quote.pm: Update version to 1.12.
+
+	* CVSTAG: finance_quote_1_12
+
+2006-06-27  David Hampton  <hampton@employees.org>
+
+	* Makefile.PL: State the dependency on Crypt::SSLeay that several
+	modules now have.
+
+	* lib/Finance/Quote/Yahoo/Base.pm: Don't set fields that are
+	defined but are empty..
+
+	* test/yahoo_brasil.t: Update the test module to have more cases
+	and use better stocks.
+
+	* lib/Finance/Quote/Yahoo/Brasil.pm: Update for the change of the
+	data separator from a semicolon to a comma.
+
+	* test/financecanada.t:
+	* test/hex.t: Add new test cases to cover the last untested
+	modules. All modules are now tested.
+
+	* lib/Finance/Quote/FinanceCanada.pm: Don't set the success flag
+	if the lookup failed.
+
+	* lib/Finance/Quote/Platinum.pm: Use the new url of the pricing
+	information.
+
+	* lib/Finance/Quote/ManInvestments.pm: Update for the new table
+	format on the web site.
+
+	* test/indiamutual.t:
+	* test/aex.t: Update the test cases to use currently listed funds.
+
+	* lib/Finance/Quote/ManInvestments.pm: The url for updating
+	quotes has changed, as has the table header.
+
+	* lib/Finance/Quote/Bourso.pm:
+	* lib/Finance/Quote/LeRevenu.pm:
+	* test/bourso.t:
+	* test/lerevenu.t: Updated modules from Dominique Corbex
+	<domcox@sourceforge.net>. The name field now returns the real name
+	and not ticker symbols, and other small fixes.
+
+2006-04-08  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/Trustnet.pm: Work around the fact that gnucash
+	escapes the ampersand character when passing stock names to F::Q.
+
+	* lib/Finance/Quote/DWS.pm: Updated module from Klaus Dahlke
+	<klaus.dahlke@gmx.de> to retrieve quotes from the new DWS web
+	page.
+
+	* lib/Finance/Quote/Tiaacref.pm: Explicitly state in the code that
+	this module requires ssl support (it uses an https:// url).  This
+	prevents perl from trying to run the code when ssl support isn't
+	present.
+
+	* lib/Finance/Quote.pm:
+	* lib/Finance/Quote/HEX.pm: 
+	* test/hex.t: New module from Mika Laari
+	<mikalaari@users.sourceforge.net> to fetch quote information from
+	the Helsinki stock exchange.
+
+	* Documentation/Hackers-Guide: Add a section on the q->store_date()
+	function.  All modules should use this function to set the 'date'
+	and 'isodate' fields based on the retrieved textual date (or lack
+	thereof).
+	
+	* test/lerevenu.t: Test the right module.
+
+2006-04-07  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote.pm:
+	* lib/Finance/Quote/LeRevenu.pm:
+	* test/lefrevenu.t: New module from Dominique Corbex
+	<domcox@sourceforge.net> to fetch information from the
+	LeRevenu.com site in France.
+
+	* t/yahoo_europe.t: New test cases for non-GBP London exchange
+	stocks.  Use new stock for test of the XETRA exchange.  (Can't
+	find a non-Euro stock there, so remove those tests.)
+
+	* lib/Finance/Quote/Yahoo/Base.pm: Patch from p1n0@sourceforge.net
+	to only divide London exchange values by 100 if they are
+	denominated in pence.
+
+2006-04-06  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote.pm:
+	* lib/Finance/Quote/Bourso.pm:
+	* test/bourso.t: New module from Dominique Corbex
+	<domcox@sourceforge.net> to fetch information from the "Paris
+	Stock Exchange", http://www.boursorama.com.
+
+	* lib/Finance/Quote/VWD.pm: Updated module from Jörg Sommer that
+	is more tolerant of the advertising added to the web page.
+
+2006-01-11  David Hampton  <hampton@employees.org>
+
+	* CVSTAG: finance_quote_1_11
+	* lib/Finance/Quote.pm: Updated $VERSION to 1.01
+
+2006-01-10  David Hampton  <hampton@employees.org>
+
+	* test/dws.t: 
+	* test/maninvestments.t: 
+	* test/yahoo_brasil.t: Accept dates in both the previous and
+	current year as valid responses.
+
+	* test/aex.t: Change test currency to one still on the exchange.
+
+	* lib/Finance/Quote/VWD.pm: Jörg Sommer's patch to work better
+	with invalid WKNs and to extract the exchange information from its
+	new location.
+
+2005-11-18  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/AEX.pm: Use the store_date function.
+
+	* lib/Finance/Quote/ASX.pm:
+	* lib/Finance/Quote/Cdnfundlibrary.pm:
+	* lib/Finance/Quote/Platinum.pm:
+	* lib/Finance/Quote/Trustnet.pm:
+	* lib/Finance/Quote/Yahoo/Base.pm: Add code to protect against
+	empty tables, data fields, etc.
+
+	* test/aex.t: Correct the number of test cases.  Changed test
+	stock to one that is still on the exchange.  Site no longer
+	provides time (date only) so remove tests for time of quote.
+	Futures quotes don't always have bid/ask values so comment out
+	those tests.
+	
+	* test/indiamutual.t:
+	* test/trustnet.t:
+	* test/union.t:
+	* test/yahoo.t: Changed test stock to one that is still on the
+	exchange.
+	
+	* test/yahoo_brasil.t: All returned prices (for all stocks I
+	tried) return a price of zero, so comment out the test for
+	non-zero.
+
+2005-10-23  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/VWD.pm: Put back the call to the
+	HTML::TableExtract first_table_state_found() function for now.  At
+	some point this should be removed and the 2.0 version of
+	HTML::TableExtract required.
+
+	* lib/Finance/Quote.pm: Make note of an alternate yahoo URL that
+	can be used to obtain currency quotes. From Gerry Barksdale <gbark
+	at barksys.com>.
+
+2005-10-22  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/Tiaacref.pm:
+	* test/tiaacref.t: Add Support for TIAA-CREF mutual funds from
+	Brandon <brandon2 at users.sourceforge.net>.
+
+	* lib/Finance/Quote/VWD.pm: Remove the thousands separator
+	character from quote values.
+
+	* lib/Finance/Quote/TSP.pm: 
+	* test/tsp.t: Frank Mori Hess's <fmhess at speakeasy.net> change
+	to add support for the TSP lifecycle L funds.
+
+	* ChangeLog: Archive pre-2005 data into a separate file.
+
+	* lib/Finance/Quote/Deka.pm: Add a new module to retrieve German
+	investment fund prices from Deka.  Module from Knut Franke
+	<Knut.Franke at gmx.de>
+
+	* lib/Finance/Quote/USFedBonds.pm: 
+	* test/usfedbonds.t: Add a new US Federal Bonds stock quote module
+	from Stephen Langenhoven <langenhoven at users.sourceforge.net>.
+
+2005-10-21  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote.pm: Updated to work with new Yahoo currency
+	conversion pages.
+
+	* lib/Finance/Quote/Tiaacref.pm: New URL from Kevin Foss.  Uses
+	https, so the Crypt::SSLeay module is now required for TIAA-CREF
+	quotes.
+
+	* lib/Finance/Quote/ZI.pm: Zürich Invest has been purchased by
+	Deutsche Bank and integrated into DWS.  The DWS.pm module should
+	now be used in place of the ZI.pm module.
+
+	* lib/Finance/Quote/VWD.pm: Patch from Rainer Dorsch to return the
+	current price as 'last'.  The HTML::TableExtract
+	first_table_state_found() function has been deprecated.  Accept
+	both the old and new values as correct answers.
+
+	* lib/Finance/Quote/ZA.pm:
+	* test/za.t: Add a new South African stock quote module from
+	Stephen Langenhoven <langenhoven at users.sourceforge.net>.
+	
+2005-08-10  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/VWD.pm: Handle invalid ISINs better. VWD
+	delivers a 404 error instead of a blank page.  Fix suggested by 
+	Uwe Simon <uwe.simon.koeln at t-online dot de>
+
+2005-07-04  Paul Fenwick  <pjf@cpan.org>
+
+	* lib/Finance/Quote.pm: Bumped $VERSION to 1.10, primarily
+	  to work around a problem with CPAN distributions.
+
+	* CVSTAG: finance_quote_1_10
+
+2005-06-29  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/VWD.pm: Updated module from Jörg Sommer
+	<joerg@alea.gnuu.de>.
+
+	* lib/Finance/Quote/cdnfundlibrary.pm: Changes inspired by
+	kalaleq@users.sourceforge.net allow retrieval of more data.
+
+	* lib/Finance/Quote.pm:
+	* lib/Finance/Quote/Yahoo/NZ.pm: New module from Stephen Judd
+	<saniac@users.sourceforge.net>.
+
+	* lib/Finance/Quote/NZX.pm: Tweak to allow both NZX and Yahoo:NZ
+	to get quotes for New Zealand Stocks (use method nz).
+
+	* CVSTAG: finance_quote_1_09
+
+2005-05-30  Paul Fenwick  <pjf@cpan.org>
+
+	* MANIFEST: Updated with files intended for distribution.
+
+	* lib/Finance/Quote.pm: Updated $VERSION to 1.09
+
+	* CVSTAG: Updated finance_quote_1_09 tag on MANIFEST and
+	  lib/Finace/Quote.pm
+
+	* Released updated version 1.09 with new MANIFEST and Quote.pm
+	  to Sourceforge.
+
+	* lib/Finance/Quote/VWD.pm: Re-enabled $VERSION and bumped
+	  to 1.01 to allow correct indexing on CPAN, however the
+	  older version currently remains in the 1.09 release.
+
+2005-05-04  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/FTPortfolios.pm: Update for changes in the
+	website.
+
+	* t/ftportfolios.t: New test module.
+
+	* TSP.pm: Replace core parsing with tighter code.  Support the
+	symbols used by both Frank Mori Hess' and Trent Piepho's TSP
+	modules.  Make the symbols case insensitive.
+
+	* lib/Finance/Quote/Cdnfundlibrary.pm: Find table by headers
+	instead of by index.
+
+	* test/asegr.t: New module
+	* lib/Finance/Quote/ASEGR.pm: New module
+
+	* lib/Finance/Quote/ASX.pm: Skip any blank lines in the table.
+	Pass an extra parameter to TableExtract to keep it from doing
+	unnecessary work that produces warnings.
+
+2005-03-19  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/Trustnet.pm: Encode the '&' character before
+	calling the user agent GET function.  Fixes bug 747080.
+
+2005-03-19  David Hampton  <hampton@employees.org>
+
+	* almost all files: Collapsed all date parsing code into a single
+	function.  This function handles the date formats provided by all
+	current quote sources and converts them all into the F::Q standard
+	of a US date format.  It also adds an ISO format date to all
+	quotes in the new isodate field.  Added lots of test functions to
+	check date formats.
+
+
+2005-03-19  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/AEX.pm: Spelling correcting from Frank Mori
+	Hess.
+
+	* lib/Finance/Quote.pm: Documentation correction from Trent
+	Piepho.
+	
+	* lib/Finance/Quote/Yahoo/Base.pm (yahoo_request): Fix an
+	undefined reference when Yahoo ocassionally returns an empty
+	field.
+
+2005-03-01  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote.pm: New modules.  New function to parse files
+	separated by semicolons instead of commas.
+
+	* lib/Finance/Quote/AEX.pm: Worked over modules from Johan van
+	Oostrum.  Most of the old AEX data has migrated elsewhere.
+
+	* lib/Finance/Quote/ASX.pm:
+	* lib/Finance/Quote/Trustnet.pm: Got the modules working again.
+	
+	* lib/Finance/Quote/ManInvestments.pm:
+	* lib/Finance/Quote/Platinum.pm: New modules for Australian
+	investment price sources from Ian Dall <iandall at
+	users.sourceforge.net>.
+
+	* lib/Finance/Quote/NZX.pm: New modules for fetching quotes the
+	from the New Zealand stock exchange. Provided by Michael Curtis.
+	
+	* lib/Finance/Quote/SEB.pm: New modules for fetching quotes from
+	the Swedish Bank.  Submitted by Tomas Carlsson.
+	
+	* lib/Finance/Quote/TSP.pm: New modules for fetching quotes from
+	the US Govt. Thrift Service Plan.  Submitted by Frank Mori Hess.
+
+	* lib/Finance/Quote/Yahoo/Base.pm: Corrected currency tags for Vienna and Valence.  
+
+	* lib/Finance/Quote/Yahoo/Brasil.pm: Add new Yahoo Brasil module
+	from Ismael Orenstein <perdig at users.sourceforge.net>.
+
+	* t/*: Various new test modules.
+	
+2005-02-09  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/Fidelity.pm:
+	* lib/Finance/Quote/Union.pm: Got the modules working again.
+	
+	* lib/Finance/Quote/Yahoo/Base.pm: Extract the currency directly
+	from Yahoo, instead of looking it up in an exchange/currency
+	mapping table.
+
+	* t/*: Various new test and updated modules.
+	
+2005-02-06  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/BMONesbittBurns.pm: Got the modules working again.
+
+2005-01-14  David Hampton  <hampton@employees.org>
+
+	* lib/Finance/Quote/Cdnfundlibrary.pm: Got the module working again.

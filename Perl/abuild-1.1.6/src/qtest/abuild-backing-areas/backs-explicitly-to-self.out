@@ -1,0 +1,2 @@
+--topdir--/bad/1/common/Abuild.backing:1: ERROR: this forest lists itself as a backing area
+abuild: ERROR: errors detected; exiting

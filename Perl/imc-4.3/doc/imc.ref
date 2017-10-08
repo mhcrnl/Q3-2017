@@ -1,0 +1,59 @@
+ORIGIN top|bottom
+
+ANGLES clockwise|anticlockwise|counterclockwise
+
+SIZE <width> <height>
+
+MOVETO <x> <y>
+
+LINETO <x> <y> [COLOR <color>] [WIDTH <width>]
+
+LINE <x1> <y1> <x2> <y2> [COLOR <color>] [WIDTH <width>]
+
+TEXT <string> [COLOR <color>] [SIZE <size>] [ALIGN [<valign>] [<halign>]]
+     [ROTATE <angle>] [MIRROR]
+
+TEXTAT <x> <y> <string> [COLOR <color>] [SIZE <size>]
+       [ALIGN [<valign>] [<halign>]] [ROTATE <angle>] [MIRROR]
+
+CIRCLE <x> <y> <radius> [COLOR <color>] [WIDTH <width>] [FILLED [<color>]]
+
+ELLIPSE <x> <y> <h_radius> <v_radius> [COLOR <color>] [WIDTH <width>]
+        [FILLED [<color>]]
+
+ARC <x> <y> <h_radius> <v_radius> <start_angle> <end_angle>
+    [COLOR <color>] [WIDTH <width>] [CLOSED [PIE|SEGMENT]] [FILLED [<color>]]
+
+RECTANGLE <x1> <y1> <x2> <y2> [COLOR <color>] [WIDTH <width>]
+          [FILLED [<color>]]
+
+IMAGE <x> <y> [<filename>] [SIZE <width> <height>]
+      [ALIGN [<valign>] [<halign>]] [ROTATE <angle>] [MIRROR]
+
+FILL <x> <y> [COLOR <color>] [BORDER <color>]
+
+BACKGROUND <color>
+
+LINECOLOR <color>
+
+LINEWIDTH <width>
+
+FILLCOLOR <color>
+
+TEXTCOLOR <color>
+
+TEXTALIGN [<valign>] [<halign>]
+
+IMAGEALIGN [<valign>] [<halign>]
+
+IMAGEROTATE <angle>
+
+IMAGEMIRROR
+
+TEXTSIZE <size>
+
+TEXTROTATE <angle>
+
+TEXTMIRROR
+
+INTERLACED

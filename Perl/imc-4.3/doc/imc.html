@@ -1,0 +1,685 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 FINAL//EN">
+<HEAD>
+<TITLE>imc Reference Manual</TITLE>
+<LINK rev="made" href="mailto:Peter.Verthez@advalvas.be">
+</HEAD>
+
+<BODY bgcolor=White>
+<H1 align=center>imc v4.3 Reference Manual</H1>
+<A name=Top>
+
+<H2>Index</H2>
+<UL>
+<LI><A href="#GenSyn">General syntax</A>
+<LI><A href="#SpType">Special types</A>
+    <UL>
+    <LI><A href="#CoordType">Coordinates</A>
+    <LI><A href="#AngleType">Angles</A>
+    <LI><A href="#ColorType">Colors</A>
+    </UL>
+<LI><A href="#Comm">Commands</A>
+    <TABLE>
+    <TR><TD><A href="#angles"><CODE>ANGLES</CODE></A>
+        <TD><A href="#arc"><CODE>ARC</CODE></A>
+	<TD><A href="#background"><CODE>BACKGROUND</CODE></A>
+	<TD><A href="#circle"><CODE>CIRCLE</CODE></A>
+        <TD><A href="#ellipse"><CODE>ELLIPSE</CODE></A>
+    <TR><TD><A href="#fill"><CODE>FILL</CODE></A>
+        <TD><A href="#fillcolor"><CODE>FILLCOLOR</CODE></A>
+	<TD><A href="#image"><CODE>IMAGE</CODE></A>
+	<TD><A href="#imagealign"><CODE>IMAGEALIGN</CODE></A>
+	<TD><A href="#imagemirror"><CODE>IMAGEMIRROR</CODE></A>
+    <TR><TD><A href="#imagerotate"><CODE>IMAGEROTATE</CODE></A>
+        <TD><A href="#interlaced"><CODE>INTERLACED</CODE></A>
+        <TD><A href="#line"><CODE>LINE</CODE></A>
+        <TD><A href="#linecolor"><CODE>LINECOLOR</CODE></A>
+        <TD><A href="#lineto"><CODE>LINETO</CODE></A>
+    <TR><TD><A href="#linewidth"><CODE>LINEWIDTH</CODE></A>
+        <TD><A href="#moveto"><CODE>MOVETO</CODE></A>
+        <TD><A href="#origin"><CODE>ORIGIN</CODE></A>
+        <TD><A href="#rectangle"><CODE>RECTANGLE</CODE></A>
+        <TD><A href="#size"><CODE>SIZE</CODE></A>
+    <TR><TD><A href="#text"><CODE>TEXT</CODE></A>
+        <TD><A href="#textalign"><CODE>TEXTALIGN</CODE></A>
+        <TD><A href="#textat"><CODE>TEXTAT</CODE></A>
+        <TD><A href="#textcolor"><CODE>TEXTCOLOR</CODE></A>
+	<TD><A href="#textmirror"><CODE>TEXTMIRROR</CODE></A>
+    <TR><TD><A href="#textrotate"><CODE>TEXTROTATE</CODE></A>
+	<TD><A href="#textsize"><CODE>TEXTSIZE</CODE></A>
+    </TABLE>
+</UL>
+
+<HR>
+
+<H2><A name=GenSyn>General syntax rules</H2>
+<P>
+<OL>
+<LI> Releases with the same major version number have a backward compatible
+syntax.
+<BR><BR>
+<LI> The input files consists of a number of input lines.  The backslash,
+followed by a newline, can be used as line continuation character.
+<BR><BR>
+<LI> Leading and trailing whitespace on an input line is ignored.
+<BR><BR>
+<LI> <STRONG>Comments:</STRONG> Two types of comments are allowed:
+     <UL type=disc>
+     <LI><EM>Shell-style comment</EM>: starts with <CODE>#</CODE> (which
+     must be the first non-whitespace character on the line) and ends at the
+     input line end
+     <LI><EM>C-style comment</EM>: starts with <CODE>/*</CODE> and ends
+     with <CODE>*/</CODE>
+     </UL>
+     Comments are ignored by <EM>imc</EM>.
+<BR><BR>
+<LI> Lines consist generally of commands (a keyword followed by some
+arguments).  Excess arguments produce an error.  The keywords are case
+insensitive; the arguments are also case insensitive, unless otherwise
+specified.
+<BR><BR>
+<LI> String arguments should be double quoted.  A backslash can be used in
+strings to escape a literal double-quote or backslash in a string.
+<BR><BR>
+<LI> A command can have, next to its fixed parameters,  optional parameters,
+e.g. the color of a line to
+be drawn. These optional parameters always start with a keyword, in the
+given example this would be "COLOR", and should be regarded as sub-commands.
+The order in which the sub-commands are given is not important, as the
+keyword of the sub-command identifies it completely; the mandatory parameters
+however should be provided in the correct order.
+<BR><BR>
+<LI> A semi-colon can be used to separate commands in a line.  It can
+also be used to terminate a line, but that is not necessary.
+<BR><BR>
+<LI> When the program is configured to use a C pre-processor, the input
+file (or standard input) is fed through the pre-processor first, before
+<EM>imc</EM> processes it.
+<BR><BR>
+<LI> A pair of curly braces <CODE>{</CODE> and <CODE>}</CODE> can delimit
+arithmetic expressions.  These expressions are fed to the Perl evaluator
+and replaced by the result.  This happens after the pre-processing stage
+(if there is one), but before the actual processing of the <EM>imc</EM>
+commands.  Between the braces only numbers, brackets and the characters +,
+-, / and * are allowed.  The result is automatically rounded to the nearest
+integer.
+</OL>
+
+<P><A href="#top">Back to top</A>
+<HR>
+
+<H2><A name=SpType>Special types</H2>
+<H4><A name=CoordType>Coordinates</H4>
+<UL>
+<LI>Coordinates must be specified as integers.
+<LI>They are by default relative to the upper left corner of the picture (
+but the <A href="#origin"><CODE>ORIGIN</CODE></A> command can change this
+default).
+<LI>Negative coordinates are allowed, but points with negative coordinates
+will never be drawn.
+</UL>
+<P><A href="#top">Back to top</A>
+
+<H4><A name=AngleType>Angles</H4>
+<UL>
+<LI>Angles must be specified as integers (positive as well as negative)
+and are interpreted module 360.
+<LI>They are by default relative to the east side of an imaginary
+circle (when they have to be interpreted as absolute angles),
+with increasing angles in the clockwise direction (but the
+<A href="#angles"><CODE>ANGLES</CODE></A> command can change this default).
+</UL>
+<P><A href="#top">Back to top</A>
+
+<H4><A name=ColorType>Colors</H4>
+A color specification is the keyword <CODE>TRANSPARENT</CODE> or has the
+form: <CODE><I>model args</I></CODE>.
+<P>
+(Note that some tools, notably xv, don't take transparency into account,
+so that images may seem wrong on these tools; also, some versions of
+Netscape don't render PNG images with transparency correctly; however, GQview
+shows PNG images as they should be...).
+<P>
+The <CODE><I>model</I></CODE> is the
+color model used; the following color models are supported at the moment:
+<DL>
+<DT><CODE>RGB</CODE></DT>
+    <DD>the <CODE><I>args</I></CODE> should be three integers between 0 and
+    255 (bounds included) and specify the red, green and blue component of
+    the color.</DD>
+    <BR><BR>
+<DT><CODE>X11</CODE></DT>
+    <DD>the <CODE><I>args</I></CODE> should be 1 argument, which can be a
+    color name or a numeric specification in the form:
+    <UL type=disc>
+    <LI><CODE>#RGB</CODE>
+    <LI><CODE>#RRGGBB</CODE>
+    <LI><CODE>#RRRGGGBBB</CODE>
+    <LI><CODE>#RRRRGGGGBBBB</CODE>
+    </UL>
+    as specified in the X11 protocol (see there).
+    <BR><BR>
+    The color name (case insensitive, but bounded by quotes if there are
+    spaces included) is looked up in the <CODE>rgb.txt</CODE> file to map
+    it to an RGB color.  The <CODE>rgb.txt</CODE> file is 
+    looked for in the following directories:
+    <UL type=disc>
+    <LI>current directory
+    <LI>directory of the input file
+    <LI><CODE>/etc/X11</CODE>
+    <LI><CODE>/usr/lib/X11</CODE>
+    </UL>
+    </DD>
+</DL>
+<STRONG>Note:</STRONG>
+<UL>
+<LI>In all the commands the substring <CODE>COLOR</CODE> can be replaced by
+<CODE>COLOUR</CODE>.
+</UL>
+
+<P><A href="#top">Back to top</A>
+<HR>
+
+<H2><A name=Comm>Commands</H2>
+
+<H4><A name="origin"><CODE>ORIGIN</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>ORIGIN <I>spec</I></CODE>
+</PRE></FONT>
+<P>
+Sets the orientation of the vertical axis.  The <I>spec</I> can be:
+<UL>
+<LI><CODE>TOP</CODE>: sets the origin to the top left (and thus the vertical
+axis oriented downwards).  This is the default value.
+<LI><CODE>BOTTOM</CODE>: sets the origin to the bottom left (vertical axis
+oriented upwards).
+</UL>
+This command must be specified before any commands that use coordinates.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>ORIGIN bottom</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="angles"><CODE>ANGLES</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>ANGLES <I>spec</I></CODE>
+</PRE></FONT>
+<P>
+Sets the orientation of angles.  The <I>spec</I> can be:
+<UL>
+<LI><CODE>CLOCKWISE</CODE> (this is the default value)
+<LI><CODE>ANTICLOCKWISE</CODE> (or its synonym <CODE>COUNTERCLOCKWISE</CODE>)
+</UL>
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>ANGLES counterclockwise</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="size"><CODE>SIZE</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>SIZE <I>width height</I></CODE>
+</PRE></FONT>
+<P>
+Fixes the size of the image to <I>width, height</I>.  If this command is
+not specified in the input file, the image is just big enough to contain
+all drawed items.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>SIZE 200 300</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="moveto"><CODE>MOVETO</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>MOVETO <I>x y</I></CODE>
+</PRE></FONT>
+Moves the current position to the point with
+<A href="#CoordType">coordinates</A> (<I>x, y</I>).
+Initially, the current position is at (0, 0).
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>MOVETO 10 100</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="lineto"><CODE>LINETO</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>LINETO <I>x y</I> [COLOR <I>colorspec</I>] [WIDTH <I>width</I>]</CODE>
+</PRE></FONT>
+Draws a line from the current position to the point with
+<A href="#CoordType">coordinates</A>
+(<I>x, y</I>).  Makes the end point the new current position.  The
+<A href="#ColorType">color</A> and
+width may be specified in the command; if not specified, the current values
+are used (see <A href="#linecolor"><CODE>LINECOLOR</CODE></A> and
+<A href="#linewidth"><CODE>LINEWIDTH</CODE></A>).
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>LINETO 20 100 COLOR RGB 100 100 100</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="line"><CODE>LINE</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>LINE <I>x1 y1 x2 y2</I> [COLOR <I>colorspec</I>] [WIDTH <I>width</I>]</CODE>
+</PRE></FONT>
+As <A href="#lineto"><CODE>LINETO</CODE></A>, but draws a line from the
+<A href="#CoordType">coordinates</A>
+(<I>x1, y1</I>) to (<I>x2, y2</I>).  The current position is not changed.
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="text"><CODE>TEXT</CODE></FONT></H4>
+<FONT color=Blue><PRE>
+    <CODE>TEXT <I>string</I> [COLOR <I>colorspec</I>] [SIZE <I>size</I>]
+                [ALIGN [<I>valign</I>] [<I>halign</I>]] [ROTATE <I>angle</I>]
+		[MIRROR] </CODE>
+</PRE></FONT>
+Prints the given text (case sensitive, of course) on the current position.
+The relative position of the current position to the text depends on the
+current alignment.  The current position is not changed.
+<P>
+If the text contains whitespace, it has to be completely enclosed in
+quotes.
+<P>
+The text <A href="#ColorType">color</A>, size, alignment and rotation, and
+whether it should be mirrored, can
+be specified on the command; if omitted, the current values are used (see
+<A href="#textcolor"><CODE>TEXTCOLOR</CODE></A>,
+<A href="#textsize"><CODE>TEXTSIZE</CODE></A>,
+<A href="#textalign"><CODE>TEXTALIGN</CODE></A>,
+<A href="#textrotate"><CODE>TEXTROTATE</CODE></A> and
+<A href="#textmirror"><CODE>TEXTMIRROR</CODE></A>).
+<P>
+Note that the alignment is always relative to the bounding rectangle
+(with horizontal and vertical edges) of the
+text, also when it is rotated.  Mirroring is always horizontal and is done
+<I>before</I> rotating.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>TEXT "This is a test" SIZE large ALIGN top center</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="textat"><CODE>TEXTAT</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>TEXTAT <I>x y string</I> [COLOR <I>colorspec</I>] [SIZE <I>size</I>]
+                      [ALIGN [<I>valign</I>] [<I>halign</I>]] [ROTATE <I>angle</I>]
+		      [MIRROR]</CODE>
+</PRE></FONT>
+As <A href="#text"><CODE>TEXT</CODE></A>, but prints the text at the
+<A href="#CoordType">coordinates</A> (<I>x, y</I>).
+The current position is not changed.
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="circle"><CODE>CIRCLE</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>CIRCLE <I>x y radius</I> [FILLED [<I>colorspec</I>]] [COLOR <I>colorspec</I>]
+                      [WIDTH <I>width</I>]</CODE>
+</PRE></FONT>
+Draws a circle with the given radius around the point with
+<A href="#CoordType">coordinates</A> (<I>x, y</I>).  The current
+position is not changed.
+<P>
+If the <CODE>FILLED</CODE> specification is given, the circle is filled with
+the given <A href="#ColorType">color</A>.  If the color is
+omitted, the current fill color is used (see <A href="#fillcolor">
+<CODE>FILLCOLOR</CODE></A>).
+<P>
+The drawing color and width can be specified on the command; if omitted,
+the current values are used (see <A href="#linecolor"><CODE>LINECOLOR</CODE>
+</A> and <A href="#linewidth"><CODE>LINEWIDTH</CODE></A>).
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>CIRCLE 100 100 50 FILLED RGB 0 0 20</CODE>
+</PRE>
+<P><A href="#top">Back to top</A> 
+
+<HR>
+<H4><A name="ellipse"><CODE>ELLIPSE</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>ELLIPSE <I>x y h_radius v_radius</I>
+            [FILLED [<I>colorspec</I>]] [COLOR <I>colorspec</I>]
+            [WIDTH <I>width</I>]</CODE>
+</PRE></FONT>
+Draws an ellipse with the given horizontal and vertical radius around the
+point with <A href="#CoordType">coordinates</A> <I>(x, y)</I>.  The current
+position is not changed.
+<P>
+If the <CODE>FILLED</CODE> specification is given, the ellipse is filled with
+the given <A href="#ColorType">color</A>.  If the color is
+omitted, the current fill color is used (see <A href="#fillcolor">
+<CODE>FILLCOLOR</CODE></A>).
+<P>
+The drawing color and width can be specified on the command; if omitted,
+the current values are used (see <A href="#linecolor"><CODE>LINECOLOR</CODE>
+</A> and <A href="#linewidth"><CODE>LINEWIDTH</CODE></A>).
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>ELLIPSE 100 100 50 100 FILLED</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="arc"><CODE>ARC</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>ARC <I>x y h_radius v_radius start_angle end_angle</I>
+        [COLOR <I>colorspec</I>] [WIDTH <I>width</I>] [CLOSED [PIE|SEGMENT]]
+	[FILLED [<I>colorspec</I>]]</CODE>
+</PRE></FONT>
+Draws an arc with the given horizontal and vertical radius around the point
+with <A href="#CoordType">coordinates</A> <I>(x, y)</I> over an
+<A href="#AngleType">angle</A> starting from <I>start</I>_<I>angle</I> to
+<I>end</I>_<I>angle</I>.  The current position is not changed.
+<P>
+The drawing color and width can be specified on the command; if omitted,
+the current values are used (see <A href="#linecolor"><CODE>LINECOLOR</CODE>
+</A> and <A href="#linewidth"><CODE>LINEWIDTH</CODE></A>).
+<P>
+When <CODE>CLOSED</CODE> or <CODE>CLOSED PIE</CODE> is specified, lines
+are drawn from the end points
+of the arc to the center of the arc, which can be interesting for pie charts.
+When <CODE>CLOSED SEGMENT</CODE> is specified, a line is drawn between the
+two end points of the arc.
+When the arc is closed, the keyword <CODE>FILLED</CODE> will cause the closed
+arc to be filled with the given <A href="#ColorType">color</A>. If the color
+is omitted, the current fill color is used (see <A href="#fillcolor">
+<CODE>FILLCOLOR</CODE></A>).
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>ARC 100 100 50 100 -20 40</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="rectangle"><CODE>RECTANGLE</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>RECTANGLE <I>x1 y1 x2 y2</I> [FILLED [<I>colorspec</I>]]
+              [COLOR <I>colorspec</I>] [WIDTH <I>width</I>]</CODE>
+</PRE></FONT>
+Draws a rectangle between the points with
+<A href="#CoordType">coordinates</A> (<I>x1, y1</I>) and (<I>x2, y2</I>).
+The current position is not changed.
+<P>
+If the <CODE>FILLED</CODE> specification is given, the rectangle is filled with
+the given <A href="#ColorType">color</A>.  If the color is
+omitted, the current fill color is used (see <A href="#fillcolor">
+<CODE>FILLCOLOR</CODE></A>).
+<P>
+The drawing color and width can be specified on the command; if omitted,
+the current values are used (see <A href="#linecolor"><CODE>LINECOLOR</CODE>
+</A> and <A href="#linewidth"><CODE>LINEWIDTH</CODE></A>).
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>RECTANGLE 100 100 200 200 FILLED X11 Blue</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="image"><CODE>IMAGE</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>IMAGE <I>x y</I> [<I>filename</I>] [SIZE <I>width height</I>]
+          [ALIGN [<I>valign</I>] [<I>halign</I>]] [ROTATE <I>angle</I>]
+	  [MIRROR]</CODE>
+</PRE></FONT>
+Imports the PNG, GIF, JPG, X Bitmap or X Pixmap image stored in the given file
+(case sensitive)
+on the position
+given by the <A href="#CoordType">coordinates</A> (<I>x, y</I>). The relative
+position of
+the current position to the image depends on the
+current alignment.  The current position is not changed.
+<P>
+When the filename is omitted, the previously used filename is used (if, of
+course, there was one; if not, an error message is generated).  This allows
+to use the same image again and again without having to load it every time.
+<P>
+A size can be specified to scale the image to the given size.  An integer
+bigger than 0 specifies an absolute size, a floating point percentage
+bigger than 0 (ending with <CODE>%</CODE>) specifies a relative size.
+<P>
+The alignment, rotation angle and whether the image has to be mirrored
+ can be specified on the command; if omitted, the current
+values are used (see <A href="#imagealign"><CODE>IMAGEALIGN</CODE></A>,
+<A href="#imagerotate"><CODE>IMAGEROTATE</CODE></A> and
+<A href="#imagemirror"><CODE>IMAGEMIRROR</CODE></A>).
+<P>
+Note that the alignment is always relative to the bounding rectangle
+(with horizontal and vertical edges) of the resulting
+image, also when it is rotated.  Mirroring is always horizontal and is done
+<I>before</I> rotating, but <I>after</I> resizing.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>IMAGE 10 10 oldfile.png ALIGN middle center MIRROR </CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="fill"><CODE>FILL</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>FILL <I>x y</I> [BORDER <I>colorspec</I>] [COLOR <I>colorspec</I>]</CODE>
+</PRE></FONT>
+Flood-fills a region that contains the point with
+<A href="#CoordType">coordinates</A> (<I>x, y</I>).  If the <CODE>BORDER</CODE>
+<A href="#ColorType">color</A> is given, filling stops when it hits the
+color specified by the border color; else filling stops when it hits a point
+of a different color than the starting point.
+<P>
+If the <CODE>COLOR</CODE> specification is given, the region is filled with
+the given color.  If the color is omitted, the current fill color is used
+(see <A href="#fillcolor"><CODE>FILLCOLOR</CODE></A>).
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>FILL 10 10 BORDER X11 red</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="background"><CODE>BACKGROUND</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>BACKGROUND <I>colorspec</I></CODE>
+</PRE></FONT>
+Sets the background <A href="#ColorType">color</A> to the given
+<I>colorspec</I>.  The default background color is white.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>BACKGROUND X11 #13A13A13A</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="linecolor"><CODE>LINECOLOR</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>LINECOLOR <I>colorspec</I></CODE>
+</PRE></FONT>
+Sets the current drawing <A href="#ColorType">color</A> to the given
+<I>colorspec</I>.  The default drawing color is black.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>LINECOLOR RGB 0 0 0</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="linewidth"><CODE>LINEWIDTH</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>LINEWIDTH <I>width</I></CODE>
+</PRE></FONT>
+Sets the current drawing width.  The <I>width</I> must be given in pixels
+and should be at least 1.  The default drawing width is 1.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>LINEWIDTH 5</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="fillcolor"><CODE>FILLCOLOR</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>FILLCOLOR <I>colorspec</I></CODE>
+</PRE></FONT>
+Sets the current fill <A href="#ColorType">color</A> to the given
+<I>colorspec</I>.  The default fill color is black.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>FILLCOLOR RGB 0 0 0</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="textcolor"><CODE>TEXTCOLOR</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>TEXTCOLOR <I>colorspec</I></CODE>
+</PRE></FONT>
+Sets the current text <A href="#ColorType">color</A> to the given
+<I>colorspec</I>.  The default text color is black.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>TEXTCOLOR X11 Yellow</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="textalign"><CODE>TEXTALIGN</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>TEXTALIGN [<I>valign</I>] [<I>halign</I>]</CODE>
+</PRE></FONT>
+Sets the text alignment to <I>valign halign</I>.
+<UL>
+<LI><I>valign</I> can be: <CODE>TOP, MIDDLE, BOTTOM</CODE> (default is <CODE>TOP</CODE>)
+<LI><I>halign</I> can be: <CODE>LEFT, CENTER, RIGHT</CODE> (default is <CODE>LEFT</CODE>)
+</UL>
+An alignment of <CODE>TOP LEFT</CODE> means that the coordinates that are
+given to a text command will be at the top left of the bounding rectangle
+(with horizontal and vertical edges) of the text, independent of
+whether the origin of the images is at the bottom or the top.
+<P>
+At least one of the arguments must be given, and they must be in the order
+<I>valign halign</I> if both given.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>TEXTALIGN top center</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="imagealign"><CODE>IMAGEALIGN</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>IMAGEALIGN [<I>valign</I>] [<I>halign</I>]</CODE>
+</PRE></FONT>
+Sets the image alignment to <I>valign halign</I>.  The syntax is as for the
+<A href="#textalign"><CODE>TEXTALIGN</CODE></A> command.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>IMAGEALIGN middle center</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="textrotate"><CODE>TEXTROTATE</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>TEXTROTATE <I>angle</I></CODE>
+</PRE></FONT>
+Sets the text rotation to <I>angle</I>.  The default is no
+rotation (<I>angle</I> = 0).
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>TEXTROTATE -95</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="textsize"><CODE>TEXTSIZE</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>TEXTSIZE <I>size</I></CODE>
+</PRE></FONT>
+Sets the current text size.  Possible values for <I>size</I> are:
+<UL>
+<LI><CODE>5x8</CODE> (or <CODE>TINY</CODE>)
+<LI><CODE>6x12</CODE> (or <CODE>SMALL</CODE>)
+<LI><CODE>7x13</CODE> (or <CODE>MEDIUM</CODE>)
+<LI><CODE>8x16</CODE> (or <CODE>LARGE</CODE>)
+<LI><CODE>9x15</CODE> (or <CODE>GIANT</CODE>)
+</UL>
+The default font size is <CODE>SMALL</CODE>.
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>TEXTSIZE large</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="interlaced"><CODE>INTERLACED</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>INTERLACED</CODE>
+</PRE></FONT>
+Defines the image as interlaced.  This gives a fading-in effect
+on some browsers.  By default this setting is disabled.
+<P><A href="#top">Back to top</A>
+
+
+<HR>
+<H4><A name="textmirror"><CODE>TEXTMIRROR</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>TEXTMIRROR</CODE>
+</PRE></FONT>
+Specifies that text should be mirrored.  By default this setting is disabled.
+<P><A href="#top">Back to top</A>
+
+
+<HR>
+<H4><A name="imagerotate"><CODE>IMAGEROTATE</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>IMAGEROTATE <I>angle</I></CODE>
+</PRE></FONT>
+Sets the image rotation to <I>angle</I>.  The default is no
+rotation (<I>angle</I> = 0).
+<P>
+<B>Example:</B>
+<PRE>
+    <CODE>IMAGEROTATE 135</CODE>
+</PRE>
+<P><A href="#top">Back to top</A>
+
+<HR>
+<H4><A name="imagemirror"><CODE>IMAGEMIRROR</CODE></H4>
+<FONT color=Blue><PRE>
+    <CODE>IMAGEMIRROR</CODE>
+</PRE></FONT>
+Specifies that images should be mirrored.  By default this setting is disabled.
+<P><A href="#top">Back to top</A>
+
+
+<HR>
+<SMALL>
+&copy; Peter Verthez<BR>
+Last modification: 27 January 2002<BR>

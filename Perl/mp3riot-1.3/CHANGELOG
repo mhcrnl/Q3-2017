@@ -1,0 +1,137 @@
+Release History
+
+  f2html.pl 0.1-20001127
+        Changes:
+         - Initial release
+
+  f2html.pl 0.2-20010117
+        Changes:
+         - The manual has been updated.
+         - The option -c has been updated. Now this option can be used more 
+           than only one time. So one is able to select file by different 
+           extensions.
+
+  f2html.pl 0.3-20010628
+        Changes:
+         - Some checks and corrections for pathnames
+         - Only existing characters are written out at the top of a html 
+           file
+         - Rewrite of sum of files and sizes. Important for writing 
+           seperate html files for every character 
+         - The option -q has been implemented and allows for doing the 
+           procedures in a non case sensitive way
+         - The option -j has been implemented. A html file with statistics 
+           can be written out.
+
+  f2html.pl 0.4-20011127
+        Changes:
+	 - Now f2html comes with a new version of Info.pm
+	   from MP3-Info-0.91 by Chris Nandor
+	 - Minor Bugfixes
+	 - New option to create sql database
+	 - New option to create a config file
+
+  f2html.pl 0.5-20020626
+	Changes:
+	 - Fixed problem with sql data output when files contain the
+	   charakter "'"
+	 - Name of option "hex" changed to "utf8"
+	 - Implemeted progress bar for prepating html files
+	 - More information about what the program is doing
+
+  f2html.pl 0.6-20020718
+        Changes:
+	 - New method (experimental) for faster sorting.
+	   Useful for indexing huge number of files or mp3 files
+	   with additional information.
+	 - New option for checking for dublicates of filenames
+	 - Now f2html.pl comes with a new version of Info.pm
+	   from MP3-Info-1.01 by Chris Nandor
+
+  f2html.pl 0.7-20021016
+        Changes:
+	 - bug for the option "check" in config file and configuration wizard fixed
+         - bug for the check of the mp3 extension when mp3info was enabled fixed
+         - bug of sum of megs in html output fixed
+	 - bug in mp3table.sql fixed
+         - basic ogg vorbis support implemented (thanks to Jens Burkal)
+	 
+  f2html.pl 0.8-20021105
+        Changes:
+	 - some changes in the documentation
+	 - new option to rename files using their id3tag
+	 - new option to rename files back
+	 - some code fixes
+
+  f2html.pl 0.9-20030313
+        Changes:
+         - Fixed a commandline parameter bug where the parameters 
+	   were handled non case sensitive. Now there are handled case sensitive
+	   As a result the functions RENAME and RENAMEBACK did not work 
+	   when called with the short command line argument.
+	 - Fixed a commandline parameter bug that occured with Perl 5.8.0 and 
+	   Getopt::Long 2.32. The "-s" flag in line 1 of the perl script 
+	   causes the program to count the command line parameters in 
+	   an usual way, so that command line parameters got disturbed and did
+	   not work any more.
+	   
+  f2html.pl 1.0-20030319
+        Changes:
+	 - Fixed some smaller bugs
+	 - Removed option for fast sorting (not necessary any more)
+	 - Rebuild the internal data structure completely
+	 - Implemented selection of files by their modification time 
+	   (younger and/or older than days from now)
+	 - Implemented grouping of files by string matching between 
+	   group defninitions by various types
+	 - Implemented variable html-code dsefinitions and templates
+	 - Changed definition for string replacement
+	 - f2html.pl now comes with a new version of Info.pm from
+	   MP3-Info-1.02 by Chris Nandor
+	 - The use of the id3tag for sql and html output is now optional
+	 - Manpage is not supported any more.
+	   
+  mp3riot 1.1-20030728
+	Changes:
+	 - Renamed f2html.pl into mp3riot
+         - Fixed output of playlist in M3U format, so that the M3U file 
+	   is now containing full information
+	 - Fixed bug for retreaving the TITLE of an id3tag
+	 - Added output of playlist in XML format
+	 - Added output of playlist in PLS format
+	 - Added random fileselection for random playlists
+	 - Added the tracknumber for sql output
+	 - Added **TRACKNUM** (tracknumber) and as a template variable 
+	   for html output
+	 - Added TRACKNUM (tracknumber) as a variable for groupings
+	 - Added tracknumber and comment for db output
+	 - Fixed bug in renaming function when special characters are 
+	   present in the id3tag
+	 - Added rename_template to do renaming of files using their id3tag
+	   in a flexible way
+	 - Fixed a bug in renameback
+	 
+  mp3riot 1.2-20040928
+	Changes:
+	 - Fixed bug in sql output
+	 - Flexible search for doublicate files using md5 sums
+	 - search for doublicates by filenames seperated from search function
+	 - fixed bug in xml output
+         - filesize in html output is now rouded
+	 - replaced progress bar by counter in percentage 
+	 - added counter for collected files	 
+	 - fixed bug in index in html output
+         - fixed bug in html output for grouping
+	 - extended grouping function by new type "EQUAL"
+         - bugfix in pls output
+ 
+  mp3riot 1.3-20041220
+	Changes:
+	 - extended grouping fuction for all playlistfiles
+	 - renaming of special characters for filenames of groups
+	 - support of b4s playlistformat
+	 - sorting of filelist by various criterias of id3tag, mp3 and
+	   file information (e.g. ARTIST, BITRATE etc.)
+	 - extended output of doublicate function by diretory names
+	 - added FIRSTCHAR as a value for grouping 
+	 - updated manual

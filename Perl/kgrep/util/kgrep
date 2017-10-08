@@ -1,0 +1,315 @@
+#! /usr/bin/perl
+# vim: set ft=perl:
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+#              C E D A R
+#          S O L U T I O N S       "Software done right."
+#           S O F T W A R E
+#
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# Copyright (c) 1999-2003 Kenneth J. Pronovici.
+# All rights reserved.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License,
+# Version 2, as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# Copies of the GNU General Public License are available from
+# the Free Software Foundation website, http://www.gnu.org/.
+#
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#   
+# Author   : Kenneth J. Pronovici <pronovic@ieee.org>
+# Language : Perl 5
+# Project  : kgrep
+# Package  : N/A
+# Revision : $Id: kgrep,v 1.5 2003/09/08 20:39:40 pronovic Exp $
+# Purpose  : Implementation
+#     
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# This file was composed using 8-space tabs and a width of 132 characters.
+
+########
+# Notes
+########
+
+#
+# The algorithm here isn't too hard to follow, but it bears some explanation.
+# We make a first pass through the file and keep track of the indices of the
+# lines at which pattern matches are found.  Then, we make a second pass through 
+# and print the appropriate lines above and below those matched lines.  Because 
+# we do this in two passes, we can print the appropriate number of lines above 
+# and below each matched line even if two or more matched lines are adjacent to
+# each other in the file.
+#
+# It's not the most efficient way to go about this, but it's reasonably performant
+# for moderately-sized files (maybe less than 100,000 lines).
+#
+
+
+################
+# Package setup
+################
+
+use FileHandle;
+use Getopt::Long;
+use strict vars;
+
+
+#################
+# Constant setup
+#################
+
+my $set         = 1;
+my $unset       = 0;
+my $blank       = "";
+
+my $fh = new FileHandle;
+my $def_wrap_lines = 0;
+
+
+########################
+# Variable declarations
+########################
+
+my $case        = $unset;
+my $wrap_str    = $blank;
+my $help        = $unset;
+my $pattern;
+my @files;
+
+my @wraps;
+my $wrap_lines_above;
+my $wrap_lines_below;
+
+my @LINES;
+my $return = -1;
+my $file;
+
+my %INDICES;
+my %PRINT_INDICES;
+
+
+################################
+# Handle command-line arguments
+################################
+
+$return = GetOptions("i"    => \$case, 
+                     "n=s"  => \$wrap_str, 
+                     "help" => \$help);
+
+if($return == 0)
+{
+   usage();
+   exit 1;
+}
+
+if($help == $set)
+{
+   usage();
+   exit 0;
+}
+
+$pattern = shift @ARGV;
+if(!defined $pattern)
+{
+   print "Pattern required.\n";
+   usage();
+   exit 1;
+}
+
+if($wrap_str eq $blank)
+{
+   $wrap_lines_above = $def_wrap_lines;
+   $wrap_lines_below = $def_wrap_lines;
+}
+else
+{
+   @wraps = split(/,/, $wrap_str); 
+   if($#wraps > 1)
+   {
+      print "Unknown option: -n $wrap_str\n";
+      usage();
+      exit 1;
+   }
+
+   if(($#wraps == 0) and ($wraps[0] =~ /[0-9]/))
+   {
+      # One argument, i.e. -n 1
+      $wrap_lines_above = $wraps[0];
+      $wrap_lines_below = $wraps[0];
+   }
+   elsif(($#wraps == 1) and ($wraps[0] =~ /[0-9]/) and ($wraps[1] =~ /[0-9]/))
+   {
+      # Two arguments, i.e. -n 1,2
+      $wrap_lines_above = $wraps[0];
+      $wrap_lines_below = $wraps[1];
+   }
+   else
+   {
+      print "Unknown option: -n $wrap_str\n";
+      usage();
+      exit 1;
+   }  
+
+}
+
+
+#####################
+# Search for pattern
+#####################
+
+@files = @ARGV;
+if($#files < 0)
+{
+   # Initialize everything
+   undef @LINES;
+   undef %INDICES;
+   undef %PRINT_INDICES;
+
+   # Use STDIN for text-space
+   @LINES = <STDIN>;
+   find_indices(\@LINES, \%INDICES);
+   build_print_indices(\%INDICES, \%PRINT_INDICES, 
+                       $wrap_lines_above, $wrap_lines_below);
+   if((keys %PRINT_INDICES) > 0)
+   {
+      print_lines(\@LINES, \%PRINT_INDICES, $#LINES);
+   }
+}
+else
+{
+   # Use files from command-line for text-space
+   foreach $file (@files)
+   {
+      # Initialize everything
+      undef @LINES;
+      undef %INDICES;
+      undef %PRINT_INDICES;
+
+      open $fh, "<$file" or die "Unable to open $file\n";
+      @LINES = <$fh>;
+      close $fh;
+
+      find_indices(\@LINES, \%INDICES);
+      build_print_indices(\%INDICES, \%PRINT_INDICES, 
+                          $wrap_lines_above, $wrap_lines_below);
+      if((keys %PRINT_INDICES) > 0)
+      {
+         print "================ $file ==============\n";
+         print_lines(\@LINES, \%PRINT_INDICES, $#LINES);
+      }
+   }
+}
+
+
+###################
+# Usage subroutine
+###################
+
+sub usage()
+{
+   print "\n\tUsage: kgrep [-i] [-n x|y,z] [--help] pattern [file-list]\n";
+   print "\n\t\t-i       \t- Make search case-INsensitive\n";
+   print "\t\t-n x|y,z \t- List x lines on either side of target line OR\n";
+   print "\t\t         \t  list y lines above and z lines below target \n";
+   print "\t\t--help   \t- Show this message\n";
+   print "\t\tpattern  \t- Pattern to search for (perl regex)\n";
+   print "\t\tfile-list\t- File or files to look through\n\n";
+   print "\tSearches through a file or files for a specified pattern and\n";
+   print "\tdisplays the target line containing the pattern as well as a\n";
+   print "\tcertain number of lines on either side of the target line\n";
+   print "\t(default of $def_wrap_lines).\n";
+   print "\n\tIf no file-list is specified, STDIN is used.\n";
+   print "\n\tThis program is copyright (c) 1999 Kenneth J. Pronovici and\n";
+   print "\tis distributed under the GNU GPL; see http://www.gnu.org/\n";
+   print "\tfor more information.\n";  
+   exit 0;
+}    
+
+
+#########################
+# Find indices function
+#########################
+
+sub find_indices($$)
+{
+
+   my ($lines_ref, $indices_ref) = (@_);
+   my $line;
+   my $i = 0;
+
+   foreach $line (@$lines_ref)
+   {
+      if($case == $set)
+      {
+         if($line =~ /$pattern/i)
+         {
+            $$indices_ref{$i} = $i;
+         }
+      }
+      else
+      {
+         if($line =~ /$pattern/)
+         {
+            $$indices_ref{$i} = $i;
+         }
+      } 
+
+      $i++;
+   }
+}
+
+
+###############################
+# Build print-indices function
+###############################
+
+sub build_print_indices($$$$)
+{
+   my ($indices_ref, $print_indices_ref, $above, $below) = (@_);
+   my $key;
+   my %TEMP_INDICES;
+   my $i;
+   
+   foreach $key (sort {$a <=> $b} (keys %$indices_ref))
+   {
+      for($i=$key-$above; $i<=$key+$below; $i++)
+      {
+         $$print_indices_ref{$i} = $i;
+      }
+   }
+}
+
+
+#######################
+# print lines function
+#######################
+
+sub print_lines($$$)
+{
+   my ($lines_ref, $print_indices_ref, $max_index) = (@_);
+   my $key;
+   my $last_key = 0;
+
+   foreach $key (sort {$a <=> $b} (keys %$print_indices_ref))
+   {
+      if($key > ($last_key + 1))
+      {
+         print "\n";
+      }
+
+      if($key >= 0 and $key <= $max_index)
+      {
+         print "> $$lines_ref[$key]";
+      }
+
+      $last_key = $key;
+   }
+}

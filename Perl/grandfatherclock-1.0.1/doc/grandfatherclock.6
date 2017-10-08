@@ -1,0 +1,160 @@
+.\" grandfatherclock.6,v 1.0.0 2000-07-21
+.\"
+.\" grandfatherclock - toll the time accoustically
+.\" Copyright (C) 2000 Dr. Robert J. Meier <robert.meier@computer.org>
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; if not, write to the Free Software
+.\" Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+.\"
+.TH grandfatherclock 6 "2000-07-21" "1.0.0" "Accoustic clock"
+.SH NAME
+grandfatherclock \- report time accoustically
+.SH SYNOPSIS
+.B grandfatherclock
+.RB [\| \-v \|]
+.RB [\| \-f
+.IR config-file \|]
+.RB [\| \-q \|]
+.RB [\| \-t
+.IR HHMM \|]
+.RB [\| \-c
+.IR play-command \|]
+.RB [\| \-a
+.IR device \|]
+.RB [\| \-g
+.IR gain \|]
+.RB [\| \-p
+.IR toll-count \|]
+.RB [\| \-p
+.IR audio-dir \|]
+.RB [\| \-1
+.IR audio-file \|]
+.RB [\| \-2
+.IR audio-file \|]
+.RB [\| \-3
+.IR audio-file \|]
+.RB [\| \-4
+.IR audio-file \|]
+.RB [\| \-h
+.IR audio-file \|]
+.SH DESCRIPTION
+.B grandfatherclock
+plays audio files to sound the nearest hour or quarter as directed.
+Command line arguments and an optional configuration file determine
+the location of the audio files, and the commands to play them.
+The file is usually executed every hour or quarter hour by a cron(1) job.
+.SH OPTIONS
+Options are set by reading an optional configuration file and then modifying
+options set by command line arguments.  No more than one configuration file
+is read.  The configuration file name is the first of: the one named in the
+command line, the one named in the environment variable, the first readable
+one named in the FILES section.
+.TP
+.B \-f file
+Specify a configuration file to read.
+.TP
+.BR \-v
+Report debugging information.
+.TP
+.BR \-q
+Sound the nearest quarter hour.
+.TP
+.BR \-a\ device-address
+.BR AUDIO_DEVICE
+Write the audio files to this device.
+.TP
+.BR \-g\ gain-float
+.BR PLAY_GAIN
+Set an overall gain available as %g in the play command.
+.TP
+.BR \-p\ toll-count
+.BR PAUSE_BETWEEN_TOLLS
+If nonzero, after each count of tolls, pause for an additional second.
+.TP
+.BR \-c\ shell-command
+.BR PLAY_COMMAND
+This shell command plays the audio file %f with gain %g to device %a.
+.TP
+.BR \-d\ directory
+.BR AUDIO_DIRECTORY
+The relative addresses among the audio files are relative to this directory.
+.TP
+.BR \-1\ file
+.BR Q1_FILE
+Play this file at the first quarter of the hour.
+.TP
+.BR \-2\ file
+.BR Q2_FILE
+Play this file at the half hour.
+.TP
+.BR \-3\ file
+.BR Q3_FILE
+Play this file at the third quarter of the hour.
+.TP
+.BR \-4\ file
+.BR Q4_FILE
+Play this file at the hour.
+.TP
+.BR \-h\ file
+.BR TOLL_FILE
+Play this file for each toll.
+.SH EXAMPLES
+.TP
+.B grandfatherclock\ \-?
+Display the latest options, keys, and defaults.
+.TP
+.B grandfatherclock\ \-q
+Play the nearest quarter hour and toll the hour if appropriate.
+.TP
+.B grandfatherclock\ \-p\ 4
+Toll the hour with a pause between each 4 tolls.
+.TP
+.B crontab -e
+(Add) 0,15,30,45 * * * * grandfatherclock -q
+.br
+Emulate a grandfather clock.
+.SH ENVIRONMENT
+.TP
+.B GRANDFATHERCLOCKRC
+If set, read the configuration from this file.  Command line arguments
+override the settings in this file.
+.SH FILES
+.TP
+.I $HOME/.grandfatherclockrc
+Personal configuration file
+.TP
+.I /etc/grandfatherclock/grandfatherclockrc
+System wide configuration file
+.TP
+.I /opt/grandfatherclock/etc/grandfatherclockrc
+Package configuration file
+.SH SEE ALSO
+.BR crontab(1),
+.BR crontab(5)
+.SH COPYRIGHT
+grandfatherclock is Copyright (C) 2000 by Dr. Robert J. Meier
+.br
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+.br
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+.br
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.

@@ -1,0 +1,66 @@
+
+1999-09-20
+
+README - Disc-Cover
+
+
+1. Idee
+
+Dieses kleine Skript erzeugt ein Cover für Audio-CDs. Es bekommt
+Informationen aus dem Internet (www.cddb.com) oder von einer Datei
+mit cddb Einträgen und erzeugt eine LaTeX, DVI, PostScript oder PDF
+Datei, die die Vorder- und Rückseite des Covers auf einer Seite
+enthält.
+
+Die Vorderseite enthält den Titel und Künstler der CD. Neben diesen
+Informationen enthält die Rückseite auch alle Tracks aufgeführt,
+davor steht die Nummer und danach die Länge des Tracks. Die Rückseite
+führt auch die Gesamtlaufzeit der CD auf. Die Seiten der Rückseite
+enthalten den Künstler und den Titel der CD.
+
+Zwei weitere Formate werden unterstützt. Eine einfache Textausgabe
+und eine Ausgabe, die mit cdlabelgen, einem weiteren Programm, das
+CD-Covers erstellt (http://www.red-bean.com/~bwf/software/cdlabelgen/)
+zusammenarbeitet.
+
+
+2. Was benötigst du
+
+Die Datei "INSTALL" beschreibt die Details der Installation.
+
+
+3. Features
+
+- Ausgaben als LaTeX, DVI, PostScript, PDF, Cddb Eintrag, Text und
+  einem Format, das mit cdlabelgen zusammenarbeitet.
+
+- Unterstützt das "Caching" von cddb-Einträgen in einem Verzeichnis,
+  das zusammen mit anderen Programmen, die auch cddb verwenden, benutzt
+  werden kann.
+
+- Verbindet sich mit einem cddb-Server um CD-Titel, Künstler und
+  Namen der Stücke abzufragen.
+  
+- Dokumentation in Niederländisch, Englisch, Deutsch und Spanisch.
+
+
+
+4. Wie funktioniert es?
+
+Die übliche Art und Weise mit Disc-Cover zu arbeiten ist einfach.
+Einfach eine Audio-CD in das CDROM-Laufwerk einlegen, eine Verbindung
+zum Internet aufbauen und disc-cover starten. Das erzeugt eine
+druckreife PostScript-Datei.
+
+
+
+5. Lizenz
+
+Das Urheberrecht dieses Programmes liegt bei J.I. van Hemert. Dieses
+Programm steht unter dem Schutz der "GNU Public License". Eine Kopie
+dieses Textes sollte beim Vertrieb des Pakets der Datei 'COPYING'
+beigefügt sein, die im "root"-Verzeichnis der Distribution gefunden
+werden kann.
+
+
+J.I van Hemert

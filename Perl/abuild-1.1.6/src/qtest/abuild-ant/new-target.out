@@ -1,0 +1,10 @@
+abuild: build starting
+abuild: user (abuild-java): local
+Buildfile: --abuild.xml--
+
+local:
+     [echo] This is a local target.
+
+BUILD SUCCESSFUL
+Total time: <time>
+abuild: build complete

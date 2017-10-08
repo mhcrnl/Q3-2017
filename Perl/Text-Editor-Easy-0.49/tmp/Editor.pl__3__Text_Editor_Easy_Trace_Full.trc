@@ -1,0 +1,146 @@
+Dans init_trace_print 64 : tmp/Editor.pl_trace.trc|
+Appel à trace_full_print : seek_start 0|seek_end 50|Subroutine demo8 redefined at Editor.pl line 493.
+
+Appel à trace_full_print : seek_start 50|seek_end 147|Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+
+Appel à trace_full_print : seek_start 147|seek_end 255|Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+
+Appel à trace_full_print : seek_start 255|seek_end 313|Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+
+Appel à trace_full_print : seek_start 313|seek_end 411|    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+
+Appel à trace_full_print : seek_start 411|seek_end 469|Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+
+Appel à trace_full_print : seek_start 469|seek_end 519|        my $return = $sub_ref->( $self, @param );
+
+Appel à trace_full_print : seek_start 519|seek_end 577|Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+
+Appel à trace_full_print : seek_start 577|seek_end 657|        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+
+Appel à trace_full_print : seek_start 657|seek_end 715|Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+
+Appel à trace_full_print : seek_start 715|seek_end 754|    return $sub_ref->( $self, @data );
+
+Appel à trace_full_print : seek_start 754|seek_end 812|Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+
+Appel à trace_full_print : seek_start 812|seek_end 882|        return execute_task( 'sync', $self_server, $method, $call_id,
+
+Appel à trace_full_print : seek_start 882|seek_end 940|Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+
+Appel à trace_full_print : seek_start 940|seek_end 961|    return new_ask( 
+
+Appel à trace_full_print : seek_start 961|seek_end 1013|Package Text::Editor::Easy, ligne à ignorer : 995 :
+
+Appel à trace_full_print : seek_start 1013|seek_end 1080|    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Appel à trace_full_print : seek_start 1081|seek_end 1147|Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+
+Appel à trace_full_print : seek_start 1147|seek_end 1209|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 1209|seek_end 1287|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+
+Appel à trace_full_print : seek_start 1287|seek_end 1349|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 1349|seek_end 1420|Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+
+Appel à trace_full_print : seek_start 1420|seek_end 1472|Valeur de retour de hash_returned : HASH(0x2177de0)
+
+Appel à trace_full_print : seek_start 1472|seek_end 1550|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+
+Appel à trace_full_print : seek_start 1550|seek_end 1574|LAST MODIF = 1248602490
+
+Appel à trace_full_print : seek_start 1574|seek_end 1636|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 1636|seek_end 1657|Dans bind_key_global
+
+Appel à trace_full_print : seek_start 1657|seek_end 1678|Dans bind_key_global
+
+Appel à trace_full_print : seek_start 1678|seek_end 1749|Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+
+Appel à trace_full_print : seek_start 1749|seek_end 1801|Valeur de retour de hash_returned : HASH(0x26aea88)
+
+Appel à trace_full_print : seek_start 1801|seek_end 1879|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+
+Appel à trace_full_print : seek_start 1879|seek_end 1941|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 1941|seek_end 2041|DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+
+Appel à trace_full_print : seek_start 2041|seek_end 2119|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+
+Appel à trace_full_print : seek_start 2119|seek_end 2143|LAST MODIF = 1507272040
+
+Appel à trace_full_print : seek_start 2143|seek_end 2205|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 2205|seek_end 2283|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a91e0)
+
+Appel à trace_full_print : seek_start 2283|seek_end 2345|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 2345|seek_end 2414|Dans init_eval de Search.pm .. HASH(0x7f13790a1c80), 139721057863832
+
+Appel à trace_full_print : seek_start 2414|seek_end 2492|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f1370190dd8)
+
+Appel à trace_full_print : seek_start 2492|seek_end 2510|EVAL _TJREAD = 13
+
+Appel à trace_full_print : seek_start 2510|seek_end 2572|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 2572|seek_end 2593|Dans bind_key_global
+
+Appel à trace_full_print : seek_start 2593|seek_end 2614|Dans bind_key_global
+
+Appel à trace_full_print : seek_start 2614|seek_end 2635|Dans bind_key_global
+
+Appel à trace_full_print : seek_start 2635|seek_end 2663|Dans Comm, mort du thread 6
+
+Appel à trace_full_print : seek_start 2663|seek_end 2741|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+
+Appel à trace_full_print : seek_start 2741|seek_end 2765|LAST MODIF = 1248602490
+
+Appel à trace_full_print : seek_start 2765|seek_end 2827|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 2827|seek_end 2905|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+
+Appel à trace_full_print : seek_start 2905|seek_end 2929|LAST MODIF = 1248602490
+
+Appel à trace_full_print : seek_start 2929|seek_end 2991|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 2991|seek_end 3069|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+
+Appel à trace_full_print : seek_start 3069|seek_end 3093|LAST MODIF = 1248602490
+
+Appel à trace_full_print : seek_start 3093|seek_end 3155|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 3155|seek_end 3233|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d1020)
+
+Appel à trace_full_print : seek_start 3233|seek_end 3257|LAST MODIF = 1248602490
+
+Appel à trace_full_print : seek_start 3257|seek_end 3319|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 3319|seek_end 3343|LAST MODIF = 1248602490
+
+Appel à trace_full_print : seek_start 3343|seek_end 3421|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d6ea8)
+
+Appel à trace_full_print : seek_start 3421|seek_end 3483|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 3483|seek_end 3561|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701f3638)
+
+Appel à trace_full_print : seek_start 3561|seek_end 3585|LAST MODIF = 1248602490
+
+Appel à trace_full_print : seek_start 3585|seek_end 3647|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 3647|seek_end 3671|LAST MODIF = 1248602490
+
+Appel à trace_full_print : seek_start 3671|seek_end 3749|Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7550)
+
+Appel à trace_full_print : seek_start 3749|seek_end 3811|Pas de configuration trouvée pour l'affichage de LINE REF = 1
+
+Appel à trace_full_print : seek_start 3811|seek_end 3881|MW = MainWindow=HASH(0x1cd09a0) MainWindow, sub_ref = CODE(0x1e1d1c0)
+
+Appel à trace_full_print : seek_start 3881|seek_end 3908|Geométrie : 1280x736+-1+26
+
+Appel à trace_full_print : seek_start 3908|seek_end 3921|Dans destroy
+
+Appel à trace_full_print : seek_start 3921|seek_end 3958|Dans Window Destroy : 1280 736 -1 26
+

@@ -1,0 +1,41 @@
+
+2000-03-05
+
+INSTALLATIE - Disc-Cover
+
+
+Om Disc-Cover te installeren is het alleen nodig het 'disc-cover' script te
+copieren naar een directory dat in een bin path staat. Zorg ervoor dat alle
+benodigdheden zoals hieronder vermeld aanwezig zijn:
+
+Voor dit script is de volgende software nodig:
+  - Perl (met deze modules: libwww-perl, MIME-Base64. URI, HTML-Parser, Audio-CD,
+    libnet, Digest-MD5)
+  - Latex (met packages: ifthen, isolatin1, graphicx, color)
+  - Dvips (voor Postscript uitvoer) of pdflatex (voor Pdf uitvoer) en het
+    volgende is nodig:
+  - Een internet verbinding voor cddb
+  - Een cdrom drive met audio cd
+  - Een /tmp directory
+optioneel:
+  - het programma convert van ImageMagick om plaatjes op de voorkant te
+    zetten.  
+
+Als je zelf de source of de distributie pakketten (RedHat/Debian) van de perl
+modules (libwww-perl, MIME-Base64, URI, HTML-Parser, Digest-MD5, libnet,
+Audio-CD) hebt opgehaald, installeer ze dan in deze volgorde:
+
+  1. MIME-Base64 (geteste versie 2.11)
+  2. URI (geteste versie 1.04)
+  3. HTML-Parser (geteste versie 2.23)
+  4. Digest-MD5 (geteste versie 2.09)
+  5. libnet (geteste versie 1.0607)
+  6. libwww-perl (geteste versie 5.47)
+  7. Audio-CD (geteste versie 0.04)
+
+Controleer na afloop of deze geinstalleerd zijn in een Perl library path
+(/usr/lib/perl).
+
+
+J.I. van Hemert
+

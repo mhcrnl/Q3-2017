@@ -1,0 +1,2402 @@
+#!/usr/bin/perl -w
+#
+# Disc-Cover - using CDDB to create a cover for music cds. Default is
+# to output a postscript file called 'artist_-_album.ps' provided the
+# album is found in the CDDB database.
+# Copyright © 1999-2005 J.I. van Hemert
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+# Author: J.I. van Hemert <jvhemert@cwi.nl>
+#
+# Physical mail:
+# J.I. van Hemert
+# CWI
+# P.O. Box 94079
+# NL-1090 GB Amsterdam
+# The Netherlands
+#
+
+my $cvs_id_string = '$Id: disc-cover,v 1.6 2006/06/20 12:15:55 jvhemert Exp $';
+
+
+################################
+# Default configuration values #
+################################
+
+my ($config_homedir) = "";
+$config_homedir = "$ENV{HOME}" if (defined $ENV{HOME});
+my ($config_tmp_dir) = '/tmp';
+my (@config_template_dirs) = ('/usr/share/disc-cover/templates','/usr/lib/disc-cover/templates','templates');
+my ($config_output_format) = 'ps';
+my ($config_device) = "/dev/cdrom";
+my ($config_cddb_cache_directory) = "$config_homedir/.cddb";
+my ($config_flaptext) = split ',', (getpwuid($<))[6];
+my ($config_version_config) = undef;
+my ($latex_user_packages) = '';
+my ($latex_language_encoding) = 'latin1';
+my ($flag_genre) = 0;
+my ($flag_with_extended_track_info) = 0;
+my (%config_latex_colors) = ( title => 'black', artist => 'black', discinfo => 'black', track_number => 'black', track_string => 'black', track_time => 'black', flaptext => 'black', track_extended => 'black', track_artist => 'black', 'genre' => 'black' );
+my ($config_casetype) = "jewel";
+my ($flag_various_artist_cd) = 0;
+my ($flag_double_disc_cdtitle) = 1;
+my ($flag_picture_use_allmusic) = 0;
+my ($flag_uppercase_fix) = 0;
+my ($flag_verbose) = 0;
+my ($flag_remove_temporary_files) = 0; # 0 means yes, remove files
+my ($latex_global_oddsidemargin, $latex_global_evenside_margin, $latex_global_voffset, $latex_global_footskip, $latex_global_textheight, $latex_global_textwidth) = ("-25pt", "-25pt", "-100pt", "0pt", "780pt", "170mm");
+
+
+
+############################
+# Read configuration files #
+############################
+
+my ($config_version) = '1.5.6';
+eval `cat "/etc/disc-cover.conf"` if (-f "/etc/disc-cover.conf");
+if (defined($config_version_config) and $config_version_config ne $config_version)
+{
+	warn "Warning: version of system configuration file \"/etc/disc-cover.conf\"\n($config_version_config) does not match current configuration version of Disc-Cover ($config_version)\n"
+}
+eval `cat "$config_homedir/.disc-coverrc"` if (-f "$config_homedir/.disc-coverrc");
+if (defined($config_version_config) and $config_version_config ne $config_version)
+{
+	warn "Warning: version of user configuration file \"$config_homedir/.disc-coverrc\"\n($config_version_config) does not match current configuration version of Disc-Cover ($config_version)\n"
+}
+
+#################################
+# Non advisable to change these #
+#################################
+
+my ($bottomtextfront) = undef;
+my ($config_cdserverrc) = "$config_homedir/.cdserverrc";
+my ($version) = '1.5.6';
+my ($process_number) = $$;
+my ($flag_move_end_file) = 0;
+my ($config_output_configuration_filename) = undef;
+my ($outputfile) = undef;
+my ($inputfile) = undef;
+my ($config_second_inputfile) = undef;
+my ($config_all_available_output_types) = 'tex dvi ps pdf cddb txt lbl html';
+my ($latex_global_packages) = 'ifthen,graphicx,color,multicol';
+my ($config_cover_picture) = undef;
+my ($config_cover_picture_no_convert_needed) = undef;
+
+
+########################
+# Start of main progam #
+########################
+
+use strict;
+use Getopt::Long;
+
+#TODO use Image::Magick;
+
+
+my @command_line = @ARGV;
+
+if ($version =~ "beta")
+{
+	warn	"+--------------------------------------+\n".
+		"| This is a beta version ($version). |\n".
+		"| It is for testing purposes only.     |\n".
+		"+--------------------------------------+\n";
+}
+
+my $flag_show_help = 0;
+my $flag_show_cvs_version = 0;
+my $flag_show_manual = 0;
+my $flag_show_version = 0;
+my $flag_show_releaseversion = 0;
+my $flag_create_new_cddb = 0;
+my $flag_create_cdserverrc = 0;
+my $flag_template_list = 0;
+Getopt::Long::Configure("permute", "no_ignore_case");
+GetOptions	("pic=s" => \$config_cover_picture_no_convert_needed,
+		"p=s" => \$config_cover_picture,
+		"t|type=s" => \$config_output_format,
+		"f|file=s" => \$inputfile, 
+		"D|Device=s" => \$config_device, 
+		"o|output=s" => \$outputfile, 
+		"a|additional=s" => \$bottomtextfront, 
+		"V|Verbose" => \$flag_verbose, 
+		"R|Remove" => \$flag_remove_temporary_files, 
+		"S|Server" => \$flag_create_cdserverrc, 
+		"e|extended" => \$flag_with_extended_track_info, 
+		"n|new!" => \$flag_create_new_cddb, 
+		"h|help!" => \$flag_show_help, 
+		"H|Help!" => \$flag_show_manual, 
+		"u|uppercase!" => \$flag_uppercase_fix,
+		"v|version!" => \$flag_show_version, 
+		"releaseversion!" => \$flag_show_releaseversion,
+		"b|flaptext=s" => \$config_flaptext, 
+		"g|genre!" => \$flag_genre, 
+		"C|Configuration=s" => \$config_output_configuration_filename,
+		"c|casetype=s" => \$config_casetype,
+		"va|variousartists!" => \$flag_various_artist_cd,
+		"allmusic!" => \$flag_picture_use_allmusic,
+		"2|second=s" => \$config_second_inputfile,
+		"CVS!" => \$flag_show_cvs_version,
+		"template_list" => \$flag_template_list);
+($flag_template_list) and print_template_list() and exit;
+($flag_show_cvs_version) and print "$cvs_id_string" and exit;
+($flag_show_help) and print print_help() and exit;
+($flag_show_manual) and print_manual() and exit;
+($flag_show_version) and print print_version_info() and exit;
+($flag_show_releaseversion) and print "$version" and exit;
+($flag_create_cdserverrc) and create_cdserverrc() and exit;
+if ($config_output_configuration_filename)
+{
+	open CONF, "> $config_output_configuration_filename" or die "Could not open \"$config_output_configuration_filename\" for writing";
+	print CONF print_configuration_file();
+	close CONF;
+	exit 0;
+}
+
+unless ($inputfile)
+{
+	require Audio::CD;
+}
+
+print STDERR "Disc-Cover: running verbose version $version (config $config_version)\n" if ($flag_verbose);
+
+if ($flag_verbose)
+{
+	print STDERR "Disc-Cover: command line string: ".join(' ',@command_line)."\n";
+	print STDERR "Disc-Cover: SYSTEM INFO\n";
+	print STDERR "  OS version: ".`uname -a`;
+	print STDERR "  Perl version: ".`perl -V:version`;
+	print STDERR "  libcdaudio version: ".`echo /usr/lib/libcdaudio.so.*`;
+	print STDERR "  Audio-CD version: ".Audio::CD->VERSION."\n";
+	print STDERR "  LaTeX version: ".`latex -v | head -1`;
+	print STDERR "  Dvips version: ".`dvips -v`;
+	print STDERR "  Convert version: ".`convert -v | head -1`;
+}
+
+$config_tmp_dir .= "/disc-cover-$process_number";
+print STDERR "Disc-Cover: creating tmp dir ($config_tmp_dir)\n" if $flag_verbose;
+mkdir ("$config_tmp_dir", 0777) or die "Error: could not create temporary directory \"$config_tmp_dir\".\n\nSolution: check if you can create the directory yourself.\n";
+
+
+my %discinfo = ();
+
+
+if ($flag_create_new_cddb)
+{
+	my $cddb_data;
+	my $audio_cd = Audio::CD->init($config_device);
+	end_program("Device initialization failed.","Make sure \"$config_device\" points to a valid Cdrom device.") unless $audio_cd;
+	my $cddb = $audio_cd->cddb;
+	my $cdinfo = $audio_cd->stat;
+	%discinfo = parse_cddb_file(create_new_cddb_entry($cdinfo, $cddb)) or end_program("Could not parse newly created cddb entry", "Internal error, please contact the author.");
+}
+elsif (!defined($inputfile))
+{
+	my $cddb_data;
+	my $audio_cd = Audio::CD->init($config_device);
+	end_program("Device initialization failed.","Make sure \"$config_device\" points to a valid Cdrom device.") unless $audio_cd;
+	my $cddb = $audio_cd->cddb;
+	my $cdinfo = $audio_cd->stat;
+
+
+	end_program("Could not read cd.", "Insert an audio cd into cdrom drive \"$config_device\".", "Use the '-f file.cddb' option.") unless $cdinfo->present;
+
+	$cddb->verbose($flag_verbose);
+
+	print STDERR "Disc-Cover: calling Audio-CD library...\n" if ($flag_verbose);
+	$cddb_data = $cddb->lookup;
+	print STDERR "Disc-Cover: ...back from call to Audio-CD library.\n" if ($flag_verbose);
+	if (!$cddb_data->title)
+	{
+		if (!-e $config_cdserverrc)
+		{
+			end_program("Could not find a \"$config_cdserverrc\" file.","Use \'disc-cover -S\' to create a default server configuration.");
+		}
+		else
+		{
+			end_program("Could not fetch cdrom information.","Check if the connection to the internet works.", "If the file is not in the cddb database you can make a new file\nas follows: 'disc-cover -n -t cddb -o newfile.cddb'. Edit this file and\ninsert the titles and artist, then do: 'disc-cover -f newfile.cddb'.");
+		}
+	}
+	print STDERR "Disc-Cover: Audio-CD library says success, let's continue\n" if $flag_verbose;
+
+	$discinfo{artist} = $cddb_data->artist;
+	$discinfo{artist} =~ s///g;
+	$discinfo{title} = $cddb_data->title;
+	$discinfo{title} =~ s///g;
+	$discinfo{extended} = $cddb_data->extended;
+	$discinfo{extended} =~ s///g;
+	$discinfo{genre} = $cddb_data->genre;
+	$discinfo{genre} =~ s///g;
+	$discinfo{discid} = sprintf("%x", $cddb->discid);
+	$discinfo{discid} =~ s///g;
+
+	$discinfo{length_minutes} = ($cdinfo->length)[0];
+	$discinfo{length_seconds} = ($cdinfo->length)[1];
+	$discinfo{total_tracks} = $cdinfo->total_tracks;
+
+	my @track_names; my @track_extended; my @track_artist;
+	my $various_artist_warning = 0;
+	#if ($flag_various_artist_cd)
+	#{
+	#	$cddb_data->parse_track_artist = 1;
+	#}
+	foreach my $track (@{$cddb_data->tracks($cdinfo)})
+	{
+		my $track_name = $track->name;
+		if ($track->artist)
+		{
+			if ($flag_various_artist_cd)
+			{
+				push (@track_artist, $track->artist);
+			}
+			else
+			{
+				$track_name = $track->artist." / ".$track->name;
+				$various_artist_warning++;
+			}
+
+		}
+		push (@track_names, $track_name);
+		push (@track_extended, $track->extended);
+	}
+	if ($various_artist_warning == $discinfo{total_tracks})
+	{
+		warn "Warning: all the tracks of this cd contain a slash ' / ' in their track titles,\nwhich could mean it is a various artist cd that contains the form\n'artist / title' for each track. Use the flag '-va' to make a nicer format.\n";
+	}
+	@track_names = map { s///g; $_ } @track_names;
+	$discinfo{track_names} = \@track_names;
+	@track_extended = map { s///g; $_ } @track_extended;
+	$discinfo{track_extended} = \@track_extended;
+	@track_artist = map { s///g; $_ } @track_artist;
+	$discinfo{track_artist} = \@track_artist;
+	
+	my @track_length_minutes; my @track_length_seconds;
+	foreach my $track (@{$cdinfo->tracks})
+	{
+		push (@track_length_minutes, ($track->length)[0]);
+		push (@track_length_seconds, ($track->length)[1]);
+	}
+	$discinfo{track_length_minutes} = \@track_length_minutes;
+	$discinfo{track_length_seconds} = \@track_length_seconds;
+
+	print STDERR "Disc-Cover: filled in disc information\n" if $flag_verbose;
+}
+else
+{
+	print STDERR "Disc-Cover: you supplied me with the file \"$inputfile\"\n" if $flag_verbose;
+	open (CDDB_FILE, "< $inputfile") or end_program("Could not open file \"$inputfile\"", "Check if this file exists and if it is readable.");
+	my $cddb_contents = "";
+	while (<CDDB_FILE>)
+	{
+		$cddb_contents = $cddb_contents.$_;
+	}
+	close CDDB_FILE;
+	%discinfo = parse_cddb_file($cddb_contents) or end_program("Could not parse file \"$inputfile\".", "Check if this is a cddb file.");
+	print STDERR "Disc-Cover: file sucessfully read as a CDDB entry\n" if $flag_verbose;
+}
+
+my %second_discinfo;
+if ($config_second_inputfile)
+{
+	print STDERR "Disc-Cover: you supplied me with the second file \"$config_second_inputfile\"\n" if $flag_verbose;
+	open (CDDB_FILE, "$config_second_inputfile") or end_program("Could not open file \"$config_second_inputfile\"", "Check if this file exists and if it is readable.");
+	my $cddb_contents = "";
+	while (<CDDB_FILE>)
+	{
+		$cddb_contents = $cddb_contents.$_;
+	}
+	close CDDB_FILE;
+	%second_discinfo = parse_cddb_file($cddb_contents) or end_program("Could not parse file \"$config_second_inputfile\".", "Check if this is a cddb file.");
+	uppercase_fix_on_discinfo(\%second_discinfo) if $flag_uppercase_fix;
+	print STDERR "Disc-Cover: second file sucessfully read as a CDDB entry\n" if $flag_verbose;
+	if ($flag_double_disc_cdtitle)
+	{
+		my $disctitle;
+		my @discinfo_array1 = split '', $discinfo{title};
+		my @discinfo_array2 = split '', $second_discinfo{title};
+		my $counter = 0;
+		my $smallest_array = $#discinfo_array1 < $#discinfo_array2 ? $#discinfo_array1 : $#discinfo_array2;
+		while (($counter <= $smallest_array) and ($discinfo_array1[$counter] eq $discinfo_array2[$counter]))
+		{
+			$counter++;
+		}
+		#while ($discinfo_array1[$counter] ne " ")
+		#{
+		#	$counter--;
+		#}
+		$disctitle = join'', @discinfo_array1[0..$counter-1];
+		$disctitle =~ s/disc//g; # This could lead to problems, e.g., 'Super disc'
+		$disctitle =~ s/disk//g;
+		$disctitle =~ s/Disc//g;
+		$disctitle =~ s/Disk//g;
+		$disctitle =~ s/DISC//g;
+		$disctitle =~ s/DISK//g;
+		$disctitle =~ s/(^[\. -]*)|([\. -]*$)//g;
+		$discinfo{title} = $disctitle;
+		print STDERR "Disc-Cover: double disc title becomes \"$disctitle\"\n" if $flag_verbose;
+	}
+}
+
+($bottomtextfront) = $discinfo{extended} if (!defined($bottomtextfront));
+{
+	# Make sure that extended disc info fits front cover
+	my (@test) = split("\n", $bottomtextfront);
+	my $max_bottom_front_lines = 19;
+	$max_bottom_front_lines = 4 if ($flag_picture_use_allmusic or $config_cover_picture_no_convert_needed or $config_cover_picture);
+	if( $#test > $max_bottom_front_lines )
+	{
+	
+		warn "Warning: had to trim the extended disc info from ".(1+$#test)." to $max_bottom_front_lines to make it fit the front cover.\n";
+		splice (@test, $max_bottom_front_lines);
+	}
+	$bottomtextfront = join("\n", @test);
+}
+print STDERR "Disc-Cover: text on bottom of front cover: \"$bottomtextfront\"\n" if $flag_verbose;
+
+
+$bottomtextfront .= "\\n genre: $discinfo{genre}" if ($flag_genre);
+
+if (!defined($outputfile))
+{
+	$outputfile = $discinfo{artist}.' - '.$discinfo{title};
+	$outputfile =~ s/ /_/g;
+	$outputfile =~ s#(["`'])##g;
+	$outputfile =~ s#/#:#g;
+	chomp $outputfile;
+}
+
+if (defined($outputfile) and ($outputfile ne "-"))
+{
+	if($config_all_available_output_types =~ /\b$config_output_format\b/)
+	{
+		$outputfile =~ s/(\.$config_output_format)?$/.$config_output_format/;
+	}
+	if ($config_second_inputfile)
+	{
+		print STDERR "Output for cddb entries \"$discinfo{discid}\" and \"$second_discinfo{discid}\" goes to \"$outputfile\"\n";
+	}
+	else
+	{
+		print STDERR "Output for cddb entry \"$discinfo{discid}\" goes to \"$outputfile\"\n";
+	}
+}
+
+if ($config_output_format =~ /lbl|txt|tex|html|cddb/)
+{
+	open OUT, ">$outputfile" or end_program("Could not open \"$outputfile\"", "Check if a file or directory with the same name already exists","Is the directory writable?");
+	print STDERR "Disc-Cover: successfully opened file \"$outputfile\" for output\n" if $flag_verbose;
+}
+
+
+uppercase_fix_on_discinfo(\%discinfo) if $flag_uppercase_fix;
+
+#######
+# LBL #
+#######
+if ($config_output_format eq 'lbl')
+{
+	print STDERR "Disc-Cover: starting output of type lbl\n" if $flag_verbose;
+
+	print OUT "cdlabelgen \\\n";
+	if ($discinfo{artist} eq "")
+	{
+		printf OUT "-c \" \" \\\n";
+	}
+	else
+	{
+		printf OUT "-c \"%s\" \\\n", $discinfo{artist};
+	}
+	printf OUT "-s \"%s\" \\\n", $discinfo{title};
+	print OUT "-S 0.96 -e penguin.eps \\\n";
+	print OUT "-i \"";
+	if ($config_second_inputfile) { print OUT "%Disc1%\\\n" };
+
+	for (my $i = 0; $i < $discinfo{total_tracks}; $i++)
+	{
+		printf OUT "%2d. %s  %02d:%02d%%\\\n", ($i+1), $discinfo{track_names}[$i], $discinfo{track_length_minutes}[$i], $discinfo{track_length_seconds}[$i];
+	}
+	printf OUT "%%CD length: %02d:%02d\n", $discinfo{length_minutes}, $discinfo{length_seconds};
+
+	if ($config_second_inputfile)
+	{
+		print OUT "%%Disc2%\\\n";
+		for (my $i = 0; $i < $second_discinfo{total_tracks}; $i++)
+		{
+			printf OUT "%2d. %s  %02d:%02d%%\\\n", ($i+1), $second_discinfo{track_names}[$i], $second_discinfo{track_length_minutes}[$i], $second_discinfo{track_length_seconds}[$i];
+		}
+		printf OUT "%%CD length: %02d:%02d\n", $second_discinfo{length_minutes}, $second_discinfo{length_seconds};
+	}
+
+	print OUT "\"";
+
+	print STDERR "Disc-Cover: finished output of type lbl\n" if $flag_verbose;
+}
+########
+# HTML #
+########
+elsif ($config_output_format eq 'html')
+{
+	print STDERR "Disc-Cover: starting output of type html\n" if $flag_verbose;
+
+	printf OUT "<html>\n<head>\n<title>%s : %s</title>\n</head>\n\n", $discinfo{artist}, $discinfo{title};
+	printf OUT "<body bgcolor=\"#FFFFFF\" text=\"#882200\" link=\"#000000\" vlink=\"#555500\" alink=\"#FF0000\">\n\n";
+	printf OUT "<p><br><br><br>\n\n";
+	printf OUT "<table width=600 align=center border=0 cellpadding=1>\n";
+	printf OUT "<tr>\n";
+	printf OUT "<td align=center bgcolor=\"#DDC0C0\">%s</td>\n", $discinfo{artist};
+	if ($bottomtextfront eq "")
+	{
+		printf OUT "<td align=center bgcolor=\"#DDC0C0\">%s</td>\n", $discinfo{title};
+	}
+	else
+	{
+		printf OUT "<td align=center bgcolor=\"#DDC0C0\">%s", $discinfo{title};
+		printf OUT "&nbsp;-&nbsp;<i>%s</i></td>\n", $bottomtextfront;
+	}
+	printf OUT "</tr>\n";
+	printf OUT "</table>\n\n";
+	printf OUT "<p>\n\n";
+	printf OUT "<table width=600 align=center border=0 cellpadding=1>\n";
+	printf OUT "<tr><td>\&nbsp;</td></tr>\n<tr>\n<td colspan=4 align=left bgcolor=\"#DDC0C0\">Disc 1</td>\n</tr>\n" if ($config_second_inputfile);
+	for (my $i = 0; $i < $discinfo{total_tracks}; $i++)
+	{
+		printf OUT "<tr>\n";
+		printf OUT "<td align=left bgcolor=\"#FFFFFF\">%02d</td>\n", ($i+1);
+		printf OUT "<td align=left bgcolor=\"#EEEEEE\">%s</td>\n", $discinfo{track_names}[$i];
+		if (!$flag_various_artist_cd or $discinfo{track_artist}[$i] eq "")
+		{
+			printf OUT "<td align=left bgcolor=\"#FFEEEE\">&nbsp;</td>\n";
+		}
+		else
+		{
+			printf OUT "<td align=left bgcolor=\"#FFEEEE\">%s</td>\n", $discinfo{track_artist}[$i];
+		}
+		if ($discinfo{track_extended}[$i] eq "" or !$flag_with_extended_track_info)
+		{
+			printf OUT "<td align=left bgcolor=\"#EEEEFF\">&nbsp;</td>\n";
+		}
+		else
+		{
+			printf OUT "<td align=left bgcolor=\"#EEEEFF\">%s</td>\n", $discinfo{track_extended}[$i];
+		}
+		printf OUT "<td align=right bgcolor=\"#EEFFEE\">%02d:%02d</td>\n", $discinfo{track_length_minutes}[$i], $discinfo{track_length_seconds}[$i];
+		printf OUT "</tr>\n";
+	}
+	printf OUT "<tr>\n<td colspan=5 align=right bgcolor=\"#DDC0C0\">\n";
+	printf OUT "CD length: %02d:%02d\n", $discinfo{length_minutes}, $discinfo{length_seconds};
+	printf OUT "</td>\n</tr>\n";
+	if ($config_second_inputfile)
+	{
+		printf OUT "<tr><td>\&nbsp;</td></tr>\n<tr>\n<td colspan=4 align=left bgcolor=\"#DDC0C0\">Disc 2</td>\n</tr>\n";
+		for (my $i = 0; $i < $second_discinfo{total_tracks}; $i++)
+		{
+			printf OUT "<tr>\n";
+			printf OUT "<td align=left bgcolor=\"#FFFFFF\">%02d</td>\n", ($i+1);
+			printf OUT "<td align=left bgcolor=\"#EEEEEE\">%s</td>\n", $second_discinfo{track_names}[$i];
+			if (!$flag_various_artist_cd or $second_discinfo{track_artist}[$i] eq "")
+			{
+				printf OUT "<td align=left bgcolor=\"#FFEEEE\">&nbsp;</td>\n";
+			}
+			else
+			{
+				printf OUT "<td align=left bgcolor=\"#FFEEEE\">%s</td>\n", $second_discinfo{track_artist}[$i];
+			}
+			if ($second_discinfo{track_extended}[$i] eq "" or !$flag_with_extended_track_info)
+			{
+				printf OUT "<td align=left bgcolor=\"#EEEEFF\">&nbsp;</td>\n";
+			}
+			else
+			{
+				printf OUT "<td align=left bgcolor=\"#EEEEFF\">%s</td>\n", $second_discinfo{track_extended}[$i];
+			}
+			printf OUT "<td align=right bgcolor=\"#EEFFEE\">%02d:%02d</td>\n", $second_discinfo{track_length_minutes}[$i], $second_discinfo{track_length_seconds}[$i];
+			printf OUT "</tr>\n";
+		}
+		printf OUT "<tr>\n<td colspan=5 align=right bgcolor=\"#DDC0C0\">\n";
+		printf OUT "CD length: %02d:%02d\n", $second_discinfo{length_minutes}, $second_discinfo{length_seconds};
+		printf OUT "</td>\n</tr>\n";
+	}
+	printf OUT "</table>\n";
+	printf OUT "</body>\n</html>";
+
+	print STDERR "Disc-Cover: finished output of type html\n" if $flag_verbose;
+}
+#######
+# TXT #
+#######
+elsif ($config_output_format eq 'txt')
+{
+	print STDERR "Disc-Cover: starting output of type txt\n" if $flag_verbose;
+
+	printf OUT "Artist: %s\n", $discinfo{artist};
+	printf OUT "Title:  %s\n", $discinfo{title};
+
+	print OUT "Disc 1\n" if ($config_second_inputfile);
+	for (my $i = 0; $i < $discinfo{total_tracks}; $i++)
+	{
+		my $textended = ""; my $tartist = "";
+		if ($flag_with_extended_track_info and $discinfo{track_extended}[$i] ne "")
+		{
+			$textended = " - ".$discinfo{track_extended}[$i];
+		}
+		if ($flag_various_artist_cd)
+		{
+			$tartist = $discinfo{track_artist}[$i]." / ";
+		}
+		printf OUT "%02d %s%s%s %02d:%02d\n", ($i+1), $tartist, $discinfo{track_names}[$i], $textended, $discinfo{track_length_minutes}[$i], $discinfo{track_length_seconds}[$i];
+	}
+	printf OUT "CD length: %02d:%02d\n", $discinfo{length_minutes}, $discinfo{length_seconds};
+
+	if ($config_second_inputfile)
+	{
+		print OUT "Disc 2\n";
+		for (my $i = 0; $i < $second_discinfo{total_tracks}; $i++)
+		{
+			if ($second_discinfo{track_extended}[$i] eq "" or !$flag_with_extended_track_info)
+			{
+				printf OUT "%02d %s %02d:%02d\n", ($i+1), $second_discinfo{track_names}[$i], $second_discinfo{track_length_minutes}[$i], $discinfo{track_length_seconds}[$i];
+			}
+			else
+			{
+				printf OUT "%02d %s %s %02d:%02d\n", ($i+1), $second_discinfo{track_names}[$i], $second_discinfo{track_extended}[$i], $second_discinfo{track_length_minutes}[$i], $second_discinfo{track_length_seconds}[$i];
+			}
+		}
+		printf OUT "CD length: %02d:%02d\n", $second_discinfo{length_minutes}, $second_discinfo{length_seconds};
+	}
+
+	print STDERR "Disc-Cover: finished output of type txt\n" if $flag_verbose;
+}
+########
+# CDDB #
+########
+elsif ($config_output_format eq 'cddb')
+{
+	print STDERR "Disc-Cover: starting output of type cddb\n" if $flag_verbose;
+
+	my $cddb_cache_file = undef;
+	end_program("CDDB type not supported with two cds", "do not use \'-t cddb\' and \'-2\' at the same time.\n") if ($config_second_inputfile);
+
+	print OUT create_existing_cddb_entry(\%discinfo);
+
+	# OBSOLETE CODE (FINALLY): made redundant because we have a function to create our own cddb
+	#end_program("standard in to standard out with CDDB entries not possible", "do not use \'-f -\' and \'-o -\' together with \'-f cddb\'") if ($inputfile eq "-");
+	#if (defined($inputfile))
+	#{
+	#	$cddb_cache_file = $inputfile;
+	#}
+	#else
+	#{
+	#	my (@subdirs, $sub);
+	#	if (-d $config_cddb_cache_directory)
+	#	{
+	#		opendir(DIR, $config_cddb_cache_directory) or end_program("Could not open $config_cddb_cache_directory for reading.", "Check the permissions and the contents of the directory $config_cddb_cache_directory.");
+	#		@subdirs = readdir(DIR);
+	#		closedir(DIR); 
+	#	}
+	#	else
+	#	{
+	#		end_program("Could not find $config_cddb_cache_directory.","Check if this directory contains cddb entries.","If the directory is somewhere else, specify it in your configuration file or in the system's configuration file.");
+	#	}
+	#
+	#	FILES:
+	#	{
+	#		foreach $sub (@subdirs)
+	#		{
+	#			if ($sub !~ /^\.\./)
+	#			{
+	#				my $try_file = "$config_cddb_cache_directory/$sub/$discinfo{discid}";
+	#				if (-e $try_file)
+	#				{
+	#					$cddb_cache_file = $try_file;
+	#					last FILES;
+	#				}
+	#			}
+	#		}
+	#	}
+	#}
+	#
+	#end_program("Could not find a cddb file entry in the cache directory \'$config_cddb_cache_directory\".", "Are there any entries in the directory?") unless defined $cddb_cache_file;
+	#
+	#open IN, "<$cddb_cache_file" or end_program("Could not read file \"$cddb_cache_file\"");
+	#while (<IN>)
+	#{
+	#	print OUT $_;
+	#}
+	#close IN;
+
+	print STDERR "Disc-Cover: finished output of type cddb\n" if $flag_verbose;
+}
+#######
+# TEX #
+#######
+elsif ($config_output_format eq 'tex')
+{
+	print STDERR "Disc-Cover: starting output of type tex\n" if $flag_verbose;
+
+	print OUT print_whole_cover();
+
+	print STDERR "Disc-Cover: finished output of type tex\n" if $flag_verbose;
+}
+#######
+# PDF #
+#######
+elsif ($config_output_format eq 'pdf')
+{
+	print STDERR "Disc-Cover: starting output of type pdf\n" if $flag_verbose;
+
+	run_latex("pdflatex");
+	$flag_move_end_file = 1;
+
+	print STDERR "If you use Acrobat Reader to print this file, make sure the option 'Fit to Page' is switched off.\n";
+
+	print STDERR "Disc-Cover: finished output of type pdf\n" if $flag_verbose;
+}
+#######
+# DVI #
+#######
+elsif ($config_output_format eq 'dvi')
+{
+	print STDERR "Disc-Cover: starting output of type dvi\n" if $flag_verbose;
+
+	run_latex("latex");
+	$flag_move_end_file = 1;
+
+	print STDERR "Disc-Cover: finished output of type dvi\n" if $flag_verbose;
+}
+######
+# PS #
+######
+elsif ($config_output_format eq 'ps')
+{
+	print STDERR "Disc-Cover: starting output of type ps\n" if $flag_verbose;
+
+	run_latex("latex");
+
+
+	print STDERR "Disc-Cover: starting external dvi run\n" if $flag_verbose;
+	my $dvi_string = $flag_verbose ? "(cd $config_tmp_dir ; dvips \"$config_tmp_dir/disc-cover.dvi\" -o \"$config_tmp_dir/disc-cover.ps\")" : "(cd $config_tmp_dir ; dvips \"$config_tmp_dir/disc-cover.dvi\" -o \"$config_tmp_dir/disc-cover.ps\" 2> /dev/null)";
+	if (system ($dvi_string) > 0)
+	{
+		end_program("Something went wrong while running dvips.", "Run disc-cover with argument '-r' as argument, then check if a .dvi\nfile is produced in \"$config_tmp_dir\".");
+	}
+	$flag_move_end_file = 1;
+	print STDERR "Disc-Cover: finished external dvi run\n" if $flag_verbose;
+
+	print STDERR "Disc-Cover: finished output of type ps\n" if $flag_verbose;
+}
+################################
+# error: no valid format given #
+################################
+else
+{
+	end_program("The type of format \"".$config_output_format."\" does not exist.", "Use \"-t <option>\" where <option> is one of:\n$config_all_available_output_types.");
+}
+
+if ($flag_move_end_file == 1)
+{
+	if (defined($outputfile) and $outputfile eq "-")
+	{
+		open OUT,"$config_tmp_dir/disc-cover.$config_output_format" or end_program("Could not open the file \"$config_tmp_dir/disc-cover.$config_output_format\".", "Run disc-cover with argument '-r', then\ncheck if a .$config_output_format file is produced in \"$config_tmp_dir\".");
+		while (<OUT>)
+		{
+			print;
+		};
+		close OUT;
+		unlink "$config_tmp_dir/disc-cover.$config_output_format";
+	}
+	else
+	{
+		system("mv", "--", "$config_tmp_dir/disc-cover.$config_output_format", "$outputfile") and end_program("Could not move the file \"$config_tmp_dir/disc-cover.$config_output_format\"\nto \"$outputfile\".", "Check if the directory is writable.", "Run disc-cover with argument '-r', then\ncheck if a .$config_output_format file is produced in \"$config_tmp_dir\".");
+	}
+}
+else
+{
+	close OUT;
+}
+end_program();
+
+
+#######################
+# Clean exit function #
+#######################
+
+
+# DESC: primary function is to remove temporary files
+#	secondary funtion is to report errors and give solutions
+# NOTE: no args means clean exit (no errors reported)
+# ARGS: 1 error string
+#	2- solutions to error
+sub end_program
+{
+	my ($error) = defined($_[0]) ? $_[0] : undef ;
+	shift;
+	my (@solutions) = defined(@_) ? @_ : undef;
+
+	warn "Error: $error\n" if defined ($error);
+
+	if (defined($solutions[0]))
+	{
+		if ($#solutions == 0)
+		{
+			warn "\nSolution: $solutions[0]\n" if ($solutions[0] ne "");
+		}
+		else
+		{
+			my ($j) = 1;
+			foreach my $solution (@solutions)
+			{
+				warn "\nSolution $j: $solution\n" if ($solution ne "");
+				$j++;
+			}
+		}
+	}
+
+	if ($flag_remove_temporary_files == 0)
+	{
+		print STDERR "Disc-Cover: cleaning up tmp dir ($config_tmp_dir)\n" if $flag_verbose;
+		my ($ext);
+		foreach $ext ('.ps', '.log', '.dvi', '.aux', '.tex', '_front-picture.eps', '_front-picture.pdf', '_allmusic.jpg')
+		{
+			unlink "$config_tmp_dir/disc-cover$ext";
+		}
+		if (defined($config_cover_picture_no_convert_needed))
+		{
+			my $ugly_tmp = "$config_tmp_dir/".safe_exec('basename', "$config_cover_picture_no_convert_needed");
+			chop $ugly_tmp;
+			unlink "$ugly_tmp" or print STDERR "Disc-Cover: error, could not remove temporary file $ugly_tmp\n";
+		}
+		rmdir $config_tmp_dir or print STDERR "Disc-Cover: error, could not remove $config_tmp_dir\n";
+	}
+	exit;
+}
+
+
+sub uppercase_fix_on_discinfo
+{
+	my $discinfo = shift;
+
+	$discinfo->{artist} = uppercase_fix($discinfo->{artist});
+	$discinfo->{title} = uppercase_fix($discinfo->{title});
+
+	my @track_names = map { uppercase_fix($_) } @{ $discinfo->{track_names} };
+	$discinfo->{track_names} = \@track_names;
+
+	my @track_artists = map { uppercase_fix($_) } @{ $discinfo->{track_artists} };
+	$discinfo->{track_artists} = \@track_artists;
+}
+
+sub uppercase_fix
+{
+	my $i = shift || return;
+
+	$i = lc $i;
+	$i =~ s/([ \(\[{])([a-z])/$1\u$2/g;
+	$i =~ s/(^[a-z])/\u$1/g;
+
+	return $i;
+}
+
+#################
+# LaTeX filters #
+#################
+
+sub filter_input_for_latex_multiple_lines
+{
+# Changes allmost all the naughty characters in a string returning a string
+# safely parsed by LaTeX.
+
+	my ($return) = $_[0];
+	return "" unless defined $return;
+
+	# recode $ as $$$
+	$return =~ s/\$/\$\$\$/mg;
+	# recode \ as $\backslash$
+	$return =~ s/\\\\/\$\\backslash\$/mg;
+	#FIXME recode \t (tabs) to spaces (should be LaTeX tabs again)
+	$return =~ s/\\t/ /g;
+	# recode \n as \\\\
+	$return =~ s/\n/\\n/mg;
+	$return =~ s/\\n/\\\\/mg;
+	# now recode $$ as \$
+	$return =~ s/\$\$\$/\\\$/mg;
+	# recode every x in _#%^&{} as \x{}
+	$return =~ s/([_#%&\^~{}])/\\$1\{\}/mg;
+	# recode every x in <>| as $x$
+	$return =~ s/([<>\|])/\$$1\$/mg;
+	# protect square brackets
+	$return =~ s/[\[\]]/\\protect$&/g;
+
+	# remove any \\ in front of the first line
+	$return =~ s/^\\+//g;
+
+	# special characters
+	$return =~ s/°/\${}^{\\circ}\$/mg;
+	$return =~ s/µ/\$\\mu\$/mg;
+	$return =~ s/ª/\${}^{\\textrm{a}}\$/mg;
+	$return =~ s/º/\${}^{\\textrm{o}}\$/mg;
+	$return =~ s/«/\$\\ll\$/mg;
+	$return =~ s/»/\$\\gg\$/mg;
+	$return =~ s/¬/\$\\neg\$/mg;
+	$return =~ s/­/--/mg;
+	$return =~ s/¯/\$\\bar{ }\$/mg;
+
+	#FIXME Needs AMS: $return =~ s/¥/\$\\yen\$/mg;
+	#FIXME Needs AMS: $return =~ s/®/\$\\circledR\$/mg;
+	#FIXME ?: $return =~ s/¢/\$ \$/mg;
+	#FIXME ?: $return =~ s/¤/\$ \$/mg;
+	#FIXME ?: $return =~ s/¦/\$ \$/mg;
+
+	return ($return);
+}
+
+sub filter_input_for_latex_one_line
+{
+# Changes all the naughty characters in a string returning a string
+# safely parsed by LaTeX.
+
+	my ($return) = $_[0];
+
+	# only read _one_ line!
+	($return) = split ("\n", $return);
+	return "" unless defined $return;
+	$return =~ s/(.*?)\\n.*/$1/mg;
+	return "" unless defined $return;
+
+	# recode $ as $$$
+	$return =~ s/\$/\$\$\$/mg;
+	# recode \ as $\backslash$
+	$return =~ s/\\/\$\\backslash\$/mg;
+	# recode \t (tabs) to spaces (we only have one line!)
+	$return =~ s/\\t/ /g;
+
+	# now recode $$ as \$
+	$return =~ s/\$\$\$/\\\$/mg;
+	# recode every x in _#%^&{} as \x{}
+	$return =~ s/([_#%&\^~{}])/\\$1\{\}/mg;
+	# recode every x in <>| as $x$
+	$return =~ s/([<>\|])/\$$1\$/mg;
+	# protect square brackets
+	$return =~ s/[\[\]]/\\protect$&/g;
+
+	# special characters
+	$return =~ s/°/\${}^{\\circ}\$/mg;
+	$return =~ s/µ/\$\\mu\$/mg;
+	$return =~ s/ª/\${}^{\\textrm{a}}\$/mg;
+	$return =~ s/º/\${}^{\\textrm{o}}\$/mg;
+	$return =~ s/«/\$\\ll\$/mg;
+	$return =~ s/»/\$\\gg\$/mg;
+	$return =~ s/¬/\$\\neg\$/mg;
+	$return =~ s/­/--/mg;
+	$return =~ s/¯/\$\\bar{ }\$/mg;
+
+	#FIXME Needs AMS: $return =~ s/¥/\$\\yen\$/mg;
+	#FIXME Needs AMS: $return =~ s/®/\$\\circledR\$/mg;
+	#FIXME ?: $return =~ s/¢/\$ \$/mg;
+	#FIXME ?: $return =~ s/¤/\$ \$/mg;
+	#FIXME ?: $return =~ s/¦/\$ \$/mg;
+
+	return ($return);
+}
+
+#####################################################
+# Start of all the print functions for LaTeX output #
+#####################################################
+
+sub print_cd_header_info
+# Prints latex code that declares the commands \DCartist, \DCtitle and \DCdiscinfo.
+{
+	print STDERR "Disc-Cover: creating latex header\n" if ($flag_verbose);
+	my ($return) = '
+%%%%%%%%%%%%%%%%%%
+% CD HEADER INFO %
+%%%%%%%%%%%%%%%%%%
+';
+
+	$return .= '\newcommand{\DCtitle}{\color{'.$config_latex_colors{title}.'}'.filter_input_for_latex_one_line($discinfo{title}).'}'."\n";
+
+	$return .= '\newcommand{\DCartist}{\color{'.$config_latex_colors{artist}.'}'.filter_input_for_latex_one_line($discinfo{artist}).'}'."\n";
+
+	$return .= '\newcommand{\DCdiscinfo}{\color{'.$config_latex_colors{discinfo}.'}'.filter_input_for_latex_multiple_lines($bottomtextfront).'}'."\n";
+
+	$return .= '\newcommand{\DCgenre}{\color{'.$config_latex_colors{genre}.'}'.filter_input_for_latex_multiple_lines($bottomtextfront).'}'."\n";
+
+	$return .= '\newcommand{\DCflaptext}{\color{'.$config_latex_colors{flaptext}.'}'.filter_input_for_latex_one_line($config_flaptext).'}'."\n";
+
+	$return .= '\newcommand{\DCpicture}{'.print_picture().'}'."\n";
+
+	# 114mm for width of cases, hopefully a good guess...
+	$return .= '\newlength{\Test}
+\settowidth{\Test}{\emph{\DCartist}\hfill~{\DCtitle}}
+\ifthenelse{\lengthtest{\Test > 114mm}}
+{
+	\settowidth{\Test}{\small \emph{\DCartist}\hfill~{\DCtitle}}
+	\ifthenelse{\lengthtest{\Test > 114mm}}
+	{
+		\settowidth{\Test}{\footnotesize \emph{\DCartist}\hfill~{\DCtitle}}
+		\ifthenelse{\lengthtest{\Test > 114mm}}
+		{
+			\settowidth{\Test}{\scriptsize \emph{\DCartist}\hfill~{\DCtitle}}
+			\ifthenelse{\lengthtest{\Test > 114mm}}
+			{
+				\newcommand{\DCsidetext}{\parbox{114mm}{\tiny \emph{\DCartist}\hfill~{\DCtitle}}}
+			}
+			{
+				\newcommand{\DCsidetext}{\parbox{114mm}{\scriptsize \emph{\DCartist}\hfill~{\DCtitle}}}
+			}
+		}
+		{
+			\newcommand{\DCsidetext}{\parbox{114mm}{\footnotesize \emph{\DCartist}\hfill~{\DCtitle}}}
+		}
+	}
+	{
+		\newcommand{\DCsidetext}{\parbox{114mm}{\small \emph{\DCartist}\hfill~{\DCtitle}}}
+	}
+}
+{
+	\newcommand{\DCsidetext}{\parbox{114mm}{\emph{\DCartist}\hfill~{\DCtitle}}}
+}';
+
+	$return .= '\newcommand{\DCformattedhead}[1]
+{
+\noindent
+\begin{center}
+{
+\parbox[t][1.2\totalheight][t]{#1}{\raggedright{\Large\DCtitle}}
+
+\rule{#1}{1pt}
+
+\noindent
+\parbox{#1}{\vspace*{0pt}\raggedleft{\hfill\large\emph{\DCartist}}}
+}
+\end{center}
+}';
+
+	print STDERR "Disc-Cover: finished latex header\n" if ($flag_verbose);
+	return $return;
+}
+
+sub print_cd_info
+{
+	print STDERR "Disc-Cover: creating latex cd contents\n" if ($flag_verbose);
+	my ($return) = "%%%%%%%%%%%%%%%\n% CD CONTENTS %\n%%%%%%%%%%%%%%%\n";
+	$return .= '\newcommand{\DCtracks}'."\n";
+	$return .= '{'."\n";
+
+	my @lines;
+	my $lines_counter; # because one line can have both title and extt
+	
+	if ($config_second_inputfile)
+	{
+		push (@lines, "\\parbox[t][1.2\\totalheight]{0.97\\linewidth}{\\vspace*{0em}{\\bfseries\\sffamily\\color{$config_latex_colors{track_number}}Disc~1}}\\par");
+		$lines_counter++;
+	}
+
+	for (my $i = 0; $i < $discinfo{total_tracks}; $i++)
+	{
+		my ($line, $number_of_lines) = print_one_track_line(\%discinfo, $i);
+		push (@lines, $line);
+		$lines_counter += $number_of_lines;
+	}
+	push(@lines, print_total_time($discinfo{length_minutes}, $discinfo{length_seconds}));
+
+
+	if ($config_second_inputfile)
+	{
+		push (@lines, "\\parbox[t][1.2\\totalheight]{0.97\\linewidth}{\\vspace*{0em}{\\bfseries\\sffamily\\color{$config_latex_colors{track_number}}Disc~2}}\\\\");
+		$lines_counter++;
+		for (my $i = 0; $i < $second_discinfo{total_tracks}; $i++)
+		{
+			my ($line, $number_of_lines) = print_one_track_line(\%second_discinfo, $i);
+			push (@lines, $line);
+			$lines_counter += $number_of_lines;
+		}
+		push(@lines, print_total_time($second_discinfo{length_minutes}, $second_discinfo{length_seconds}));
+	}
+
+	#FIXME 20 is still just a guess, but rescaling just a few lines would screw everything up.
+	($lines_counter > 19) and $return .= '\resizebox*{\linewidth}{9.5cm}{';
+	
+	$return .= '\begin{minipage}{\linewidth}';
+
+	# 26 is enough to make sure that the max tracks (99) is scaled neatly into 3 cols,
+	# could be dreadful when -e is used (198 lines?). But hey, that's what you get for
+	# cramming to much info into one jewel case.
+	(int($lines_counter/26) > 1) and $return .= "\\begin{multicols}{".int($lines_counter/26)."}\n";
+
+	$return .= '\color{'.$config_latex_colors{track_string}."}\\center\n";
+
+	foreach my $line (@lines) 
+	{
+		$return .= $line;
+	}
+	
+	(int($lines_counter/26) > 1) and $return .= '\end{multicols}'."\n";
+	
+	$return .= '\end{minipage}';
+	
+	($lines_counter > 19) and $return .= '}';
+
+	$return .= '}'."\n\n";
+
+	print STDERR "Disc-Cover: finished latex cd contents\n" if ($flag_verbose);
+	return ($return);
+}
+
+
+sub print_total_time
+{
+	# Cumbersome way of printing the total time, but it makes sure it
+	# uses the same space as normal lines.
+	my $minutes = shift;
+	my $seconds = shift;
+	my $line = sprintf("\\parbox[t][1.2\\totalheight]{0.97\\linewidth}{
+				\\vspace*{0em}
+			\\parbox[t]{\\linewidth}
+			{
+				\\vspace*{0em}
+				\\addtolength{\\linewidth}{-1.7em}%%
+				\\parbox[t]{1.7em}
+				{
+					\\vspace*{0em}
+					~
+				}%%
+				\\parbox[t]{\\linewidth}
+				{
+					\\vspace*{0pt}
+					\\addtolength{\\linewidth}{-2.3em}%%
+					\\parbox[b]{\\linewidth}
+					{
+						\\vspace*{0pt}
+						\\sffamily\\raggedright~\\mbox{}
+					}%%
+					\\parbox[b]{2.3em}
+					{
+						\\vspace*{0pt}
+						\\color{$config_latex_colors{track_time}}\\sffamily%02i:%02i
+					}
+				}
+			}\n",
+			$minutes, $seconds);
+		$line .= "}\\par\n";
+	return $line;
+}
+
+
+sub print_one_track_line
+{
+	# The [-1pt] in the track's name-parbox is there to eliminate additional vspace in case
+	# of foreign capital characters. Removed again as it makes lines overlap!
+	my %disc_info = %{$_[0]};
+	my $i = $_[1];
+
+	my $lines_counter = 1;
+
+		my $line = sprintf (
+			"\\parbox[t][1.2\\totalheight]{0.97\\linewidth}{
+				\\vspace*{0em}
+			\\parbox[t]{\\linewidth}
+			{
+				\\vspace*{0em}
+				\\addtolength{\\linewidth}{-1.7em}%%
+				\\parbox[t]{1.7em}
+				{
+					\\vspace*{0em}
+					\\makebox[\\linewidth][r]{\\bfseries\\sffamily\\color{$config_latex_colors{track_number}} %2i\.~}
+				}%%
+				\\parbox[t]{\\linewidth}
+				{
+					\\vspace*{0pt}
+					\\addtolength{\\linewidth}{-2.3em}%%
+					\\parbox[b]{\\linewidth}
+					{
+						\\vspace*{0pt}
+						\\sffamily\\raggedright %s~\\dotfill\\mbox{}
+					}%%
+					\\parbox[b]{2.3em}
+					{
+						\\vspace*{0pt}
+						\\color{$config_latex_colors{track_time}}\\sffamily%02i:%02i
+					}
+				}
+			}\n",
+			($i+1),
+			filter_input_for_latex_one_line($disc_info{track_names}[$i]),
+			$disc_info{track_length_minutes}[$i],
+			$disc_info{track_length_seconds}[$i]);
+
+		if ($flag_various_artist_cd and ($disc_info{track_artist}[$i] ne ""))
+		{
+			$lines_counter++;
+			$line .= sprintf(
+			"\\parbox[t]{1.7em}{\\vspace*{0em}~}%%
+			 \\addtolength{\\linewidth}{-1.7em}%%
+			 \\parbox[t]{\\linewidth}
+			 {
+				\\vspace*{0pt}
+				\\footnotesize\\em\\color{$config_latex_colors{track_artist}}\\raggedright %s\\hfill
+				\\vspace*{-2pt}
+			 }\n",
+			 filter_input_for_latex_one_line($disc_info{track_artist}[$i]));
+		}
+		if ($flag_with_extended_track_info and ($disc_info{track_extended}[$i] ne ""))
+		{
+			$lines_counter++;
+			$line .= sprintf(
+			"\\parbox[t]{1.7em}{\\vspace*{0em}~}%%
+			 \\addtolength{\\linewidth}{-1.7em}%%
+			 \\parbox[t]{\\linewidth}
+			 {
+				\\vspace*{0pt}
+				\\footnotesize\\em\\color{$config_latex_colors{track_extended}}\\raggedright %s\\hfill
+				\\vspace*{-2pt}
+			 }\n",
+			 filter_input_for_latex_one_line($disc_info{track_extended}[$i]));
+		}
+
+		$line .= "}\\par\n";
+
+	return ($line, $lines_counter);
+}
+
+
+############################
+# Help and version dialogs #
+############################
+
+sub print_version_info
+{
+	return '
+Disc-Cover version '.$version.' Copyright © 1999-2005 J.I. van Hemert
+This piece of software comes with ABSOLUTELY NO WARRANTY
+This is free software, and you are welcome to redistribute it
+under certain conditions, see the file COPYING for details.
+For more information read the documentation that comes with the
+distribution.
+';
+}
+
+
+sub print_manual
+{
+	#system("pod2man --release=\"J.I. van Hemert\" --center=\"Version $version\" $0 | nroff -man");
+	system("pod2text $0");
+	return 1;
+}
+
+sub print_help
+{
+	return print_version_info().'
+Program switches (short style), capital options are not for
+daily use, see -H for the whole manual
+ -2 <filename>   cddb file to use for second cd of double album
+ -a "<text>"     additional text at the bottom of the front cover
+ -allmusic       search on www.allmusic.com for a front cover
+ -b "<text>"     text on the additional flap at the back cover
+ -c <filename>   type of case (template to use)
+ -C <filename>   output configuration file with current options
+ -D <device>     scan the cd in this device
+ -e              enable extended track info
+ -f <filename>   use this cddb file as input instead of a cddb connection 
+ -g              include genre as last line in front bottom text
+ -h              this help
+ -H              more help, shows the manual page
+ -n              create a new cddb entry (if it does not exist in the database)
+ -o <filename>   output to this filename (extension is added accordingly)
+ -p <filename>   picture (almost any format) to be put on the front cover
+ -pic <filename> picture on the front cover in same format as ouput format
+ -R              do not remove temporary files from '.$config_tmp_dir.' (for debugging)
+ -S              write a .cdserverrc file in your homedir
+ -t <type>       output format, choose: '.$config_all_available_output_types.'
+ -u              fix entries that are all in lowercase
+ -v              version and program information
+ -V              enable verbose output (for debugging)
+ -va             enable various artist output
+ -template_list  prints a list of outpout template types and their descriptions
+';
+}
+
+
+#########################
+# LaTeX print functions #
+#########################
+
+sub print_latex_head
+{
+	my ($return) = '\documentclass[]{article}';
+	if ($config_output_format eq 'pdf')
+	{
+		$return = '\documentclass[pdftex]{article}';
+	}
+
+	$return .= '
+\usepackage{'.$latex_global_packages.','.$latex_user_packages.'}
+\usepackage['.$latex_language_encoding.']{inputenc}
+\graphicspath{{'.$config_tmp_dir.'/}}
+\renewcommand{\thepage}{}
+\setlength{\oddsidemargin}{'.$latex_global_oddsidemargin.'}
+\setlength{\evensidemargin}{'.$latex_global_evenside_margin.'}
+\setlength{\voffset}{'.$latex_global_voffset.'}
+\setlength{\footskip}{'.$latex_global_footskip.'}
+\setlength{\textheight}{'.$latex_global_textheight.'}
+\setlength{\textwidth}{'.$latex_global_textwidth.'}
+\hyphenpenalty=10000
+\renewcommand{\dotfill}{\leaders\hbox to 2mm{\hfil.\hfil}\hfill}
+
+%\newcommand{\mydate}{\the\year/\the\month/\the\day}
+
+';
+
+	return ($return);
+}
+
+sub print_picture
+{
+	# Search for a cover picture on AllMusic.com and use it
+	if ($flag_picture_use_allmusic)
+	{
+		print STDERR "Disc-Cover (AllMusic): searching on AllMusic.com for a cover picture\n" if $flag_verbose;
+		my $web_search = $discinfo{title};
+		$web_search =~ s/ /+/g;
+		$web_search =~ s/[tT]he//g;
+		my $result = safe_exec('wget', "-O-", "-o/dev/null", "http://www.allmusic.com/cg/amg.dll?P=amg&opt1=2&sql=$web_search");
+
+		if ($result =~ /albumsearchresults/)
+		{
+			my $artist = $discinfo{artist};
+			$artist =~ s/^[tT]he //g; # AllMusic strips 'The/La/..' from artists...
+			$artist =~ s/^[Ll]a //g; 
+			print STDERR "Disc-Cover (AllMusic): more than one album found\n" if $flag_verbose;
+
+			#my @entries = ($result =~ /<td class="cell" style="width:172px;word-wrap:break-word;"><a href="\/cg\/amg.dll\?p=amg&sql=([^"]*)">/mig);
+			my @entries = ($result =~ /$artist<\/TD><td class="cell-img"><a href="[^"]*"><img src="[^"]*" border="0" alt="Listen Now!" title="Listen Now!" style="padding-top:1px;padding-right:2px;" \/><\/a><\/TD><td class="cell" style="width:172px;word-wrap:break-word;"><a href="\/cg\/amg.dll\?p=amg&sql=([^"]*)">/mig);
+			print STDERR "Disc-Cover (AllMusic): using artist to determine correct album, this leaves ".(1+$#entries)." album(s)\n" if $flag_verbose;
+			print STDERR join(' / ',@entries)."\n";
+			if (defined $entries[0])
+			{
+				print STDERR "Disc-Cover (AllMusic): downloading AllMusic info page of the first album (key: $entries[0])\n" if $flag_verbose;
+				$result = safe_exec('wget', "-O", "-",  "-o", "/dev/null", "http://www.allmusic.com/cg/amg.dll?P=amg&sql=$entries[0]");
+			}
+		}
+
+
+		my @entries = ($result =~ /src="(http:\/\/image\.allmusic\.com\/00\/amg\/cov[^"]*)"/mg);
+
+		#print STDERR join(' / ',@entries)."\n";
+
+		if (defined $entries[0])
+		{
+			print STDERR "Disc-Cover (AllMusic): found a cover picture on AllMusic.com: $entries[0], downloading...\n" if $flag_verbose;
+			system('wget',  '-O', "$config_tmp_dir/disc-cover_allmusic.jpg", '-o', '/dev/null', "$entries[0]");
+
+			$config_cover_picture = "$config_tmp_dir/disc-cover_allmusic.jpg";
+			print STDERR "Disc-Cover (AllMusic): successfully finished AllMusic procedure.\n" if $flag_verbose;
+		}
+		else
+		{
+			print STDERR "Disc-Cover (AllMusic): could not find a cover picture on AllMusic.com\n" if $flag_verbose;
+		}
+		
+		print STDERR "Disc-Cover (AllMusic): finished searching on AllMusic.com for a cover picture\n" if $flag_verbose;
+	}
+
+	my ($picture) = ""; # Or 'no picture'...
+	if (defined($config_cover_picture_no_convert_needed))
+	{
+		# FIXME
+		# Difficult situation: when using tex we want the picture filename in tact,
+		# in case the user wants to run latex. When using pdf or ps we want to use
+		# it from the $tmp dir. For dvi we want both! (user does dvips or xdvi).
+		# Solution for now: just copy it to the $tmp dir and warn the user.
+		end_program("Something went wrong trying to copy \"$config_cover_picture_no_convert_needed\" to \"$config_tmp_dir/disc-cover_front-picture.pdf\".", "Check if the file is readable for you.") if (system("cp", "--", "$config_cover_picture_no_convert_needed", "$config_tmp_dir"));
+		warn "Note: I copied the file \"$config_cover_picture_no_convert_needed\" to \"$config_tmp_dir\" and used it. If you save in dvi or latex please add this file to the same directory.\n";
+		#$picture = "\\parbox{0.9\\linewidth}{\\raggedleft\\framebox{\\includegraphics[height=0.6\\linewidth]{$config_cover_picture_no_convert_needed}}}\\vspace*{\\fill}\\\\";
+		$picture = "\\includegraphics[height=0.6\\linewidth]{$config_cover_picture_no_convert_needed}\\vspace*{\\fill}\\\\";
+	}
+	elsif (defined($config_cover_picture))
+	{
+		if (-f "$config_cover_picture")
+		{
+			if ($config_output_format eq 'pdf')
+			{
+				if ($flag_verbose)
+				{
+					print STDERR "Disc-Cover: starting external convert (to pdf) run\n";
+					end_program("Failed converting the cover picture \"$config_cover_picture\" to PDF.", "Check if the file is readable for you.") if (system ("convert -verbose -size 200x200 \"$config_cover_picture\" EPDF:$config_tmp_dir/disc-cover_front-picture.pdf 2>&1"));
+					print STDERR "Disc-Cover: finished external convert (to pdf) run\n";
+				}
+				else
+				{
+					end_program("Failed converting the cover picture \"$config_cover_picture\" to PDF.", "Check if the file is readable for you.") if (system ("convert -size 200x200 \"$config_cover_picture\" EPDF:$config_tmp_dir/disc-cover_front-picture.pdf 2> /dev/null"));
+				}
+				
+			}
+			else
+			{
+				if ($flag_verbose)
+				{
+					print STDERR "Disc-Cover: starting external convert (to eps) run\n";
+					end_program("Failed converting the cover picture \"$config_cover_picture\" to EPS.", "Check if the program convert (comes with ImageMagick) is installed.", "Check if you can convert the cover picture to EPS yourself.") if (system ("convert -verbose -geometry 200x200 \"$config_cover_picture\" EPS:$config_tmp_dir/disc-cover_front-picture.eps 2>&1"));
+					print STDERR "Disc-Cover: finished external convert (to eps) run\n";
+				}
+				else
+				{
+					end_program("Failed converting the cover picture \"$config_cover_picture\" to EPS.", "Check if the program convert (comes with ImageMagick) is installed.", "Check if you can convert the cover picture to EPS yourself.") if (system ("convert -geometry 200x200 \"$config_cover_picture\" EPS:$config_tmp_dir/disc-cover_front-picture.eps 2> /dev/null"));
+				}
+				### TODO: THIS DOES NOT WORK YET!
+				#my ($magick) = new Image::Magick;
+				#$magick->Read($config_cover_picture);
+				#$magick->SetAttributes(sample=>"200x200");
+				#$magick->Display();
+				#$magick->Write("EPSI:$config_tmp_dir/disc-cover_front-picture.eps");
+				###
+
+			}
+			#$picture = "\\parbox{0.9\\linewidth}{\\raggedleft\\framebox{\\includegraphics[height=0.6\\linewidth]{disc-cover_front-picture}}}\\vspace*{\\fill}\\\\";
+			$picture = "\\includegraphics[height=0.6\\linewidth]{disc-cover_front-picture}";
+		}
+		else
+		{
+			end_program("Failed to open cover picture \"$config_cover_picture\".", "Check if the file exists and if it is readable.");
+		}
+	}
+	return $picture;
+}
+
+
+
+sub print_disccoverheader
+{
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+	my $datetime = sprintf "%4d-%02d-%02dT%02d:%02d", 1900+$year,$mon+1,$mday,$hour,$min;
+
+	my $header;
+	if ($config_second_inputfile)
+	{
+		$header = '\parbox[c]{\linewidth}{\small Printed entries \texttt{'.$discinfo{discid}.'} and \texttt{'.$second_discinfo{discid}.'}';
+	}
+	else
+	{
+		$header = '{\small Printed entry \texttt{'.$discinfo{discid}.'}';
+	}
+
+	$header .= ' with \emph{Disc-Cover} version '.$version.' on '.$datetime.' using template \textsf{'.$config_casetype.'}.  For suggestions mail the author at \texttt{jvhemert@cwi.nl}. For the latest version check \texttt{http://www.cwi.nl/\~{}jvhemert/disc-cover.html}}';
+	
+	return $header;
+}
+
+
+
+sub print_whole_cover
+{
+	my $latex_body = "\\begin{document}\\begin{center}\n";
+	
+	my $no_template_found = 1;
+
+	if (-f $config_casetype)
+	{
+		print STDERR "Disc-Cover: opening and using \"$config_casetype\" as a template file.\n" if $flag_verbose;
+		$no_template_found = ! open LATEX_TEMPLATE, "$config_casetype";
+	}
+	my @directories = @config_template_dirs;
+	while ($no_template_found and @directories)
+	{
+		my $directory = shift @directories;
+		print STDERR "Disc-Cover: looking for template \"$config_casetype\" in \"$directory\"..." if $flag_verbose;
+		$no_template_found = ! open LATEX_TEMPLATE, "$directory/$config_casetype";
+		if ($flag_verbose)
+		{
+			print STDERR "not found.\n" if ($no_template_found);
+			print STDERR "found.\n" unless ($no_template_found);
+		}
+	}
+			
+	end_program("You have requested an unknown cover template.", "Check the directories @config_template_dirs for any templates and use one of these.", "If your templates are not stored in one of the above directories then change the \@config_template_dirs variable accordingly.") if $no_template_found;
+
+	while (<LATEX_TEMPLATE>) { $latex_body .= $_ };
+	close LATEX_TEMPLATE;
+		
+	$latex_body .= "\n\n\\vspace{\\baselineskip}".print_disccoverheader()."\\end{center}\\end{document}\n";
+
+	return (print_latex_head().print_cd_header_info().print_cd_info().$latex_body);
+}
+
+sub run_latex
+{
+	print STDERR "Disc-Cover: starting external latex run\n" if $flag_verbose;
+	
+	my ($latex_command) = $_[0];
+
+	open OUT,">$config_tmp_dir/disc-cover.tex" or end_program("Could not write temporary latex file", "Does \"$config_tmp_dir\" exist?", "Is the $config_tmp_dir directory writable?");
+	print OUT print_whole_cover() ;
+	close OUT;
+
+	my $latex_string = $flag_verbose ? "(cd $config_tmp_dir ; echo q | $latex_command \"disc-cover.tex\" )" : "(cd $config_tmp_dir ; echo q | $latex_command \"disc-cover.tex\" > /dev/null)";
+	if (system ($latex_string) > 0)
+	{
+		end_program("Something went wrong while running $latex_command.", "Check if the necessary LaTeX packages are installed:\ninputenc,$latex_global_packages.", "Run disc-cover with the option \'-t tex\' and run $latex_command on the\noutput file.");
+	}
+
+	print STDERR "Disc-Cover: finished external latex run\n" if $flag_verbose;
+}
+
+# FIXME: get rid of this function, not supported by libcdaudio yet
+sub parse_cddb_file
+{
+	print STDERR "Disc-Cover: parsing cddb file\n" if $flag_verbose;
+
+	my $input = shift;
+
+	my %output;
+
+	my $tmp = $input;
+	$tmp =~ /^\#\s*Disc length:\s*(\d+)/mg;
+	$output{length_minutes} = int($1/60);
+	$output{length_seconds} = $1 % 60;
+
+	$output{genre} = (split(' ', $tmp))[1];
+
+	$tmp = $input;
+
+	my ($discid) = ($tmp =~ m%^DISCID=([0-9A-Fa-f]*)%mg);
+
+	my (@tmp2) = ($tmp =~ m%^DTITLE=(.*)%mg);
+
+	my ($dtitle) = "";
+	my ($i) = "";
+	foreach $i (@tmp2)
+	{
+		$dtitle .= $i;
+	}
+
+	my ($artist, $title) = (undef, undef);
+	($artist, $title) = ($dtitle =~ m%(.*?) / (.*)%mg);
+
+	if (!defined($artist) or !defined($title))
+	{
+		# Catch artist/title disks without / 
+		($title) = ($tmp =~ m%^DTITLE=(.*)%m);
+		$artist = $title;
+	}
+	$artist =~ s///g;
+	$title =~ s///g;
+
+	my ($extend, @extd, $j);
+	@extd = ($tmp =~ m%^EXTD=([^\n\r]*)%mg);
+	foreach $j (@extd) {
+		$extend .= "$j";
+	}
+	$extend =~ s/\\n/\n/g;
+	$extend =~ s/\\t/\t/g;
+
+	my (@extended) = undef;
+	foreach $i ($tmp =~ m%^EXTT(\d+=.*)[\n\r]*%mg)
+	{
+		# do not use split on = on next line!
+		my ($trackno, $ttitle) = ($i =~ /(\d+)=(.*)/);
+		$ttitle =~ s///g;
+		$extended[$trackno] .= $ttitle;
+	}
+
+	my (@tracks) = undef;
+	my (@tartist) = undef;
+	my $various_artist_warning = 0;
+	foreach $i ($tmp =~ m%^TTITLE(\d+=.*)[\n\r]*%mg)
+	{
+		my ($trackno, $ttitle) = ($i =~ /(\d+)=(.*)/);
+		$ttitle =~ s///g;
+
+		if ($ttitle =~ / \/ /)
+		{
+			if ($flag_various_artist_cd)
+			{
+				($tartist[$trackno], $ttitle) = ($ttitle =~ m%(.*?) / (.*)%mg);
+			}
+			else
+			{
+				$various_artist_warning++;
+			}
+		}
+		$tracks[$trackno] .= $ttitle;
+	}
+	#return 0 if ($tracks[0] eq "");
+	
+	if ($various_artist_warning == $#tracks+1)
+	{
+		warn "Warning: all the tracks of this cd contain a slash ' / ' in their track titles,\nwhich could mean it is a various artist cd that contains the form\n'artist / title' for each track. Use the flag '-va' to make a nicer format.\n";
+	}
+
+	for ($i = 0; $i <= $#tracks; $i++)
+	{
+		$tracks[$i] = "" unless defined $tracks[$i];
+		$extended[$i] = "" unless defined $extended[$i];
+		$tartist[$i] = "" unless defined $tartist[$i];
+	}
+
+	my (@offsets) = ($tmp =~ /^\#\s+(\d+)/mg);
+	my ($disclength) = ($tmp =~ /^\#\s*Disc length:\s*(\d+)/mg);
+	
+
+	my ($lastOffset) = $offsets[0];
+	my (@lengths) = ();
+
+	foreach my $offset (@offsets[1..$#offsets])
+	{
+		@lengths = (@lengths, ($offset - $lastOffset));
+		$lastOffset = $offset;
+	}
+
+	foreach my $length (@lengths)
+	{
+		$length /= 75;
+	}
+
+	@lengths = (@lengths, $disclength - ( $lastOffset / 75 ) );
+
+	# This rounds times out properly.
+	@lengths = map { my $m = $_ - int($_); if (substr($m,0,3) >= .5) { $_++; } int($_); } @lengths;
+
+	my @lengths_minutes; my @lengths_seconds;
+	foreach my $length (@lengths)
+	{
+		push (@lengths_minutes, int($length/60));
+		push (@lengths_seconds, $length%60);
+	}
+		
+	$output{discid} = $discid;
+	$output{artist} = $artist;
+	$output{title} = $title;
+	$output{extended} = $extend;
+	$output{track_artist} = \@tartist;
+	$output{track_extended} = \@extended;
+	$output{track_names} = \@tracks;
+	$output{track_offsets} = \@offsets;
+	$output{track_length_minutes} = \@lengths_minutes;
+	$output{track_length_seconds} = \@lengths_seconds;
+	$output{total_tracks} = $#tracks+1;
+
+	print STDERR "Disc-Cover: finished parsing cddb file\n" if $flag_verbose;
+
+
+	return %output;
+}
+
+
+sub create_existing_cddb_entry
+{
+	my %discinfo = %{$_[0]};
+	my $return = "";
+
+	$return .= "# xmcd CD database file generated by Disc-Cover ".$version."\n#\n";
+	$return .= "# Track frame offsets:\n";
+	my ($tracknumber) = undef;
+	my $position = 150;
+	for ($tracknumber = 0; $tracknumber < $discinfo{total_tracks}; $tracknumber++)
+	{
+		$return .= "# ".$position."\n";
+		$position += ($discinfo{track_length_minutes}->[$tracknumber] * 60 + $discinfo{track_length_seconds}->[$tracknumber] ) * 75;
+	}
+	$return .= "#\n# Disc length: ".( $discinfo{length_minutes}*60 + $discinfo{length_seconds} )." seconds\n";
+
+	$return .= "#\n# Revision: 0\n";
+	$return .= "# Submitted via: none 1.0\n";
+	$return .= "#\n";
+
+
+	$return .= sprintf("DISCID=%x\n",hex($discinfo{discid}));
+	$return .= "DTITLE=$discinfo{artist} / $discinfo{title}\n";
+	for ($tracknumber = 0; $tracknumber < $discinfo{total_tracks}; $tracknumber++)
+	{
+		if ($flag_various_artist_cd and $discinfo{track_artist}->[$tracknumber])
+		{
+			$return .= "TTITLE".($tracknumber)."=$discinfo{track_artist}->[$tracknumber] / $discinfo{track_names}->[$tracknumber]\n";
+		}
+		else
+		{
+			$return .= "TTITLE".($tracknumber)."=$discinfo{track_names}->[$tracknumber]\n";
+		}
+	}
+	$return .= "EXTD=\n";
+	for ($tracknumber = 0; $tracknumber < $discinfo{total_tracks}; $tracknumber++)
+	{
+		$return .= "EXTT".($tracknumber)."=$discinfo{track_extended}->[$tracknumber]\n"
+	}
+	$return .= "PLAYORDER=\n";
+
+	return $return;
+}
+
+sub create_new_cddb_entry
+{
+	my $cdinfo = shift;
+	my $cddb = shift;
+	my $return = "";
+
+	$return .= "# xmcd CD database file generated by Disc-Cover ".$version."\n#\n";
+	$return .= "# Track frame offsets:\n";
+	my ($tracknumber) = undef;
+	my @offsets = @{$cdinfo->tracks};
+	for ($tracknumber = 0; $tracknumber <= $#offsets; $tracknumber++)
+	{
+		$return .= "# ".((($offsets[$tracknumber]->pos)[0] * 60 + ($offsets[$tracknumber]->pos)[1] ) * 75)."\n";
+	}
+	$return .= "#\n# Disc length: ".( ($cdinfo->length)[0]*60 + ($cdinfo->length)[1] )." seconds\n";
+
+	$return .= "#\n# Revision: 0\n";
+	$return .= "# Submitted via: none 1.0\n";
+	$return .= "#\n";
+
+
+	$return .= sprintf("DISCID=%x\n",$cddb->discid);
+	$return .= "DTITLE=Artist / Disctitle\n";
+	for ($tracknumber = 0; $tracknumber <= $#offsets; $tracknumber++)
+	{
+		$return .= "TTITLE".($tracknumber)."=Untitled\n"
+	}
+	$return .= "EXTD=\n";
+	for ($tracknumber = 0; $tracknumber <= $#offsets; $tracknumber++)
+	{
+		$return .= "EXTT".($tracknumber)."=\n"
+	}
+	$return .= "PLAYORDER=\n";
+
+	return $return;
+}
+sub print_configuration_file
+{
+	my $result = "#######################################\n# Configuration values for Disc-Cover #\n#   unset values will get a default   #\n#######################################\n\n";
+	$result .= "\$config_version_config = \"$config_version\";\n";
+
+	$result .= "\n#########\n# Paths #\n#########\n";
+	$result .= "\$config_tmp_dir = \'$config_tmp_dir\';\n";
+	$result .= "\$config_device = \'$config_device';\n";
+	$result .= "\@config_template_dirs = (\'".join ('\', \'', @config_template_dirs)."\');\n";
+	$result .= "\$config_cddb_cache_directory = \'$config_cddb_cache_directory\';\n";
+
+	$result .= "\n#############\n# Latex packages #\n#############\n";
+	$result .= "\$latex_user_packages = \'$latex_user_packages\';\n";
+	$result .= "\$latex_language_encoding = \'$latex_language_encoding\';\n";
+
+	$result .= "\n##########\n# Output #\n##########\n";
+	$result .= "\$config_output_format = \'$config_output_format\';\n";
+	$result .= "\$config_casetype = \'$config_casetype\';\n";
+	$result .= "\$flag_genre = $flag_genre;\n";
+	$result .= "\$config_flaptext = \"$config_flaptext\";\n";
+	$result .= "\$flag_with_extended_track_info = $flag_with_extended_track_info;\n";
+	$result .= "\$flag_various_artist_cd = $flag_various_artist_cd;\n";
+	$result .= "\$flag_double_disc_cdtitle = $flag_double_disc_cdtitle;\n";
+	$result .= "\$flag_picture_use_allmusic = $flag_picture_use_allmusic;\n";
+	$result .= "\$flag_uppercase_fix = $flag_uppercase_fix;\n";
+	$result .= "\%config_latex_colors = (";
+	foreach my $color (keys %config_latex_colors)
+	{
+		$result .= " $color => \"$config_latex_colors{$color}\","
+	}
+	chop($result);
+	$result .= " );\n";
+
+
+}
+
+
+sub create_cdserverrc
+{
+
+	if (-e $config_cdserverrc)
+	{
+		$flag_remove_temporary_files = 1;
+		end_program("A \"$config_cdserverrc\" file already exists.", "Check the contents of the file and move it to another location,\nthen run this again.");
+		
+	}
+	else
+	{
+		open CDSERVERRC, ">$config_cdserverrc" or end_program("Could not open \"$config_cdserverrc\"", "Check if you can write this file yourself.");
+
+		print CDSERVERRC "# Created by Disc-Cover $version\n";
+		print CDSERVERRC "SERVER=cddbp://freedb.freedb.org:888/\n";
+		print CDSERVERRC "ACCESS=REMOTE\n";
+
+		close CDSERVERRC;
+	}
+
+	return 1;
+}
+
+sub safe_exec
+{
+	my $program = shift;
+	
+	my $result;
+	my $pid = undef;
+	die "Error: cannot fork $!" unless defined ($pid = open(SAFE_KID, "-|"));
+	if ($pid == 0)
+	{
+		#exec('wget', "-O-", "-o/dev/null", "http://www.allmusic.com/cg/amg.dll?P=amg&opt1=2&sql=$web_search") or die "Error: can not exec wget: $!";
+		exec($program, @_) or die "Error: can not exec $program $!";
+	}
+	else
+	{
+		$/ = undef;
+		$result = <SAFE_KID>;
+		close SAFE_KID;
+		
+	}
+	return $result;
+}
+
+sub print_template_list {
+    # We output a list of template types that we find in our template
+    # directories.  We print the template name, a colon `:' a space
+    # and then the template description as found in the actual
+    # template file.
+
+    my %template_list = ();
+    foreach my $dir (@config_template_dirs) {
+	opendir(DIR, $dir) || next;
+	my @templates = grep(/[a-z]+/i, readdir(DIR));
+	foreach my $template (@templates) {
+	    open(F, "<$dir/$template") || 
+		die "Couldn't open template: $dir/$template for read: $!\n";
+	    while (<F>) {
+		if (/^% Description:(.*)$/) {
+		    $template_list{$template} = $1;
+		    last;
+		}
+	    }
+	    close(F);
+	}
+	close(DIR);
+    }
+
+    for (sort keys %template_list) {
+	print "$_: $template_list{$_}\n";
+    }
+    
+    return 1;
+}
+
+
+###############
+# MANUAL PAGE #
+###############
+
+=head1 NAME
+
+Disc-Cover - create front and back covers for audio CDs
+
+=head1 SYNOPSIS
+
+disc-cover 
+S<[-2|second F<filename>]>
+S<[-b|flaptext text]>
+S<[-a|additional text]>
+S<-allmusic>
+S<[-c|-casetype (jewel|slim|x-slim|tevion-slim|letter-slim)]> 
+S<[-C|Configuration F<filename>]>
+S<[-D|Device F<device>]>
+S<[-e|extended]>
+S<[-f|file F<filename>]>
+S<[-h|help]>
+S<[-H|Help]>
+S<[-n|new]>
+S<[-o|output F<filename>]>
+S<[-p F<filename>|-pic F<filename>]>
+S<[-R|Remove]>
+S<[-S|Server]>
+S<[-t|type txt|dvi|tex|ps|pdf|cddb|lbl|html]>
+S<[-u|uppercase]>
+S<[-v|version]>
+S<[-V|Verbose]>
+S<[-va|-variousartists]>
+S<-template_list>
+
+
+=head1 DESCRIPTION
+
+Disc-Cover creates front and back covers for audio CDs. The CD has to be
+present in the CD-ROM drive, or alternatively a valid CDDB file can be used.
+Disc-Cover searches the CDDB database for an entry corresponding to the CD's
+CDDB ID. It starts by looking for a local CDDB entry in F<~/.cddb> (or another
+directory pointed to by your cddb installation). If no local CDDB entry matches
+the CD, disc-cover continues to search the online CDDB databases or CDINDEX
+databases as configured in the AudioCD library. It then formats the entry to
+produce a Latex, Dvi, Postscript or PDF file, which contains the front and back
+covers on a single page. Other formats supported include a simple text output,
+a CDDB compatible format, HTML and an output format that can be used with
+cdlabelgen (http://www.red-bean.com/~bwf/software/cdlabelgen/), another cover
+builder.
+
+=head1 QUICKSTART
+
+The easiest way of using Disc-Cover is to put an audio cd in your cdrom drive
+and then run disc-cover without options. Disc-Cover will tell you what it does
+and if it is able to create a set of covers it tells you the name of the file
+it creates. Normally this is a PostScript file that is ready for printing.
+
+=head1 LAYOUT
+
+The front cover shows artist, album title and when available extended disc
+info. Optionally a picture can be added to the front cover. The back cover 
+holds the title and artist in the same fashion. In addition to those, the back
+cover lists the individual tracks, preceded by a track number and followed by
+their running time. The total running time of the CD is given at the bottom of
+the back cover. The sides of the back cover contain the artist and CD title.
+Another flap hangs on the side of the right of the back cover. When using
+fully transparent jewel cases this flap is visible from the front. By default
+it holds the user's full name. Colour is also supported.
+
+=head1 FEATURES
+
+=over 4
+
+=item - Uses Latex to produce high quality output.
+
+=item - Outputs in Latex, Dvi, Postscript, Pdf, Cddb entry, HTML, Text and a format
+  to use with cdlabelgen.
+
+=item - Supports caching of cddb entries in a directory that can be shared with other
+  cddb-aware programs.
+
+=item - Connects with a cddb or cdindex server to get the disc title, artist and list
+  of track titles and extended information where available.
+
+=item - Optionally put a picture on the front cover, supports almost any image
+  format.
+
+=item - Optionally let Disc-Cover search on allmusic.com for a small version of the
+  corresponding front cover of the cd, which it will put on your front cover.
+  
+
+=item - Assign different colours to different items such as artist name and track
+  numbers.
+
+=item - Supports double albums (two cds in one jewel case).
+
+=item - Creates covers for jewel cases and various slim cases.
+
+=back
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-2, -second> F<filename>
+
+When using this option disc-cover goes into double album mode, meaning it
+will print the front cover using the first cddb entry, either reading the
+cd in the drive or by using a file as described in L<B<-f, -file> F<filename>> option. Then it prints
+the back cover with two halves, the upper half consists the title/artist and
+then the tracks of the first cd, the lower half contains the tracks of the second
+cd.
+
+=item B<-a, -additional> I<text>
+
+Add text to the bottom of the front cover. Default is to put extended disc
+information here. You can use this to cancel the extended disc information
+by doing 'B<-a> " "'.
+
+=item B<-allmusic>
+
+Search on wwww.allmusic.com for the front cover of the album. This picture will
+be put on the front cover, just like with B<-p> and B<-pic>. These last options
+override this flag. This way you can enable -allmusic by default in the config file
+and override it whenever you need to.
+
+=item B<-b, -flaptext> I<text>
+
+Add text to the additional flap at the side of the back cover. This flap is
+visible when used with a fully transparent jewel case. These are becoming more
+common everyday. By default text from the password entry is used. We take the
+string from the comments field up until the first comma. Most times this should
+be the user's full name. Cancel this text by using the configuration file or
+with 'B<-b> " "'.
+
+=item B<-c, -casetype> (I<jewel|slim|x-slim|tevion-slim|letter-slim>)
+
+These options correspond with files in one of the @config_template_dirs which
+are templates that describe case types. You can also copy one of these files to
+your current directory, change it and let disc-cover use your own template.
+The cases described next are delivered together with Disc-Cover.
+Setting this to slim will have Disc-Cover output covers in a format suitable
+for slim cases. These are thinner cases often used for single cds or EPs. Use x-slim
+if you want the side and flap exchanged. Even
+more slim are the cases provided by Tevion (use: tevion-slim). For people using
+letter format that have trouble with not getting the whole case fitted on paper,
+please use letter-slim.
+
+=item B<-C, -Configuration> F<filename>
+
+Output configuration to a file. The current flags and options set in existing
+configuration files or given on the commandline are used to set the values.
+To see the current settings do ;disc-cover -C -'.
+For example, you can change the default output format to pdf as follows:
+
+  disc-cover -t pdf -C ~/.disc-coverrc
+
+=item B<-D, -Device> I<device>
+
+Specify the CD-ROM device. Default is to use F</dev/cdrom>
+
+=item B<-e, -extended>
+
+This flag enables extended track information, when available. This extended
+information will be added below the track names. It is mostly used in
+compilation cds for artist information. Sometimes this extended track
+information has been used for lyrics, needles to say this will not fit at the
+back of one cd cover and hence to prevent the destruction of the layout only the
+first line will be used. That is why this is an option instead of default behaviour.
+
+=item B<-f, -file> F<filename>
+
+Use filename as input instead of searching the local and online CDDB database. File
+should be a valid CDDB entry.
+
+=item B<-g, -genre>
+
+Include the genre of the disc as the last line of the bottom text on the front cover.
+The line looks like this: "genre: F<genre>". Default is off, as often the wrong genre is
+used or even just misc or data has been chosen.
+
+=item B<-h, -help>
+
+Print help message and exit.
+
+=item B<-H, -Help>
+
+Show the manual page using pod2text, this should be installed and working (you can check this
+by typing 'pod2text /path/to/disc-cover')
+
+=item B<-n, -new>
+
+Creates a new cddb entry. This works with any format, but should be used in
+conjunction with '-t cddb' to create a template for you to fill in. See the L<FREQUENTLY ASKED QUESTIONS>
+to create covers for your custom cds or for cds that are not in the CDDB
+database yet.
+
+=item B<-o, -output> F<filename>
+
+The -o switch allows to specify the name of the output file. By default the
+filename will be Artist_Title.xxx, where xxx is txt, tex, dvi, ps, pdf or html,
+depending on the file format. See -t option for supported file formats. Using
+"B<-o> -" will send the output to standard output.
+
+=item B<-p> F<filename>
+
+Includes the picture F<filename> on the front cover in a framed box
+right aligned with the artist name. The format of the picture has to be known to
+the program I<convert> that comes with I<ImageMagick>. Also the graphicx package for
+LaTeX has to be available. The picture is scaled to 200x200 and converted into
+Adobe Encapsulated PostScript Interchange format. Remember that output in tex,
+dvi, txt, html and labelgen are completely useless with pictures. In case of output
+in pdf the picture is transformed into Encapsulated Portable Document Format (EPDF).
+
+=item B<-pic> F<filename>
+
+Include a graphics file on the front cover without converting it. This only
+works when the format of the file is the same as the output format. In case of
+PostScript (PS) output you can use Encapsulated PostScript (EPS,EPSI) files. In
+case of Portable Document Format (PDF) you can use Encapsulated Portable
+Document Format (EPDF). Note that this is essentially the same option as in L<B<-p> F<filename>>
+but no scaling or converting is performed. More responsibility goes to the user
+this way.
+
+=item B<-R, -Remove>
+
+By default disc-cover deletes all temporary files it creates before it exits.
+This behaviour can be overwritten by specifying the this option. For debugging
+purposes only.
+
+=item B<-S, -Server>
+
+Create a default configuration for the selection of CDDB server. This configuration
+is used by other CDDB aware programs too, so be careful. Note that Disc-Cover will not
+overwrite the configuration file.
+
+=item B<-t, -type> I<txt|tex|dvi|ps|pdf|cddb|lbl|html>
+
+The -t switch allows to specify the output format. By default disc-cover will
+create a Postscript file. Other formats supported include ASCII text (txt),
+LaTeX (tex), DVI (dvi), PDF (pdf), cddb database format (cddb), a cdlabelgen
+compatible format (lbl) and in Hypertext Markup Language (html).
+
+=item B<-u, -uppercase>
+
+Fixes those annoying entries that are written without capitals. It capitalises every single word in titles and artists.
+
+=item B<-v, -version>
+
+Print version and program information and exit.
+
+=item B<-V, -Verbose>
+
+Enable verbose output of Disc-Cover, the libaudiocd library and all third party software,
+such as LaTeX, dvips and convert. For debugging purposes.
+
+=item B<-va, -variousartists>
+
+Some CDDB entries code every track in the 'artist / title' format. Mostly, this is used for
+artists that contain various artists. By enabling this option Disc-Cover will decode and use
+that information.
+
+=item B<-template_list>
+
+Prints a list of output template types and their descriptions.
+
+=back
+
+=head1 CONFIGURATION
+
+Disc-cover first checks the file F</etc/disc-cover.conf> for system wide parameters and
+then looks at F<~/.disc-coverrc>. Following are all the different variables that can be
+set. The file F<~/.cdserverrc> is used indirectly through the AudioCD library. This file
+contains the CDDB and CDINDEX servers. Furthermore it can be used to control certain
+other options of this library. See the appropriate documentation.
+
+You can generate a configuration file with the L</B<-C, -Configuration> F<filename>> option. Keep in mind that the values
+in this file will be set by looking at the current settings. That is, any existing configuration
+files or options on the commandline will be used.
+
+To make a clean configuration file, first remove the ~/.disc-coverrc file and then run Disc-Cover without any option but '-C': disc-cover -C ~/.disc-coverrc
+
+=over 4
+
+=item $config_version_config
+
+This will be used in the future by new versions of Disc-Cover to check for inconsistencies
+in changed, removed or added configuration options.
+
+ Default: '1.4.0';
+
+=item $config_tmp_dir
+
+This sets the directory that is used for temporary files.
+
+ Default: '/tmp';
+
+=item $config_output_format
+
+This is the default output format. Although you can choose any of the types listed
+in 'disc-cover -h' option the most common would be 'ps' or 'pdf'.
+
+ Default: 'ps';
+
+=item $config_device
+
+The default cdrom drive that is used to scan a cd. See L<B<-D, -Device> I<device>>
+
+ Default: '/dev/cdrom';
+
+=item $config_cddb_cache_directory
+
+The path where cddb entries are stored in and retrieved from. This can be shared with
+other programs that also use cddb.
+
+ Default: "$ENV{HOME}/.cddb";
+
+=item $flag_with_extended_track_info
+
+Setting this to one will force disc-cover to include extended track
+information. See L</B<-e, -extended>> option. It is advised to keep
+this 0 as there are lots of entries that contain ugly and meaningless extended
+information. Most of the time it is only useful in case of various artists cds.
+
+ Default: 0;
+
+=item $flag_various_artist_cd
+
+Setting this to one will force disc-cover to parse every track the same way
+it parses the 'artist / title' label. This might be useful for various artist
+cds where every track is formatted in the same way. It is adviced to leave this
+option 0, as disc-cover will issue a warning whenever it encounters such a disc.
+You can easily turn it on with L</B<-va, -variousartists>>
+
+ Default: 0;
+
+=item $flag_double_disc_cdtitle
+
+Setting this flag during the processing of a double cd (using the L</B<-2, -second>>
+option) enables a 'smart' algorithm that attempts to find a nice title for the cd, using
+the titles of both cddb entries. It will remove all characters unequal in both strings,
+and gets rid of any characters surrounding uncommon parts. Last, it removes the words 'disc'
+and 'disk', plus any whitespace at the beginning or end., -second>>
+option) enables a 'smart' algorithm that attempts to find a nice title for the cd, using
+the titles of both cddb entries. It will remove all characters unequal in both strings,
+and gets rid of any characters surrounding uncommon parts. Last, it removes the words 'disc'
+and 'disk', plus any whitespace at the beginning or end.
+
+ Default: 1;
+
+=item $flag_genre
+
+By setting this an additional line will be added to the bottom of the bottom text on the front cover
+with the genre (taken from the database) of the disc. See L<B<-g, -genre>> option.
+
+ Default: 0;
+
+=item $flag_picture_use_allmusic
+
+Setting this flag does the same as the L<B<-allmusic>> option. That is, Disc-Cover will search for
+a cover picture on allmusic to be put on the front cover.
+
+ Default: 0;
+
+=item $flag_uppercase_fix
+
+Setting this flag does the same as the L<B<-u,-uppercase>> option. That is, Disc-Cover will capitalise every single word in titles and artists.
+
+ Default: 0;
+
+=item %config_latex_colors
+
+This is a list of colours that can be set to alter most of the different items that appear on
+the covers. You can change the colour of the title, artist, discinfo, track strings, track numbers
+and track times independently. Use colours from the color.sty Latex file: black, white, red, green,
+blue, cyan, magenta and yellow.
+ 
+ Default: ( title => 'black',
+            artist => 'black',
+	    discinfo => 'black',
+	    track_number => 'black',
+	    track_string => 'black',
+	    track_time => 'black',
+	    track_extended => 'black'
+	    track_artist => 'black'
+	    flaptext => 'black',
+	  );
+
+=item $config_flaptext
+
+This takes the string from the comments field of the user's password entry. We
+use only the text up until the first comma, which normally is set to the user's
+full name. You can also put a simple string here or an empty one to cancel the
+output. See also L<B<-b, -flaptext> I<text>> option.
+
+ Default: split ',', (getpwuid($<)))[6];
+
+=item $config_casetype
+
+This determines for which type of case output is generated. It searches for a template
+file in all the @config_template_dirs with the same name.
+
+ Default: "jewel";
+
+=item $latex_user_packages
+
+If you create a template that requires special LaTeX packages, they can be added here. Generally not advised if you want to share your templates with others as they need to own those LaTeX packages, and add them to Disc-Cover's configuration file.
+
+ Default: "";
+
+=item $latex_language_encoding
+
+Whenever you create cds with languages not normally supported by LaTeX you should
+add or change this. It calls \usepackage[$latex_language_encoding]{inputenc}. Main encodings are, latin1 for ISO Latin-1, ascii for pure ASCII, ansinew and cp1252 (they are synonyms) for Windows 3.1 ANSI (an MS extension of ISO Latin-1) and applemac for Apple MacIntosh.
+
+ Default: "latin1";
+
+=back
+
+
+=head1 FREQUENTLY ASKED QUESTIONS
+
+Here you might find an answer between the FAQs.
+
+=head2 Q: I get the following error (or similar), what's wrong?
+
+ "Can't locate HTTP/Request.pm in @INC (@INC contains:
+ /usr/lib/perl5/5.00502/i586-linux /usr/lib/perl5/5.00502
+ /usr/lib/perl5/site_perl/5.005/i586-linux /usr/lib/perl5/site_perl/5.005 .)
+ at ./disc-cover line 811.
+ BEGIN failed--compilation aborted at ./disc-cover line 811."
+
+A: Install the Perl modules called libwww-perl, HTML-Parser, URI, and
+MIME-Base64, which can be found at www.cpan.org or at the 'more stuff...'
+directory on the homepage of Disc-Cover. See the file INSTALL for more details.
+
+=head2 Q: I get the following error with the option -V, what's wrong?
+
+ "Disc-Cover: running verbose version x.x.x (config y.y.y)
+ Disc-Cover: creating tmp dir (/tmp/disc-cover-4436)
+ Disc-Cover: calling Audio-CD library...
+ Trying CDDB server cddbp://:0/
+ Connection error: No such file or directory
+ Could not establish connection with any CDDB servers!
+ Disc-Cover: ...back from call to Audio-CD library.
+ Disc-Cover: Audio-CD library says success, let's continue"
+
+A: You have no CDDB servers configured. Either use the wonderful
+program cdcd to create such a configuration or run disc-cover with
+the options -S.
+
+=head2 Q: How do I make a cover for homemade cds?
+
+A: Follow these steps.
+
+1. Insert the homemade cd.
+ 
+2. Run disc-cover like this:
+    disc-cover -n -t cddb -o myfile.cddb
+ 
+3. Edit the myfile.cddb with some text editor, the tracks will all be named
+   "Untitled". This should be very easy.
+
+4. For printable output run disc-cover again:
+    disc-cover -f myfile.cddb
+
+=head2 Q: I have been using 1.0.1. under SuSE 7.3 for a while an want to
+upgrade to 1.3.X or higher However, Audio-CD does not compile.
+
+A:  You have to install lbcdaudio first. Your distribution does not
+contain it, or it does not install it with the standard setup.
+
+
+=head2 Q: After installation all my CD's are reread from the internet.
+
+A: Run the following commands (from a script, if you like)
+
+  cd ~/.cddb
+  ln -s . blues
+  ln -s . classical
+  ln -s . country
+  ln -s . data
+  ln -s . folk
+  ln -s . jazz
+  ln -s . newage
+  ln -s . reggae
+  ln -s . rock
+  ln -s . soundtrack
+  ln -s . misc
+
+
+=head2 Q: Q3. Mike Oliphant's grip creates cddb-files with track-artist held in a special field called TARTIST0, TARTIST1, ...  Why can't disc-cover print these lables appropriately by the "-va" option? 
+
+A: Unfortunately Mike's idea to invent new tags for the track artist
+violates the freedb-conventions for handling samplers. There will be no
+support for this.
+
+
+
+
+=head2 Q: How to cut the covers?
+
+A: This is my routine for jewel cases, just one way of doing it. I start with
+the front cover.  I cut it with two cuts along the width of the paper. This
+results in a front cover with two pieces of paper along the sides. These are
+folded backwards to help the cover keep in place when it is inserted in the
+jewel case. The back cover is just cut with four cuts.
+
+=head2 Q: When I print my cover from PDF in Acrobat Reader the resulting covers are too small. How come?
+
+A: Hendrik Neumann E<lt>h-n@gmx.netE<gt>: The problem is the option 'Fit to page' that
+makes Acrobat Reader scale the page before printing. Turn it off before
+attempting to print.
+
+=head2 Q: I'm not root and I want to install Audio::CD
+
+A: Adam Spiers E<lt>adam@spiers.netE<gt>: make sure that the correct parameters are
+given to the perl Makefile.PL file as follows:
+
+  perl Makefile.PL LIBS="-L/nfs-home/adams/local/lib -lcdaudio" \
+  INC=-I/nfs-home/adams/software/libcdaudio-0.99.6/source PREFIX=~
+
+=head2 Q: How do I make covers for double cds?
+
+A: Follow these steps:
+
+1. insert the I<second> disc
+
+2. Run disc-cover:
+    disc-cover -t cddb -o disc2.cddb
+   
+3. replace the second disc with the first
+
+4. Run disc-cover again:
+    disc-cover -2 disc2.cddb 
+
+=head2 Q: The quality of the picture is reduced!
+
+A: The image is resized to 200x200 pixels, this is to make sure that the size
+of the resulting eps or pdf picture is not too large. You can work around this
+by converting your picture yourself, for example with jpeg2ps, and then including
+this in your cover using the '-pic' option. This options includes files as they are.
+
+=head2 Q: I want Disc-Cover to have this specific feature, what now?
+
+A: Send me an e-mail with your feature or better yet, implement it yourself
+and send me a patch file. This does not guarantee that your feature will be
+in any future version though. I would like to keep Disc-Cover as simple to use
+as possible. But, sometimes I can't resist to put in something new, or the number
+of e-mails on one feature grows large enough for me to add it to Disc-Cover.
+
+=head2 Q: I run Disc-Cover and it does not produce a correct cover, what's wrong?
+
+A: I don't know! If you e-mail the problem I can try to fix it. When you mail
+some error please remember to state the problem as exact as you can and to
+include the cddb entry (save it with 'disc-cover -t cddb'). Also, two debug
+options are included. Use L</B<-V, -Verbose>> to get verbose output of what the
+program is doing. This helps me locate the problem if you email me your
+problem. Use L</B<-R, -Remove>> to prevent disc-cover from deleting temporary
+files. This enables you to examine intermediate files (.tex, .div, pictures).
+
+
+=head1 FILES
+
+=over 4
+
+=item F</etc/disc-cover.conf>
+
+System wide configuration file (for its format see L</CONFIGURATION>)). All its items can be overridden in a user configuration file.
+
+=item F<$HOME/.disc-coverrc>
+
+User configuration file (for its format see L</CONFIGURATION>). 
+
+=item F<$HOME/.cdserverrc>
+
+Configuration of the AudioCD library. Use this to select which servers are to be used.
+
+=back
+
+=head1 BUGS
+
+=over 4
+
+=item 1
+
+Whenever there is more than one file in the cddb cache directory disc-cover
+will issue a warning and just use the first one it found.
+
+=item 2
+
+Not possible to use CDINDEX files as input.
+
+=item 3
+
+The layout of the tracks can be slightly deformed when special international
+characters or any other tall characters appear in the title.
+
+=back
+
+=head1 AUTHORS
+
+disc-cover is written and maintained by J.I. van Hemert E<lt>jvhemert@cwi.nlE<gt>
+You can find the latest version on http://www.cwi.nl/~jvhemert/disc-cover.html
+The program is licensed under the GNU Public License. More information about this license
+is in the source package in the file F<COPYING> or on http://www.gnu.org/copyleft/gpl.html
+
+=cut
+
+# Eof disc-cover
+
+

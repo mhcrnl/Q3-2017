@@ -1,0 +1,269 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+
+require TestDriver;
+require abuild_test_utils;
+
+chdir("abuild-java-rules") or die;
+
+my $td = new TestDriver("java rules");
+test_setup();
+
+my $top = get_top();
+my $filters = get_filters();
+my ($test_java, $test_junit, $jar, $java) = @{get_java_information()};
+
+if (! $test_java)
+{
+    $td->notify("skipping java tests");
+    $td->report(0);
+    exit 0;
+}
+
+# This test suite contains basic functionality tests for the Java
+# rules.  Additional testing is done through the examples tests.
+
+setup($td);
+
+cd('work/jars');
+
+$td->runtest("java startup failure",
+	     {$td->COMMAND => [qw(abuild -b all -k --no-dep-failures),
+			       ' --test-java-builder-bad-java'],
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/java-startup-failure.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+my $cygwin = ($^O eq 'cygwin');
+if ($cygwin)
+{
+    # Test to make sure a java build will work if we don't have perl.
+    my $opath = $ENV{'PATH'};
+    my @path = ();
+    foreach my $p (split(':', $opath))
+    {
+	if ((-e "$p/perl") || (-e "$p/perl.exe") ||
+	    (-e "$p/uname") || (-e "$p/uname.exe"))
+	{
+	    # exclude from path
+	}
+	else
+	{
+	    push(@path, $p);
+	}
+    }
+    $ENV{'PATH'} = join(':', @path);
+    system("abuild --build=all > build-java.out 2>&1");
+    system("abuild --clean=all > clean-java.out 2>&1");
+    $ENV{'PATH'} = $opath;
+    $td->runtest("build java without perl in path",
+		 {$td->FILE => "build-java.out",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/build-java-no-perl.out"},
+		 $td->NORMALIZE_NEWLINES);
+    $td->runtest("clean without perl in path",
+		 {$td->FILE => "clean-java.out",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/clean-no-perl.out"},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+$td->runtest("build",
+	     {$td->COMMAND => "abuild -b all doc",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/jars1.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("check html",
+	     {$td->COMMAND => "find . -name index.html -print",
+	      $td->FILTER => "LANG=C sort"},
+	     {$td->FILE => "$top/javadoc-html.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("rebuild when up to date",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/jars2.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("run simple java program",
+	     {$td->COMMAND => "simple/prog/abuild-java/java-program"},
+	     {$td->FILE => "$top/prog1.out", $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("run multijar program 1",
+	     {$td->COMMAND => "multijar/abuild-java/wrapper"},
+	     {$td->FILE => "$top/prog3.out", $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+if (in_windows())
+{
+    $td->runtest("run wrapper batch file",
+		 {$td->COMMAND =>
+		      "cmd /c multijar\\\\abuild-java\\\\wrapper.bat"},
+		 {$td->FILE => "$top/prog3.out", $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+$td->runtest("run multijar program 2",
+	     {$td->COMMAND => "multijar/abuild-java/other"},
+	     {$td->FILE => "$top/prog2.out", $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("extract simple program manifest",
+	     {$td->COMMAND =>
+		  [$jar, 'xf', 'simple/prog/abuild-java/dist/java-program.jar',
+		   'META-INF/MANIFEST.MF']},
+	     {$td->REGEXP => ".*", $td->EXIT_STATUS => 0});
+
+$td->runtest("check Class-Path",
+	     {$td->COMMAND => "grep Class-Path META-INF/MANIFEST.MF"},
+	     {$td->STRING =>"Class-Path: lib2.jar\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("check Main-Class",
+	     {$td->COMMAND => "grep Main-Class META-INF/MANIFEST.MF"},
+	     {$td->STRING =>"Main-Class: com.example.basic.BasicProgram\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("extract lib2 manifest",
+	     {$td->COMMAND =>
+		  [$jar, 'xf', 'simple/lib2/abuild-java/dist/lib2.jar',
+		   'META-INF/MANIFEST.MF']},
+	     {$td->REGEXP => ".*", $td->EXIT_STATUS => 0});
+
+$td->runtest("check Class-Path",
+	     {$td->COMMAND => "grep Class-Path META-INF/MANIFEST.MF"},
+	     {$td->STRING =>"Class-Path: lib1.jar\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("extract multijar other manifest",
+	     {$td->COMMAND =>
+		  [$jar, 'xf', 'multijar/abuild-java/dist/other.jar',
+		   'META-INF/MANIFEST.MF']},
+	     {$td->REGEXP => ".*", $td->EXIT_STATUS => 0});
+
+$td->runtest("check extra key",
+	     {$td->COMMAND => "grep custom-key META-INF/MANIFEST.MF"},
+	     {$td->STRING =>"custom-key: medeco\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("check Main-Class",
+	     {$td->COMMAND => "grep Main-Class META-INF/MANIFEST.MF"},
+	     {$td->STRING =>"Main-Class: com.example.other.Other\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/archive-types");
+
+$td->runtest("archive types",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/archive-types1.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("rebuild when up to date",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/archive-types2.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("jar contents",
+	     {$td->COMMAND =>
+		  [$jar, 'tf', "jar/abuild-java/dist/jar-example.jar"],
+		  $td->FILTER => "perl $filters/filter-jar.pl"},
+	     {$td->FILE => "$top/jar-contents.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("rar contents",
+	     {$td->COMMAND =>
+		  [$jar, 'tf', "rar/abuild-java/dist/rar-example.rar"],
+		  $td->FILTER => "perl $filters/filter-jar.pl"},
+	     {$td->FILE => "$top/rar-contents.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("war contents",
+	     {$td->COMMAND =>
+		  [$jar, 'tf', "war/abuild-java/dist/war-example.war"],
+		  $td->FILTER => "perl $filters/filter-jar.pl"},
+	     {$td->FILE => "$top/war-contents.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("client war contents",
+	     {$td->COMMAND =>
+		  [$jar, 'tf',
+		   "client-war/abuild-java/dist/client-war-example.war"],
+		  $td->FILTER => "perl $filters/filter-jar.pl"},
+	     {$td->FILE => "$top/client-war-contents.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("ear contents",
+	     {$td->COMMAND =>
+		  [$jar, 'tf', "ear/abuild-java/dist/ear-example.ear"],
+		  $td->FILTER => "perl $filters/filter-jar.pl"},
+	     {$td->FILE => "$top/ear-contents.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("other ear contents",
+	     {$td->COMMAND =>
+		  [$jar, 'tf',
+		   "other-ear/abuild-java/dist/other-ear-example.ear"],
+		  $td->FILTER => "perl $filters/filter-jar.pl"},
+	     {$td->FILE => "$top/other-ear-contents.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/junit");
+
+if ($test_junit)
+{
+    $td->runtest("junit with failure",
+		 {$td->COMMAND => "abuild -b all test",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/junit-failure.out",
+		  $td->EXIT_STATUS => 2},
+		 $td->NORMALIZE_NEWLINES);
+
+    $td->runtest("junit with failure and -k",
+		 {$td->COMMAND => "abuild -k -b all test",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/junit-failure-k.out",
+		  $td->EXIT_STATUS => 2},
+		 $td->NORMALIZE_NEWLINES);
+
+    $td->runtest("junit with no failures",
+		 {$td->COMMAND => "abuild -d test -C test",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/junit-okay.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+else
+{
+    # Make sure these files are accessed.
+    system("(tar cf - . | cat > /dev/null)");
+}
+
+check_work_accessed($td, 'not-accessed.out');
+
+$td->report(24 +
+	    ($test_junit ? 3 : 0) +
+	    (in_windows() ? 1 : 0) +
+	    ($cygwin ? 2 : 0));

@@ -1,0 +1,30 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+
+chdir("logger") or die "chdir testdir failed: $!\n";
+
+require TestDriver;
+
+my $td = new TestDriver('Logger');
+
+$td->runtest("full test",
+	     {$td->COMMAND => "test_logger"},
+	     {$td->FILE => "logger.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("full test: output only",
+	     {$td->COMMAND => "test_logger 2> /dev/null"},
+	     {$td->FILE => "logger.stdout",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("full test: error only",
+	     {$td->COMMAND => "test_logger 1>/dev/null"},
+	     {$td->FILE => "logger.stderr",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->report(3);

@@ -1,0 +1,13 @@
+abuild: build starting
+abuild: old (abuild-java): all
+Buildfile: --abuild.xml--
+[deprecate] *** DEPRECATION WARNING *** (abuild version 1.1): abuild.use-local-hooks is no longer needed; abuild now always behaves as if this is set
+
+BUILD FAILED
+--abuild.xml--:nn: deprecation error mode; failing
+
+Total time: <time>
+abuild: old (abuild-java): build failed
+abuild: build complete
+abuild: ERROR: at least one build failure occurred; summary follows
+abuild: ERROR: build failure: old on platform java

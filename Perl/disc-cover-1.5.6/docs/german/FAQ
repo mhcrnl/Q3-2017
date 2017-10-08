@@ -1,0 +1,83 @@
+
+1999-12-08
+
+FAQ - Disc-Cover
+
+
+Häufig gestellte Fragen:
+
+
+Q. Ich bekomme die folgende Fehlermeldung, was stimmt nicht?
+
+"Can't locate HTTP/Request.pm in @INC (@INC contains:
+/usr/lib/perl5/5.00502/i586-linux /usr/lib/perl5/5.00502
+/usr/lib/perl5/site_perl/5.005/i586-linux /usr/lib/perl5/site_perl/5.005 .)
+at ./disc-cover line 811.
+BEGIN failed--compilation aborted at ./disc-cover line 811."
+
+A. Installiere die Perl-Module libwww-perl, HTML-Parser, URI und
+MIME-Base64, die auf www.cpan.org oder im 'more stuff...' Verzeichnis
+auf der Disc-Cover Homepage gefunden werden können. Die Datei INSTALL
+enthält weitere Details.
+
+
+
+Q. Ich bekomme die folgende Fehlermeldung, was stimmt nicht?
+
+"Can't locate HTML/HeadParser.pm in @INC (@INC contains:                         
+/usr/lib/perl5/5.00503/i386-linux                                               
+/usr/lib/perl5/5.00503 /usr/lib/perl5/site_perl/5.005/i386-linux                
+/usr/lib/perl5/site_perl/5.005 .) at                                            
+/usr/lib/perl5/site_perl/5.005/LWP/Protocol.pm line 46.                         
+BEGIN failed--compilation aborted at                                            
+/usr/lib/perl5/site_perl/5.005/LWP/UserAgent.pm line 103.                       
+BEGIN failed--compilation aborted at ./disc-cover line 893."
+
+A. Installiere die Perl-Module libwww-perl, HTML-Parser, URI und
+MIME-Base64, die auf www.cpan.org oder im 'more stuff...' Verzeichnis
+auf der Disc-Cover Homepage gefunden werden können. Lese die Datei
+INSTALL für mehr Details.
+
+
+
+Q. Wie erstelle ich ein Cover für selbst gebrannte CDs?
+
+A. Befolge diese Schritte:
+
+  1. Lege die selbst gebrannte CD ein.
+
+  2. Starte disc-cover folgendermaßen:
+     > disc-cover -t cddb -o myfile.cddb
+     
+  3. Editiere mytex.cddb mit einem Texteditor, die Stücke heißen alle
+     "Unknown". Das sollte sehr einfach sein.
+
+  4. Für eine ausdruckbare Ausgabe starte disc-cover ein weiteres
+     Mal:
+     > disc-cover -f myfile.cddb
+
+
+
+Q. Ich benutze Disc-Cover, aber das Cover wird nicht korrekt
+erstellt, was stimmt nicht?
+
+A. Keine Ahnung! Wenn du mir eine E-Mail schreibst, kann ich
+versuchen das Problem zu beheben. Wenn du einen Fehler per E-Mail
+sendest, dann denke bitte daran, das Problem so genau zu
+beschreiben, wie du kannst und den cddb-Eintrag mitzuschicken (du
+kannst ihn mit 'disc-cover -t cddb' speichern).
+
+
+
+Q. Tipp: Wie schneidet man das Cover aus?
+
+A. Ich mache es folgendermaßen, aber das ist nur eine Möglichkeit.
+Ich beginne mit der Vorderseite. Diese schneide ich mit zwei
+Schnitten entlang der Breite des Papiers aus. Das Ergebnis ist ein
+Vorderseite, mit zwei Papierstücken an den Seiten. Diese falte ich
+nach hinten, um dem Cover Halt zu geben, wenn es in die CD-Hülle
+gesteckt wird. Die Rückseite wird einfach mit vier Schnitten
+ausgeschnitten.
+
+
+J.I. van Hemert

@@ -1,0 +1,15 @@
+<html>
+<head>
+<LINK REL="STYLESHEET" HREF="/default.css" TYPE="text/css">
+<BASE TARGET='control'>
+</head>
+<body>
+
+<p><b>Program</b>:
+<li><b><a href="/bin/iniedit.pl">Edit mh.ini</a></b>
+<li><b><a href="RUN?reload_code">Reload code</a></b>
+
+
+</body>
+</html>
+

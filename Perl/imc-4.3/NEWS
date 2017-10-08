@@ -1,0 +1,180 @@
+version 4.3 (3 April 2005):
+
+- Bugfix: semicolon and double-quote embedded in text string was not properly
+  handled.  Re-implemented lexer to have a robust handling.
+
+- Re-added support for GIF files (if the GD perl module supports it).
+
+version 4.2 (1 May 2003):
+
+- Bugfix: origin was not initialized to (0,0), so that MOVETO was required
+  to set it.  This has been fixed.
+
+version 4.1 (27 January 2002):
+
+- Addition of JPEG input/output (if the installed GD library supports it).
+
+- Bugfixes for the use of the pre-processor.
+
+version 4.0 (9 November 1999):
+
+- Renamed the program from 'gifc' to 'imc'.  Although the syntax for the
+  input files has not changed, the major version is stepped up.  This is
+  because imc does not generate GIF files anymore, but PNG files, due to
+  patent restrictions.
+
+- imc now requires GD 1.22 instead of 1.18.
+
+version 3.1 (18 September 1999):
+
+- Only one fix really: arcs that stretched for about 180 degrees were
+  not correctly filled.  This is fixed now.
+
+- A small problem in configure was fixed.
+
+version 3.0 (23 April 1999):
+
+- Quite some bugfixes.  Biggest bugfix: horizontal and vertical text
+  and image alignment parameters were interchanged with respect to their
+  logical meaning.  Fixed the bug, but some scripts may depend on this,
+  so I'll make it a major version change now...
+
+- Implemented INTERLACED command: gives a fading-in effect in
+  some browsers.
+
+- The CLOSED subcommand for the ARC command is extended: it can
+  now be CLOSED PIE or CLOSED SEGMENT.  The old syntax CLOSED is
+  a synonym of CLOSED PIE (this makes it backwards compatible).
+
+- Converted configure/make steps to autoconf/automake: brings
+  greater portability !  I ditched --with-pp in the process,
+  because it doesn't seem to be useful: the pre-processor is always in
+  some standard location, no?  Let me know if I'm wrong...  Note also
+  that 'make test' changed to 'make check' due to these changes.
+
+- Implemented general rotation and mirroring of text and images.  New
+  commands: TEXTMIRROR, IMAGEROTATE, IMAGEMIRROR, the ROTATE and MIRROR
+  subcommands for IMAGE, and the MIRROR subcommand for TEXT and TEXTAT.
+  The restrictions from 2.6 on the rotation of text have been lifted.
+  Please test this thoroughly...
+
+version 2.6 (13 March 1999):
+
+- Some changes to the configure script: --with-perl instead of --perl,
+  --with-pp instead of --pp (more compliant with standard configure)
+
+- Added 'make test' to makefile.
+
+- Implemented rotating of text, but only counterclockwise rotation
+  of 90 degrees is supported for now.  The syntax leaves room for
+  extension however.  New commands are: TEXTROTATE and the ROTATE
+  subcommand for TEXT and TEXTAT.
+
+version 2.5 (30 August 1998):
+
+- More portable makefile, more GNU-style configure script.
+
+- CLOSED subcommand for the ARC command (interesting for pie charts).
+  A closed arc can also be filled.
+
+- First public release.
+
+version 2.4 (13 July 1998):
+
+- Miscellaneous bugfixes.
+
+- More extensive configure script and makefile.
+
+- make install
+
+- Support of C style comments, also without pre-processor.
+
+- manual page and HTML formatted reference guide.
+
+version 2.3 (5 July 1998):
+
+- Miscellaneous bugfixes.
+
+- Coordinates can also be negative, but points with negative coordinates
+  are never drawn.
+
+- SIZE subcommand in IMAGE command can also use floating point percentages
+  instead of integer absolute sizes.
+
+- Basic configure script and makefile.
+
+version 2.2 (30 June 1998):
+
+- Miscellaneous bugfixes.
+
+- Added the IMAGEALIGN command and the ALIGN subcommand for the IMAGE
+  command.
+
+- The angles in the ARC command do not have to lie between -360 and
+  360 degrees anymore (anything that fits into a signed integer on
+  your machine should be ok).
+
+version 2.1 (28 June 1998):
+
+- Miscellaneous bugfixes.
+
+- Changed the name of the program from gifc.pl to gifc.
+
+- Added the -I command line option and the "include" CGI parameter for
+  specifying standard include directories.  Added the -h and -v command
+  line options.
+
+- Added the TEXTALIGN command and the ALIGN subcommand for the TEXT and
+  TEXTAT commands.
+
+- The angles in the ARC command can now also be negative, but they must
+  lie between -360 and 360 degrees.
+
+- Added the ANGLES command.  This enables to specify whether angles should
+  increase clockwise or anticlockwise.  The default is still clockwise.
+
+- Added the FILL command.
+
+version 2.0 (21 June 1998):
+
+- Miscellaneous bugfixes.
+
+- The default origin is now at the top left of the image.  The setting can
+  be changed with the ORIGIN command. (-> backward incompatibility)
+
+- When in the IMAGE command the filename is omitted, the previous filename
+  is now used.  A size can be specified to scale the image.  The image
+  can also be an X Bitmap file.
+
+- Addition of TEXTAT, LINE and RECTANGLE commands.  Changed CIRCLE command:
+  the X and Y coordinate of the center must be given. (-> backward
+  incompatibility)  Addition of ELLIPSE and ARC commands.
+
+- A semicolon can be used as separator between two commands on one line.
+  However, this means that the semicolon cannot be used anymore to start a
+  comment. (-> backward incompatibility)
+
+- Possibility to use arithmetic expressions (within braces).
+
+- Script is first fed through the C pre-processor if one can be found.
+
+- Addition of transparent color.
+
+- Step-up of major version number because of backward incompatibilities.
+
+version 1.1 (17 June 1998):
+
+- Script can be used in a URL as CGI script: the GIF image is then output
+  to the browser.
+
+- X11 color names can be used to denote colors.
+
+- Text can now be in a given color and with a given size: TEXTCOLOUR and
+  TEXTSIZE commands; COLOUR and SIZE subcommands for TEXT command.
+
+version 1.0 (16 June 1998):
+
+- Basic syntax.
+
+- Following commands are supported: BACKGROUND, LINECOLOUR, FILLCOLOUR,
+  LINEWIDTH, MOVETO, LINETO, TEXT, CIRCLE, IMAGE, SIZE.

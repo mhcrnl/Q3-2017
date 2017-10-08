@@ -1,0 +1,201 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+
+require TestDriver;
+require abuild_test_utils;
+
+chdir("abuild-groovy-basic") or die;
+
+my $td = new TestDriver("basic groovy");
+test_setup();
+
+my $top = get_top();
+my $filters = get_filters();
+my ($test_java, $test_junit, $jar, $java) = @{get_java_information()};
+
+if (! $test_java)
+{
+    $td->runtest("skipping groovy tests",
+		 {$td->STRING => "skip"},
+		 {$td->STRING => "skip"});
+    fake_qtc($td, '^(JavaBuilder|groovy)');
+    $td->report(1);
+    exit 0;
+}
+
+# This test contains basic groovy-specific functionality tests and a
+# few general java backend tests.
+
+setup($td);
+
+cd("work/util");
+
+$td->runtest("jvm-append-args",
+	     {$td->COMMAND => "abuild --jvm-append-args -oops1 -oops2" .
+		  " --end-jvm-args --verbose",
+		  $td->FILTER => "grep 'invoking java:'"},
+	     {$td->REGEXP =>
+		  ".*/java -XX:MaxPermSize\\S+ -oops1 -oops2 -classpath .*",
+	      $td->EXIT_STATUS => undef});
+
+$td->runtest("jvm-replace-args",
+	     {$td->COMMAND => "abuild --jvm-replace-args -oops1 -oops2" .
+		  " --end-jvm-args --verbose",
+		  $td->FILTER => "grep 'invoking java:'"},
+	     {$td->REGEXP => ".*/java -oops1 -oops2 -classpath .*",
+	      $td->EXIT_STATUS => undef});
+
+$td->runtest("groovy Util",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->STRING =>
+		  "abuild: build starting\n" .
+		  "abuild: util (abuild-indep): all\n"  .
+		  "assertions passed\n" .
+		  "abuild: build complete\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/protocol");
+
+chop(my $support_utf8 = `abuild --silent -b name:print-utf8`);
+foreach my $j ('j1', 'j2')
+{
+    # There is a race condition in reading output/error that can
+    # sometimes cause this test case to fail.  See comments in
+    # JavaBuilder.java around testProtocol for details in case it
+    # becomes worth fixing.
+    if ($support_utf8)
+    {
+	$td->runtest("JavaBuilder protocol (utf8): $j",
+		     {$td->COMMAND =>
+			  ['abuild', ' --test-java-builder-protocol',
+			   '--output-prefix=O ', '--error-prefix=! ',
+			   "-$j"],
+			  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		     {$td->FILE => "$top/protocol-$j.utf8.out",
+		      $td->EXIT_STATUS => 0},
+		     $td->NORMALIZE_NEWLINES);
+    }
+    $td->runtest("JavaBuilder protocol (ascii): $j",
+		 {$td->COMMAND =>
+		      ['abuild', ' --test-java-builder-protocol',
+		       '--output-prefix=O ', '--error-prefix=! ',
+		       "-$j", 'FORCE_ASCII=1'],
+		      $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/protocol-$j.ascii.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+cd("work/dynamic");
+
+$td->runtest("no qtest.log",
+	     {$td->STRING => (-f "abuild-indep/qtest.log" ? "yes" : "no")},
+	     {$td->STRING => "no"});
+
+$td->runtest("groovy dynamic file build",
+	     {$td->COMMAND => ['abuild', 'potato.salad=one two three',
+			       'check'],
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/groovy-dynamic-run.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("qtest.log existence",
+	     {$td->STRING => (-f "abuild-indep/qtest.log" ? "yes" : "no")},
+	     {$td->STRING => "yes"});
+
+$td->runtest("groovy dynamic file",
+	     {$td->FILE => "abuild-indep/.ab-dynamic.groovy",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/groovy-dynamic.out"},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/force-exit");
+
+$td->runtest("JavaBuilder exit",
+	     {$td->COMMAND => "abuild -b all -k",
+	      $td->FILTER =>
+		  "perl $top/filter-exit.pl | perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/force-exit.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/failures");
+
+$td->runtest("build failures",
+	     {$td->COMMAND => "abuild -b all -k",
+	      $td->FILTER =>
+		  "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/failures.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build failures without -k",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER =>
+		  "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/failures-no-k.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/rules/user");
+
+$td->runtest("basic rule loading",
+	     {$td->COMMAND => "abuild -d",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/rules.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("override target",
+	     {$td->COMMAND => "abuild -d special",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/rules-override.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/clean-binding");
+
+$td->runtest("clean binding",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/clean-binding.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/stdin");
+
+$td->runtest("use System.in",
+	     {$td->COMMAND => "echo quack | abuild test",
+	      $td->FILTER => "grep input:"},
+	     {$td->REGEXP => ".*input: quack\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/java-groovy-interdep");
+
+$td->runtest("Groovy/Java interdependence",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/java-groovy-interdep.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# Test relative source directory set in java.dir.src.  This test case
+# is verbatim from a bug report sent in by Brian Reid.
+cd("work/relative-src-dir");
+
+$td->runtest("relative java.src.dir",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/relative-src-dir.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+check_work_accessed($td);
+
+$td->report(19 + ($support_utf8 ? 2 : 0));

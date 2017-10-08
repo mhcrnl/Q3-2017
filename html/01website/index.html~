@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<title>Prima pagina web!</title>
+	</head>
+	<body>
+		<header>
+			<a href="home.html" >Home</a>		
+			<a href="news.html" >News</a>
+			<a href="gallery/gallery1.html" >Gallery Page 1</a>
+		</header>
+		<p>
+			<code>
+			<pre>
+			<samp>
+#!/usr/bin/perl -w
+# guardian-list -- list Guardian articles matching keyword
+
+use XML::RSSLite;
+use LWP::Simple;
+use strict;
+use utf8;
+
+# list of keywords we want
+my @keywords = qw(perl internet porn iraq Sofi bush);
+
+# get the RSS
+my $URL = 'http://evz.ro/rss.xml';
+my $content = get($URL);
+#print "$content";
+
+# parse the RSS
+my %result;
+parseRSS(\%result, \$content);
+
+# build the regex from keywords
+my $re = join "|", @keywords;
+$re = qr/\b(?:$re)\b/i;
+
+my $fh;
+my $filem = "text.txt";
+open($fh, '>', $filem) or die "Could not open '$filem' $!";
+
+# print report of matching items
+foreach my $item (@{ $result{items} }) {
+  my $title = $item->{title};
+  my $description = $item->{description};
+  $title =~ s{\s+}{ };  $title =~ s{^\s+}{  }; $title =~ s{\s+$}{  };
+    print $fh "$title\n\t$item->{link}\n\n$description";
+  if ($title =~ /$re/) {
+    print "$title\n\t$item->{link}\n\n";
+  }
+}
+__END__
+		</samp>
+			</pre>
+			</code>		
+		</p>
+		<div class="content">
+		
+		</div>
+		<div class="sidebar">
+		
+		</div>
+		<footer>
+		
+		</footer>
+	</body>
+
+</html>

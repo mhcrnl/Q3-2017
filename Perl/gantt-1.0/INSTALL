@@ -1,0 +1,31 @@
+This archive includes all the files you should need.  The files were tar'd and 
+gzipped with the appropriate directory structure and permissions.  The directory 
+structure should look like this:
+
+
+public_html/
+  gantt/
+    all the html and cgi files
+    images/
+      all the images
+    users/      [make sure your web server has write access on this]
+      all the users' server-side cookies
+
+
+The files that you probably need to modify include:
+	variables.pl
+		docroot
+		wwwroot
+		admin
+		adminEmail
+	dbhelp.pl
+		require
+
+
+You will also need CGI.pm and Date::Manip.pm installed on the server.  You
+can get both of these from perl.com if you don't already have them.
+
+Once configured, you can test the Gantt tool by going to
+http://youserver.com/gantt/   and typing in "test" at the login screen.
+
+Enjoy!

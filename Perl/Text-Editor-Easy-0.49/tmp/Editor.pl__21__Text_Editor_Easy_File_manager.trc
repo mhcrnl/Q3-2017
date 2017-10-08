@@ -1,0 +1,173 @@
+File_manager de l'instance 139721393805744 (demo10.pl)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 21, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f1340048208)
+FILE_NAME  : ./demo10.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# Session management
+#
+# A time saving feature of an Editor is to be able
+# to save configurations of opened file and to
+# re-load this configuration later.
+#
+# As usual, press F5 to insert code in the macro panel
+# This should remove demo 1 to 6 and
+# should stop and restart the Editor in the same state.
+#
+
+{
+    'F5' => sub {
+        my ( $editor, $info_ref ) = @_;
+        
+        my $macro = Text::Editor::Easy->whose_name('macro');
+        $macro->empty;
+        $macro->insert( $info_ref->{'macro'} );
+    },
+    
+    'macro' => << 'macro'
+for my $demo ( 1 .. 6 ) {
+    print "demo$demo.pl\n";
+    Text::Editor::Easy->on_editor_destroy('zone1', "demo${demo}.pl");
+}
+Text::Editor::Easy->restart;
+macro
+    ,
+}
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 719
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+===> Dans read_ à partir de seek_start = 0 (lu sur fichier)
+	who = I0, text = #
+Texte de la ligne 1 : |#|
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 21, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f1340048208)
+FILE_NAME  : ./demo10.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# Session management
+#
+# A time saving feature of an Editor is to be able
+# to save configurations of opened file and to
+# re-load this configuration later.
+#
+# As usual, press F5 to insert code in the macro panel
+# This should remove demo 1 to 6 and
+# should stop and restart the Editor in the same state.
+#
+
+{
+    'F5' => sub {
+        my ( $editor, $info_ref ) = @_;
+        
+        my $macro = Text::Editor::Easy->whose_name('macro');
+        $macro->empty;
+        $macro->insert( $info_ref->{'macro'} );
+    },
+    
+    'macro' => << 'macro'
+for my $demo ( 1 .. 6 ) {
+    print "demo$demo.pl\n";
+    Text::Editor::Easy->on_editor_destroy('zone1', "demo${demo}.pl");
+}
+Text::Editor::Easy->restart;
+macro
+    ,
+}
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 719
+FIRST      : ARRAY(0x7f13401e6858)
+LAST       : ARRAY(0x7f13401e6858)
+================================================================================
+	Level 1 : ARRAY(0x7f13401e6858)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 2
+	TEXT       : #
+	PARENT       : ARRAY(0x7f1340048208)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13401e6858)
+
+Le dump a renvoyé 0 erreurs
+
+Dans next_ de ARRAY(0x7f13401e6858)
+Parent 719| segment précédant 2
+===> Dans read_ à partir de seek_start = 2 (lu sur fichier)
+Segment next lu : seek_end = 23
+Dans next_ de ARRAY(0x7f13401f8200)
+Parent 719| segment précédant 23
+===> Dans read_ à partir de seek_start = 23 (lu sur fichier)
+Segment next lu : seek_end = 25
+Dans next_ de ARRAY(0x7f13401f8470)
+Parent 719| segment précédant 25
+===> Dans read_ à partir de seek_start = 25 (lu sur fichier)
+Segment next lu : seek_end = 76
+Dans next_ de ARRAY(0x7f13401d2760)
+Parent 719| segment précédant 76
+===> Dans read_ à partir de seek_start = 76 (lu sur fichier)
+Segment next lu : seek_end = 123
+Dans next_ de ARRAY(0x7f13401fb918)
+Parent 719| segment précédant 123
+===> Dans read_ à partir de seek_start = 123 (lu sur fichier)
+Segment next lu : seek_end = 159
+Dans next_ de ARRAY(0x7f13401f86b0)
+Parent 719| segment précédant 159
+===> Dans read_ à partir de seek_start = 159 (lu sur fichier)
+Segment next lu : seek_end = 161
+Dans next_ de ARRAY(0x7f13401e6888)
+Parent 719| segment précédant 161
+===> Dans read_ à partir de seek_start = 161 (lu sur fichier)
+Segment next lu : seek_end = 216
+Dans next_ de ARRAY(0x7f13401e6ac8)
+Parent 719| segment précédant 216
+===> Dans read_ à partir de seek_start = 216 (lu sur fichier)
+Segment next lu : seek_end = 253
+Dans next_ de ARRAY(0x7f13401f3788)
+Parent 719| segment précédant 253
+===> Dans read_ à partir de seek_start = 253 (lu sur fichier)
+Segment next lu : seek_end = 309
+Dans next_ de ARRAY(0x7f13401fc350)
+Parent 719| segment précédant 309
+===> Dans read_ à partir de seek_start = 309 (lu sur fichier)
+Segment next lu : seek_end = 311
+Dans next_ de ARRAY(0x7f13401fc758)
+Parent 719| segment précédant 311
+===> Dans read_ à partir de seek_start = 311 (lu sur fichier)
+Segment next lu : seek_end = 312
+Dans next_ de ARRAY(0x7f13401fc278)
+Parent 719| segment précédant 312
+===> Dans read_ à partir de seek_start = 312 (lu sur fichier)
+Segment next lu : seek_end = 314
+Dans next_ de ARRAY(0x7f13401fbb58)
+Parent 719| segment précédant 314
+===> Dans read_ à partir de seek_start = 314 (lu sur fichier)
+Segment next lu : seek_end = 332
+Dans next_ de ARRAY(0x7f1340042e50)
+Parent 719| segment précédant 332
+===> Dans read_ à partir de seek_start = 332 (lu sur fichier)
+Segment next lu : seek_end = 372
+Dans next_ de ARRAY(0x7f13401f8920)
+Parent 719| segment précédant 372
+===> Dans read_ à partir de seek_start = 372 (lu sur fichier)
+Segment next lu : seek_end = 381
+Dans next_ de ARRAY(0x7f13401fc740)
+Parent 719| segment précédant 381
+===> Dans read_ à partir de seek_start = 381 (lu sur fichier)
+Segment next lu : seek_end = 442
+Dans next_ de ARRAY(0x7f13401f87e8)
+Parent 719| segment précédant 442
+===> Dans read_ à partir de seek_start = 442 (lu sur fichier)
+Segment next lu : seek_end = 465

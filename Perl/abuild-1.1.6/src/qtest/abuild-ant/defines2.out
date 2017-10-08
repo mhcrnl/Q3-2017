@@ -1,0 +1,12 @@
+abuild: *** DEPRECATION WARNING *** (abuild version 1.1): the --ant option is deprecated; use prop=value instead of --ant -Dprop=value
+abuild: WARNING: ant options other than -Dprop=value are ignored
+abuild: build starting
+abuild: defines (abuild-java): all
+Buildfile: --abuild.xml--
+
+-pre-compile:
+     [echo] Property = 'four five six'
+
+BUILD SUCCESSFUL
+Total time: <time>
+abuild: build complete

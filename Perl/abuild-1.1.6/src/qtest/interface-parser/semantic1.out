@@ -1,0 +1,35 @@
+semantic1:12:5: ERROR: unknown function x
+semantic1:17:9: ERROR: unknown variable qwer
+semantic1:19:7: ERROR: unknown function xyz
+semantic1:27:7: ERROR: unknown function x
+semantic1:27:9: ERROR: unknown function y
+semantic1:27:18: ERROR: unknown function z
+semantic1:27:20: ERROR: unknown function w
+semantic1:33:1: ERROR: assigning to unknown variable oink
+semantic1:38:3: ERROR: assigning to unknown variable bad1
+semantic1:44:13: ERROR: b is not a valid target type
+semantic1:46:13: ERROR: the empty string is not a valid target type
+semantic1:51:14: ERROR: unknown environment variable NO_SUCH_VARIABLE
+semantic1:53:7: ERROR: resetting unknown variable UNKNOWN
+semantic1:54:10: ERROR: unknown variable UNKNOWN
+semantic1:55:6: ERROR: flag unknown-flag is not supported by this build item
+semantic1:57:22: ERROR: multiple words may not be assigned to scalar variable sc1
+semantic1:58:29: ERROR: value  is invalid for boolean variable empty_bool
+semantic1:59:34: ERROR: the empty string may not be used as a value for filename variable empty_filename
+semantic1:60:10: ERROR: value  is invalid for boolean variable empty_bool
+semantic1:61:10: ERROR: the empty string may not be used as a value for filename variable empty_filename
+semantic1:62:14: ERROR: unknown parameter NO_SUCH_PARAMETER
+parse(semantic1): failure
+dumping interface semantic1
+  a: string, target type object-code = 
+  b: list string append, target type object-code: uninitialized
+  c: boolean, target type object-code = 1
+  d: filename, target type object-code = --CWD--/a
+  e: list filename prepend, target type object-code: uninitialized
+  empty_bool: boolean, target type object-code = 
+  empty_filename: filename, target type object-code = 
+  sc1: string, target type object-code = 1 2 3
+  after-build files:
+    --CWD--/something.interface
+    --CWD--/a
+end of interface semantic1

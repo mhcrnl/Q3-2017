@@ -1,0 +1,745 @@
+
+2006-06-20
+
+CHANGELOG - Disc-Cover
+
+
+Version 1.5.6
+
+- fixed: version incorrectly displayed
+
+- fixed: proper encoding of languages through inputenc package
+  (thanks to Matthias Drochner)
+
+
+Version 1.5.5
+
+- fixed: better handling of double disc titles
+  (patch by Lars at systemausfall.org)
+
+- fixed: isolatin1 is removed from the userpackages as it has become depreciated.
+  (thanks to Markus Gapp)
+
+- fixed: AllMusic works again (new layout of website)
+
+- added: new template paper-box, which creates a sleeve that holds your cd.
+  (contributed by Lothar Schweikle-Droll)
+
+- added: new template that places only a a picture on the front cover, which is
+  scaled to fit the whole cover.
+
+- added: added option template_list, which generates list of feasible templates. 
+  (patch by Jereme Corrado, the new Debian maintainer)
+
+- changed: new template_list option used in the webserver index.cgi
+  (patch by Jereme Corrado, the new Debian maintainer)
+
+- changed: better regular expression for getting covers from AllMusic.com
+  (patch by Julius Gehr).
+
+
+Version 1.5.4
+
+- fixed: fatal bug causing disc-cover not to work under Linux without -f flag
+  (thanks to Thibaut Cousin for the quick response).
+
+
+Version 1.5.3
+
+- changed: online.cgi works on SunOS
+
+- changed: Audio:CD library is no longer required when using the -f option.
+  This makes setting up a webserver much easier.
+
+- added: new template that only prints backs of jewel cases, called backonly
+  (Sebastian Kaps)
+
+- bugfix: latex templates set by user were overwritten (Christophe Labouisse)o
+
+- added: to the FAQ, how to include pictures without quality reduction.
+
+- bugfix: forgot \ in linewidth command for Disc 1&2 lines (Harry James Butler)
+
+- bugfix: fixed problem with = symbol in ttitle entries (Yaniv Aran).
+
+
+Version 1.5.2
+
+- added: new option -u (or -uppercase) that fixes cddb entries written in all lowercase,
+  which too many people still do!
+
+- bugfix: problem with title lines (Disc 1 & Disc 2) of double discs.
+
+
+Version 1.5.1
+
+- changed: picture command \DCpicture now only provides the basic command for including a picture
+  in LaTeX. This makes it possible to do almost anything with the picture now.
+
+- changed: the templates have been changed to use the new \DCpicture command, the picture will
+  be centered and the border has been removed. 
+
+
+Version 1.5.0
+
+- bugfix: problems with title of double cd when both titles in cddb files were
+  equal (thanks to Jacco de Kraker).
+
+- bugfix: misaligned lines when 'foreign' characters in capital appeared,
+  like umlauts and such (thanks to Martin Hensel and Sebastian Djupsjöbacka).
+
+- changed: internal code for cover types has been replaced by external template
+  files. This should make it easier for people to change templates and add new
+  ones. Because of this move some configuration variables have become obsolete:
+  $config_frontcover_height, $config_frontcover_width,
+  $config_backcover_height, $config_backcover_width,
+  $config_tevion_cover_height, $config_tevion_cover_width,
+  $config_tevion_flap_height, $config_tevion_flap_width1,
+  $config_tevion_flap_width2
+
+- changed: moved disc-cover information bar to the bottom (should prevent
+  printer problems).
+
+- changed: the LaTeX output (not the final result) to get rid of many (all?)
+  LaTeX warnings (thanks to Martin Haefele).
+
+- changed: the LaTeX files made by Disc-Cover contain newcommands statements
+  that can be used in templates to layout a cover. These commands all start
+  with '\DC'. For example: \DCtracks gives the list of tracks already formatted,
+  while \DCtitle just gives the title of the disc.
+
+- added: information about the system when using -V, for better bugreports.
+
+- added: new template for audio cassette tapes (use '-c tape')
+
+- added: \DCgenre can be used to include the genre in a template. Also its
+  colour may be changed through the config file.
+
+- added: new script online.cgi and three pictures to determine whether a server is
+  available or very busy.
+
+
+
+Version 1.4.0
+
+- bugfix: fixed nonsense output and errors when first track title is empty
+  (thanks to Raphael Goubet).
+
+- bugfix: no more warnings when $HOME is not defined (for webservers).
+
+- bugfix: some verbose message lacked Disc-Cover: prefix.
+
+- bugfix: when a picture is put on the front (or -allmusic is used), the extended
+  disc info is trimmed down to make sure it fits below the picture.
+
+- changed: safer execution of external programs such as wget, mv and cp.
+  Especially important for webservers.
+
+- changed: removed documentation in docs directory, it has become outdated.
+  If anyone is interested in translating documentation, the full documentation
+  now resides under 'disc-cover -H'.
+
+- added: new option '-allmusic', which searches on www.allmusic.com for a
+  cover picture to put on the front cover.
+
+- added: new case type called 'sleeve', which just prints a front cover, but puts
+  the tracklistings on it. (thanks for the suggestions Adam Perer et al.)
+
+- added: new case type called 'x-slim', which exchanges the flap and side.
+
+- added: three more entries to the FAQ about installation SuSE and Mike's grip program
+  (many thanks to Thomas Kakolewski).
+
+
+Version 1.3.2
+
+- changed: added message about Acrobat Reader when using '-t pdf'
+
+- fixed: (Glenn Huxtable) the size of the front cover in slim case mode was
+  wrong.
+
+- added: new case for slim Tevion cases, thanks to Tilman Vogel for the patch.
+  Use -c tevion-slim to produce it.
+
+- added: the ability to understand various artist cds, where every track is
+  formatted using the 'artist / title' method. (suggested bu Ivan Fernandez)
+
+- added: algorithm that attempts to create a nice title for double cds (they
+  often have things like 'disc 1' or '1/2' inserted)
+
+- added: new slim case type for people that still use letter instead of the
+  standard A4, it is called letter-slim. It removes the flaptext to make room.
+
+
+Version 1.3.1
+
+- fixed: problem with slim case where LaTeX (and thus Disc-Cover) would fail
+  in producing a cover if no front picture was included by the user.
+
+- fixed: if the flaptext was empty, the box containing it (most top one)
+  woulde be in the wrong size.
+
+- added: index.cgi script in freedb directory, which powers the on-line
+  version of Disc-Cover.
+
+
+Version 1.3.0
+
+- changed: much better layout of the tracks, especially tracknames that use
+  multiple lines. Also, better aligned tracktime and tracktitle
+
+- added: configuration options to change height and width of both front and
+  back cover, thereby getting rid of e-mails stating: I believe the xxx-cover
+  should be h X w cm ;-)
+
+- changed: layout of covers and header text on the page is a bit different,
+  everything is more compact and better centered on the page.
+
+- fixed: for some long cd titles the text of the title would be justified.
+
+- added: new command parameter '-c' to choose the type of case you want
+  Disc-Cover to generate. The default is jewel, but also slimcase can be
+  chosen to create a cover (in one piece) suitable for those slim case
+  variants that save precious shelf space.
+
+
+Version 1.2.2
+
+- fixed: with '-t cddb' extended track information was not inserted (thanks to
+  Rodney Kanno for finding this one)
+
+- fixed: problems with multiple \n in -a option.
+
+- added: possibility for user to add latex style files, such as isolatin2 in
+  the configuration file.
+
+- changed: increased width of sideflaps (artist/title) of backflap and
+  improved centering of text on it.
+
+- added: option -S to create a default configuration for CDDB server (FreeDB
+  is used of course)
+
+- changed: old option -n is back by popular demand, which makes creating new
+  covers possible again.
+
+- fixed: problem of not being able to do standard input and output with cddb
+  at the same time is solved. Better way of handling cddb type (does not read
+  cache directory anymore).
+  
+- fixed: t after an empty line in -a would result in a loss of the t.
+
+
+Version 1.2.1
+
+- fixed: problem with ` quote in artis/title.
+
+- fixed: problem with quote in title/artist when creating file.
+
+- fixed: removed space between front and back to fix problems with letter
+  paper format (thanks goes to Hans Ecke).
+
+- fixed: small bug in -H option, now uses pod2man instead of perldoc which I
+  think is more common.
+
+- fixed: problems with \n and \t in extended disc info. Would have different
+  results when reading a disc and using cddb files.
+
+- changed: most of the english documentation files have been moved into the
+  manual page, these include FAQ, README and TODO. Use '-H' to see the manual.
+  
+- changed: front is moved more into center of paper to have better
+  'sideflaps'. Read the FAQ about this.
+
+- changed: -V (verbose) flag gives much more information which can be helpful
+  when you submit problems/bugs to the author.
+
+- changed: updated documentation (manual page), created internal links.
+
+- changed: system calls mkdir and rmdir replaced with perl's internal ones.
+
+
+Version 1.2.0
+
+- added: support for double cds with the -2 option.
+
+- changed: size of covers (thanks to Roman Silar).
+
+- changed: removed disc-cover.1, replaced with -H option.  Do a 'pod2man
+  disc-cover > disc-cover.1' to get the old manual file back.
+
+- fixed: -e flag was not used in html and txt output.
+
+
+Version 1.1.1
+
+- added: genre on last line of bottom text front cover with -g flag.
+
+- added: option '-C' to generate a configuration file based on current
+  settings and commandline options.
+
+- fixed: 'defined(@array) is deprecated' bug.
+
+- fixed: problem with multiple (\n) lines in bottom text front cover.
+
+- fixed: problem with unvalid cdrom devices (thanks to Roman Shterenzon).
+
+- changed: everywhere, times are now in ISO 8601 format min:sec (thanks to
+  Eduardo Pérez Ureta).
+
+- changed: out of date documentation updated, regarding features and required
+  software.
+
+- removed: obsolete flags, options and documentation because of move to the
+  AudioCD library.
+
+
+Version 1.1.0
+
+- added: an additional flap on one side of the back cover. This will be
+  visible when used with fully transparent jewel cases. By default the user's
+  name taken from the comment field is inserted. Can be overridden with the
+  config_flaptext variable in the configuration file or with the -b option.
+
+- added: cddb entry is displayed in comments on output page.
+
+- added: HTML output with the '-t html' option.
+
+- added: parameter -V that enables verbose output for debugging.
+
+- fixed: bug that caused disc-cover to choke on title/artist names with only
+  one double quote (") inside.
+
+- fixed: extended disc info is trimmed to stop it from destroying the layout.
+
+- changed: parameter -r is now -R.
+
+- changed: disc-cover is now using the Audio::CD library. This should be more
+  compatible, especially for FreeBSD users. Audio::CD uses the libcdaudio
+  libraries.
+
+- changed: drastic change of the layout engine of cd contents. By scaling the
+  postscript output it will always fit! But on the dark side, this could mean
+  infinitely small fonts...
+
+- changed: lots of code cleanups (removed almost 300 lines) that make it
+  easier to maintain (read: reducing chance or more bugs :)
+
+- changed: replaced command line parser with Getopt::Long library.
+
+
+Version 1.0.1
+
+- fixed: bug that caused '-pic' not be recognised as a valid command line
+  option.
+
+- fixed: problem of pictures included with '-eps' (should have been '-pic')
+  not being removed from the temporary directory, thereby causing an error
+  when the temporary directory itself was removed.
+
+
+Version 1.0.0
+
+- added: configuration files for the user ($HOME/.disc-coverrc) and system
+  (/etc/disc-cover.conf) mainly to set variables such as proxies, cddb
+  servers, temp dir and output format. It uses Perl syntax. Sample included in
+  "example.conf".
+
+- added: colour support. Colour title, artist, items, time, track numbers and
+  extended information in your own preferred colour.
+
+- added: support for handling more than one cddb server. The default is still
+  FreeDB, but more sites can be added in your own config file.
+
+- fixed: front cover graphics is now fully supported for PDF files.
+
+- fixed: security bug. The temporary files were a security risk. The new way
+  of handling temporary files (placing them in a newly created directory)
+  removes this risk.
+
+- fixed: rectangular brackets are correctly handled.
+
+- fixed: problems with \t in entries. For now every \t is converted into a
+  space. Should be fixed to use actual tabs in LaTeX.
+
+- fixed: problem with '-eps' (now '-pic') when the path to the file was
+  relative.
+
+- fixed: FreeDB bug that gave the wrong error when no cdrom was found.
+
+- fixed: problem with cdlabelgen when there is no artist.
+
+- changed: font of numbering of tracks has been changed to Sans Serif.
+
+- changed: removed dependence on LaTeX package 'rotating'.
+
+- changed: added dependence on LaTeX package 'ifthen'.
+
+- changed: copyright year.
+
+- changed: the option '-eps' has been changed to '-pic' because of the support
+  of pictures in PDF files. 
+
+- changed: lots of improvements in the manual page.
+
+
+Version 0.9.6
+
+- added: new option '-n' to generate a new cddb file to be edited by hand (or
+  script). Very handy for homebrewn cds.
+
+- added: new option '-eps <filename>' to put a picture in EPS (Encapsulated
+  PostScript) or PS (PostScript) on the front cover without scaling of
+  converting.
+
+- added: preliminary support for characters not in the isolatin1 standard,
+  still some missing characters.
+
+- fixed: bug that caused wrong layout (duplicate tracks) in the track listing.
+
+- fixed: removed multiple lines in extended track info.
+
+- fixed: problems with slashes in disc titles and artists are hopefully sorted
+  out.
+
+- fixed: numerous small bugs in FreeDB.pm
+
+- fixed: problem in FreeDB.pm that made it output 'Warning can't find
+  AutoLoader'.
+
+- changed: FreeDB shows error when ioctl does not work, such as reported on
+  NetBSD.
+
+- changed: instead of the old Latex package epsfig we now use graphicx to do
+  the picture on the front cover.
+
+- changed: because of license problems and frequent downtime of the cddb
+  server disc-cover now uses the freedb server.
+
+- removed: quiet option '-q' because it has become obsolete. All screen output
+  goes to stderr from now on.
+
+
+Version 0.9.5
+
+- added: new option '-p <filename>' to add a picture to the front cover. This
+  requires the LaTeX package epsfig and the program convert that comes with
+  ImageMagick.
+
+- changed: uses freedb.freedb.org instead of www.cddb.com
+
+- changed: better error handling of command line.
+
+- changed: better overall error handling and solution providing.
+
+- changed: better handling of wrong input (changes to FreeDB).
+
+
+Version 0.9.4
+
+- fixed: problems that are occurring due to a change in the cddb servers.
+
+- fixed: some people have entries stored in the root of the cddb cache dir
+  these will be used now as well.
+
+- fixed: problem where disc-cover would give the error 'Can't locate
+  auto/FreeDB/end_program.al'.
+
+- added: distribution files for FreeDB to make a clean perl module.
+
+
+Version 0.9.3
+
+- added: new option '-e' which results in extended track info to be added to
+  the back cover whenever available.
+
+- added: Spanish documentation is back in docs/spanish
+
+- added: German documentation now in docs/german
+
+- changed: all of the cddb code has been transferred to a separate module
+  called FreeDB, on which Disc-Cover is now dependent.
+
+- fixed: problem with empty track names producing invalid LaTeX code.
+
+- fixed: problem with two backslashes immediately following each other in a
+  track name.
+
+- fixed: problems with external programs such as Latex, dvips, pdflatex and mv
+  are now caught and a message will be displayed.
+
+
+Version 0.9.2
+
+- fixed: problems with artist and cd titles over multiple lines in a cddb
+  entry (is not in cddb protocol).
+
+- fixed: problems with track titles and extended track info over multiple
+  lines in a cddb entry (track titles over multiple lines is not in cddb
+  protocol).
+
+- fixed: problems with some cddb entry not having 'seconds' behind disc length
+  (is not in cddb protocol).
+
+- changed: when the artist and cd title are too long to be put on the sides
+  the font size is made smaller until it fits or until the font is tiny.
+
+- changed: latex parameters to change the page width, height and offsets are
+  now in a perl variable at the start of disc-cover's code. Makes it more easy
+  when people need small adjustments for there printer.
+
+- changed: the error message when the device can not be opened. Put in an
+  extra line telling people to log out and in before trying again.
+
+- added: another LaTeX package called 'times' for those who had the default to
+  something else and ended up with a horrible result. Enable this at the start
+  of disc-cover's code.
+
+- added: documentation using pod. Also a man page build from this is included
+  now.
+
+
+Version 0.9.1
+
+- fixed: problem in entries having extended disc info with a \n at the end of
+  a line, this resulted in a 'Could not find file error'.
+
+
+Version 0.9.0
+
+- added: the front cover now gets the extended disc info printed on at the
+  bottom. The contents can be overridden with the '-a <text>' command.
+
+- changed: font of the bottom text to sans-serif.
+
+- changed: documentation is updated and should be more useful. Removed
+  documentation in Spanish because it is outdated and I do not speak or write
+  Spanish.
+
+- fixed: better error handling if the cdrom device cannot be opened for
+  reading (for instance if the user has no access rights).
+
+- fixed: better error handling when user selects wrong format.
+
+- removed: removed loose output format as it only makes maintenance more
+  tedious. To compensate a tip is added to the FAQ for those who want to
+  minimise the number of cuts.
+
+
+Version 0.8.5
+
+- fixed: problems with some Latex distributions causing Disc-Cover not to
+  produce dvi files.
+
+- fixed: some reported errors of tracks that were not appearing in the texfile
+  with some cddb entries.
+
+- added: FAQ in docs/* directories. This file will answer questions I get in
+  my mailbox too often.
+
+- fixed: problem when the cddb cache directory was a link.
+
+- fixed: quick hack to ensure the cache only finds one file, namely the first
+  one it encounters. This should become an interactive process.
+
+
+Version 0.8.4
+
+- added: option '-F' to force a cddb lookup.
+
+- added: standard logo for the cdlabelgen output ('-t lbl'), it's a penguin!
+
+- fixed: problems with interactive handling of inexact matches.
+
+- fixed: better check of categories in the cddb cache directory (~/.cddb),
+  will add new genres from server to the list.
+
+- fixed: better handling of quiet option '-q`.
+
+
+Version 0.8.3
+
+- added: proxy support. To activate supply a proxy server in the beginning
+  for the $proxy_value variable.
+
+- fixed: removed ^M after track titles which caused some Latex distributions
+  to fail.
+
+
+Version 0.8.2
+
+- added: new format in plain ASCII, use '-t txt'
+
+- added: new format for use in cdlabelgen, use '-f lbl'
+
+- added: new format in Adobe's Portable Document Format (PDF), use '-f pdf'
+
+- added: ability to handle cds that have inexact matches. User will be
+  prompted to choose which match should be used. Up to 10 matches.
+
+- fixed: bug of ^M in artist and title.
+
+- fixed: all '{\em ...}' in LaTeX changed to '\emph{...}'
+
+- fixed: error in substituting ':' for every '\' in a filename.
+
+- fixed: buf in calculating discid, could result in string of less than 8
+  characters.
+
+- changed: every pack('CCCP'...) in pack('C8'...), works better?
+
+
+Version 0.8.1
+
+- fixed: a slash in a filename is translated to a colon.
+
+- added: caches files in a directory (default: $HOME/.cddb) for off line
+   usage. This directory can be shared with cdcd.
+
+
+Version 0.8
+
+- added: The files docs/spanish/* contain the appropriate documentation in
+    Spanish for version 0.7.
+
+- added: The files docs/dutch/* contain the appropriate documentation in
+    Dutch.
+
+- removed: dependencies on cdcd and cda.
+
+- removed: parameters '-cda' and '-cdcd'.
+
+- added: build-in support for querying a cddb database. This is very
+    experimental!
+
+- changed: layout of the track numbers. Numbers below 10 are now
+    right-aligned with numbers above and equal to 10.
+
+- fixes: some minor adjustments in the layout of the tracks on the back
+    cover.
+
+
+Version 0.7
+
+- added: the total time of a disc is added as the last line of the track
+    list
+
+- added: possibility of using cddb formatted files as input. This way files
+    produced by grip and cdda2wav can directly be used to generate layouts.
+    The option '-f <filename>' is used to select a file.
+
+- changed: the option '-f' is no longer used for choosing the layout format.
+    Use '-loose' or '-connected'.
+
+- changed: the '-c' option is no longer used to select the program to
+    connect to the database, from now on use '-cda' or '-cdcd'.
+
+- fixed: the artist and title of the cd at the sides of the jewel case have
+    been exchanged. This much more reflects the way original disks are
+    labelled: artist followed by title
+
+- fixed: a reported problem of filenames not properly being used. Sometimes
+    an 'enter' character would stick to the end of a title causing this
+    filename to appear "artist_-_title\n.ps".
+
+- fixed: filenames starting with a '-' would not work.
+
+- added: using '-o -' sends result to standard output.
+
+
+Version 0.6.1
+
+- fixed: problems with artist/title containing Latex characters. Disc-Cover
+    did not save the file to disc.
+
+- fixed: problem with the new connected format, the front cover was too
+    small.
+
+- fixed: problem with the new connected format, the whole layout would not
+    align on paper in letter format.
+
+
+Version 0.6
+
+- added: a new layout of the covers on the page to make cutting an easier
+    job. The option '-f' can be used to choose between 'loose' (default) or
+    'connected'. The format connected aligns both covers and connects them.
+    This way the covers can be cut in 5 cuts opposed to 8 cuts in the loose
+    format.
+
+
+Version 0.5.2
+
+- fixed: bug that caused the artist name to be mangled under cdcd.
+
+
+Version 0.5.1
+
+- changed: a nicer dotted line between the name and the length of a track.
+
+- fixed: problems with files when a title or artist had an apostrophe in
+    their name.
+
+- fixed: problems when a cd had the artist or title missing.
+
+
+Version 0.5
+
+- added: support for cda (comes with xmcd). Cdcd is the default way of
+    communicating with cddb, if this fails cda is used. The parameter -c can
+    be used to force the use of either cdcd or cda.
+
+- fixed: problems with LaTeX in the MLTex distribution are fixed. For some
+    reason it does not understand the --interaction= option.
+
+
+Version 0.4.1
+
+- fixed: problems when LaTeX was run, it paused and cause the program to
+    stop.  
+
+- fixed: the program could not detect if there was no disc in the drive.
+
+
+Version 0.4
+
+- changed: the program no longer outputs to 'disc-cover.ps' as default, but
+    to a file named after the artist and album name: 'artist_-_album.ps'. All
+    spaces are replaced by underscores.
+
+- added: new command line parameter '-q' for quiet mode, no information or
+    warnings will be displayed (only errors).
+
+
+Version 0.3
+
+- changed: added some information on the output regarding the program. This
+    lowers the covers, thereby fixing the problem some printers had with not
+    printing the top cover correctly.
+
+- added: detects and exits if there is no disc loaded in the cdrom drive.
+
+- fixed: added support for special characters from the isolatin1 standard,
+    by using the isolatin1 package for Latex.
+
+- added: support for cds up to 99 tracks (maximum number).
+
+
+Version 0.2
+
+- fixed: bug when using -l or -d without -o, would result in a wrong
+    filename.  
+
+- removed: latex package dependency 'color', 'epsfig' and 'url'.
+
+- added: support for 22-27 tracks in smaller font.
+
+- added: support for 28-54 tracks in smaller font and two columns.
+
+
+Version 0.1
+
+- initial release.
+
+
+
+J.I. van Hemert

@@ -1,0 +1,21 @@
+Awesome Collection of Excellent Stuff
+
+Project:  ACES
+Release:  Alpha 2
+Authors:  Jin-Ho King <acramon1@users.sourceforge.net>
+          Barak Shilo <baraks@users.sourceforge.net>
+
+Copyright: 2001, Jin-Ho King and Barak Shilo
+
+=================================================================
+ACES - a collection of Perl programs designed to aid the end user
+=================================================================
+
+==> id32mp3 <==
+
+renames mp3 files to reflect the data in the id3 tag
+
+depends upon:
+
+	id3ed <http://www.azstarnet.com/~donut/programs/id3ed.html> 
+

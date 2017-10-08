@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<build-graph version="1">
+ <item name="lib" platform="<native>"/>
+ <item name="calculate" platform="<native>">
+  <dep name="lib" platform="<native>"/>
+ </item>
+ <item name="lib" platform="<native>.release"/>
+ <item name="calculate" platform="<native>.release">
+  <dep name="lib" platform="<native>.release"/>
+ </item>
+ <item name="codegen" platform="indep">
+  <dep name="calculate" platform="<native>.release"/>
+ </item>
+ <item name="prog" platform="<native>">
+  <dep name="codegen" platform="indep"/>
+ </item>
+</build-graph>

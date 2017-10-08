@@ -1,0 +1,1 @@
+abuild: ERROR: backing area loop found for --topdir--/errors/cycle/a, a backing area of --topdir--/errors/cycle/b

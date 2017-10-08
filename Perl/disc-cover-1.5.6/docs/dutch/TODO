@@ -1,0 +1,25 @@
+
+2000-03-05
+
+NOG-DOEN - Disc-Cover
+
+- Repareer probleem waarbij meerdere entries in the cddb cache dezelfde discid
+  hebben.
+
+- Wachten op de nieuw cddb2 specificaties en zien wat er nieuw is!
+
+- Mogelijkheid voor erg lange titels van tracks (afbreken? heel laten?).
+
+- Grafische gebruikers inferface (gtk? python?) die alle informatie laat zien
+  en de mogelijkheid tot veranderen biedt.
+
+- Templates gebruiken voor de hoesjes.
+
+- Idee: een Gimp plugin maken zodat de gebruiker het resultaat makkelijker kan
+  aanpassen.
+
+- Idee: teksten ophalen en een kleine boekje produceren.
+
+
+J.I. van Hemert
+

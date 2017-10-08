@@ -1,0 +1,112 @@
+.TH IMC 1 "3 April 2005" "" "Image Compiler"
+
+.SH NAME
+imc \- Image Compiler (v4.3)
+
+.SH SYNOPSIS
+.B imc
+[\fB\-h\fP] [\fB\-v\fP] [\fB\-q \fIquality\fP] [\fIinputfile\fP]
+\fB\-o\fP \fIoutputfile\fP {\fB\-I\fP \fIincludedir\fP}*
+.PP
+or in a URL, as CGI script:
+.PP
+\fBimc\fP?file=\fIinputfile\fP[&quality=\fIquality\fP]{&include=\fIincludedir\fP}*
+
+.SH DESCRIPTION
+.PP
+This program accepts drawing commands from a file or from standard input.
+The output of the program is a either a PNG, GIF or JPG image (GIF and JPG
+if supported by the installed libgd and GD perl module).  If \fBimc\fP
+is used in a URL as CGI script, the image will be output to the browser.
+.PP
+The input file can also be automatically piped through a C pre-processor
+first, if one is available.
+
+.SH REQUIREMENTS
+.PP
+\fBimc\fP needs Perl version 5.003, patchlevel 23, or higher (version
+5.004 is recommended).  Also the GD module, version 1.18 or higher,
+is required.  For JPG input/output, version 1.26 or higher is required.
+For GIF input/output, version 2.15 or higher is required.
+
+.SH ARGUMENTS
+.PP
+The following arguments are accepted when run from the command line (the
+arguments can be specified in random order):
+.TP
+.BI \-h
+prints a help text, then quits
+.TP
+.BI \-v
+prints version info, then quits
+.TP
+.BI \-q\ \fIquality\fP
+the quality parameter in case of JPG output (ignored for PNG or GIF output)
+.TP
+.BI \fIinputfile\fP
+the name of the input file with drawing commands (if no input file
+is given, standard input is used)
+.TP
+.BI \-o\ \fIoutputfile\fP
+the name of the output file (the file to generate); this is the
+only mandatory argument; the output type (PNG, GIF or JPG) is deduced
+from the extension of the file (.png, .gif or .jpg)
+.TP
+.BI \-I\ \fIincludedir\fP
+the name of an include directory to be fed to the C pre-processor;
+several include directories may be specified
+.PP
+In a URL, the \fIinputfile\fP and, optionally, some \fIincludedir\fPs
+have to be given.  Also the \fIquality\fP can be passed, for JPG
+output.
+
+.SH SYNTAX
+.PP
+The supported syntax is described in the \fIimc Reference Manual\fP,
+which is included in the distribution (in text and HTML format).
+Releases with the same major version number have a backward compatible
+syntax.
+
+.SH HISTORY
+.PP
+\fBimc\fP came out of a kind of contest started by my sysadmin at
+work.  He wanted a program that would allow him to generate web
+pages that show various things of interest about the system (system
+location, disk usage, ...), preferably in a graphical way.
+.PP
+HTML itself has some restrictions on the placement of text and
+graphics on a page, so he came up with the idea of generating a
+GIF file from a text file with drawing commands, which could then
+be included in an HTML page.  The rest, as they say, is history...
+.PP
+Since there were patent issues in using GIF files, the GD library
+switched over to PNG instead, and so did this program (since
+release 4.0).  Now that the patent issues are not there anymore, the GD
+library (and this program, since release 4.3) has re-added GIF support.
+
+.SH COPYRIGHT
+\fBimc\fP is Copyright (C) 1998, 1999, 2002 Peter Verthez
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+02111-1307, USA.
+
+.SH BUGS
+Bugs should be reported to the address given below.  Please include
+the version number of the program that you are using (or better yet:
+only report bugs on the latest version; see the README file on how
+to get the latest version).
+
+.SH AUTHOR
+Peter Verthez <Peter.Verthez@advalvas.be>

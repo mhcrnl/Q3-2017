@@ -1,0 +1,79 @@
+
+1999-12-08
+
+FAQ - Disc-Cover
+
+
+Algunas preguntas frecuentes:
+
+P: Recibo el siguiente mensaje de error. ¿Que puede estar mal?
+
+"Can't locate HTTP/Request.pm in @INC (@INC contains:
+/usr/lib/perl5/5.00502/i586-linux /usr/lib/perl5/5.00502
+/usr/lib/perl5/site_perl/5.005/i586-linux /usr/lib/perl5/site_perl/5.005 .)
+at ./disc-cover line 811.
+BEGIN failed--compilation aborted at ./disc-cover line 811."
+
+R: Instala los modulos de Perl llamados libwww-perl, HTML-Parser, URI, y 
+   MIME-Base64, lo que puede ser encontrado en www.cpan.org o en la seccion
+   'more stuff...' de la pagina principal de Disc-Cover. Mira el fichero INSTALL
+   para mas detalles.
+
+
+
+P: Recibo el siguiente mensaje de error. ¿Que puede estar mal?
+
+"Can't locate HTML/HeadParser.pm in @INC (@INC contains:                         
+/usr/lib/perl5/5.00503/i386-linux                                               
+/usr/lib/perl5/5.00503 /usr/lib/perl5/site_perl/5.005/i386-linux                
+/usr/lib/perl5/site_perl/5.005 .) at                                            
+/usr/lib/perl5/site_perl/5.005/LWP/Protocol.pm line 46.                         
+BEGIN failed--compilation aborted at                                            
+/usr/lib/perl5/site_perl/5.005/LWP/UserAgent.pm line 103.                       
+BEGIN failed--compilation aborted at ./disc-cover line 893."
+
+R: Instala los modulos de Perl llamados libwww-perl, HTML-Parser, URI, y 
+   MIME-Base64, lo que puede ser encontrado en www.cpan.org o en la seccion
+   'more stuff...' de la pagina principal de Disc-Cover. Mira el fichero INSTALL
+   para mas detalles.
+
+
+
+P: ¿Como hago una portada para un CD casero?
+
+R: Sigue estos pasos:
+
+  1. Inserta el CD casero en la lectora de CDs.
+
+  2. Ejecuta Disc-Cover del siguiente modo:
+      > disc-cover -t cddb -o myfile.cddb
+     
+  3. Edita 'myfile.cddb' con algun editor de textos, todas las pistas tendran el
+     nombre "Unknown". Esto deberia ser sencillo.
+
+  4. Para una salida imprimible ejecuta disc-cover de nuevo de este modo:
+	> disc-cover -f myfile.cddb
+
+
+
+P: Ejecuto Disc-Cover y no produce una portada correcta, ¿Cual es el problema?
+
+R: ¡No lo se! Si me envias un email con el problema puedo tratar de arreglarlo.
+   Cuando envies un mensaje de error, por favor asegurate de definir el problema
+   del modo mas exacto posible, y de incluir la entrada del cddb (guardala
+   ejecutando 'disc-cover -t cddb')
+
+
+P: Consejo: ¿Como cortar las portadas?
+
+R: Este es el modo que yo sigo. Empiezo con la portada. La corto con cortes a lo
+   ancho. El resultado es una portada con dos trozos de papel a los lados.
+   Estos se doblan hacia atras para darle cuerpo y que quede en su sitio en la
+   caja. La parte de atras la corto en cuatro cortes.
+
+
+J.I. van Hemert
+
+
+Traduccion por Javier M. de Lucas Cruz <restauracion@arrakis.es>
+Acentos omitidos voluntariamente.

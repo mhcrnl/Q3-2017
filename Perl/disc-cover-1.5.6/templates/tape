@@ -1,0 +1,24 @@
+% Template for Disc-Cover
+% Author: J.I. van Hemert
+% Date: 2003/03/07
+% Description: audio cassette tape (experimental)
+\framebox{\parbox[c][16mm][t]{100mm}
+{
+	\DCflaptext~\vfill\DCgenre
+}}
+
+\vspace{-0.5mm}
+\framebox{\parbox[c][12mm][t]{100mm}
+{
+	\vfill
+	\emph{\DCartist}\hfill\DCtitle
+	\vfill
+}}
+
+\vspace{-0.5mm}
+\framebox{\parbox[c][128mm][t]{100mm}
+{
+	\DCformattedhead{0.97\linewidth}
+	\vspace{0.25\baselineskip}
+	\DCtracks
+}}

@@ -1,0 +1,16 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+
+require TestDriver;
+
+my $td = new TestDriver("thread-safe queue");
+chdir("thread-safe-queue") or die;
+
+$td->runtest("thread-safe queues",
+	     {$td->COMMAND => "test_thread_safe_queue"},
+	     {$td->FILE => "thread-safe-queue.out", $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->report(1);

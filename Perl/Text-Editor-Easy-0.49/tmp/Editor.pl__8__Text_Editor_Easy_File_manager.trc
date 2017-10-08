@@ -1,0 +1,285 @@
+File_manager de l'instance 139721057657896 (demo1.pl)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 8, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13501bd388)
+FILE_NAME  : ./demo1.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# How ugly !
+#
+# These demos will introduce you to :
+#   - the perl Editor program
+#       (in which you should be now, if my
+#       readme is readable)
+#   - the editor perl module which is
+#       intensively used by the program
+#       (a few objects created by this
+#       "full of bugs" module should be
+#       running silently now, be careful of
+#       unpredictable effects !)
+#
+#
+# As a perl programmer, and in the future
+# (of course), you might be interested
+# by these 2 elements  :
+#
+#   - by the program used to edit your code
+#     and execute it. You'll have :
+#         - powerful perl regular search
+#         - maybe one of the most powerful
+#           macro langage (this langage,
+#           perl of course, is indeed the same
+#           that is used to write the program)
+#           It didn't cost me a lot since perl
+#           has a powerful "eval".
+#
+#   - by the module itself to write very
+#     quickly interactive graphical
+#     applications :
+#         - you'll be able to write your own
+#           "highlight" subs
+#         - you'll be able to redirect events,
+#           keys... knowing nothing about Tk
+#           (a knowledge of perl
+#           would help, though)
+#
+# Let's start now !
+#
+# You can move your mouse over the
+# "Editor" tab on the right
+# This will show you the first displays
+# that this program has made.
+#
+# This log is "interactive" : moving
+# your mouse over one display
+# WITH THE SHIFT KEY PRESSED
+# will send you to the line of the file
+# that generated it.
+#
+# The "Eval" tab will be used later.
+#
+#    In the same way, when you run a perl
+# program that you are editing,
+# all displays are traced.
+#    To see that, press F5 : a new editor will be
+# created on the right (with the name "demo1").
+# It will contain the displays made by this program 
+# (that has been run by F5) :
+
+print "Hello\n";
+
+say ( "Welcome to Text::Editor::Easy"
+      . "\n"
+      . "introduction" );
+
+sub say {
+    print @_;
+        print STDERR "....",
+    "\n#\n#Writing 'manually' on STDERR...\n";
+}
+
+# Again, if you want to check the origin of these prints, move
+# your mouse over one display with shift key pressed.
+# As you can see, the complete stack call at the time of the print
+# is stored (in your ./tmp directory).
+
+# Now, this demo is finished, you can
+# mouve you mouse over "demo2.pl"
+#
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 2350
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+===> Dans read_ à partir de seek_start = 0 (lu sur fichier)
+	who = I0, text = #
+Texte de la ligne 1 : |#|
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 8, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f13501bd388)
+FILE_NAME  : ./demo1.pl
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
+# How ugly !
+#
+# These demos will introduce you to :
+#   - the perl Editor program
+#       (in which you should be now, if my
+#       readme is readable)
+#   - the editor perl module which is
+#       intensively used by the program
+#       (a few objects created by this
+#       "full of bugs" module should be
+#       running silently now, be careful of
+#       unpredictable effects !)
+#
+#
+# As a perl programmer, and in the future
+# (of course), you might be interested
+# by these 2 elements  :
+#
+#   - by the program used to edit your code
+#     and execute it. You'll have :
+#         - powerful perl regular search
+#         - maybe one of the most powerful
+#           macro langage (this langage,
+#           perl of course, is indeed the same
+#           that is used to write the program)
+#           It didn't cost me a lot since perl
+#           has a powerful "eval".
+#
+#   - by the module itself to write very
+#     quickly interactive graphical
+#     applications :
+#         - you'll be able to write your own
+#           "highlight" subs
+#         - you'll be able to redirect events,
+#           keys... knowing nothing about Tk
+#           (a knowledge of perl
+#           would help, though)
+#
+# Let's start now !
+#
+# You can move your mouse over the
+# "Editor" tab on the right
+# This will show you the first displays
+# that this program has made.
+#
+# This log is "interactive" : moving
+# your mouse over one display
+# WITH THE SHIFT KEY PRESSED
+# will send you to the line of the file
+# that generated it.
+#
+# The "Eval" tab will be used later.
+#
+#    In the same way, when you run a perl
+# program that you are editing,
+# all displays are traced.
+#    To see that, press F5 : a new editor will be
+# created on the right (with the name "demo1").
+# It will contain the displays made by this program 
+# (that has been run by F5) :
+
+print "Hello\n";
+
+say ( "Welcome to Text::Editor::Easy"
+      . "\n"
+      . "introduction" );
+
+sub say {
+    print @_;
+        print STDERR "....",
+    "\n#\n#Writing 'manually' on STDERR...\n";
+}
+
+# Again, if you want to check the origin of these prints, move
+# your mouse over one display with shift key pressed.
+# As you can see, the complete stack call at the time of the print
+# is stored (in your ./tmp directory).
+
+# Now, this demo is finished, you can
+# mouve you mouse over "demo2.pl"
+#
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SEEK_START : 0
+SEEK_END   : 2350
+FIRST      : ARRAY(0x7f13501c3098)
+LAST       : ARRAY(0x7f13501c3098)
+================================================================================
+	Level 1 : ARRAY(0x7f13501c3098)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 2
+	TEXT       : #
+	PARENT       : ARRAY(0x7f13501bd388)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13501c3098)
+
+Le dump a renvoyé 0 erreurs
+
+Dans next_ de ARRAY(0x7f13501c3098)
+Parent 2350| segment précédant 2
+===> Dans read_ à partir de seek_start = 2 (lu sur fichier)
+Segment next lu : seek_end = 15
+Dans next_ de ARRAY(0x7f13501c6bf0)
+Parent 2350| segment précédant 15
+===> Dans read_ à partir de seek_start = 15 (lu sur fichier)
+Segment next lu : seek_end = 17
+Dans next_ de ARRAY(0x7f13501bda90)
+Parent 2350| segment précédant 17
+===> Dans read_ à partir de seek_start = 17 (lu sur fichier)
+Segment next lu : seek_end = 55
+Dans next_ de ARRAY(0x7f13501c2ed0)
+Parent 2350| segment précédant 55
+===> Dans read_ à partir de seek_start = 55 (lu sur fichier)
+Segment next lu : seek_end = 85
+Dans next_ de ARRAY(0x7f13501c3098)
+Dans next_ de ARRAY(0x7f13501c6bf0)
+Dans next_ de ARRAY(0x7f13501bda90)
+Dans next_ de ARRAY(0x7f13501c2ed0)
+Dans next_ de ARRAY(0x7f13501c6668)
+Parent 2350| segment précédant 85
+===> Dans read_ à partir de seek_start = 85 (lu sur fichier)
+Segment next lu : seek_end = 128
+Dans next_ de ARRAY(0x7f13501c2f18)
+Parent 2350| segment précédant 128
+===> Dans read_ à partir de seek_start = 128 (lu sur fichier)
+Segment next lu : seek_end = 156
+Dans next_ de ARRAY(0x7f13501c63e0)
+Parent 2350| segment précédant 156
+===> Dans read_ à partir de seek_start = 156 (lu sur fichier)
+Segment next lu : seek_end = 194
+Dans next_ de ARRAY(0x7f13501c2f78)
+Parent 2350| segment précédant 194
+===> Dans read_ à partir de seek_start = 194 (lu sur fichier)
+Segment next lu : seek_end = 234
+Dans next_ de ARRAY(0x7f13501c1c88)
+Parent 2350| segment précédant 234
+===> Dans read_ à partir de seek_start = 234 (lu sur fichier)
+Segment next lu : seek_end = 273
+Dans next_ de ARRAY(0x7f13501c6218)
+Parent 2350| segment précédant 273
+===> Dans read_ à partir de seek_start = 273 (lu sur fichier)
+Segment next lu : seek_end = 313
+Dans next_ de ARRAY(0x7f135000a920)
+Parent 2350| segment précédant 313
+===> Dans read_ à partir de seek_start = 313 (lu sur fichier)
+Segment next lu : seek_end = 357
+Dans next_ de ARRAY(0x7f13501cb0e0)
+Parent 2350| segment précédant 357
+===> Dans read_ à partir de seek_start = 357 (lu sur fichier)
+Segment next lu : seek_end = 390
+Dans next_ de ARRAY(0x7f13501cb440)
+Parent 2350| segment précédant 390
+===> Dans read_ à partir de seek_start = 390 (lu sur fichier)
+Segment next lu : seek_end = 392
+Dans next_ de ARRAY(0x7f13501cb230)
+Parent 2350| segment précédant 392
+===> Dans read_ à partir de seek_start = 392 (lu sur fichier)
+Segment next lu : seek_end = 394
+Dans next_ de ARRAY(0x7f13501c68d8)
+Parent 2350| segment précédant 394
+===> Dans read_ à partir de seek_start = 394 (lu sur fichier)
+Segment next lu : seek_end = 436
+Dans next_ de ARRAY(0x7f13501cb260)
+Parent 2350| segment précédant 436
+===> Dans read_ à partir de seek_start = 436 (lu sur fichier)
+Segment next lu : seek_end = 475
+Dans next_ de ARRAY(0x7f13501c6380)
+Parent 2350| segment précédant 475
+===> Dans read_ à partir de seek_start = 475 (lu sur fichier)
+Segment next lu : seek_end = 500
+Dans next_ de ARRAY(0x7f13501cb248)
+Parent 2350| segment précédant 500
+===> Dans read_ à partir de seek_start = 500 (lu sur fichier)
+Segment next lu : seek_end = 502

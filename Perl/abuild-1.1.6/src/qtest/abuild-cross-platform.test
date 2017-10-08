@@ -1,0 +1,317 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+
+require TestDriver;
+require abuild_test_utils;
+
+chdir("abuild-cross-platform") or die;
+
+my $td = new TestDriver("cross-platform");
+test_setup();
+
+my $top = get_top();
+my $filters = get_filters();
+
+# This test suite exercises various dependency chains that cross
+# platform type boundaries.  Build items are named such that their
+# lexical sorting is the opposite of their topological sorting so we
+# are sure that just looking at the build order is sufficient.  The
+# special build item "rules" contains rules to just print the name of
+# the build item.  Additional cases are covered in doc/example.
+
+setup($td);
+
+cd("work/bad1");
+
+$td->runtest("dep platform type declaration errors",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad1.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/bad2");
+
+$td->runtest("dep platform type runtime errors",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad2.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/bad3");
+
+$td->runtest("platform type declaration errors",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad3.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/case1");
+
+$td->runtest("dump data",
+	     {$td->COMMAND => "abuild --dump-data",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case1.dumpdata.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("object-code -> indep -> object-code",
+	     {$td->COMMAND => "abuild -b desc",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case1.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/case2");
+
+$td->runtest("dump data",
+	     {$td->COMMAND => "abuild --dump-data",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case2.dumpdata.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("oc/java -> all -> all -> oc/java/indep",
+	     {$td->COMMAND => "abuild -b desc no-op",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case2.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("dump build graph",
+	     {$td->COMMAND => "abuild -b desc --dump-build-graph",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case2.buildgraph.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+validate_dump_build_graph($td, "-b desc");
+
+cd("work/case3");
+
+$td->runtest("cross-platform dependencies",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.allitems.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("skipping native with as-needed selection",
+	     {$td->COMMAND => "abuild -b all -p native:skip",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.no-native.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("skipping indep with as-needed selection",
+	     {$td->COMMAND => "abuild -b all -p indep:skip",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.no-indep.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("skipping java with as-needed selection",
+	     {$td->COMMAND => "abuild -b all -p java:skip",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.no-java.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("skipping java and native",
+	     {$td->COMMAND => "abuild -b all -p native:skip -p java:skip",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.no-java-native.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build-also",
+	     {$td->COMMAND => "abuild -d -C build-also check",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.build-also.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build-also default target",
+	     {$td->COMMAND => "abuild -d -C dep-build-also check",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.dep-build-also.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("invalid non-object-code selector",
+	     {$td->COMMAND => "abuild -b all -p indep:all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.bad-selector.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("clean",
+	     {$td->COMMAND => "abuild -c all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.clean.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("dump data",
+	     {$td->COMMAND => "abuild --dump-data",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case3.dumpdata.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/case4");
+
+foreach my $d (['none', 'none', ''],
+	       ['all-default', 'all default',
+		'-p native:default -p other:default'],
+	       ['native-debug', 'native debug',
+		'-p native:option=debug'],
+	       ['all-debug', 'all debug',
+		'-p option=debug'],
+	       ['all-empty-native-release', 'all empty, native release',
+		'-p option= -p native:option=release'],
+	       ['all-debug-native-release', 'all debug, native release',
+		'-p option=debug -p native:option=release'],
+	       ['all-debug-native-default', 'all debug, native default',
+		'-p option=debug -p native:default'],
+	       ['other-debug', 'other debug',
+		'-p other:option=debug'])
+{
+    my ($out, $description, $selectors) = @$d;
+    $td->runtest($description,
+		 {$td->COMMAND => "abuild --dump-build-graph -b all $selectors",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/case4.$out.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+$td->runtest("unused platform selectors",
+	     {$td->COMMAND =>
+		  [qw(abuild -p native:compiler=oink -p option=al),
+		   qw(-p oink:skip -p moo:default)],
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/unused-selectors.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+# dumpdata to exercise global-tree-deps and global-plugins
+
+$td->runtest("dump data",
+	     {$td->COMMAND => "abuild --dump-data",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case4.dumpdata.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+validate_dump_data($td);
+
+cd("work/case5");
+
+$td->runtest("list_platforms --native-data",
+	     {$td->COMMAND => "abuild --list-platforms",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case5.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/case6");
+
+foreach my $d (['none', 'none', ''],
+	       ['native-skip', 'skip native', '-p native:skip'],
+	       ['object-code-skip', 'skip object code', '-p skip'],
+	       ['object-code-java-skip', 'skip java and object code',
+		'-p skip -p java:skip'],
+	       ['object-code-indep-skip', 'skip indep and object code',
+		'-p skip -p indep:skip'],
+	       ['java-indep-skip', 'skip java and indep',
+		'-p java:skip -p indep:skip'],
+	       ['all-skip', 'skip everything',
+		'-p java:skip -p indep:skip -p skip'],
+	       )
+{
+    my ($out, $description, $selectors) = @$d;
+    $td->runtest($description,
+		 {$td->COMMAND => "abuild -b all $selectors no-op",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/case6.$out.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+cd("work/case7");
+
+$td->runtest("hierarchical types",
+	     {$td->COMMAND => "abuild -b all --dump-build-graph",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case7.buildgraph.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# Make sure a platform selector works properly through all the
+# hierarchical platform type cases.
+$td->runtest("hierarchical types with -p",
+	     {$td->COMMAND =>
+		  "abuild -b all -p p1:option=o1 --dump-build-graph",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case7.buildgraph-o1.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("dump data",
+	     {$td->COMMAND => "abuild --dump-data",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case7.dumpdata.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+validate_dump_data($td);
+
+$td->runtest("list_platforms with parents",
+	     {$td->COMMAND => "abuild --list-platforms",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case7.list-platforms.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/case8");
+
+$td->runtest("two levels of hierarchical types",
+	     {$td->COMMAND =>
+		  "abuild -b all --dump-build-graph",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case8.buildgraph.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build all with nested types",
+	     {$td->COMMAND =>
+		  "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case8.all.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("no fallback to grandparent",
+	     {$td->COMMAND =>
+		  "SKIP_PARENT=1 abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case8.parent-error.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("missing platform with -k",
+	     {$td->COMMAND =>
+		  "SKIP_PARENT=1 abuild -b all -k",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/case8.forced-fail.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+check_work_accessed($td, "not-accessed.out");
+
+$td->report(48);

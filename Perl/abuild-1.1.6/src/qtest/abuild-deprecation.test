@@ -1,0 +1,95 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+
+require TestDriver;
+require abuild_test_utils;
+
+chdir("abuild-deprecation") or die;
+
+my $td = new TestDriver("deprecation");
+test_setup();
+
+my $top = get_top();
+my $filters = get_filters();
+my ($test_java, $test_junit, $jar, $java) = @{get_java_information()};
+my $platform_native = get_native_platform();
+
+# Test various cases of using deprecated features.
+
+setup($td);
+
+$ENV{'ABUILD_COMPAT_LEVEL'} = '1.0';
+
+cd("work/build-item-rules");
+
+$td->runtest("build-item-rules",
+	     {$td->COMMAND => "abuild -b all -k",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/build-item-rules.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build-item-rules deprecation error",
+	     {$td->COMMAND => "abuild -b all -k --deprecation-is-error",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/build-item-rules-error.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build-item-rules compat level 1.1",
+	     {$td->COMMAND => "abuild -b all --compat-level=1.1 -k",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/build-item-rules-1_1.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/hook-build-items");
+if ($test_java)
+{
+    $td->runtest("hook-build-items",
+		 {$td->COMMAND => "abuild -b all -k",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/hook-build-items.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+
+    $td->runtest("hook-build-items deprecation error",
+		 {$td->COMMAND => "abuild -b all -k --deprecation-is-error",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/hook-build-items-error.out",
+		  $td->EXIT_STATUS => 2},
+		 $td->NORMALIZE_NEWLINES);
+
+    $td->runtest("hook-build-items compat level 1.1",
+		 {$td->COMMAND => "abuild -b all -k --compat-level=1.1",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/hook-build-items-1_1.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+else
+{
+    system("(tar cf - . | cat > /dev/null)");
+}
+
+cd("work/link-shlibs");
+
+$td->runtest("LINK_SHLIBS compat level 1.1",
+	     {$td->COMMAND => "ABUILD_COMPAT_LEVEL=1.1 abuild -b all -k",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/link-shlibs-1_1.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("LINK_SHLIBS",
+	     {$td->COMMAND => "abuild -b all -k",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/link-shlibs.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+check_work_accessed($td);
+
+$td->report(6 + ($test_java ? 3 : 0));

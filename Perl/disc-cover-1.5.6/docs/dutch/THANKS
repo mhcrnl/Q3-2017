@@ -1,0 +1,38 @@
+
+
+2000-06-11
+
+DANKJEWEL - Disc-Cover
+
+Dank gaat uit naar de volgende mensen:
+  - Alexandre Farcy voor de HTML otput patch.
+  - Alexander Werner voor de juiste lijst perl modules.
+  - Bart Warmderdam voor het maken van een Debian package en de vele opgemerkte fouten.
+  - Barton C Massey voor de cddb entry met de *hele* lange cd titel.
+  - Christian Delbaere voor de suggestie voor een beter layout van de hoesjes.
+  - Christian Perrier voor de kleuren-patch.
+  - Colin Marquardt voor een aantal suggesties, met name de \emph LaTeX tip en PDF formaat suggesties.
+  - Dieter Faulbaum voor hete beter afhandelen van bestandsnamen.
+  - Gianluca Granero voor het maken van RedHat packages.
+  - Grant voor betere afhankelijkheid van Cdcd.
+  - Javier M. de Lucas Cruz voor de Spaanse vertaling van de documentatie.
+  - Jean-Michel Rouet voor het repareren van twee bugs bij het runnen van Latex.
+  - Joerg Plate voor het sturen van patches.
+  - Maarten Lamers voor het bedenken van de naam.
+  - Marc LeMaire voor het uitvinden van de juiste volgorde waarin de benodigde perl mpdules gecompileerd moeten worden. 
+  - Marcel Mol voor de formaten in ascii en cdlabelgen en vele, vele andere veranderingen.
+  - Martin Schrode voor het vinden van een aantal foutjes
+  - Nick Stephen voor het idee van verschillende soorten layouts.
+  - Oliver Kirchkam voor de hulp en het test account bij het verhelpen van de foutieve discid's.
+  - Peter Crystal voor de proxy support code.
+  - Ralf Uhlig voor de cddb cache link patch en het opmerken van het probleem wanneer twee disc-ids in de cache dir hetzelfde zijn.
+  - Richard Martin voor de suggestie en het perl script om cddb bestanden te kunnen gebruiken.
+  - Richard Sloeserwij voor het opmerken dat de artiestnaam en titel van de cd op de zijkant beter andersom kan.
+  - Roland ? voor de suggestie (en gedeeltelijke patch) om de nummers bij de tracks er beter uit te laten zien.
+  - Roman Shterenzon voor vele zaken, zoals bug fixes, FreeBSD problemen en vele suggesties.
+  - Stefan Volker voor het vinden van vele problemen.
+  - Steffen Klupsch voor een betere latin1 support.
+  - Stephane Raimbault voor een betere gestippelde lijn tussen tracknaam en tracklengte.
+  
+
+J.I. van Hemert

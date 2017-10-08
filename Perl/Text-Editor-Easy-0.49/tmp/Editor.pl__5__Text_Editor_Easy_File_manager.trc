@@ -1,0 +1,77 @@
+File_manager de l'instance 20847928 (main_tab)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 5, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f136019c820)
+undefined FILE_NAME
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+	who = I0, text = 
+Texte de la ligne 1 : ||
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 5, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f136019c820)
+undefined FILE_NAME
+SEEK_START : 0
+SEEK_END   : 0
+FIRST      : ARRAY(0x7f13601e3c98)
+LAST       : ARRAY(0x7f13601e3c98)
+================================================================================
+	Level 1 : ARRAY(0x7f13601e3c98)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 0
+	TEXT       : 
+	PARENT       : ARRAY(0x7f136019c820)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f13601e3c98)
+
+Le dump a renvoyé 0 erreurs
+
+Dans next_ de ARRAY(0x7f13601e3c98)
+Avant appel next_ de ARRAY(0x7f136019c820), seek_end = 0
+Dans next_ de ARRAY(0x7f136019c820)
+Pas de segment parent : seek_end = 0
+PAs de ligne suivante trouvée derrière 1
+SEEK START de cette dernière ligne 0
+SEEK END de cette dernière ligne 0
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f13601e3c98)

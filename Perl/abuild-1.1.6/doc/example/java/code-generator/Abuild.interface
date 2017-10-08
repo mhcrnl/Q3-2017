@@ -1,0 +1,6 @@
+# Provide a variable that names our code generator so we can use it in
+# taskdef.  Since this jar just creates an ant task, we don't need to
+# add it to the classpath.
+
+declare code-generator.classpath filename
+code-generator.classpath = $(ABUILD_OUTPUT_DIR)/dist/CodeGenerator.jar

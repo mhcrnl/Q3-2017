@@ -1,0 +1,39 @@
+
+2000-12-20
+
+INSTALL - Disc-Cover
+
+
+To install just copy the 'disc-cover' script in some bin path. Make sure you
+have all the items mentioned below:
+
+To run this script you need the following software:
+  - Perl (with these modules: libwww-perl, MIME-Base64. URI, HTML-Parser,
+    Audio-CD, libnet, Digest-MD5)
+  - Latex (with packages: ifthen, isolatin1, graphicx, color)
+  - Dvips (for Postscript output) or pdflatex (for Pdf output) and you need the
+    following
+  - An Internet connection for cddb or cdindex
+  - A cdrom drive containing an audio cd
+  - A /tmp dir
+optional:
+  - the program convert which comes with ImageMagick for pictures on the front.
+
+
+If you download the source packages or distribution (RedHat/Debian) packages
+for the perl modules (libwww-perl, MIME-Base64, URI, HTML-Parser, Digest-MD5,
+libnet, Audio-CD) yourself then install them in this order:
+
+  1. MIME-Base64 (suggest version 2.11)
+  2. URI (suggest version 1.04)
+  3. HTML-Parser (suggest version 2.23)
+  4. Digest-MD5 (suggest version 2.09)
+  5. libnet (suggest version 1.0607)
+  6. libwww-perl (suggest version 5.47)
+  7. Audio-CD (suggest version 0.04)
+
+Afterwards make sure they are present in a Perl library path (/usr/lib/perl).
+
+For SuSE distributions: install te_etex, te_pdf and te_pscm.
+
+J.I. van Hemert

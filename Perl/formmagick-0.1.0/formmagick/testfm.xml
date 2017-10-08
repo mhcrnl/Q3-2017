@@ -1,0 +1,19 @@
+  <FORM TITLE="My form application" HEADER="testfm_header.tmpl" 
+    FOOTER="testfm_footer.tmpl" POST-EVENT="submit_order">
+    <PAGE TITLE="Personal details" TEMPLATE="myform_page.tmpl">
+      <FIELD ID="firstname" LABEL="Your first name" TYPE="TEXT" 
+        VALIDATION="nonblank"/>
+      <FIELD ID="lastname" LABEL="Your surname" TYPE="TEXT" 
+        VALIDATION="nonblank"/>
+      <FIELD ID="username" LABEL="Choose a username" TYPE="TEXT" 
+        VALIDATION="username, length(4)"/>
+    </PAGE>
+    <PAGE TITLE="Payment details">
+      <FIELD ID="cardtype" LABEL="Credit card type" TYPE="SELECT" 
+        OPTIONS="list_credit_card_types" VALIDATION="credit_card_type"/>
+      <FIELD ID="cardnumber" LABEL="Credit card number" TYPE="TEXT" 
+        VALIDATION="credit_card_number"/>
+      <FIELD ID="cardexpiry" LABEL="Expiry date (MM/YY)" TYPE="TEXT" 
+        VALIDATION="credit_card_expiry"/>
+    </PAGE>
+  </FORM>

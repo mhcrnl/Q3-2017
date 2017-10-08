@@ -1,0 +1,405 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+
+require TestDriver;
+require abuild_test_utils;
+
+chdir("abuild-shlibs") or die;
+
+my $td = new TestDriver("shared libraries");
+test_setup();
+
+my $top = get_top();
+my $filters = get_filters();
+my $native_out = get_native_out();
+
+# Although shared library functionality is exercised in the examples
+# and in other parts of the test suite, these tests go through several
+# scenarios that cover some of the corner cases and potential pitfalls
+# of using shared libraries.  The idea of these test cases is to make
+# sure that doing proper dependency-aware builds successfully
+# mitigates most of the problems.
+
+# The following build items are used in these test cases:
+
+# static: a library with a method called printString whose value comes
+# from a file at compile time.
+
+# shared1: a shared library that depends on static and has the option
+# of being built either with or without linking against the static
+# library.  After build, it resets LIBS and adds itself so that
+# depending on shared1 doesn't put static into the library list.
+
+# prog1: depends on shared1 but not on static; can only link if static
+# is linked into shared1.
+
+# shared1-alt: identical interface to shared1 enabling it to replace
+# shared1 at runtime; depends on static and links with its library.
+# Also uses an after-build file to remove static from the library
+# list.
+
+# shared2: different interface; also depends privately on static, and
+# also has the option of being build without linking the static
+# library.
+
+# prog2: like prog1 but links with shared2
+
+# prog3: links with shared1 and shared2; enables us to exercise
+# conditions in which shared1 and shared2 where both linked with
+# static
+
+# prog4: links with shared1 and static, calls printString itself;
+# enables us to exercise conditions in which prog4 and shared1 both
+# have static
+
+# In addition to the above, we also exercise handling of orphan
+# targets in ccxx here.
+
+setup($td);
+
+cd("work");
+
+# Set the static string to "shared1"
+write_static("shared1");
+
+cd("work/static");
+$td->runtest("build static with shared1",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/static-shared1.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/shared1");
+
+if (! in_windows())
+{
+    # Windows doesn't allow us to have a DLL with unresolved symbols.
+
+    # Leave --make in here
+    $td->runtest("build shared1 without static",
+		 {$td->COMMAND => "abuild --no-deps --make SKIP_LINK=1",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/shared1-build.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+
+    cd("work/prog1");
+    # prog1 can't link because static was not linked into shared1
+    $td->runtest("link failure on prog1",
+		 {$td->COMMAND => "abuild --no-deps --monitored",
+		  $td->FILTER =>
+		      "perl $filters/filter-abuild.pl | grep '^abuild-monitor: '"},
+		 {$td->FILE => "$top/prog1-link-failure.out",
+		  $td->EXIT_STATUS => 2},
+		 $td->NORMALIZE_NEWLINES);
+
+    cd("work/shared1");
+    $td->runtest("clean shared1",
+		 {$td->COMMAND => "abuild clean"},
+		 {$td->STRING => "abuild: cleaning in .\n",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+$td->runtest("build shared1 with static",
+	     {$td->COMMAND => "abuild --no-deps",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/shared1-build.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/prog1");
+
+$td->runtest("clean prog1",
+	     {$td->COMMAND => "abuild clean"},
+	     {$td->STRING => "abuild: cleaning in .\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("link prog1",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/prog1-build.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# See "shared1" from the copy of static in shared1
+$td->runtest("run prog1",
+	     {$td->COMMAND =>
+		  prepend_runtime_pathvar(["shared1"]) . "$native_out/prog1"},
+	     {$td->STRING =>
+		  "prog1 calling shared1: shared1 calling static: shared1\n",
+		  $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/static");
+
+$td->runtest("clean static",
+	     {$td->COMMAND => "abuild clean"},
+	     {$td->STRING => "abuild: cleaning in .\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+write_static("shared1-alt");
+
+$td->runtest("build static with shared1-alt",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/static-shared1-alt.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/shared1-alt");
+
+$td->runtest("build shared1-alt",
+	     {$td->COMMAND => "abuild --no-deps",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/shared1-alt-build.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/prog1");
+
+# See "shared1" from the copy of static in shared1
+$td->runtest("run prog1 with shared1",
+	     {$td->COMMAND =>
+		  prepend_runtime_pathvar(["shared1"]) . "$native_out/prog1"},
+	     {$td->STRING =>
+		  "prog1 calling shared1: shared1 calling static: shared1\n",
+		  $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# See "shared1-alt" from the copy of static in shared1-alt
+$td->runtest("run prog1 with shared1-alt",
+	     {$td->COMMAND => prepend_runtime_pathvar(["shared1-alt"]) .
+		  "$native_out/prog1"},
+	     {$td->STRING =>
+		  "prog1 calling shared1: shared1-alt calling static: shared1-alt\n",
+		  $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/static");
+
+$td->runtest("clean static",
+	     {$td->COMMAND => "abuild clean"},
+	     {$td->STRING => "abuild: cleaning in .\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+write_static("shared2");
+
+$td->runtest("build static with shared2",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/static-shared2.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/shared2");
+
+$td->runtest("build shared2",
+	     {$td->COMMAND => "abuild --no-deps",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/shared2-build.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+
+cd("work/prog2");
+
+$td->runtest("build prog2",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/prog2-build.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# See "shared2" from the copy of static in shared2
+$td->runtest("run prog2 with shared2",
+	     {$td->COMMAND =>
+		  prepend_runtime_pathvar(["shared2"]) . "$native_out/prog2"},
+	     {$td->STRING =>
+		  "prog2 calling shared2: shared2 calling static: shared2\n",
+		  $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/prog3");
+
+$td->runtest("build prog3",
+	     {$td->COMMAND => "abuild --no-deps",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/prog3-build.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# In UNIX, for both calls, see "shared2" from the copy of static in
+# shared2.  (Since shared1 and shared2 are not related by dependency,
+# shared2's interface gets loaded last (since it follows shared1
+# alphabetically).  Since LIBS is a prepend list, shared2 gets linked
+# into prog3 first and that's where prog3 resolves Static from.  Even
+# the call to Static from a function in shared1 sees it there.)  In
+# Windows, each DLL sees the copy of the static function that is
+# linked into it.
+my $prog3_shared1 = (in_windows() ? "shared1" : "shared2");
+$td->runtest("run prog3",
+	     {$td->COMMAND =>
+		  prepend_runtime_pathvar(["shared1", "shared2"]) .
+		  "$native_out/prog3"},
+	     {$td->STRING =>
+		  "prog3 calling shared1: shared1 calling static: $prog3_shared1\n" .
+		  "prog3 calling shared2: shared2 calling static: shared2\n",
+		  $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+if (! in_windows())
+{
+    cd("work/shared2");
+
+    $td->runtest("clean shared2",
+		 {$td->COMMAND => "abuild --no-deps clean"},
+		 {$td->STRING => "abuild: cleaning in .\n",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+
+    $td->runtest("build shared2 without static",
+		 {$td->COMMAND => "abuild --no-deps SKIP_LINK=1",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/shared2-build.out",
+		  $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+
+    cd("work/prog3");
+
+    # This time, since shared2 doesn't have static, we see shared1.
+    $td->runtest("run prog3",
+		 {$td->COMMAND =>
+		      prepend_runtime_pathvar(["shared1", "shared2"]) .
+		      "$native_out/prog3"},
+		 {$td->STRING =>
+		      "prog3 calling shared1: shared1 calling static: shared1\n" .
+		      "prog3 calling shared2: shared2 calling static: shared1\n",
+		      $td->EXIT_STATUS => 0},
+		 $td->NORMALIZE_NEWLINES);
+}
+
+cd("work/static");
+
+$td->runtest("clean static",
+	     {$td->COMMAND => "abuild clean"},
+	     {$td->STRING => "abuild: cleaning in .\n",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+write_static("prog4");
+
+$td->runtest("build static with prog4",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/static-prog4.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/prog4");
+
+$td->runtest("build prog4",
+	     {$td->COMMAND => "abuild --no-deps",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/prog4-build.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# In UNIX, both calls see the copy of Static in prog4.  In Windows,
+# shared1 sees "shared1".
+my $prog4_shared1 = (in_windows() ? "shared1" : "prog4");
+$td->runtest("run prog4",
+	     {$td->COMMAND =>
+		  prepend_runtime_pathvar(["shared1"]) . "$native_out/prog4"},
+	     {$td->STRING =>
+		  "prog4 calling shared1: shared1 calling static: $prog4_shared1\n" .
+		  "prog4 calling static: prog4\n",
+		  $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/extra-targets");
+
+$td->runtest("extra targets: build all",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/extra-targets.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# Create extra dep file
+create_file("$native_out/extra.dep");
+
+$td->runtest("build with extra dep",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/extra-dep.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build does nothing",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/extra-nothing.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# Create extra object file
+my $xobj = (in_windows() ? 'obj' : 'o');
+create_file("$native_out/extra.$xobj");
+
+$td->runtest("build with extra object file",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/extra-obj.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build does nothing",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/extra-nothing.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# Create extra library file
+my $xlib = (in_windows() ? 'extra.lib' : 'libextra.a');
+create_file("$native_out/$xlib");
+
+$td->runtest("build with extra library",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/extra-lib.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build does nothing",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/extra-nothing.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+check_work_accessed($td);
+
+$td->report(29 + (in_windows() ? 0 : 6));
+
+sub write_static
+{
+    sleep 1;
+    open(S, ">$top/work/static/string-value") or die;
+    print S $_[0], "\n";
+    close S;
+}
+
+sub create_file
+{
+    my $file = shift;
+    open(F, ">$file") or die;
+    close(F);
+}

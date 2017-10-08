@@ -1,0 +1,33 @@
+<?xml version="1.0"/>
+<h2g2 article="C0">
+<title>The Hitchhiker's Guide to the Galaxy</title>
+<date>24 Jan 2001</date>
+
+<body>
+
+<p>Welcome to the Earth edition of <i>The Hitchhiker's Guide to the Galaxy</i>,
+slurped straight from <a external href="http://www.h2g2.com/">h2g2.com</a>.</p>
+
+<p>However, as h2g2.com - and all the content stored on it - is copyrighted to
+some/none or all of Douglas Adams, The Digital Village and h2g2.com the
+compiled information is <b>not</b> distributable.</p>
+
+<p><i>hhgg2xml</i> is available from
+<a external href="http://www.bleb.org/software/pda/">bleb.org</a> and will
+search the site and pull down the entries into XML. You can then combine
+these entries into text, HTML or TomeRaider: a format suitable for using on
+EPOC, PalmOS and Pocket PCs - giving you a truly mobile version of the
+Hitchhiker's Guide.</p>
+
+<p>The top categories are:</p>
+<ul>
+<li><b><a href="C72.h2g2">Life</a></b> - where you can find entries on
+life and living; everything from sex and shopping to families and food.</li>
+<li><b><a href="C73.h2g2">The Universe</a></b> - where you can find entires on places, travelling and getting around.</li>
+<li><b><a href="C74.h2g2">Everything</a></b> - where you can find everything
+that's not included in "Life" or "The Universe" - everything <i>else</i>,
+in other words...</li>
+</ul>
+
+</body>
+</h2g2>

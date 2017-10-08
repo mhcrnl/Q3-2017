@@ -1,0 +1,44 @@
+
+Abuild release checklist
+========================
+
+ * Update copyright years in all files that contain a copyright if
+   this is the first release of the calendar year.  Do a
+   case-insensitive search for "copyright".  A list of files that
+   contain the copyright appears in manual.xml.  Last update: 2011.
+
+ * Update version numbers in Abuild-init.cc and manual.xml
+
+ * Update release date at top of manual.xml and also in the release
+   notes section for the current release
+
+ * If boost >= 1.35 is not present in the compiler's default search
+   path, set BOOST_TOP to the installation path of boost >= 1.35 and
+   set LD_LIBRARY_PATH to a directory that contains the corresponding
+   runtime libraries.
+
+ * Make sure qtest-driver is in your path and qtest-driver --version
+   works.
+
+ * Set ABUILD_JUNIT_JAR to the full path to a JUnit (>= 4.4) JAR file.
+   On Windows, it's a Windows path, not a cygwin path.
+
+ * Set JAVA_HOME and ensure that $JAVA_HOME/bin/java is the first java
+   in path when building the manual
+
+ * Set ANT_HOME.
+
+ * Verify that the test suite passes when ABUILD_NO_JAVA is set.
+
+ * Follow source and binary release instructions in README.build for
+   building source and binary distributions.
+
+
+After release is built
+======================
+
+ * Check images in PDF
+
+ * Make a snapshot in subversion
+
+ * Update documentation on website

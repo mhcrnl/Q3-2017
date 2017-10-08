@@ -1,0 +1,31 @@
+
+2003-04-08
+
+TODO - Disc-Cover
+
+- Universal way of defining covers (templates), so that it becomes easier to handle the
+  enormous amount of different types of covers used over the world. (start has been made)
+
+- Matthew Hand <Matthew.Hand@defence.gov.au>: handle html tags within cddb entries (such as &amp;)
+  (Volker Moell suggests to use HTML::Entities module:  $parsed_line = HTML::Entities::decode($unparsed_line);)
+
+- add use cddb discid to search
+
+- better cddb server configuration (now handled by Audio::CD library)
+
+- find more on DYEAR= entry, do people really use this? (suggested by Attila Bogar)
+
+- cdindex
+
+- covers for the cd itself (like cd-circleprint does)
+
+- more case support?
+
+- caching of allmusic covers?
+
+- adding additional lines to aid in cutting covers.
+
+- take extd info from double cds as title instead of 'Disc 1' and 'Disc 2' headings.
+
+- go through all those e-mails with suggestions, bugs and patches. Keep them coming! ;-)
+

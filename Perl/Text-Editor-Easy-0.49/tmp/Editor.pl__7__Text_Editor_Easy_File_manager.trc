@@ -1,0 +1,44 @@
+File_manager de l'instance 35998224 (out_tab)
+Dans editor_number, reçu : NUMBER 1
+Dans dump_file_manager : tid = 7, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f135c1bd3b8)
+undefined FILE_NAME
+================================================================================
+
+Le dump a renvoyé 0 erreurs
+
+	Premier accès pour who = I0
+	who = I0, text = 
+Texte de la ligne 1 : ||
+C'est la bonne ligne !
+Dans dump_file_manager : tid = 7, 0 erreurs
+================================================================================
+ROOT : ARRAY(0x7f135c1bd3b8)
+undefined FILE_NAME
+SEEK_START : 0
+SEEK_END   : 0
+FIRST      : ARRAY(0x7f135c1bdca0)
+LAST       : ARRAY(0x7f135c1bdca0)
+================================================================================
+	Level 1 : ARRAY(0x7f135c1bdca0)
+	TYPE       : 'line'
+	PREVIOUS   : undefined
+	SEEK_START : 0
+	SEEK_END   : 0
+	TEXT       : 
+	PARENT       : ARRAY(0x7f135c1bd3b8)
+	REF          : 1
+	NEXT       : undefined
+	================================================================================
+	
+	LAST = ARRAY(0x7f135c1bdca0)
+
+Le dump a renvoyé 0 erreurs
+
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f135c1bdca0)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f135c1bdca0)
+Previous de 1 demandé
+Line ref trouvée : ARRAY(0x7f135c1bdca0)

@@ -1,0 +1,875 @@
+
+mp3riot User Manual
+
+Dec 29, 2004
+
+
+-----------------------------------------------------------------------------
+
+If you want to test a program, then run it on a sample data set!
+Do not thing, that anything will work correctly!
+
+-----------------------------------------------------------------------------
+
+CONTENTS
+
+About This Program
+Usage
+Requirements
+Installation
+Problems under Windows and Dos
+Examples
+Changing html layout
+Html templates
+Release History
+Contacting the Author
+ToDo
+
+-----------------------------------------------------------------------------
+
+About This Program
+
+mp3riot is a command line utility written in perl to generate html files by
+searching recoursivly through directories.
+
+With the program some additional files are delivered:
+  - Copyright: the gnu public licence
+  - utf.dat: a file containing utf code to correct links
+  - example.unix: an example config file for unix
+  - example.win: an example config file for windows
+  - repl.dat: an example file for replacements (for windows users)
+  - Info.pm: the perl module MP3::Info is written by Chris Nandor
+  - MANUAL: this file
+  - mp3table.sql: file containing the sql skeletton
+  - group.dat: an exsample file for grouping
+
+Bugs: Doubtless many. Feel free to contact the author, but remember:
+      I do not promise anything.
+      f2html@linuxsecure.de
+
+Disclaimer: - I do not support Perl, html, or any OS
+            - I do not promise that this program does anything
+            - this program may distroy all your data
+            - I cannot promise that this program will not distroy
+              all human civilization
+
+-----------------------------------------------------------------------------
+
+Usage
+
+	perl mp3riot [options]			 
+
+	-h, --help                  Show this screen and exit
+	-k, --mkconf                Use an assistant to write a config file
+        -o, --os       <value>      Default "unix", otherwise windows. Possible values are:
+				    win, unix
+	-Q, --sortby   <value>      Default is "NAME" (the filename). You can sort
+				    the fillist by the following criteria:
+				    URLNAME, SHOWNAME, DIR, NAME, TITLE, ARTIST, 
+				    ALBUM, YEAR, COMMENT, GENRE, TRACKNUM, SIZE, 
+        			    MODTIME, VBR, BITRATE, FREQUENCY, MINUTES, 
+				    SECONDS, FIRSTCHAR
+	-n, --doublicates           Check for doublicates of files by their
+	                            filename
+	-D, --md5doublicates	    Check for doublicates of files by their
+				    MD5 sum			    				   
+        -V, --seekvalues <n,+-n,n>  Three values that have to be seperated by ",". This
+				    is an useful option for --md5doublicates.
+				    The first one is the offset in bytes, the second is
+				    the number of bytes to seek (and the direction), and 
+				    the last value tells the program where to start from (1 means to
+				    start from the begining of a file, 2 means to start 
+				    from the end of a file. So, a combination of 1000,-1128,2 
+				    tells the programm to start 1128 bytes before the file ends 
+				    (id3v1 tag is 128 bytes long!) and use
+				    1000 bytes for calculation of md5 sums.				    			   
+        -b, --dbfile   <file>       Write database to a file for searching it
+        -m, --m3u      <file>       Write a m3u playlist file. Directory and filename or
+				    "GROUPPATH" for writing m3u files for groups.
+        -X, --xml      <file>       Write a xml playlist file. Directory and filename or
+				    "GROUPPATH" for writing xml files for groups.	
+        -L, --pls      <file>       Write a pls playlist file. Directory and filename or
+				    "GROUPPATH" for writing pls files for groups.			
+	-W, --b4s      <file>	    Write a b4s playlist file. Directory and filename or
+				    "GROUPPATH" for writing b4s files for groups. 
+        -t, --html     <file>       Write a html file. Directory and filename or
+				    "GROUPPATH" for writing m3u files for groups.
+        -a, --http     <name>       Define the http address for url
+        -r, --remove                Remove id3tags (do you know what you are doing?)
+        -i, --mp3info               Use mp3/ogg info for html output
+        -e, --ext                   Remove file extensions in html output
+        -f, --filesize              Use filesize for html output
+        -c, --check    <ext>        Select files by their extension(s) (e.g. mp3).
+				    For every extension use a seperate flag!
+        -z, --skip     <number>     Skip n elements of mount/directories/names
+        -p, --conf     <file>       Use a config file
+        -w, --utf8     <file>       File with UTF-8 code for replacements in links
+        -q, --nocs                  Do sorting not case sensitive
+        -j, --statfile <file>       Write statistics to file
+        -d, --dir      <directory>  Define the (multiple) directory(ies) the
+                                    mp3s are stored in. For every directory use a 
+				    seperate flag!
+	-g, --sql      <file>       Filename to store sql table in (only for mp3 and ogg!)
+        -y, --replace  <file>       Name of replacement file; in the file use
+                                    <string_1>=<string_2> to transform <string_1>
+                                    into <string_2>; special characters like a
+                                    backslash have to be preceeded by a
+                                    backslash "\\" (used for directories)
+        -s, --seperate <path>       Write seperate html files for every
+                                    character
+	-R, --rename                Renames mp3 and ogg file using their id3tag. 
+				    The use of rename_template in the configfile 
+				    is optional. If rename_template is not used,
+				    the program tries to create a filename like:
+				    ARTIST - ALBUM - TRACKNUMBER - TITLE by using 
+				    the id3tag. It assumes, that the filenames have
+				    a similar format and tries to guess, whether the 
+				    id3tag has enough information to create a better 
+				    filename. Old and new filenames are stored in
+				    RENAME.bak	
+	-B, --renameback	    Renames files back using the file RENAME.bak	    
+	-T, --templates             Html templates are used. They have to be defined 
+                                    in the conmfig file using the commands html_head,
+				    html_change, html_body, html_footer, html_sep_head.
+				    See the README for avalable templates!
+	-G, --groupfile <file>      Filename for grouping information:				    
+	                            <groupname1>=<TYPE>=<string1>,<string2>,...
+				    Prossible types are: NAME, DIR, TITLE, ARTIST,   
+				    ALBUM, YEAR, COMMENT, GENRE, TRACKNUM, SIZE, MODTIME, 
+				    VBR, BITRATE, FREQUENCY, MM, SS, EQUAL, FIRSTCHAR     				    
+	-P, --grouppath <path>      The path, where to write the html, m3u, xml, b4s, and pls 
+				    files for groups			    
+        -O, --older     <number>    Only files are selected, having a modification time
+				    higher than the specified days
+	-Y, --younger   <number>    Only files are selected, having a modification time
+				    less than the specified days
+	-I, --id3tag                Use the id3 tag to get infos			    
+	-S, --random    <number>    Percentage of file to select randomly (e.g. 50 to select
+				    50% of files/every second file)
+
+        Additionally, in the config file it is possible to use the commands:
+        exec=           <param>     Execute system command. This command can be used multiple
+				    times
+	
+	rename_template=<string>    string with templates for renaming files by their id3tag
+				    (to be used together with --rename)
+	
+	The following rename templates are available:
+	**TITLE**, **ARTIST**, **ALBUM**, **YEAR**, **COMMENT**, **GENRE**. **TRACKNUM**
+			                            
+	html_head=      <string>     Html code for the head
+	html_change=    <string>     Html code if the first character between two file names
+	                             change
+	html_body=      <string>     Html code for each filename
+	html_footer=    <string>     Html code for the foot.
+	html_sep_head=  <string>     Html code for the head seperate html files by first character
+	
+	The following html templates are available:
+	**SUMOFFILES**, **SUMOFMEGS**, **DATE**, **URLNAME**, **SHOWNAME**, **DIR**, **NAME**,
+	**TITLE**, **ARTIST**, **ALBUM**, **YEAR**, **COMMENT**, **GENRE**, **TRACKNUM**, **SIZE**, 
+	**MODTIME**, **VBR**, **BITRATE**, **FREQUENCY**, **MINUTES**, **SECONDS**, **HTMLINDEX**, 
+	**FIRSTCHAR** 
+
+-----------------------------------------------------------------------------
+
+Requirements
+
+
+mp3riot runs under all systems where perl is installed. The program was
+tested und Windows 2000 and Linux.
+
+You can download perl from http://www.perl.org
+
+
+Furthermore the skript needs two perl modules. (1) getopt that is normally
+part of every perl distributuion, and (2) Mp3Info. You can download Mp3Info
+from http://search.cpan.org. But a version is also delivered with f2html.pl.
+Under Unix systems like linux you can use the installation skripts. Or it
+can be copied into a folder like "/usr/lib/perl5/site_perl/5.8.1/MP3".
+Under Windows the perl module "Info.pm" has to be copied to the perl
+libary directory: "path were perl is installed"\lib\. There you have to
+create a directory called MP3. Into this directory you have to copy the
+file Info.pm.
+
+
+-----------------------------------------------------------------------------
+
+Installation
+
+mp3riot does not need to be installed. Just copy it to a directory and
+execute it from this directory, or copy to a directory and set the
+PATH variable.
+
+
+-----------------------------------------------------------------------------
+
+Problems under Windows and Dos
+
+The shell under Windows is limited to 256 characters. So sometimes it is not
+possible to define all option wanted. Therefor I inplemented the option to
+use a config file, in that all parameters can be written.
+
+
+-----------------------------------------------------------------------------
+
+Examples
+
+If you want to create a custom config file, then execute
+
+  perl mp3riot -k
+
+If you want to use a configfile, just type
+
+  perl mp3riot -p file.conf
+
+where file.conf is your configfile.
+
+With the command line
+
+  perl mp3riot -d /home/nikolei/download1 -d /home/nikolei/download2
+                 -o unix -t /home/nikolei/content.html
+
+the script searches recursively through the two directories defined by
+"-d", builds a file list, sorts this filelist alphabetically by the filename,
+not by the name of the directory they are stored in, and writes the list to
+a html file defined by "-t". The options "-b"  and "-m" can be used
+additionally or instead of "-t" to write a database file, that can be
+used by the script mp3search.pl, or to create a playlist.
+
+With the command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -d /home/nikolei/download2 
+                 -o unix -s /home/nikolei
+
+the script does nearly the same as before. The difference is, that a
+seperate html file for every different first character of the file names
+is written into the directory defined by "-s". For example, the following
+files could be created:
+
+  /home/nikolei/1.html
+  /home/nikolei/a.html
+  /home/nikolei/b.html
+  /home/nikolei/t.html
+
+where "1.html" contains a list of all files beginning with a "1",
+"a" contains all files beginning with an "a" (for example aa.dat,
+ab.dat, ac.dat ...), and so on. 
+
+
+With the command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -o unix -c mp3 -c MP3
+                 -t /home/nikolei/content.html
+
+the script writes out a html file, but uses not all files it has found, but 
+only files that have the suffix "mp3" or "MP3".
+
+With the command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -o unix -i -f -e
+                 -t /home/nikolei/content.html
+
+the script writes out a html file. For this html file it uses additional 
+information, if the file is a mp3 file (the "-i" option), i.e. the length 
+of the track, the bitrate, the frequency, and if it is variable encoded.
+Defining "-f" option, the html file contains the size of each file, and 
+given the "-e" option the file suffix is deleted in the html file.
+
+Using additionally the "-I" flags enables the use of the id3tag.
+
+  perl mp3riot -d /home/nikolei/download1 -o unix -i -f -e -I
+                 -t /home/nikolei/content.html
+		 
+The id3tag information is used for sql output and can be used for
+html output with templates.		 
+
+
+With the command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -w /home/nikolei/utf8.dat
+                 -o unix -t /home/nikolei/content.html
+
+the script writes out a html file, and corrects special characters 
+by changing them to their utf-8 code. Simply define a file where the utf-8 code
+is stored in by using option "-w". The file containing the utf-8 code for 
+replacements must have the following form:
+  
+  À %C0
+  à %E0
+  Á %C1
+  
+Thuch a substitution might be necessary, because you cannot download files
+containing special characters in their file name. Using such a utf-8 file the 
+name of a link will be replaced so that a file is downloadable. For example:
+
+  <a href="Ànamalà.mp3">Ànamalà.mp3</a>
+
+becomes
+
+  <a href="%C0namal%E0.mp3">Ànamalà.mp3</a>  
+
+With the command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -y /home/nikolei/repl.dat
+                 -o unix -t /home/nikolei/content.html
+
+the script writes out a html file, and corrects special patterns in the 
+link, if option "-y" is used. The patterns and their substitution have to be 
+stored in a file. The option can be used for path name substitution. Windows
+user have to be aware of using two backslashes instead of one! For example,
+the file repl.dat contains the following replacement table:
+
+  c:\\music\\good=/mp3c
+  c:\\music\\bad=/mp3d
+
+Then the pathname for a file stored in the directory c:\music\good will be
+corrected to /mp3c. This option is usefull if you want to setup a webserver
+for your files. Note that both strings are seperated by ------>. There are no
+spaces before or after any string!
+
+With the command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -a http://www.yourdomain.net
+                 -o unix -t /home/nikolei/content.html
+
+the sript writes out a html file and uses a http address for the links. 
+It might be necessary do use this option together with option "-z"!
+
+With the command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -z 2
+                 -o unix -t /home/nikolei/content.html
+
+the sript writes out a html file, and skips the first 2 directories when 
+writing the link. For exmaple
+
+  <a href="/home/nikolei/download1/name.mp3">name.mp3</a>
+
+becomes 
+
+  <a href="/download1/name.mp3">name.mp3</a>
+
+This option is usedful if you have stored your file in subdirectory of 
+the path where your homepage is stored in and if you want to put the files
+for download into the net. It might also be useful for samba/windows shares etc.
+
+Given the option -q in the commandline, the program does not work case 
+sensitive any more. For example, it groups lower case and upper case 
+characters of the same type together. So "a" and "A" are the same.
+
+The command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -q
+                 -o unix -t /home/nikolei/content.html
+                 -j /home/nikolei/statistics.html
+
+forces the program to do the sorting ertc. not case sensitive (-q option)
+and to write a statistics html file to /home/nikolei/statistics.html. The
+other things are done on the same way as for the command line before
+
+You can sort the collected file not only by their filename (default), but you can
+use mp3- or tag-infos as a sorting criteria. For example:
+
+  perl mp3riot -d /home/nikolei/download1 --sortby DIR 
+                 -o unix -t /home/nikolei/content.html
+                 -j /home/nikolei/statistics.html
+
+sort all files by the name of the directory they are stored in. The are other possible
+criteria like URLNAME, SHOWNAME, DIR, NAME, TITLE, ARTIST, ALBUM, YEAR, COMMENT, GENRE, TRACKNUM, SIZE, 
+MODTIME, VBR, BITRATE, FREQUENCY, MINUTES, SECONDS, FIRSTCHAR.
+
+
+To write a sql data file just type
+ 
+  perl mp3riot -d /home/nikolei/download -o unix 
+               -g /home/nikolei/sqldata.sql
+		 
+Only files that end with "mp3" or "MP3" make their way into the database file!
+The sql data consists of the following mp3 file information: file name, song title,
+artist, album, year, comment, genre, directory, filezize, modification time,
+vbr, bitrate, frequency, minutes, and seconds.
+
+If you want to check for dublicates of you files you can add the dublicates option
+(-n) to you command and the filenames that exist more than one time are
+listed on stdout.
+ 
+  perl mp3riot -d /home/nikolei/downlod1 -o unix -n
+                 -g /home/nikolei/sqldata.sql
+
+
+You can try to find dublicate files based on their content.   
+
+The statement
+
+  perl mp3riot -d /home/nikolei/download -o unix -D
+		-V 1000,-1128-2
+		
+tells mp3riot to search for dublicate files in /home/nikolei/download using md5sums.
+The calculation of md5sums is restricted to a small part of the file. Here, the program
+uses only 1000 bytes. The 1000 bytes are located 1128 bytes starting from the end of the file (2).
+So the last 128 bytes (size of an idv1 tag) are not used. 
+
+
+The command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -r -o unix
+
+simply removes every id3tag it finds.
+
+
+The command line
+
+  perl mp3riot -d /home/nikolei/download1 -o unix -m /home/nikolei/mp3.m3u -S 20
+
+creates a m3u playlist containing a random sample of 20% of all files of the 
+folder /home/nikolei/download1.
+
+
+The command line
+
+  perl mp3riot -d /home/nikolei/download1 -o unix -X /home/nikolei/mp3.xml
+  
+creates a xml playlist.
+
+  
+The command line
+
+  perl mp3riot -d /home/nikolei/download1 -o unix -L /home/nikolei/mp3.pls
+  
+creates a pls playlist.
+
+
+The command line
+ 
+  perl mp3riot -d /home/nikolei/download1 -R -o unix
+
+renames all files containing an id3tag (nomally mp3 and ogg files) by the conent of
+the tag in the form:
+
+  ARTIST - ALBUM - TRACKNUMBER - TITLE.mp3 
+  
+The information about what files have been renamed and how can be found in the 
+file "RENAME.bak" in the mp3riot-directory. This file is used when you want to rename
+your files back, so that they get their original name. This option is  only useful for 
+for renaming new files. It is not good to run it on files that have already a good
+naming shema or that already have been renamed. 
+
+This can be done using the command line 
+
+  perl mp3riot -d /home/nikolei/download1 -B -o unix
+
+
+In the config file you can use a template to rename files using the id3tag. you need the
+commands:
+
+rename
+rename_template=<string>
+
+<string can be any string and can be filled with the following templates:
+**TITLE**, **ARTIST**, **ALBUM**, **YEAR**, **COMMENT**, **GENRE**. **TRACKNUM**
+
+So one good choice for rename_template would be:
+
+rename_template=**ARTIST** - **ALBUM** - **TRACKNUM** - **TITLE**
+
+
+It has to be noted, that the options can be used together. For example
+
+  perl mp3riot -d /home/nikolei/download1 -d /home/nikolei/download2
+                 -o unix -q -g -i -l -f -e -R -n -z 3 
+		 -y /home/nikolei/repl.dat
+		 -g /home/nikolei/mp3.sql -j /home/nikolei/stat.html
+                 -w /home/nikolei/utf.dat -c MP3 -c mp3
+                 -b /home/nikolei/content.db -m /home/nikolei/content.m3u
+                 -t /home/nikolei/content.html -a http://mydomain.net/music
+
+Because it is too much to write if you want to update the generated files
+more frequently, you can write everything into a config file. In the config 
+file you can use the same option, but they have to be written in a slighly 
+different way:
+
+  -d /home/nikolei/download1 
+
+becomes
+
+  d=/home/nikolei/download1 
+  
+  or
+  
+  dir=/home/nikolei/download1 
+
+and so on. But be aware about that one or more spaces (e.g. at the end of the
+line) do also belong to the filename. So when you get an error message like
+"cannot open directory xxx" then it may be due to your rights reading this 
+directory or because you used spaces in the definition of the directory. 
+
+An additional option is available if you are using a config file:
+"x=". with this option, that you can use several times, it is possibles to 
+make system calls. For example, if you want to copy the html file to an
+other directory, then just type:
+
+  x=copy /home/nikolei/content.html /home/nikolei/public_html/content.tml
+
+It might be also useful to write a seperate script (under dos a so called
+batch file). This file could execute the script mp3riot several times 
+using different config files. This can be useful if you want to handle some 
+directories in a different way. 
+
+Or you can use the batch option to updaten or create you aql database:
+  
+  x=mysql mp3 < sqldata.sql
+
+
+Fortunately, everybody is free to modify the html code within the script 
+to adjust the output. 
+
+
+If you want to use your own html code, then you can do this using the 
+tamplates option. Because you have to fill some variables, it is best to
+use a confiug file for it. See the Html templates section for further 
+details.
+
+You can select file not only by their extension, but also by their
+modification time. Yon can select files that are a specified number of day
+older ("-O") and/or younger ("-Y") than the current date. For example:
+
+  perl mp3riot -d /home/nikolei/download1 -q
+                 -o unix -t /home/nikolei/content.html
+		 -O 10
+		 -Y 20
+
+With this options, you can select files, that are older than 10 and younger 
+than 20 days.
+
+Another useful option is grouping. For example, if you have some files 
+beginning with the same string, and you want to build a seperate
+html file for them, you can do this by specifiing the in a groupfile.
+The syntax within the groupfile is:
+
+  <groupname1>=<TYPE>=<string1>,<string2>,...
+  <groupname2>=<TYPE>=<string1>,<string2>,...
+  end so on.
+
+<groupname1> is the name of the group 1. <TYPE> is the type of group.
+And <string1> is the first string in the group to search for.
+Possible values for type are:
+
+  NAME      : the name of the file
+  FIRSTCHAR : the first character of the filename
+  DIR       : the directory, where the file is stored in
+  TITLE     : the title of the song (using id3tag)
+  ARTIST    : the artist of the song (using id3tag)
+  ALBUM     : the album of the song (using id3tag)
+  YEAR      : the year of the song (using id3tag)
+  COMMENT   : the comment of the song (using id3tag)
+  GENRE     : the genre of the song (using id3tag)
+  SIZE      : the size of the file
+  MODTIME   : the modification time of the file (in non-leap seconds since January 1st, 1970 UTC)
+  VBR       : is 1, if the song is encodet with variable bitrate
+  BITRATE   : the bitrate of the song
+  FREQUENCY : the frequency of the song
+  MM        : song lentgh in minutes
+  SS        : song length in seconds
+  EQUAL     : special type, used to build groups automatically based on characteristis
+
+Fortunately, every group can have a different <TYPE>.
+
+For example, to put all songs from Red Hot Chili Peppers into one file,
+and the ones from New Model Army into another, create a group file
+like this:
+
+  Red Hot Chili Peppers=NAME=Red Hot Chili Peppers,Red_Hot_Chili_Peppers
+  New Model Army=NAME=New Model Army,New_Model_Army
+
+EQUAL is a special <TYPE>. It functions like an aggrigator. The left and
+the right statement (<groupname> and <string>) have to be <TYPES> (e.g. NAME, 
+DIR, ...). Both should be the same, So that:
+
+ DIR=EQUAL=DIR
+
+will group together all file, that are stored in the same directory. The output
+file will then be named after the name of DIR.
+
+
+On the commandline, you can specify the groupfile using the "-G" option.
+Additionally, a path has to be specified, where to store the html files
+for the defined groups. This can ba done using the "-P" option. 
+The names of the html files for the groups are then <groupname>.html.
+All other files, that do not match a group, are written into the 
+normal file.
+
+  perl mp3riot -d /home/nikolei/download1 -q
+                 -o unix -t /home/nikolei/therest.html
+		 -G /home/nikolei/groupfile
+		 -p /home/nikolei
+
+The type EQUAL can be used to make a seperate html file for every different characteristic. For
+example, you can build a seperate html file for any single (atomic sub-) directory, that exists,
+by defining:
+
+DIR=EQUAL=DIR
+
+The html files are stored in the specified directory. To make html file for any genre, year or whatever,
+is straightforward.
+
+GENRE=EQUAL=GENRE
+
+or
+
+YEAR=EQUAL=YEAR
+
+All regular types can be used.
+
+    
+-----------------------------------------------------------------------------
+
+Changing html layout
+
+If you want to change the layout of the htmloutput, you have to go directly 
+into the code (although it is planned to make changing the htmlcode more
+flexible by using templates). The functions that contain html are:
+
+Writestatfile: here you can change the layout of the statistics file.
+
+Getmp3info: in this function layout is defined when using the command line
+            parameter "mp3info"
+	    
+Getogginfo: in this function layout is defined when using the command line
+            parameter "mp3info"
+
+Date: here the layout of the actual date is defined.
+
+Writehtml: here some layout of the html output can be changed.
+
+Htmlheader: here you can change the header for "Writehtml".
+
+Htmlfooter: here you can change the footer for "Writehtml".
+
+Htmlchange: here the html code is defined when the first character from 
+            on file to the other changes.
+
+Htmlbody: here the htmlcode for writing each file is defined.
+
+Writesephtml: here seperate html files for every different first character
+              is written out.
+
+Sephtmlheader: here the header for "Writesephtml" is defined.
+
+
+
+-----------------------------------------------------------------------------
+
+Html templates
+
+Since version 1.0 it is possible to use html templates. Templates have to
+be activated usinf the "-T" oder "--templates" flag. Additionally, in the 
+configuration file, variables with html code and templates have to be filled.
+
+There are four varibales to can fill with your own html code. These are:
+
+  html_head	: The header of an html file
+  html_sep_head : The header of a html file for seperated files by fist character
+  html_body	: the body, or simply, every song, file or record
+  html_change	: if the first character between two filenames change
+
+Templates are identified via keywords. Every keyword start with two asterics and
+also ends with two asterics. Please note, that not all templates are available 
+for all variables! Implemeted templates are:
+
+  **SUMOFFILES** : Sum of files listed in html file 
+  **SUMOFMEGS**  : Sum of megabytes of files listed in html file
+  **DATE**	 : Date of creation of html file
+  **URLNAME**	 : URL name of file (name within the <a href=...>-tag)
+  **SHOWNAME**   : The name that is shown  (name between the tag <a></a>
+  **DIR**	 : Directory where the file is located
+  **NAME**	 : Original name of the file
+  **TITLE**	 : Tile of the song (using id3-tag)
+  **ARTIST**	 : Artist of the song (using id3-tag)
+  **ALBUM**	 : Album of the song (using id3-tag)
+  **YEAR**	 : Year the album was released (using id3-tag)
+  **COMMENT**	 : Commentstring of the song (using id3-tag)
+  **GENRE**	 : Genre of the song (using id3-tag)
+  **SIZE**	 : Fize of the file in kilobytes
+  **MODTIME**	 : Modification time of the file in the fromat <year>-<month>-<day>
+  **VBR**	 : Indicator whether variable bitrate is used or not, if it is an
+ 		   mp3 or ogg vorbis file
+  **BITRATE**	 : Bitrate, if it is an mp3 or ogg vorbis file
+  **FREQUENCY**  : Frequency of the file, if it is an mp3 or ogg vorbis file
+  **MINUTES**	 : Minutes, the song lasts, if it is an mp3 or ogg vorbis file
+  **SECONDS**	 : Seconds, the song lasts, if it is an mp3 or ogg vorbis file
+  **HTMLINDEX**  : Prints a linked index of fist chararacters for html output
+  **FIRSTCHAR**  : The first character of the filename
+
+For example, in order to get exactly the same result for html output as 
+the program gernerates by default, you can define the following varibales:
+
+  html_head=<html><body>**HTMLINDEX**<br>
+  html_change=<P><A HREF="#top">back to top</A></P><P><A NAME="**FIRSTCHAR**">**FIRSTCHAR**</A></P>
+  html_body=<BR><A HREF="**URLNAME**">**SHOWNAME**</A> **SIZE** kb **MINUTES**' **SECONDS**''
+  html_footer=<BR><P><A HREF="#top">back to top</a></P><P>Sum of files is **SUMOFFILES**.<br>Sum of megabytes is **SUMOFMEGS**.<br>Generated by mp3riot on **DATE**, (c)2000-2003 Nikolei Steinhage</P></body></html>
+  html_sep_head=<HTML><BODY><P><B></B>**FIRSTCHAR**</P>
+
+
+-----------------------------------------------------------------------------
+
+Release History
+
+ 
+  f2html.pl 0.1-20001127
+        Changes:
+         - Initial release
+
+  f2html.pl 0.2-20010117
+        Changes:
+         - The manual has been updated.
+         - The option -c has been updated. Now this option can be used more 
+           than only one time. So one is able to select file by different 
+           extensions.
+
+  f2html.pl 0.3-20010628
+        Changes:
+         - Some checks and corrections for pathnames
+         - Only existing characters are written out at the top of a html 
+           file
+         - Rewrite of sum of files and sizes. Important for writing 
+           seperate html files for every character 
+         - The option -q has been implemented and allows for doing the 
+           procedures in a non case sensitive way
+         - The option -j has been implemented. A html file with statistics 
+           can be written out.
+
+  f2html.pl 0.4-20011127
+        Changes:
+	 - Now f2html comes with a new version of Info.pm
+	   from MP3-Info-0.91 by Chris Nandor
+	 - Minor Bugfixes
+	 - New option to create sql database
+	 - New option to create a config file
+
+  f2html.pl 0.5-20020626
+	Changes:
+	 - Fixed problem with sql data output when files contain the
+	   charakter "'"
+	 - Name of option "hex" changed to "utf8"
+	 - Implemeted progress bar for prepating html files
+	 - More information about what the program is doing
+
+  f2html.pl 0.6-20020718
+        Changes:
+	 - New method (experimental) for faster sorting.
+	   Useful for indexing huge number of files or mp3 files
+	   with additional information.
+	 - New option for checking for dublicates of filenames
+	 - Now f2html.pl comes with a new version of Info.pm
+	   from MP3-Info-1.01 by Chris Nandor
+
+  f2html.pl 0.7-20021016
+        Changes:
+	 - bug for the option "check" in config file and configuration wizard fixed
+         - bug for the check of the mp3 extension when mp3info was enabled fixed
+         - bug of sum of megs in html output fixed
+	 - bug in mp3table.sql fixed
+         - basic ogg vorbis support implemented (thanks to Jens Burkal)
+	 
+  f2html.pl 0.8-20021105
+        Changes:
+	 - some changes in the documentation
+	 - new option to rename files using their id3tag
+	 - new option to rename files back
+	 - some code fixes
+
+  f2html.pl 0.9-20030313
+        Changes:
+         - Fixed a commandline parameter bug where the parameters 
+	   were handled non case sensitive. Now there are handled case sensitive
+	   As a result the functions RENAME and RENAMEBACK did not work 
+	   when called with the short command line argument.
+	 - Fixed a commandline parameter bug that occured with Perl 5.8.0 and 
+	   Getopt::Long 2.32. The "-s" flag in line 1 of the perl script 
+	   causes the program to count the command line parameters in 
+	   an usual way, so that command line parameters got disturbed and did
+	   not work any more.
+	   
+  f2html.pl 1.0-20030319
+        Changes:
+	 - Fixed some smaller bugs
+	 - Removed option for fast sorting (not necessary any more)
+	 - Rebuild the internal data structure completely
+	 - Implemented selection of files by their modification time 
+	   (younger and/or older than days from now)
+	 - Implemented grouping of files by string matching between 
+	   group defninitions by various types
+	 - Implemented variable html-code definitions and templates
+	 - Changed definition for string replacement
+	 - f2html.pl now comes with a new version of Info.pm from
+	   MP3-Info-1.02 by Chris Nandor
+	 - The use of the id3tag for sql and html output is now optional
+	 - Manpage is not supported any more.
+	   
+  mp3riot 1.1-20030728
+	Changes:
+	 - Renamed f2html.pl into mp3riot
+         - Fixed output of playlist in M3U format, so that the M3U file 
+	   is now containing full information
+	 - Fixed bug for retreaving the TITLE of an id3tag
+	 - Added output of playlist in XML format
+	 - Added output of playlist in PLS format
+	 - Added random fileselection for random playlists
+	 - Added the tracknumber for sql output
+	 - Added **TRACKNUM** (tracknumber) and as a template variable 
+	   for html output
+	 - Added TRACKNUM (tracknumber) as a variable for groupings
+	 - Added tracknumber and comment for db output
+	 - Fixed bug in renaming function when special characters are 
+	   present in the id3tag
+	 - Added rename_template to do renaming of files using their id3tag
+	   in a flexible way
+	 - Fixed a bug in renameback
+
+  mp3riot 1.2-20040928
+	Changes:
+	 - Fixed bug in sql output
+	 - Flexible search for doublicate files using md5 sums
+	 - search for doublicates by filenames seperated from search function
+	 - fixed bug in xml output
+         - filesize in html output is now rouded
+	 - replaced progress bar by counter in percentage 
+	 - added counter for collected files	 
+	 - fixed bug in index in html output
+         - fixed bug in html output for grouping
+	 - extended grouping function by new type "EQUAL"
+         - bugfix in pls output
+ 
+  mp3riot 1.3-20041220
+	Changes:
+	 - extended grouping fuction for all playlistfiles
+	 - renaming of special characters for filenames og groups
+	 - support of b4s playlistformat
+	 - sorting of filelist by various criterias of id3tag, mp3 and
+	   file information (e.g. ARTIST, BITRATE etc.)
+	 - extended output of doublicate function by diretory names
+	 - added FIRSTCHAR as a value for grouping 
+	 - updated manual
+
+-----------------------------------------------------------------------------
+
+Contacting The Author
+
+You you have found bugs, need help, or have some ideas for further
+development of the program, feel free to mail me
+
+  mp3riot@linxsecure.de
+
+-----------------------------------------------------------------------------
+
+Todo
+
+There are still a lot of things to do. But first of all I have to write a
+better manual with a lot of examples in it. To me, this seems very necessary,
+bacause some users may encounter problems using this program. Some feature
+like sql-interface, advanced sorting and grouping have to be implemented.
+PHP interface has to be written. Change all command line examples to config file examples.
+
+
+
+

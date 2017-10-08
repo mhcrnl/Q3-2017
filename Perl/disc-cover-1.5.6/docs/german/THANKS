@@ -1,0 +1,56 @@
+
+2000-03-05
+
+DANKE - Disc-Cover
+
+Mein Dank gilt den folgenden Menschen:
+  - Alexander Werner für die korrekte Liste der Perl Module.
+  - Bart Warmderdam für das Erstellen eines Debian Pakets und das
+    Mitteilen von mehreren Fehlern.
+  - Barton C Massey für die cddb Datei, die *sehr* lange CD-Titel
+    korrigiert.
+  - Christian Delbaere für den Vorschlag für ein besseres Layout
+    der Covers.
+  - Christian Perrier für die 'colour patch'.
+  - Colin Marquardt für einige Vorschläge, hauptsächliche der \emph
+    LaTeX Hinweis und den Vorschläge für das PDF Format.
+  - Dieter Faulbaum für den besseren Umgang mit Dateinamen.
+  - Gianluca Granero für das Erstellen eines RedHat Pakets.
+  - Grant für die bessere Zusammenarbeit mit Cdcd.
+  - Javier de Lucas Cruz für das Übersetzen der Dokumentation ins
+    Spanische.
+  - Jean-Michel Rouet für das Korrigieren zweier Fehler in dem Teil,
+    der LaTeX verwendet.
+  - Joerg Plate für das Einsenden von so vielen Patchen.
+  - Maarten Lamers für die Namensgebung.
+  - Marc LeMaire für das Herausfinden der richtigen Reihenfolge, in
+    der die Perl-Module zu kompilieren sind.
+  - Marcel Mol für die ASCII und cdlabelgen Formate und für viele,
+    viele andere Korrekturen und Änderungen.
+  - Martin Schrode für das Finden einer Anzahl von Fehlern.
+  - Nick Stephen für die Idee, ein anderes Layout-Format zu verwenden.
+  - Oliver Kirchkam für das Aushelfen und Bereitstellen eines
+    Test-Accounts um den Bug, der die falsche CD-IDs verursachte,
+    loszuwerden.
+  - Peter Crystal für den Code zur Proxy-Unterstützung.
+  - Ralf Uhlig für den cddb-Cache-Link Patch und für die Feststellung,
+    dass zwei gleiche CD-IDs im Cache existieren können.
+  - Richard Martin für den Vorschlag und das Perl-Skript zur Verwendung
+    von cddb-Dateien.
+  - Richard Sloeserwij für das Erwähnen, dass die Künstler/Titel an den
+    Seiten vertauscht besser aussehen.
+  - Roland ? für den Vorschlag (und teilweisen Patch) um schöner aus-
+    sehende Track-Nummern zu bekommen.
+  - Stefan Volker für das Zeigen vieler Probleme und für das Bereit-
+    stellen der man-Seite.
+  - Steffen Klupsch für eine bessere latin1 Unterstützung.
+  - Stephane Raimbault für eine schönere gepunktete Linie nach den
+    Track-Namen.
+
+Den vielen, vielen anderen, für das Einreichen von Vorschlägen,
+Fehlermeldungen, Ideen und einer Menge netter Kommentare über das
+Programm. Solltest du nicht auf der Liste sein, so bist du dennoch
+in meinem disc-cover E-Mail-Ordner. Danke!
+
+
+J.I. van Hemert

@@ -1,0 +1,217 @@
+#!/usr/bin/perl
+# Project: Emulate a grandfather clock
+# Copyright: This package is licensed under the terms of
+#            GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+#            You should have received a copy with this package.
+# Author:  Dr. Robert J. Meier, Jr.
+# History: 00-03-22 -rjm- file creation
+
+
+
+#
+# Constants
+#
+
+
+
+#
+# Includes
+#
+require "getopts.pl";		# &Getopts()
+
+
+
+#
+# Support routines
+#
+
+
+#
+# Play a sound
+#
+
+
+
+#
+# Main program
+#
+
+# Default the execution parameters
+$error   = 0;			# Assume success
+$name    = "grandfatherclock";
+$NAME    = "GRANDFATHERCLOCK";
+
+$device  = "/dev/audio";
+$command = "cat %f > %a";
+$dir     = "/opt/$name/lib";
+$gain    = 1.0;
+$pause   = 0;
+$q1      = "Westminister1.au";
+$q2      = "Westminister2.au";
+$q3      = "Westminister3.au";
+$q4      = "Westminister4.au";
+$toll    = "Grandfather.au";
+$config  = "";
+
+# Process the command-line options
+$error = -1 if !&Getopts('a:c:d:f:g:t:p:qv1:2:3:h:');
+
+# Identify the configuration file
+if ("" ne "$opt_f") {
+  $config = $opt_f;
+} elsif ("" ne $ENV{"$NAME"."RC"}) {
+  $config = $ENV{"$NAME"."RC"};
+} elsif (-r $ENV{"HOME"}."/.$name"."rc") {
+  $config = $ENV{"HOME"}."/.$name"."rc";
+} elsif (-r "/etc/$name/$name"."rc") {
+  $config = "/etc/$name/$name"."rc";
+} elsif (-r "/opt/$name/etc/$name"."rc") {
+  $config = "/opt/$name/etc/$name"."rc";
+}
+
+# Read the configuration file
+if (-r "$config") {
+  open(CONFIG, "$config") || die "Unable to read configuration, $config: $!";
+  local($ignore, $delim) = split(//, <CONFIG>);
+  while (<CONFIG>) {
+    print STDERR "$config:$_" if $opt_v;
+    chomp;
+    local($record) = split(/$ignore/);
+    local(@field) = split(/$delim/, $record);
+    $device  = $field[1] if $field[0] =~ /AUDIO_DEVICE/i;
+    $command = $field[1] if $field[0] =~ /PLAY_COMMAND/i;
+    $gain    = $field[1] if $field[0] =~ /PLAY_GAIN/i;
+    $pause   = $field[1] if $field[0] =~ /PAUSE_BETWEEN_TOLLS/i;
+    $dir     = $field[1] if $field[0] =~ /AUDIO_DIRECTORY/i;
+    $q1      = $field[1] if $field[0] =~ /Q1_FILE/i;
+    $q2      = $field[1] if $field[0] =~ /Q2_FILE/i;
+    $q3      = $field[1] if $field[0] =~ /Q3_FILE/i;
+    $q4      = $field[1] if $field[0] =~ /Q4_FILE/i;
+    $toll    = $field[1] if $field[0] =~ /TOLL_FILE/i;
+  }
+}
+
+# Validate the command-line options
+$device  = $opt_a unless "" eq "$opt_a";
+$command = $opt_c unless "" eq "$opt_c";
+$dir     = $opt_d unless "" eq "$opt_d";
+$gain    = $opt_g unless "" eq "$opt_g";
+$pause   = $opt_p unless "" eq "$opt_p";
+$q1      = $opt_1 unless "" eq "$opt_1";
+$q2      = $opt_2 unless "" eq "$opt_2";
+$q3      = $opt_3 unless "" eq "$opt_3";
+$q4      = $opt_4 unless "" eq "$opt_4";
+$toll    = $opt_h unless "" eq "$opt_h";
+if ("" ne "$opt_t") {
+  $time = $opt_t;
+} else {
+  open(TIME, "date +%H%M |") || die "Unable to determine the time: $!";
+  $time = <TIME>;
+  chomp $time;
+  close TIME;
+}
+if (-d "$dir") {
+  $q1   = $dir."/".$q1   unless $q1 =~ m:^/:;
+  $q2   = $dir."/".$q2   unless $q2 =~ m:^/:;
+  $q3   = $dir."/".$q3   unless $q3 =~ m:^/:;
+  $q4   = $dir."/".$q4   unless $q4 =~ m:^/:;
+  $toll = $dir."/".$toll unless $toll =~ m:^/:;
+}
+
+
+# If the command-line arguments are invalid, indicate usage
+if ($error) {
+  print STDERR "Usage:$0 [-v] [-c command] [-a device] [-g gain]\n";
+  print STDERR "    [-f file] [-p tolls] [-q] [-t time] [-d dir]\n";
+  print STDERR "    [-h file] [-1 file] [-2 file] [-3 file] [-4 file]\n";
+  print STDERR "  -1 1st quarter chime  [$q1]\n";
+  print STDERR "     Q1_FILE\n";
+  print STDERR "  -2 half hour chime    [$q2]\n";
+  print STDERR "     Q2_FILE\n";
+  print STDERR "  -3 3rd quarter chime  [$q3]\n";
+  print STDERR "     Q3_FILE\n";
+  print STDERR "  -4 hourly chime       [$q4]\n";
+  print STDERR "     Q4_FILE\n";
+  print STDERR "  -a audio out device   [$device]\n";
+  print STDERR "     AUDIO_DEVICE\n";
+  print STDERR "  -c play command       [$command]\n";
+  print STDERR "     PLAY_COMMAND\n";
+  print STDERR "  -d chime directory    [$dir]\n";
+  print STDERR "     AUDIO_DIRECTORY\n";
+  print STDERR "  -f configuration file [$config]\n";
+  print STDERR "  -g gain               [$gain]\n";
+  print STDERR "     PLAY_GAIN\n";
+  print STDERR "  -h toll               [$toll]\n";
+  print STDERR "     TOLL_FILE\n";
+  print STDERR "  -p pause after tolls  [$pause]\n";
+  print STDERR "     PAUSE_BETWEEN_TOLLS\n";
+  print STDERR "  -q sound the quarter  [$opt_q]\n";
+  print STDERR "  -t time HHMM          [$time]\n";
+  print STDERR "  -v verbose            [$opt_v]\n";
+  print STDERR "  play command substitutes:\n";
+  print STDERR "    %a - output device\n";
+  print STDERR "    %f - sound sample file\n";
+  print STDERR "    %g - gain\n";
+
+# Output the correct time
+} else {
+
+  # Fill in the common command parts
+  $command =~ s/%a/$device/g;
+  $command =~ s/%g/$gain/g;
+
+  # Determine the nearest quarter.
+  local($hour, $min) = (int($time / 100), $time % 100);
+  print STDERR "$name $hour:$min\n" if $opt_v;
+
+  # Play the 1st quarter
+  if ($opt_q) {
+    if (7.5 <= $min && 22.5 > $min) {
+      local($cmd) = $command;
+      $cmd =~ s:%f:$q1:g;
+      !system($cmd) || die "Unable to execute >$cmd: $!";
+    }
+  }
+
+  # Play the 2nd quarter
+  if ($opt_q) {
+    if (22.5 <= $min && 37.5 > $min) {
+      local($cmd) = $command;
+      $cmd =~ s/%f/$q2/g;
+      !system($cmd) || die "Unable to execute >$cmd: $!";
+    }
+  }
+
+  # Play the 3rd quarter
+  if ($opt_q) {
+    if (37.5 < $min && 52.5 > $min) {
+      local($cmd) = $command;
+      $cmd =~ s/%f/$q3/g;
+      !system($cmd) || die "Unable to execute >$cmd: $!";
+    }
+  }
+
+  # Play the 4th quarter
+  if ($opt_q) {
+    if (52.5 < $min || 7.5 > $min) {
+      local($cmd) = $command;
+      $cmd =~ s/%f/$q4/g;
+      !system($cmd) || die "Unable to execute >$cmd: $!";
+    }
+  }
+  
+  # Toll the hour
+  if (!$opt_q || 52.5 < $min || 7.5 > $min) {
+    local($remaining) = 0;
+    $hour = 1 + ((11 + $hour) %12);
+    while (0 < $hour--) {
+      local($cmd) = $command;
+      $cmd =~ s/%f/$toll/g;
+      !system($cmd) || die "Unable to execute >$cmd: $!";
+      if (++$remaining == $pause) {
+	sleep(1);
+	$remaining = 0;
+      }
+    }
+  }
+}

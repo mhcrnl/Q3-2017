@@ -1,0 +1,48 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+use File::Basename;
+
+my $whoami = basename($0);
+
+my @libdirs = ();
+my @libs = ();
+foreach my $arg (@ARGV)
+{
+    if ($arg =~ s/^-L//)
+    {
+	push(@libdirs, $arg);
+    }
+    elsif ($arg =~ s/^-l//)
+    {
+	push(@libs, $arg);
+    }
+    else
+    {
+	die "Usage: $whoami -Ldir -llib ...\n";
+    }
+}
+foreach my $lib (@libs)
+{
+    my $found = 0;
+    foreach my $libdir (@libdirs)
+    {
+	if (-f "$libdir/shlib-$lib")
+	{
+	    print "$libdir/shlib-$lib\n";
+	    $found = 1;
+	    last;
+	}
+	elsif (-f "$libdir/lib-$lib")
+	{
+	    print "$libdir/lib-$lib\n";
+	    $found = 1;
+	    last;
+	}
+    }
+    if (! $found)
+    {
+	die "$whoami: can't find $lib\n";
+    }
+}

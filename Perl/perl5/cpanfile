@@ -1,0 +1,5 @@
+requires 'JSON';
+requires 'DateTime';
+requires 'Test::Exception';
+requires 'List::MoreUtils';
+requires 'Path::Tiny';

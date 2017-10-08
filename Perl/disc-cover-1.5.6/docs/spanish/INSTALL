@@ -1,0 +1,40 @@
+
+2000-03-05
+
+INSTALL - Disc-Cover
+
+Para instalarlo simplemente copia el script 'disc-cover' en algun directorio
+'bin' del path. Asegurate de que tienes todo lo mencionado abajo.
+
+Para ejecutar este script necesitas los siguientes programas:
+  - Perl (con estos modulos: libwww-perl, MIME-Base64. URI, HTML-Parser,
+    FreeCDDB, libnet, Digest-MD5)
+  - Latex (con los paquetes: ifthen, isolatin1, graphicx, color)
+  - Dvips (para la salida Postscript) o pdflatex (para la salida Pdf)
+y necesitas lo siguiente:
+  - Una conexion a internet para el cddb
+  - A lectora de cdrom con un CD de musica
+  - Un directorio /tmp opcional.
+  - El programa convert que viene con ImageMagick para las imagenes en la
+    portada.
+
+Si descargas los paquetes con las fuentes  o los paquetes de las
+distribuciones RedHat o Debian de los modulos de Perl (libwww-perl, 
+MIME-Base64, URI, HTML-Parser, Digest-MD5, libnet, FreeDB), instalalos 
+en este orden:
+
+  1. MIME-Base64 (sugerida version 2.11)
+  2. URI (sugerida version 1.04)
+  3. HTML-Parser (sugerida version 2.23)
+  4. Digest-MD5 (sugerida version 2.09)
+  5. libnet (sugerida version 1.0607)
+  6. libwww-perl (sugerida version 5.47)
+  7. FreeDB (sugerida version 1.1.4-disc-cover)
+
+Luego asegurate de que estan en el path de librerias de Perl (/usr/lib/perl).
+
+
+J.I. van Hemert
+
+Traduccion por Javier M. de Lucas Cruz <restauracion@arrakis.es>
+Acentos omitidos voluntariamente.

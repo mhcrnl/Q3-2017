@@ -1,0 +1,34 @@
+#: grandfatherclock configuration
+# The first character in this file is the comment character.
+# The second character in this file is the delimiter.
+# Everything on a line after the comment character is ignored.
+# Every line after this is a record
+
+
+# Choose the audio output device
+AUDIO_DEVICE:/dev/dsp
+
+
+# Specify how to play an audio file.
+
+# use > grandfatherclock -? to see the pattern substitutes
+PLAY_COMMAND:cat %f > /dev/audio
+#PLAY_COMMAND:sox -v %g %f -t ossdsp %a
+
+# Amplify the sound uniformly
+PLAY_GAIN:1.0
+
+# Pause after a given number of tolls if not 0.
+# 4 plays 7 O'clock as ding-ding-ding-ding ding-ding-ding
+PAUSE_BETWEEN_TOLLS:0
+
+
+# Specify the audio files to play
+
+# Specify the files to use
+AUDIO_DIRECTORY:/opt/grandfatherclock/lib
+Q1_FILE        :Westminister1.au
+Q2_FILE        :Westminister2.au
+Q3_FILE        :Westminister3.au
+Q4_FILE        :Westminister4.au
+TOLL_FILE      :Grandfather.au

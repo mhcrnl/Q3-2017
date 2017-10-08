@@ -1,0 +1,388 @@
+				   
+imc, version 4.3
+
+==========================================================================
+
+Usage:
+
+- on the command line:
+
+    imc [-h] [-v] [-q <quality>] <inputfile> -o <outputfile> {-I <includedir>}*
+
+    <inputfile> is the text file with commands
+    <outputfile> is the PNG, GIF or JPEG file to output
+    <includedir> is a directory to be added to the standard include path
+    (note that the initial standard include path is empty)
+    <quality> is the quality parameter for JPEG output (ignored for PNG or GIF)
+    -h causes imc to print a help text, after which it quits
+    -v causes imc to print a version number, after which it quits
+
+- in a URL, as CGI script:
+
+    imc?file=<inputfile>[quality=<quality>]{&include=<includedir>}*
+
+    <inputfile> is the text file with commands
+    The PNG, GIF or JPEG file is output to the browser.
+    <includedir> is a directory to be added to the standard include path
+    (note that the initial standard include path is empty)
+    <quality> is the quality parameter for JPEG output (ignored for PNG or GIF)
+
+The following syntax is supported:
+
+(Note: releases with the same major version number have a backward compatible
+syntax)
+
+- The input file consists of a number of input lines.
+
+- The input file is first fed through the C pre-processor if it can be
+  found.  If no C pre-processor can be found, no error is given: the input
+  file is processed as is.
+
+- Braces ('{' and '}') can delimit arithmetic expressions.  These expressions
+  are fed to the Perl evaluator and replaced by the result.  This happens
+  after the pre-processing stage but before the actual processing of the
+  imc commands.  Between the braces only numbers, brackets and the characters
+  +, -, / and * are allowed.  The result is automatically rounded to the
+  nearest integer.
+
+- The backslash can be used as a line continuation character.
+
+- Leading and trailing whitespace on an input line is ignored.
+
+- Lines starting with '#' (possibly after some whitespace) are supposed
+  to be comments and are ignored (unless they specify a pre-processor command).
+  Comments can never be included inside a command (also not after a line
+  continuation character).  Note that a line continuation character will
+  also continue a comment line !
+
+  C style comments (/* ... */) and C++ style comments (// ...) are also
+  supported, also when not using a pre-processor.
+
+- Other lines must consist of a keyword, followed by some arguments.
+  Excess arguments produce an error.  The keywords are case insensitive,
+  but the arguments are case sensitive, unless otherwise specified.
+
+  A semicolon ';' can be used to separate commands in a line.  It is
+  also allowed at the end of a line, but is not necessary there.
+
+- String arguments should be double quoted.  A backslash can be used to
+  escape a literal double quote or backslash in a string.
+
+- Coordinates must be specified as integers and are by default relative to
+  the upper left corner (which is (0, 0) ).  The ORIGIN command can change
+  this default.  Note that points with negative coordinates are never
+  visible.
+
+- In all the commands the substring "COLOUR" can be replaced by "COLOR".
+
+- A color specification is the keyword TRANSPARENT (case insensitive) or
+  has the form
+    <model> <args>
+
+  (Note that some tools, notably xv, don't take transparency into account,
+   so that images may seem wrong on these tools; however, other tools, like
+   Netscape *do* take transparency into account).
+
+  <model> is the color model used; the following models are supported (the
+  model name is case insensitive):
+
+    RGB    the <args> should be three integers between 0 and 255
+           (bounds included)
+
+    X11    the <args> should be 1 argument, which can be a color name
+           or a numeric specification in the form:
+             #RGB
+             #RRGGBB
+             #RRRGGGBBB
+             #RRRRGGGGBBBB
+           as defined in the X11 protocol (see there).
+
+           The color name (case insensitive, but bounded by quotes if
+           there are spaces included) is looked up in the rgb.txt file
+           to map it to an RGB color.  The rgb.txt file is subsequently
+           looked for in the following directories:
+             - current directory
+             - directory of the input file
+             - /etc/X11
+             - /usr/lib/X11
+
+
+- Commands:
+
+  - INTERLACED
+
+      Defines the images as interlaced.  This gives a fading-in
+      effect in certain browsers.  By default this setting is disabled.
+
+  - BACKGROUND <colorspec>
+
+      Sets the background color to the given <colorspec>.
+      The default background color is white.
+
+      Examples:
+
+        BACKGROUND RGB 0 0 200
+        BACKGROUND X11 #13A13A13A
+
+  - LINECOLOUR <colorspec>
+
+      Sets the current drawing color to the given <colorspec>.
+      The default drawing color is black.
+
+  - LINEWIDTH <width>
+
+      Sets the current drawing width.  The <width> must be given in pixels and 
+      should be at least 1.  The default drawing width is 1.
+
+  - FILLCOLOUR <colorspec>
+
+      Sets the current fill color to the given <colorspec>.
+      The default fill color is black.
+
+  - TEXTCOLOUR <colorspec>
+
+      Sets the current text color to the given <colorspec>.
+      The default text color is black.
+
+  - TEXTALIGN [<valign>] [<halign>]
+
+      Sets the text alignment to <valign> <halign> (both are case insensitive).
+
+      <valign> can be: TOP, MIDDLE, BOTTOM (default is TOP).
+      <halign> can be: LEFT, CENTER, RIGHT (default is LEFT).
+
+      An alignment of TOP LEFT means that the coordinates that are given to the
+      text command will be at the top left of the bounding rectangle (with
+      horizontal and vertical edges) of the text, independent of whether the
+      origin of the output file is at the bottom or the top.
+
+      At least one of the arguments must be given (and they must be in the
+      order <valign> <halign> if both given).
+
+  - IMAGEALIGN [<valign>] [<halign>]
+
+      Sets the image alignment to <valign> <halign> (both are case
+      insensitive).  The syntax is as for the TEXTALIGN command.
+
+  - TEXTROTATE <angle>
+				   
+      Sets the text rotation to <angle>.  The default is no rotation
+      (<angle> = 0).
+
+  - IMAGEROTATE <angle>
+				   
+      Sets the image rotation to <angle>.  The default is no rotation
+      (<angle> = 0).
+
+  - TEXTMIRROR
+
+      Specifies that text should be mirrored.  By default this is disabled.
+
+  - IMAGEMIRROR
+
+      Specifies that images should be mirrored.  By default this is disabled.
+
+  - TEXTSIZE <size>
+
+      Sets the current text size.  Possible values are: 5x8 (or TINY), 6x12
+      (or SMALL), 7x13 (or MEDIUM), 8x16 (or LARGE) or 9x15 (or GIANT).  The
+      values are case insensitive.
+      The default font size is SMALL.
+
+  - MOVETO <x> <y>
+
+      Move the current position to the point with coordinates <x>,<y>
+				   
+      Example:
+
+        MOVETO 100 100
+
+  - LINETO <x> <y> [COLOUR <colorspec>] [WIDTH <width>]
+
+      Draws a line from the current position to the point with coordinates
+      <x>, <y>.  Makes the end point the new current position.  The color and
+      width may be specified in the command; if not specified, the current
+      values are used (see LINECOLOUR and LINEWIDTH).
+
+      Example:
+
+        LINETO 20 100 COLOUR RGB 100 100 100
+
+  - LINE <x1> <y1> <x2> <y2> [COLOUR <colorspec>] [WIDTH <width>]
+
+      As LINETO, but draws a line from (<x1>,<y1>) to (<x2>,<y2>).  The
+      current position is not changed.
+
+  - TEXT <string> [COLOUR <colorspec>] [SIZE <size>]
+                  [ALIGN [<valign>] [<halign>]] [ROTATE <angle>] [MIRROR]
+
+      Prints the given text on the current position (where the current position
+      will be relative to the text depends on the current alignment).
+
+      If the text contains whitespace, it has to be enclosed in quotes.  The
+      current position is not changed.
+
+      The text color, size, alignment and rotation and whether the text should
+      be mirrored, can be specified on the command; if omitted, the current
+      values are used (see TEXTCOLOUR, TEXTSIZE, TEXTALIGN, TEXTROTATE and
+      TEXTMIRROR).
+
+      Note that the alignment is always relative to the bounding rectangle
+      (with horizontal and vertical edges) of the resulting text, also when
+      it is rotated.  Mirroring is always horizontal and is done *before*
+      rotating.
+
+      Example:
+
+        TEXT "This is a test" SIZE large ALIGN top center
+
+  - TEXTAT <x> <y> <string> [COLOUR <colorspec>] [SIZE <size>]
+                            [ALIGN [<valign>] [<halign>]] [ROTATE <angle>]
+			    [MIRROR]
+
+      As TEXT, but prints the text at <x>, <y>.  The current position is not
+      changed.
+
+  - CIRCLE <x> <y> <radius> [FILLED [<colorspec>]] [COLOUR <colorspec>]
+                            [WIDTH <width>]
+
+      Draws a circle with the given radius around <x>, <y>.  The current
+      position is not changed.
+
+      If the FILLED specification is given, the circle is filled with the
+      given color (color specification as for BACKGROUND).  If the color
+      is omitted, the current fill color is used.
+
+      The drawing color and width can be specified on the command; if omitted,
+      the current values are used (see LINECOLOUR and LINEWIDTH).
+
+      Example:
+
+        CIRCLE 100 100 50 FILLED RGB 0 0 20
+
+  - ELLIPSE <x> <y> <h_radius> <v_radius>
+            [FILLED [<colorspec>]] [COLOUR <colorspec>] [WIDTH <width>]
+
+      Draws a ellipse with the given horizontal and vertical radius around
+      <x>, <y>.  The current position is not changed.
+
+      If the FILLED specification is given, the ellipse is filled with the
+      given color (color specification as for BACKGROUND).  If the color
+      is omitted, the current fill color is used.
+
+      The drawing color and width can be specified on the command; if omitted,
+      the current values are used (see LINECOLOUR and LINEWIDTH).
+
+      Example:
+
+        ELLIPSE 100 100 50 100 FILLED
+
+  - ARC <x> <y> <h_radius> <v_radius> <start_angle> <end_angle>
+        [COLOUR <colorspec>] [WIDTH <width>] [CLOSED [PIE|SEGMENT]]
+
+      Draws a arc with the given horizontal and vertical radius around
+      <x>, <y>, starting from <start_angle> to <end_angle>.  These angles
+      must be integers between -360 and 360 (degrees).  Zero degrees is at
+      the right of the imaginary ellipse, angles are increasing clockwise.
+      The current position is not changed.
+
+      The drawing color and width can be specified on the command; if omitted,
+      the current values are used (see LINECOLOUR and LINEWIDTH).
+
+      When CLOSED or CLOSED PIE is specified, the arc is closed as a pie.
+      When CLOSED SEGMENT is specified, the arc is closed via a chord.
+
+      Example:
+
+        ARC 100 100 50 100 180 360
+
+  - RECTANGLE <x1> <y1> <x2> <y2> [FILLED [<colorspec>]] [COLOUR <colorspec>]
+                                  [WIDTH <width>]
+
+      Draws a rectangle between the points <x1>,<y1> and <x2>,<y2>.  The
+      current position is not changed.
+
+      If the FILLED specification is given, the rectangle is filled with the
+      given color (color specification as for BACKGROUND).  If the color
+      is omitted, the current fill color is used.
+
+      The drawing color and width can be specified on the command; if omitted,
+      the current values are used (see LINECOLOUR and LINEWIDTH).
+
+      Example:
+
+        RECTANGLE 100 100 200 200 FILLED RGB 0 0 20
+
+  - IMAGE <x> <y> [<filename>] [SIZE <width> <height>]
+                  [ALIGN [<valign>] [<halign>]] [ROTATE <angle>] [MIRROR]
+
+      Imports the PNG, GIF, JPG or X Bitmap image stored in the given file on
+      the position given by the coordinates <x> and <y> (where these
+      coordinates will be relative to the image depends on the current
+      alignment).
+
+      When the filename is omitted, the previously used filename is used
+      (if, of course, there was one; if not, an error message is generated).
+
+      A size can be specified to scale the image to the given size.  An
+      integer bigger than 0 specifies an absolute size, a floating point
+      percentage bigger than 0 (ending with '%') specifies a relative size.
+      If the size is omitted, the image is copied as is.
+
+      The alignment, the rotation angle and whether the image should be
+      mirrored, can be specified on the command; if omitted, the current
+      values are used (see IMAGEALIGN, IMAGEROTATE and IMAGEMIRROR).
+
+      Note that the alignment is always relative to the bounding rectangle
+      (with horizontal and vertical edges) of the resulting image, also when
+      it is rotated.  Mirroring is always horizontal and is done *before*
+      rotating.
+
+      Example:
+
+        IMAGE 10 10 oldfile.gif ALIGN middle center
+
+  - FILL <x> <y> [BORDER <colorspec>] [COLOUR <colorspec>]
+
+      Flood-fills a region that contains the point with coordinates <x> and
+      <y>.  If the BORDER color is given, filling stops when it hits the color
+      specified by the border color; else filling stops when it hits a point
+      of a different color than the starting point.
+
+      If the COLOUR specification is given, the region is filled with the
+      given color (color specification as for BACKGROUND).  If the color
+      is omitted, the current fill color is used.
+
+      Example:
+
+        FILL 10 10 BORDER X11 red
+
+  - SIZE <width> <height>
+
+      Fixes the size of the image to <width>, <height>.
+
+      Example:
+
+        SIZE 300 300
+
+  - ORIGIN <spec>
+
+      Sets the origin.  The <spec> can be TOP or BOTTOM: TOP sets the origin
+      to the top left, BOTTOM sets the origin to the bottom left.  The
+      default is TOP.  The <spec> is case insensitive.
+
+      This command must be given before any drawing commands are specified.
+
+      Example:
+
+        ORIGIN BOTTOM
+
+  - ANGLES <spec>
+
+      Sets the orientation of angles.  The <spec> can be CLOCKWISE or
+      ANTICLOCKWISE (the synonym COUNTERCLOCKWISE is also accepted).  The
+      default is CLOCKWISE.  The <spec> is case insensitive.
+
+      Example:
+
+        ANGLES counterclockwise

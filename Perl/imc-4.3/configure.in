@@ -1,0 +1,156 @@
+# Process this file with autoconf to produce a configure script.
+AC_INIT(imc.dist)
+
+dnl =============================================================
+dnl Global variables
+PROG=imc
+VERSION=4.3
+COPYRIGHT="Copyright (C) 1998, 1999, 2002, 2003, 2005 Peter Verthez"
+SHELL=/bin/sh
+CONFIG=make.cfg
+AC_SUBST(PROG)
+AC_SUBST(VERSION)
+AC_SUBST(SHELL)
+AC_SUBST(CONFIG)
+AC_SUBST(COPYRIGHT)
+
+dnl =============================================================
+AM_INIT_AUTOMAKE(${PROG},${VERSION})
+
+dnl Check for perl...
+AC_ARG_WITH(perl, [  --with-perl=ARG         path to the perl interpreter], perl_path=$with_perl)
+
+if test "x$perl_path" = "x"; then
+  AC_PATH_PROGS(PERL, perl perl5.004 perl5.003 perl5.002 perl5.001 perl5)
+else
+  AC_PATH_PROGS(PERL, perl perl5.004 perl5.003 perl5.002 perl5.001 perl5, ,$perl_path:$PATH)
+fi
+
+if test "x$PERL" = "x"; then
+  AC_MSG_ERROR([perl not found, but required; consider using the option --with-perl=ARG for configure])
+fi
+
+dnl Check for version of perl...
+AC_MSG_CHECKING(version of perl)
+AC_TRY_PERL([
+  require 5.004
+  ],
+  AC_MSG_RESULT(Ok),
+  AC_MSG_RESULT(Not ok)
+  AC_MSG_ERROR($PROG requires version 5.004 or better)
+)
+
+dnl GD module
+AC_MSG_CHECKING(whether GD perl module is available)
+AC_TRY_PERL([
+  use GD
+  ],
+  AC_MSG_RESULT(Ok),
+  AC_MSG_RESULT(Not ok)
+  AC_MSG_ERROR($PROG requires the GD perl module)
+)
+
+dnl GD module version
+AC_MSG_CHECKING(version of GD perl module)
+AC_TRY_PERL([
+  use GD 1.22;
+  ],
+  AC_MSG_RESULT(Ok),
+  AC_MSG_RESULT(Not ok)
+  AC_MSG_ERROR($PROG requires version 1.22 or better of the GD module)
+)
+
+SUPP_INPUT="PNG XBM XPM"
+SUPP_OUTPUT="PNG"
+
+dnl Check whether JPEG input is supported
+AC_MSG_CHECKING(whether GD perl module supports JPEG input)
+AC_TRY_PERL([
+  use GD;
+  \$image = newFromJpeg GD::Image("$srcdir/examples/next.jpg");
+  ],
+  AC_MSG_RESULT(yes)
+  SUPP_INPUT="$SUPP_INPUT JPG",
+  AC_MSG_RESULT(no)
+)
+
+dnl Check whether JPEG output is supported
+AC_MSG_CHECKING(whether GD perl module supports JPEG output)
+AC_TRY_PERL([
+  use GD;
+  \$image = new GD::Image();
+  \$image->jpeg();
+  ],
+  AC_MSG_RESULT(yes)
+  SUPP_OUTPUT="$SUPP_OUTPUT JPG",
+  AC_MSG_RESULT(no)
+)
+
+dnl Check whether GIF input is supported
+AC_MSG_CHECKING(whether GD perl module supports GIF input)
+AC_TRY_PERL([
+  use GD;
+  \$image = newFromGif GD::Image("$srcdir/examples/next.gif");
+  ],
+  AC_MSG_RESULT(yes)
+  SUPP_INPUT="$SUPP_INPUT GIF",
+  AC_MSG_RESULT(no)
+)
+
+dnl Check whether GIF output is supported
+AC_MSG_CHECKING(whether GD perl module supports GIF output)
+AC_TRY_PERL([
+  use GD;
+  \$image = new GD::Image();
+  \$image->gif();
+  ],
+  AC_MSG_RESULT(yes)
+  SUPP_OUTPUT="$SUPP_OUTPUT GIF",
+  AC_MSG_RESULT(no)
+)
+AC_SUBST(SUPP_INPUT)
+AC_SUBST(SUPP_OUTPUT)
+
+dnl Biggest integer-like number
+AC_MSG_CHECKING(maximum integer-like number)
+AC_GET_PERL(MAXINT, [
+  \$max_integer = 10000;
+  while ((\$max_integer * 10) != (\$max_integer * 10 + 1)) {
+    \$max_integer *= 10;
+  }
+  print "\$max_integer\n";
+  ])
+
+dnl Check for a pre-processor
+AC_ARG_ENABLE(pp, [  --enable-pp[=ARG]       use pre-processor on input files [default=yes]], , enable_pp="yes")
+
+AC_MSG_CHECKING(whether to use a pre-processor)
+if test "$enable_pp" = "yes"; then
+  AC_MSG_RESULT(yes)
+  AC_PROG_CPP
+  AC_PATH_PROG(CPP_PATH, $CPP)
+  AC_SUBST(CPP_PATH)
+else
+  AC_MSG_RESULT(no)
+fi
+
+dnl List all input files in the examples directory
+INPUT_FILES=`(cd $srcdir/examples; ls *.imc | xargs)`
+BASE_FILES=`echo $INPUT_FILES | sed 's/\.imc//g'`
+OUTPUT_FILES=`echo $INPUT_FILES | sed 's/\.imc/\.png/g'`
+REF_FILES=`echo $INPUT_FILES | sed 's/\.imc/\.png\.ref/g'`
+AC_SUBST(INPUT_FILES)
+AC_SUBST(BASE_FILES)
+AC_SUBST(OUTPUT_FILES)
+AC_SUBST(REF_FILES)
+
+dnl for error in autoconf ??
+test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
+AC_SUBST(INSTALL_SCRIPT)
+
+AC_OUTPUT(Makefile examples/Makefile examples/ref/Makefile
+	  doc/Makefile make.cfg)
+
+dnl Local variables: ***
+dnl mode:m4 ***
+dnl End: ***

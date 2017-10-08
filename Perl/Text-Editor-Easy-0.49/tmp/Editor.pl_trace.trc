@@ -1,0 +1,75 @@
+Subroutine demo8 redefined at Editor.pl line 493.
+Réservation du thread avec tid 0 pour le graphique, référence de la première instance : 20847928
+Fichiers trouvés :
+	lib/Text/Editor/Easy/Abstract.pm
+	lib/Text/Editor/Easy/Comm.pm
+	lib/Text/Editor/Easy.pm
+Package Text::Editor::Easy::Comm, ligne à ignorer : 470 :
+    my $response = simple_context_call( $self, $sub_name, $sub_ref, $call_id, $context, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 509 :
+        my $return = $sub_ref->( $self, @param );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 647 :
+        return new_ask( $self, $method, $id, $client_tid, $server_tid, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 669 :
+    return $sub_ref->( $self, @data );
+Package Text::Editor::Easy::Comm, ligne à ignorer : 712 :
+        return execute_task( 'sync', $self_server, $method, $call_id,
+Package Text::Editor::Easy::Comm, ligne à ignorer : 818 :
+    return new_ask( 
+Package Text::Editor::Easy, ligne à ignorer : 995 :
+    return Text::Editor::Easy::Comm::ask2( $self, $what, @param );
+
+Dans init de Abstract self PARENT = Editor=SCALAR(0x7f137011dcd8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701917b0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans reference_zone_events : name = zone1, event_ref = HASH(0x2177de0)
+Valeur de retour de hash_returned : HASH(0x2177de0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701841f0)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans reference_zone_events : name = zone2, event_ref = HASH(0x26aea88)
+Valeur de retour de hash_returned : HASH(0x26aea88)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e050)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+DANS INIT_MOVE HASH(0x7f1378574f48), 139721057727800, Text::Editor::Easy::Zone=HASH(0x7f136c054fd0)
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a2388)
+LAST MODIF = 1507272040
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701a91e0)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init_eval de Search.pm .. HASH(0x7f13790a1c80), 139721057863832
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f1370190dd8)
+EVAL _TJREAD = 13
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans bind_key_global
+Dans bind_key_global
+Dans bind_key_global
+Dans Comm, mort du thread 6
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b3798)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f137019e560)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7bf8)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d1020)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+LAST MODIF = 1248602490
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701d6ea8)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701f3638)
+LAST MODIF = 1248602490
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+LAST MODIF = 1248602490
+Dans init de Abstract self PARENT = Text::Editor::Easy=SCALAR(0x7f13701b7550)
+Pas de configuration trouvée pour l'affichage de LINE REF = 1
+MW = MainWindow=HASH(0x1cd09a0) MainWindow, sub_ref = CODE(0x1e1d1c0)
+Geométrie : 1280x736+-1+26
+Dans destroy
+Dans Window Destroy : 1280 736 -1 26

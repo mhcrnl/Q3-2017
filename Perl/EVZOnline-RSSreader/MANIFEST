@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/EVZOnline-RSSreader.t
+lib/EVZOnline/RSSreader.pm

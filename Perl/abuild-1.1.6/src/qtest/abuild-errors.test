@@ -1,0 +1,384 @@
+#!/usr/bin/env perl
+require 5.008;
+use warnings;
+use strict;
+use File::Temp 'tempdir';
+
+require TestDriver;
+require abuild_test_utils;
+
+chdir("abuild-errors") or die;
+
+my $td = new TestDriver("abuild errors");
+test_setup();
+
+my $top = get_top();
+my $filters = get_filters();
+
+# These tests exercise various abuild error conditions.
+
+setup($td);
+
+$ENV{'ABUILD_COMPAT_LEVEL'} = '1.0';
+
+$td->runtest("abuild errors",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/allitems0.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("dump data with errors",
+	     {$td->COMMAND => "abuild --dump-data 2> /dev/null",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/dumpdata.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+validate_dump_data($td, 1);
+
+cd("work/a/aa/aaa");
+
+$td->runtest("no Abuild.conf",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/no-abuild.conf.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/a/aa/aab");
+
+$td->runtest("bad parent path",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-parent.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/a/aa/aac/aacc");
+
+$td->runtest("parent/child problems",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/parent-child.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/a/aa/aae");
+
+$td->runtest("parent points down",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/conf-cycle.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/a/aa/aaf");
+
+$td->runtest("bad externals 1",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-externals1.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/a/ab/abc");
+
+$td->runtest("bad externals 2",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-externals2.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/a/aa/aag");
+
+$td->runtest("bad build tree root config",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-root-config.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/a/aa/aai/aaia");
+
+$td->runtest("after-build with no build file config",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/after-build-no-buildfile.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/a/ae");
+
+$td->runtest("child-dir cycle",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/conf-child-cycle.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/h");
+
+# Also tests monitored with errors
+$td->runtest("after-build errors",
+	     {$td->COMMAND => "abuild --monitored --build=desc",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-after-build.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/e/backing/c");
+
+$td->runtest("dependency interface errors",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/dependency-interface.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/e/main/c");
+
+$td->runtest("plugin interface errors",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/plugin-interface.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/e/other/a");
+
+$td->runtest("plugin interface errors",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-plugin-interface.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/e/platform");
+
+$td->runtest("plugin platform errors",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-plugin-platforms.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/f");
+
+$td->runtest(".. in source files",
+	     {$td->COMMAND => "abuild -k -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/dotdot-in-path.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/g");
+
+$td->runtest("build failure: normal",
+	     {$td->COMMAND => "abuild -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/build-failures.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build failure: keep going",
+	     {$td->COMMAND => "abuild -b all -k",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/build-failures-keep-going.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("build failure: no dep failures",
+	     {$td->COMMAND => "abuild -b all -k --no-dep-failures",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/build-failures-no-dep-failures.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/circular-deps");
+
+$td->runtest("abuild dependency errors",
+	     {$td->COMMAND => "abuild --build=all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/circular-deps.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/wrong-tree/main");
+
+$td->runtest("tree access errors",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/tree-access-errors.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/tree-buildset");
+
+$td->runtest("invalid tree buildset",
+	     {$td->COMMAND => "abuild -b local",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/tree-buildset.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/not-in-tree");
+
+$td->runtest("named item not in tree",
+	     {$td->COMMAND => "abuild --compat-level=1.1 -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/named-item-not-in-tree.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+$td->runtest("named item not in tree",
+	     {$td->COMMAND => "abuild --compat-level=1.0 -b all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/named-item-not-in-tree-compat.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/external/main");
+
+$td->runtest("external with no top",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/external-no-top.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/globals");
+
+$td->runtest("global plugins",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/globals.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+# To actually bump into the root directory while finding the top of
+# the tree, we need to create a directory outside of the abuild source
+# tree.  Otherwise, abuild's own Abuild.conf will block us.  This test
+# case will pass but result in a coverage failure if /Abuild.conf or
+# /tmp/Abuild.conf exist, so we explicitly check for it to avoid
+# confusion.
+my $dir = tempdir();
+if ($dir =~ m,^/tmp/[^/]+$,)
+{
+    my $okay = (((-e "/Abuild.conf") || (-e "/tmp/Abuild.conf"))
+		? "see comments in abuild-errors.test\n"
+		: "okay\n");
+    $td->runtest("no Abuild.conf files above $dir",
+		 {$td->STRING => "okay\n"},
+		 {$td->STRING => $okay});
+}
+else
+{
+    $td->runtest("tempdir() not in /tmp",
+		 {$td->STRING => ""},
+		 {$td->STRING => "see comments in abuild-errors.test\n"});
+}
+my $windir = windir($dir);
+open(F, ">$dir/Abuild.conf") or die;
+print F "tree-name: hello\n";
+print F "name: hello\n";
+close(F);
+$td->runtest("find root looking for top",
+	     {$td->COMMAND => "abuild --no-deps -C $windir",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/found-root.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+
+# Command-line parsing
+cd("work/usage");
+$td->runtest("create output directory",
+	     {$td->COMMAND => "abuild",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/make-indep.out",
+	      $td->EXIT_STATUS => 0},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("clean set with targets",
+	     {$td->COMMAND => "abuild --clean=all check",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/clean-set-with-targetes.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("clean with targets",
+	     {$td->COMMAND => "abuild clean all",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/clean-with-targetes.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("bad compatibility level",
+	     {$td->COMMAND => "abuild --compat-level 0.9",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-compat.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("invalid build set",
+	     {$td->COMMAND => "abuild -b oinq",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-buildset.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("invalid help invocation",
+	     {$td->COMMAND => "abuild --help one two three",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/bad-help.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("invalid number of jobs",
+	     {$td->COMMAND => "abuild -j0",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/j0.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("multiple special targets",
+	     {$td->COMMAND => "abuild clean no-op",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/multiple-special.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("rdeps with no build set",
+	     {$td->COMMAND => "abuild --no-deps --with-rdeps",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/rdeps-no-set.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+$td->runtest("traits with no build set",
+	     {$td->COMMAND => "abuild --no-deps --only-with-traits tester",
+	      $td->FILTER => "perl $filters/filter-abuild.pl"},
+	     {$td->FILE => "$top/traits-no-set.out",
+	      $td->EXIT_STATUS => 2},
+	     $td->NORMALIZE_NEWLINES);
+
+cd("work/symlink");
+
+if (! in_windows())
+{
+    symlink "target", "link" or die;
+    symlink "child.target", "child" or die;
+    symlink "ext.target", "ext" or die;
+    $td->runtest("symlink errors",
+		 {$td->COMMAND => "abuild",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/symlink-errors.out",
+		  $td->EXIT_STATUS => 2},
+		 $td->NORMALIZE_NEWLINES);
+    $td->runtest("upgrade with symlink errors",
+		 {$td->COMMAND => "abuild --upgrade-trees",
+		  $td->FILTER => "perl $filters/filter-abuild.pl"},
+		 {$td->FILE => "$top/symlink-errors-upgrade.out",
+		  $td->EXIT_STATUS => 2},
+		 $td->NORMALIZE_NEWLINES);
+}
+else
+{
+    system("(tar cf - . | cat > /dev/null)");
+}
+
+check_work_accessed($td, "not-accessed.out");
+
+$td->report(41 + (in_windows() ? 0 : 2));

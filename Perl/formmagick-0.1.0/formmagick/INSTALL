@@ -1,0 +1,38 @@
+Installation instructions for FormMagick 0.1.0
+
+PRE-REQUISITES
+
+You need a metric buttload of modules for this to work.  Here's the
+basic list:
+
+	CGI::Persistent
+	Persistence::Object::Simple
+	XML::Parser
+	Text::Template
+	Data::Dumper
+
+The following are required by certain validation routines.  If you don't
+use the validation routine (given in parentheses) you won't need the
+module.
+
+	Time::ParseDate			(date)
+	Geography::States		(US_state)
+
+You'll also need a web server configured to run CGIs.
+
+INSTALLATION
+
+Extract the tarball into a CGI-able directory.
+
+Make sure that the session-tokens/ directory is server-writable and
+executable (either mode 777, or owned by the web server user and mode
+700)
+
+RUNNING
+
+Point your browser at
+http://yourserver/yourdirectory/formmagick/testfm.pl for a demo.
+
+VERSION INFO
+
+Document version: $Id: INSTALL,v 1.2 2000/11/11 15:23:57 skud Exp $

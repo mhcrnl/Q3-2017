@@ -1,0 +1,70 @@
+
+2000-03-05
+
+README - Disc-Cover
+
+
+1. Idea Principal
+
+Este pequeño script crea portadas para CDs de audio. Consigue informacion de
+internet (www.cddb.com) o de un fichero de entrada con formato cddb, y produce
+un fichero Latex, Dvi, Postscript, o Pdf, el cual contiene las portas frontal y
+posterior en una pagina. La portada contiene el titulo y el artista del CD. La
+portada trasera tambien contiene una lista con todas las pistas, con su numero y
+duracion. Ademas incluye la duracion total del CD. Los laterales de la portada
+posterior incluyen el titulo y el artista.
+
+Se pueden usar otros dos formatos. Una salida de texto sin formato, y una salida
+para usar con cdlabelgen (http://www.red-bean.com/~bwf/software/cdlabelgen/),
+otro generador de portadas.
+
+
+2. Lo que necesitas
+
+Mira el archivo INSTALL para todos los detalles relacionados con la instalacion.
+
+
+3. Prestaciones
+
+- Salidas en Latex, Dvi, Postscript, Pdf, entrada de cddb, texto, y el formato
+  de cdlabelgen.
+
+- Soporta cache de las entradas de cddb en un directorio compartido con otros
+  programas preparados para cddb.
+
+- Se conecta a un servidor cddb para conseguir el titulo del disco, el autor, y
+  una lista con los nombres de las pistas.
+
+- Documentacion en aleman, español, holandes, e ingles.
+
+- Posibilidad de poner una imagen en practicamente cualquier formato en la 
+  portada
+
+
+4. ¿Como funciona?
+
+El modo normal de trabajo con Disc-Cover es simple. Simplemente inserta un CD de
+audio en la lectora de cd, activa tu conexion a internet, y ejecuta Disc-Cover.
+Esto te dara una salida Postscript lista para impresion.
+
+
+
+5. Licencia
+
+El copyrigth del programa pertenece a J.I. van Hemert. El programa se encuentra
+bajo la Licencia Publica GNU. Una copia de esta deberia estar incluida con la
+distribucion en el archivo 'COPYING', encontrado en el directorio raiz de la
+distribucion.
+
+Texto original del apartado '5. Licencia':
+
+The copyright of this program is owned by J.I. van Hemert. The program is
+licensed under the GNU Public License. A copy of this file should be included
+with the distribution package in the file 'COPYING', found in the root of the
+distribution.
+
+
+J.I van Hemert
+
+Traduccion por Javier M. de Lucas Cruz <restauracion@arrakis.es>
+Acentos omitidos voluntariamente.

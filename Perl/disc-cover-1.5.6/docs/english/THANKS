@@ -1,0 +1,41 @@
+
+2000-06-11
+
+THANKS - Disc-Cover
+
+Thanks go out to the following people:
+  - Alexandre Farcy for providing the HTML output patch.
+  - Alexander Werner for the correct list of perl modules.
+  - Bart Warmderdam for creating a Debian package and reporting of multiple errors.
+  - Barton C Massey for the cddb file to fix the *very* long cd title.
+  - Christian Delbaere for the suggestion on a better layout for the covers.
+  - Christian Perrier for the colour patch.
+  - Colin Marquardt for many suggestions, mainly \emph LaTeX hint and suggestions for PDF format. Also the patch for the Latex graphicx package.
+  - Dieter Faulbaum for a better filename handling.
+  - Gianluca Granero for creating RedHat packages.
+  - Grant for the better dependency on Cdcd.
+  - Javier M. de Lucas Cruz for translating the documentation into Spanish.
+  - Jean-Michel Rouet for fixing two bugs in the part that runs Latex.
+  - Joerg Plate for sending me so many patches.
+  - Maarten Lamers for coming up with the name.
+  - Marc LeMaire for finding out the order in which to compile the required perl modules.
+  - Marcel Mol for the formats in ASCII and cdlabelgen and many, many other fixes and changes.
+  - Martin Schrode for finding a number of errors.
+  - Nick Stephen for the idea to have a different layout format.
+  - Oliver Kirchkam for helping out and providing a test account to get rid of wrong disk-id numbers.
+  - Peter Crystal for the proxy support code.
+  - Ralf Uhlig for the cddb cache link patch and noticing two equal disc-ids can exist in the cache.
+  - Richard Martin for the suggestion and perl script on using cddb files.
+  - Richard Sloeserwij for mentioning the swapping of artist/title on the sides.
+  - Roland ? for the suggestion (and partial patch) to get nicer looking track numbers.
+  - Roman Shterenzon for many things, among which bug fixes, FreeBSD issues and many suggestions.
+  - Stefan Volker for pointing out and fixing many problems and for providing the manpage.
+  - Steffen Klupsch for a better latin1 support.
+  - Stephane Raimbault for a nicer dotted line after a trackname.
+
+Lots and lots of others for turning in suggestions, bug reports, ideas and
+loads of nice comments on the program. If you're not on the list, you're still
+in my disc-cover mailfolder. Thanks!
+
+
+J.I. van Hemert

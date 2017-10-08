@@ -1,0 +1,35 @@
+Hi mp3riot/f2html.pl Users,
+
+I decided to rename f2html.pl into mp3riot. the reason is, that 
+the name f2html.pl does not clearly indicate, for what the program
+is best suited for. Because the program has grown so much (and 
+because the the name should be more attractive to get more users),
+a renaming seems to be a must to me. 
+
+During the last few days I have invested a lot of time into mp3riot.
+The internal data structure, rewritten for the the version 1.0, has 
+proven to be fruitful in the sense, that new functionality can be
+integrated easily.  
+
+As highlights in version 1.0, there were very flexible grouping mechanism 
+and the integration of variable html code with templates. 
+So you can start designing.
+
+The new version 1.1 comes up with flexible renaming of files using their
+id3tag, fixes, new output formats, etc.
+
+Because I am not really using my own program, I have two problems. The 
+first one is, that it is not very well tested. And the other is, that
+I do not know, what's relly impotant to implement. So I have to rely 
+on your help. 
+
+I am looking for someone writing a manual together with me. If you are
+interested in it, please contact me. 
+
+The only thing I can say now is: Have a lot of fun!
+
+
+Niko
+
+
+PS: If you want to test a program, then run it on a sample data set!

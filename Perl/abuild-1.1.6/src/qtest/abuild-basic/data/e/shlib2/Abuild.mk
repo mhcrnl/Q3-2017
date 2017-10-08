@@ -1,0 +1,12 @@
+TARGETS_lib := shlib1 shlib2 static
+TARGETS_bin := bin
+SRCS_lib_shlib1 := shlib1.c
+SRCS_lib_shlib2 := shlib2.c
+SRCS_lib_static := static.c
+SRCS_bin_bin := bin.c
+SHLIB_shlib1 := 0 0 0
+SHLIB_shlib2 := 0 0 0
+OFLAGS_shlib1.c :=
+WFLAGS_shlib2.c :=
+DFLAGS_static.c :=
+RULES := ccxx

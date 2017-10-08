@@ -1,0 +1,65 @@
+
+
+2000-12-20
+
+LEESMIJ - Disc-Cover
+
+
+1. Idee
+
+Dit kleine scriptje maakt hoesjes voor audio cds. Het haalt alle benodigde
+informatie van Internet en produceert een Latex, Dvi Postscript of Pdf bestand
+met daarin de voor- en achterkant op één pagina. De voorkant heeft de titel en
+de artiest van de cd. De achterkant heeft naast deze informatie alle tracks van
+de cd, voorafgaand met het nummer van de track en gevolgd door de lengte van de
+track. Ook bevat de achterkant de totale lengte van de cd. De zijkanten van de
+achterkant bevatten de artiest en titel van de cd.
+
+Drie andere formaten worden ondersteund. Een simpele tekst uitvoer, HTML en een
+formaat dat samenwerkt met cdlabelgen (http://www.red-bean.com/~bwf/software/cdlabelgen/),
+een ander hoesjes programma.
+
+
+
+2. Wat heb je nodig
+
+Zie het bestand INSTALL voor de details omtrend installatie.
+
+
+3. Mogelijkheden
+
+- gebruikt Latex voor hoge kwaliteit uitvoer.
+
+- Uitvoer in Latex, Dvi, Postscript, Pdf, Cddb entry, Tekst, HTML en een
+  formaat dat samenwerkt met cdlabelgen. 
+
+- Ondersteuning voor het 'cachen' van cddb entries in een directory dat
+  gedeelt kan worden met andere programma's die ook cddb gebruiken.
+
+- Gebruikt de cddb of cdindex server om de titel van een disc, artiest en lijst
+  van tracknamen op te vragen.  
+
+- Documentatie in het Duits, Engels, Nederlands en Spaans.
+
+- Mogelijkheid om een plaatje in bijna elk formaat op de voorhoes te zetten.
+
+- Geef verschillende kleuren aan de onderdelen, zoals de naam van de artiest
+  en de nummers van de tracks.
+
+
+
+4. Hoe werkt het?
+
+De normale manier om met Disc-Cover te werken is gemakkelijk. Plaats en audio
+cd in de cdrom speler, start een internet verbinding en start disc-cover. Er
+wordt een Postscript bestand aangemaakt klaar om te printen.
+
+
+5. Licensie
+
+Het auteursrecht van dit programma is behouden aan J.I. van Hemert. Het
+programma valt onder de 'GNU Public License'. Een kopie van deze tekst moet in
+de distributie van dit programma aanwezig zijn in het bestand 'COPYING'.
+
+
+J.I. van Hemert

@@ -1,0 +1,52 @@
+#!@bin_perl@
+
+# $Header: /cvsroot/ctk-cgi-chkurl/ctk-nettools/Time.pm.in,v 1.1.1.1 2000/11/03 15:18:41 cyrilb Exp $
+
+# ctk-nettools: a perl module to deal with templates by http
+# Copyright (C) 2000 Cyril Bouthors (cyril@bouthors.org)
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+package nettools::Time;
+
+use strict vars;
+use strict subs;
+
+BEGIN { push(@INC,
+	     '' ); }
+
+use POSIX;
+
+
+@nettools::Time::ISA = qw(Exporter);
+@nettools::Time::EXPORT = qw(ctk_date);
+
+
+
+sub ctk_date
+{
+	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+	$mon++;
+	#cyrilb 31aug99
+	$year+=1900; #we are y2k complient ... NOW
+	return "$mon-$mday-$year";
+
+
+}
+
+
+1;
+

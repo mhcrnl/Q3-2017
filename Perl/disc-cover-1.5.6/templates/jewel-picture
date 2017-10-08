@@ -1,0 +1,25 @@
+% Template for Disc-Cover
+% Author: J.I. van Hemert
+% Date: 2003/03/31
+% Description: jewel case with picture on the front cover
+\framebox{\parbox[c][118mm][t]{118mm}
+{
+\resizebox*{118mm}{118mm}{\DCpicture}
+}}\vspace{-1.5pt}
+\noindent%
+\framebox{\parbox[c][115mm][t]{3.5mm}
+{
+	\rotatebox{90}{\parbox[c][3.5mm][c]{115mm}{\DCsidetext}}
+}}\framebox{\parbox[c][115mm][t]{136mm}
+{
+	\DCformattedhead{0.97\linewidth}
+	\vspace{0.25\baselineskip}
+	\DCtracks
+}}\framebox{\parbox[c][115mm][t]{3.5mm}
+{
+	\rotatebox{-90}{\parbox[c][3.5mm][c]{115mm}{\DCsidetext}}
+}}\framebox{\parbox[c][115mm][t]{5mm}
+{
+	\centering
+	\rotatebox{-90}{\DCflaptext}
+}}
