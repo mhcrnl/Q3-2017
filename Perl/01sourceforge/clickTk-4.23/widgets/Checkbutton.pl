@@ -1,0 +1,30 @@
+$rDef = {
+  'icon' => 'Checkbutton',
+  'geom' => '1',
+  'file' => 'Checkbutton',
+  'attr' => {
+    '-background' => 'color',
+    '-width' => 'int+',
+    '-selectcolor' => 'color',
+    '-padx' => 'int+',
+    '-underline' => 'int+',
+    '-foreground' => 'color',
+    '-relief' => 'relief',
+    '-variable' => 'variable',
+    '-textvariable' => 'variable',
+    '-anchor' => 'anchor',
+    '-pady' => 'int+',
+    '-offvalue' => 'text',
+    '-command' => 'callback',
+    '-justify' => 'justify',
+    '-text' => 'text',
+    '-onvalue' => 'text'
+  },
+  'classname' => 'Checkbutton',
+  'use' => 'Tk::Checkbutton',
+  'nonVisual' => '0',
+  'defaultgeometrymanager' => 'pack',
+  'balloon' => '1',
+  'defaultgeometryoptions' => undef,
+  'defaultwidgetoptions' => undef
+};

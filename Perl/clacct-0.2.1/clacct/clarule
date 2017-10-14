@@ -1,0 +1,703 @@
+#!/usr/bin/perl
+
+#---------------------------------------
+# Command Line Accountant Rule Processor
+# Written by Joe Kauzlarich
+# Copyright 2004 
+#---------------------------------------
+
+# Rule-language grammar:
+#
+# Rule "[name]" [modifiers]:
+# [pay|receive] [amount|'variable amount']
+#    every ['day'|'week'|'month'] [on [mday|wkday]] [and on...]
+#    every [n] ['days'|'weeks'|'months'] [on [mday|wkday]]
+#    from [accountName]
+#    to [accountName]
+#    starting [date]
+#    ending [date]
+#    ending when balance of [accountName] is [amount];
+#
+# # # # # # # # # # # # # # #
+# possible elements within rule-strings (in @RuleArray)
+#
+# name, pay, receive, interval, timePeriod, 
+# from, to, startDay, startMonth, startYear, 
+# endDay, endMonth, endYear, whenAccount, 
+# whenBalance, on
+#
+#
+#
+#
+#
+
+use Getopt::Long;
+use Date::Calc qw(Delta_Days 
+		  Add_Delta_Days 
+		  Add_Delta_YMD
+		  check_date
+		  Day_of_Week);
+use Time::Local;
+
+my $version="0.2";
+my $cladir=$ENV{HOME} . "/.clacct";
+my $progname="clarule";
+my $long_progname="Command Line Accountant Rule Processor";
+my $verbose=0;
+my $rightNow=time;
+my $tty=0;
+my $rule_filename="_rules";
+my $rule_meta_filename="_rules.meta";
+my @RuleArray=(); #array of rule strings
+my %Metadata={}; #rule meta-data information
+my $debug=0;
+
+#for date parsing
+my $sec; 
+my $min;
+my $hour;
+my $mday,
+my $mon;
+my $year;
+my $wday;
+my $yday, 
+my $isdst;
+
+my @months=("", "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+
+my @longMonths=("", "January", "February", "March", "April", 
+		   "May", "June", "July", "August", "September",
+		   "October", "November", "December");
+
+my @weekdays=("", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+
+my @longWeekdays=("", "Sunday", "Monday", "Tuesday", "Wednesday",
+		 "Thursday", "Friday", "Saturday");
+
+sub parseEpochTime {
+    ($sec, $min, $hour, $mday, $mon,
+     $year, $wday, $yday, $isdst)=localtime(shift);
+    $year+=1900;
+    $mon++;
+}
+
+#converts 1..7 (Sun-Sat) to 1..7 (Mon-Sun)
+sub convertDow {
+    my $dow=shift;
+    $dow--;
+    if($dow==0) {
+	$dow=7;
+    }
+    return $dow;
+}
+
+sub getDows {
+    my @dowStrings=@_;
+    my @dows=();
+    my $index=0;
+    print "Entering getDows\n" if ($debug);
+    foreach $dow (@dowStrings) {
+	if($index=getMatchingIndex($dow, @weekdays)) {
+	    push @dows, convertDow $index;
+	}
+	elsif($index=getMatchingIndex($dow, @longWeekdays)) {
+	    push @dows, convertDow $index;
+	}
+    }
+    @dows=sort {$a <=> $b} @dows;
+    print "Leaving getDows\n" if ($debug);
+    return @dows;
+}
+
+sub getNextListItem {
+    my $item=shift;
+    foreach $temp (@_) {
+	if ($temp > $item) {
+	    return $temp;
+	}
+    }
+    return -1;
+}
+
+sub inList {
+    my $item=shift;
+    foreach $temp (@_) {
+	if($temp==$item) {
+	    return 1;
+	}
+    }
+    return 0;
+}
+
+sub getMatchingIndex {
+    my $item=shift;
+    my @list=@_;
+    foreach $i (0 .. $#list) {
+	if(lc($item) eq lc($list[$i])) {
+	    return $i;
+	}
+    }
+    return 0;
+}
+
+sub printHelp {
+    print "Usage:  $progname [options...]\n";
+}
+
+sub printVersion {
+    print "$long_progname v$version\n";
+}
+
+sub accountExists {
+    my $acctName=shift;
+    if(-e "$cladir/$acctName") {
+	return 1;
+    }
+    return 0;
+}
+
+sub getBalance {
+    my $acctName=shift;
+    my $balance=0;
+    my @info=();
+    open(ACCT, "<$cladir/$acctName")
+	|| die "Cannot open file $cladir/$acctName.";
+    while(<ACCT>) {
+	s/\\\#/\t/;
+	@info=split '\#';
+	$balance+=$info[1];
+    }
+    close ACCT;
+    return $balance;
+}
+
+sub addTransaction {
+    my $accountName=shift;
+    my $checkNumber=shift;
+    my $trAmount=shift;
+    my $trDesc=shift;
+    my $accountFilename=$cladir . "/" . $accountName;
+    $trDesc =~ s/\#/\\\#/;
+    $checkNumber="" if($checkNumber < 1);
+    $trAmount=int(100*$trAmount)/100;
+    my $rightNow=time();
+    open(ACCOUNT, ">>$accountFilename")
+    	|| die "Could not open file $cladir/$accountName";
+    print ACCOUNT "$rightNow#$trAmount#$trDesc#$checkNumber\n";
+    close ACCOUNT;    
+}
+
+
+sub parseRuleMetaFile {
+    print "Entering parseRuleMetaFile\n" if ($debug);
+    open(METAD, "<$cladir/$rule_meta_filename")
+	|| die "Could not open $cladir/$rule_meta_filename for reading.\n";
+
+    while(<METAD>) {
+	if(/^LastApplied:([\w\ \_]+):(\d+\/\d+\/\d+)$/) {
+	    $Metadata{"LA#$1"}=$2;
+	}
+    }
+
+    close METAD;
+    print "Leaving parseRuleMetaFile\n" if ($debug);
+}
+
+sub writeRuleMetaFile {
+    print "Entering writeRuleMetaFile\n" if ($debug);
+    open(METAD, ">$cladir/$rule_meta_filename")
+	|| die "Could not open $cladir/$rule_meta_filename for reading.\n";
+    foreach $key (keys %Metadata) {
+	if($key =~ /LA\#(.+)/) {
+	    my $dateValue=$Metadata{"LA#$1"};
+	    print METAD "LastApplied:$1:$dateValue\n";
+	}
+    }
+    close METAD;
+    print "Leaving writeRuleMetaFile\n" if ($debug);
+}
+
+sub parseRuleFile{
+    print "Entering parseRuleFile\n" if($debug);
+    open(RULES, "<$cladir/$rule_filename")
+	|| die "Could not open $cladir/$rule_filename for reading.\n";
+    my @errors=();
+    my $content="";
+    while(<RULES>) {
+	chomp;
+	$content .= " " . lc;
+    }
+    close RULES;
+    my @rules=split "\;", $content;
+    foreach $rule (@rules) {
+	if($rule =~ /^\s*rule \"[\w\ \_]+\"\s*\:\s*(pay|receive)/) {
+	    push @errors, parsePayReceive($rule);
+	}
+    }
+    print "Leaving parseRuleFiles\n" if($debug);
+    return @errors;
+}
+
+sub parsePayReceive {
+    print "Entering parsePayReceive\n" if $debug;
+    my $rule = shift;
+    print "RULE: " . $rule . "\n" if $debug;
+    my $temp="";
+    my @errors=();
+    if($rule =~ /^\s*rule \"([\w\ \_]+)\"\:/) {
+	$rule =~ s/$@/ /;
+	$temp .="name=\"$1\" ";
+    }
+    if($rule =~ /\s*(pay|receive)\s+[\$]?(\d+|\d+\.\d\d|\.\d\d)(\s+|$)/) {
+	$rule =~ s/$@/ /;
+	$temp .= "$1=$2 ";
+    } else {
+	push @errors, "Rule $temp{name}: Invalid pay/receive clause.";
+    }
+    if($rule =~ /\s+every\s+(\d+)\s+(day|week|month|year)s(\s+|$)/) {
+	$rule =~ s/$@/ /;
+	$temp .= "interval=$1 ";
+	$temp .= "timePeriod=$2 ";
+    }
+    if($rule =~ /\s+every\s+(day|week|month)(\s+|$)/) {
+	$rule =~ s/$@/ /;
+	$temp .= "interval=1 ";
+	$temp .= "timePeriod=$1 ";
+    }
+    while($rule =~ /(\s+and)?\s+on\s+(\w+|\d+)(\s+|$)/) {
+	$rule =~ s/$@/ /;
+	$temp .="on=\"$2\" ";
+    }
+    if($rule =~ /\s+from\s+(\w+)(\s+|$)/) {
+	$rule =~ s/$@/ /;
+	$temp .="from=$1 ";
+    }
+    if($rule =~ /\s+to\s+(\w+)(\s+|$)/) {
+	$rule =~ s/$@/ /;
+	$temp .="to=$1 ";
+    }
+    if($rule =~ /\s+starting\s+(\d+)\/(\d+)\/(\d+)(\s+|$)/) {
+	$rule =~ s/$@/ /;
+	$temp .="startDay=$1 ";
+	$temp .="startMonth=$2 ";
+	$temp .="startYear=$3 ";
+    }
+    if($rule =~ /\s+ending\s+(\d+)\/(\d+)\/(\d+)(\s+|$)/) {
+	$rule =~ s/$@/ /;
+	$temp .= "endDay=$1 ";
+	$temp .="endMonth=$2 ";
+	$temp .="endYear=$3 ";
+    }
+    if($rule =~ m/
+       \s+ ending \s+ when \s+ balance \s+
+       of \s+ (\w+) \s+ is \s+ [\$]?
+       ([+-]?\d+ | [+-]?\d+[\.\d\d]? | [+-]? \.\d\d)
+       (\s+ | $) 
+	/x) {
+       $rule =~ s/$@/ /;
+       $temp .="whenAccount=$1 ";
+       $temp .="whenBalance=$2 ";
+   }
+   push @RuleArray, $temp;
+   
+   print "$temp\n" if($debug);
+
+   print "Leaving parsePayReceive\n" if $debug;
+   #strip whitespace from remaining tokens, if any
+   $rule =~ s/\s//;
+   if($rule =~ /\w/) {
+       push @errors, "Rule $temp{name} contains unparsed tokens: $rule";
+   }   
+
+   return @errors;
+}
+
+sub validateRules {
+    my @errors=();
+    foreach $i (0 .. $#RuleArray) {
+	print "-------------$i---------------\n" if ($debug);
+	push @errors, validateRule($RuleArray[$i]);
+    }
+    return @errors;
+}
+
+sub validateRule {
+    my $rule=shift;
+    my %tempHash={};
+    my @errors=();
+    while($rule =~ /\w/) {
+	$rule =~ /([\w\d]+)=([\w\d\.\_]+|\"[\d\w\s\.\_]+\") /;
+	$rule =~ s/$@/ /;
+	my $tempKey=$1;
+	my $tempValue=$2;
+	if($tempValue =~ /\"(.+?)\"/) {
+	    $tempValue=$1;
+	}
+	if(exists $tempHash{$tempKey}) {
+	    $tempHash{$tempKey} .= ",$tempValue";
+	} 
+	else {
+	    $tempHash{$tempKey}=$tempValue;
+	}
+    }
+    if($debug) {
+	foreach $key (keys %tempHash) {
+	    print "$key=$tempHash{$key}\n";
+	}
+    }
+    print "Unmatched tokens: $rule\n" if ($debug);
+
+    unless(defined $tempHash{name}) {
+	push @errors, "Each rule must have a name";
+	return @errors;
+    }
+    if(defined $tempHash{whenAccount}
+       && !defined $tempHash{interval}) {
+	push @errors, "'Every' clause required in rule $tempHash{name}";
+    }
+    unless(defined $tempHash{startDay}) {
+	push @errors, "'Starting' clause required in all pay/receive rules "
+	    . "in rule $tempHash{name}";
+    }
+
+    if(defined $tempHash{from} 
+       && !accountExists($tempHash{from})) {
+	push @errors, "Account $tempHash{from} does not exist" . 
+	    " in rule $tempHash{name}";
+    }
+
+    if(defined $tempHash{to}
+       && !accountExists($tempHash{to})) {
+	push @errors, "Account $tempHash{to} does not" .  
+	    " exist in rule $tempHash{name}";
+    }
+
+    if(defined $tempHash{endDay} 
+       && defined $tempHash{whenAccount}) {
+	push @errors, "Rule cannot contain both 'when' clause " .
+	    "and 'ending' clause " . 
+	    " in rule $tempHash{name}";
+    }
+    if(defined $tempHash{on}) {
+	my $tokenType="";
+	my @onValues=split ',', $tempHash{on};
+	foreach $onValue (@onValues) {
+	    if($onValue =~ /(\d+)/) {
+		if($1 < 1 && $1 > 31) {
+		    push @errors, "Day of month value within 'on' clause "
+			. "must be between (or equal to) 1 and 31 "
+			. "in rule $tempHash{name}";
+		}
+		else {
+		    $tokenType="monthday";
+		}
+	    }
+	    elsif($onValue =~ /(\w+)/) {
+		my $contains=0;
+		my $token="";
+		foreach $token (@weekdays, @longWeekdays) {
+		    if(lc($token) eq $onValue) {
+			$contains=1;
+			$tokenType="weekday";
+		    }
+		}
+		unless($contains) {
+		    push @errors, "'On' clause contains invalid token"
+			. " $onValue in rule $tempHash{name}";
+		}
+		
+	    }
+	    
+	    #$tokenType values are monthday or weekday
+	    if(!defined $tempHash{interval}
+	       || !defined $tempHash{timePeriod}) {
+		push @errors, "'On' clause requires 'every' clause "
+		    . "in rule $tempHash{name}";
+	    }
+	    else {
+		if($tempHash{timePeriod} eq "week"
+		   && $tokenType ne "weekday") {
+		    push @errors, "'On' value $onValue not "
+			. "compatible with 'every' clause "
+			. "time period '$tempHash{timePeriod}' "
+			. "in rule $tempHash{name}";
+		}
+		if($tempHash{timePeriod} eq "month"
+		   && $tokenType ne "monthday") {
+		    push @errors, "'On' value $onValue not "
+			. "compatible with 'every' clause "
+			. "time period '$tempHash{timePeriod}' "
+			. "in rule $tempHash{name}";	    
+		}
+	        if($tempHash{timePeriod} eq "day") {
+		    push @errors, "There cannot be an 'on' clause "
+			. "with a 'day' value in the 'every' clause "
+			. "in rule $tempHash{name}";
+		}
+	    }
+	}
+    }
+    return @errors;
+}
+
+sub applyRules {
+    for $rule (@RuleArray) {
+	print "$rule\n" if ($debug);
+	applyRule($rule);
+    }
+}
+
+# name, pay, receive, interval, timePeriod, 
+# from, to, startDay, startMonth, startYear, 
+# endDay, endMonth, endYear, whenAccount, 
+# whenBalance, on
+
+sub applyRule {
+    my $rule = shift;
+    my %tempHash={};
+    parseEpochTime(localtime);
+    #create hash
+    while($rule =~ /\w/) {
+	$rule =~ /([\w\d]+)=([\w\d\.\_]+|\"[\d\w\s\.\_]+\") /;
+	$rule =~ s/$@/ /;
+	my $tempKey=$1;
+	my $tempValue=$2;
+	if($tempValue =~ /\"(.+?)\"/) {
+	    $tempValue=$1;
+	}
+	if(exists $tempHash{$tempKey}) {
+	    $tempHash{$tempKey} .= ",$tempValue";
+	} 
+	else {
+	    $tempHash{$tempKey}=$tempValue;
+	}
+    }
+    #ensure startDate is before today
+    if(exists $tempHash{startDay}) {
+	if(0 > Delta_Days($year, $mon, $mday,
+			  $tempHash{startYear},
+			  $tempHash{startMonth},
+			  $tempHash{startDay})) {
+	    return; #do not evaluate rule
+	}
+    }
+    #ensure endDate is after today
+    if(exists $tempHash{endDay}) {
+	if(0 < Delta_Days($year, $mon, $mday,
+			  $tempHash{endYear},
+			  $tempHash{endMonth},
+			  $tempHash{endDay})) {
+	    if($verbose) {
+		print "Rule $tempHash{name} has expired. " . 
+		    "Ending date set to " . 
+		    "$tempHash{endDay} $longMonths[$tempHash{endMonth}] " . 
+		    "$tempHash{endYear}\n";
+	    }
+	    return;
+	}
+    }
+
+    #ensure minBalance > actual balance
+    if(exists $tempHash{whenBalance}) {
+	if(getBalance($tempHash{whenAccount}) <=
+	   $tempHash{whenBalance}) {
+	    if($verbose) {
+		print "Rule $tempHash{name} not applied due " .
+		    "to restriction that account " .
+		    "$tempHash{whenAccount} have a balance " . 
+		    "greater than $tempHash{whenBalance}.\n";
+	    }
+	    return;
+	}
+    }
+
+    #apply rule until up-to-date
+    my $lastDay=0;
+    my $lastMon=0; 
+    my $lastYear=0;
+    my $useStartingDate=0;
+    my $cancelUseStartingDate=0;
+    if(exists $Metadata{"LA#$tempHash{name}"}) {
+	print "LA:$Metadata{'LA\#tempHash{name}'}\n" if($debug);
+	($lastDay, $lastMon, $lastYear)=
+	    split "\/" , $Metadata{"LA\#$tempHash{name}"};
+    }
+    else {
+	($lastDay, $lastMon, $lastYear)=
+	    ($tempHash{startDay}, 
+	     $tempHash{startMonth}, 
+	     $tempHash{startYear});
+	$useStartingDate=1;
+    }
+    my $keepIterating=1;
+    parseEpochTime $rightNow;
+    while($keepIterating) {
+	#calculate next rule-application date
+	if($tempHash{timePeriod} eq 'day') {
+	    unless($useStartingDate) {
+		($lastYear, $lastMon, $lastDay)=
+		    Add_Delta_Days($lastYear, $lastMon, 
+				   $lastDay, $tempHash{interval});
+	    }
+	    if($useStartingDate) {
+		$cancelUseStartingDate=1;
+	    }
+	}
+	if($tempHash{timePeriod} eq 'week') {
+	    my @onDays=();
+	    @onDays= split /,/, $tempHash{on};
+	    @onDays=getDows @onDays;
+	    my $dow=Day_of_Week($lastYear, $lastMon, $lastDay);
+	    if($useStartingDate) {
+		#check if starting date is a day of the week
+		# mentioned in one of the 'on' clauses
+		print "Using starting date...\n" if ($debug);
+		if(! (inList $dow, @onDays)) {
+		    $useStartingDate=0;
+		}
+		else {
+		    $cancelUseStartingDate=1;
+		}		
+	    }
+	    unless($useStartingDate) {
+		#find the next starting date with a d.o.w 
+		#  matching a member of the 'on' clause array
+		print "Not using starting date...\n" if ($debug);
+		my $newDow=0;		
+	      LABEL: $newDow=getNextListItem $dow, @onDays;
+		if($newDow==-1) {		  
+		    ($lastYear, $lastMon, $lastDay)=
+			Add_Delta_Days($lastYear, $lastMon, $lastDay,
+				       7*$tempHash{interval}-$dow);
+		    $dow=0;
+		    goto LABEL;
+		}
+		($lastYear, $lastMon, $lastDay)=
+		    Add_Delta_Days($lastYear, $lastMon, $lastDay,
+				   $newDow-$dow);
+	    }
+	}
+	if($tempHash{timePeriod} eq 'month') {
+	    my @onDays=sort {$a <=> $b} split ',', $tempHash{on};
+	    if($useStartingDate) {
+		#check if the starting date is a
+		#   valid application date
+		if(! (inList $lastDay, @onDays)) {
+		    $useStartingDate=0;
+		}
+		else {
+		    $cancelUseStartingDate=1;
+		}
+	    }
+	    unless($useStartingDate) {
+	      LABEL: $lastDay=getNextListItem $lastDay, @onDays;
+		if($lastDay==-1) { 
+		    $lastDay=1; 
+		    ($lastYear, $lastMon, $lastDay)=
+			Add_Delta_YMD($lastYear, $lastMon, $lastDay,
+				      0, $tempHash{interval}, 0);
+		    $lastDay=0;
+		    goto LABEL;
+		}
+		if(!check_date($lastYear, $lastMon, $lastDay))
+		{ goto LABEL; }
+	    }
+	}
+	#see if the next date is after today
+	if(0 > Delta_Days($lastYear, $lastMon, $lastDay,
+			  $year, $mon, $mday)) {
+	    $keepIterating=0;
+	}
+	#apply the rule
+	my $trAmount=0;
+	if($keepIterating) {
+	    if(exists $tempHash{pay}) {
+		$trAmount=$tempHash{pay};
+	    }
+	    if(exists $tempHash{receive}) {
+		$trAmount=$tempHash{receive};
+	    }
+	    if(exists $tempHash{from}) {
+		print "Applied rule \'$tempHash{name}\' " . 
+		    "to $tempHash{from}\n";
+		addTransaction($tempHash{from}, 0,
+			       $trAmount * -1,
+			       "Rule \"$tempHash{name}\" " . 
+			       " for $lastDay $longMonths[$lastMon] " .
+			       "$lastYear");
+			       
+	    }
+	    if(exists $tempHash{to}) {
+		print "Applied rule \'$tempHash{name}\' " . 
+		    "to $tempHash{to}\n";
+		addTransaction($tempHash{to}, 0,
+			       $trAmount,
+			       "Rule \"$tempHash{name}\" " . 
+			       " for $lastDay $longMonths[$lastMon] " .
+			       "$lastYear");
+	    }
+	    #update the metadata
+	    $Metadata{"LA\#$tempHash{name}"}=
+		"$lastDay/$lastMon/$lastYear";
+	    if($cancelUseStartingDate) {
+		#already used starting date, so move on...
+		$useStartingDate=0;
+		$cancelUseStartingDate=0;
+	    }
+	}
+    } 
+    
+}
+
+#------------------------------------#
+# Verify file & directory existences #
+#------------------------------------#
+       
+#make sure rc directory exists
+unless(-e $cladir && -d $cladir) {
+    die "$cladir not found.";
+}
+
+#make sure rule file exists
+unless(-e "$cladir/$rule_filename") {
+    die "$cladir/$rule_filename does not exist.";
+}
+
+#make sure rule metadata file exists, if not, create it
+unless(-e "$cladir/$rule_meta_filename") {
+    open(METAD, ">$cladir/$rule_meta_filename")
+	|| die "Cannot create $cladir/$rule_meta_filename";
+    close METAD;
+}
+
+#------------------------#
+# Begin actual execution #
+#------------------------#
+parseEpochTime($rightNow);
+parseRuleMetaFile();
+
+my @errors=parseRuleFile();
+for $error (@errors) {
+    print "$error\n";
+}
+
+if(@errors > 0) {
+    print @errors . " error(s) found in file $cladir/$rule_filename\n";
+    exit;
+}
+
+@errors=();
+
+@errors=validateRules();
+for $error (@errors) {
+    print "$error\n";
+}
+
+if(@errors > 0) {
+    print @errors . " error(s) found in file $cladir/$rule_filename\n";
+    exit;
+}
+
+applyRules();
+writeRuleMetaFile();

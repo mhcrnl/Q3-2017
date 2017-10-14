@@ -1,0 +1,318 @@
+<HTML>
+<HEAD>
+<TITLE>For programmers wishing to create plugins for Guido, the Perl/Tk &quot;GUI</TITLE>
+</HEAD>
+<BODY BGCOLOR="#fffff8" TEXT="#000000">
+<UL>
+<LI><A HREF="#Guido%20Plugin%20Author's%20Guide">Guido Plugin Author's Guide
+
+</A></LI>
+<UL>
+<LI><A HREF="#Guido's%20plugin%20architecture%20provides%20flexibility">Guido's plugin architecture provides flexibility
+
+</A></LI>
+<LI><A HREF="#Every%20Guido%20plugin%20is%20an%20object-oriented%20Perl%20module%20and%20probably%20a%20composite%20widget%2c%20too">Every Guido plugin is an object-oriented Perl module and probably a composite widget, too
+
+</A></LI>
+<LI><A HREF="#Every%20Guido%20plugin%20inherits%20from%20Guido%3a%3aPlugin">Every Guido plugin inherits from Guido::Plugin
+
+</A></LI>
+<LI><A HREF="#init_plugin()%20is%20called%20when%20the%20plugin%20is%20created">init_plugin() is called when the plugin is created
+
+</A></LI>
+<LI><A HREF="#place_menus()%20is%20called%20when%20the%20plugin%20can%20add%20menus%20to%20Guido">place_menus() is called when the plugin can add menus to Guido
+
+</A></LI>
+<LI><A HREF="#refresh()%20is%20called%20when%20application%20or%20project%20state%20changes">refresh() is called when application or project state changes
+
+</A></LI>
+<LI><A HREF="#The%20%22plugin_data%22%20hashes%20allow%20you%20to%20store%20global%20and%20project-specific%20plugin%20information">The &quot;plugin_data&quot; hashes allow you to store global and project-specific plugin information
+
+</A></LI>
+<LI><A HREF="#References">References
+
+</A></LI>
+</UL>
+</UL>
+<HR>
+<H1><A NAME="Guido%20Plugin%20Author's%20Guide">Guido Plugin Author's Guide
+
+</A></H1>
+
+<P>For programmers wishing to create plugins for Guido, the Perl/Tk &quot;GUI-Builder-GUI,&quot; this document is provided to outline what must be done, what can be done, and how to tell the difference between the two.
+
+</P><H2><A NAME="Guido's%20plugin%20architecture%20provides%20flexibility">Guido's plugin architecture provides flexibility
+
+</A></H2>
+
+<P>The Guido plugin architecture gives the end user (the Perl/Tk developer, that is), a lot of control over how the application functions.
+
+</P><DL><DT><A NAME="*%20Every%20built-in%20Guido%20IDE%20component%20--%20except%20for%20the%20menu%20and%20toolbar%20--%20is%20already%20a%20plugin">* Every built-in Guido IDE component -- except for the menu and toolbar -- is already a plugin
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Each%20of%20the%20built-ins%20can%20be%20overridden%20by%20a%20custom%20component%20that%20either%20inherits%20from%20the%20original%20or%20creates%20a%20whole%20new%20API%20of%20its%20own.">* Each of the built-ins can be overridden by a custom component that either inherits from the original or creates a whole new API of its own.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20The%20Guido%20application%20itself%20is%20represented%20by%20an%20object%20model%20that%20is%20exposed%20to%20every%20registered%20plugin%20at%20runtime%2c%20giving%20the%20plugins%20complete%20control%20over%20the%20application's%20functionality.">* The Guido application itself is represented by an object model that is exposed to every registered plugin at runtime, giving the plugins complete control over the application's functionality.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20The%20Guido%20project%20data%20is%20also%20represented%20by%20a%20separate%20object%20model%2c%20making%20it%20easy%20to%20parse%20and%20persist.%20%20The%20application%20object%20model%20provides%20references%20to%20each%20loaded%20project.">* The Guido project data is also represented by a separate object model, making it easy to parse and persist.  The application object model provides references to each loaded project.
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+<H2><A NAME="Every%20Guido%20plugin%20is%20an%20object-oriented%20Perl%20module%20and%20probably%20a%20composite%20widget%2c%20too">Every Guido plugin is an object-oriented Perl module and probably a composite widget, too
+
+</A></H2>
+
+<P>Every plugin used by Guido must be a Perl OO module.  In order to present a user interface, they must also be a composite Perl/Tk widget.  This stands in contrast to Guido macros, which can be non-OO Perl modules or simple snippets of Perl code, but which are not required to persist data beyond the current method call.  Plugins are supposed to integrate with the Guido application and maintain a persistent presence and can optionally display information graphically to the user in the IDE.
+
+</P>
+<P>Usually, composite widgets inherit from Tk::Frame or Tk::Derived, and Guido plugins are no exception.  The large majority of them will be basic composite widgets, although it is not a restriction placed on them by Guido.  Here is an example of a simple Guido plugin:
+
+</P>
+<PRE>	package Guido::Plugin::MyPlugin;</PRE>
+
+<PRE>	require Guido::Plugin;
+	require Tk::Frame;</PRE>
+
+<PRE>	use base qw(Guido::Plugin Tk::Frame);</PRE>
+
+<PRE>	Construct Tk::Widget 'MyPlugin';</PRE>
+
+<PRE>	sub Populate {
+		my ($cw, $args) = @_;
+		$cw-&gt;SUPER::Populate($args);</PRE>
+
+<PRE>		$cw-&gt;Label(-text=&gt;&quot;Yo, I'm a plugin!&quot;)-&gt;pack();
+	}
+	
+	sub init_plugin {
+	}
+	
+	sub place_menus {
+	}
+	
+	sub refresh {
+	}</PRE>
+
+<P>This plugin will do nothing more than display &quot;Yo, I'm a plugin!&quot; in the IDE, but it's still a valid plugin.
+
+</P>
+<P>Note that the only real difference between this and a regular composite widget is the addition of Guido::Plugin to the inheritance heirarchy and the overriding of Guido::Plugin's 3 methods -- <CODE>init_plugin()</CODE>, <CODE>place_menus()</CODE>, and <CODE>refresh()</CODE>
+
+</P><H2><A NAME="Every%20Guido%20plugin%20inherits%20from%20Guido%3a%3aPlugin">Every Guido plugin inherits from Guido::Plugin
+
+</A></H2>
+
+<P>(If you don't understand Perl's object-oriented inheritance system, please refer to the <I>perltoot</I> man page (the section on Inheritance).
+
+</P>
+<P>The Guido::Plugin module defines the interface that must be supported by each Guido plugin.  To support the interface, each plugin must inherit from Guido::Plugin and override the required methods.
+
+</P>
+<P>In order to ensure that all plugins support the interface, the Guido application checks each plugin at runtime to verify that it inherits from the Guido::Plugin module.  The Guido::Plugin module helps enforce the interface by raising errors if a required method has not been overridden.  There are currently 3 methods in Guido::Plugin that must be overridden by the inheriting plugin:
+
+</P><UL>
+<LI>
+<P><CODE>init_plugin($self, $app)</CODE>
+
+</P>
+<P>Parameters: <CODE>$self</CODE> (ref to the plugin itself), <CODE>$app</CODE> (ref to the Guido::Application object)
+
+</P>
+<P>This method is called when the plugin is first added to the application.  Nearly all plugins will have work to do at this point.
+
+</P></LI>
+<LI>
+<P><CODE>place_menus($self, $app)</CODE>
+
+</P>
+<P>Parameters: <CODE>$self</CODE> (ref to the plugin), <CODE>$app</CODE> (ref to the Guido::Application object)
+
+</P>
+<P>This method is called when the application is ready for the plugin to add menus to the main application menu structure.  Adding menus is done through calls to the Application object's add_menu() method.  The plugin has the option of doing nothing at all in this method.
+
+</P></LI>
+<LI>
+<P><CODE>refresh($self)</CODE>
+
+</P>
+<P>Parameters: <CODE>$self</CODE> (ref to the plugin)
+
+</P>
+<P>This method is called when something has changed in the Application's data structures that might affect the plugin's display or operation.  It gives the plugin an opportunity to update itself, or perform some event-oriented function.
+
+</P></LI>
+</UL>
+
+<P>Although each plugin must override the methods implemented in Guido::Plugin, it is not necessary that the plugin actually do anything in any of the methods.  For example, many plugins will not need to add menus to the application's menu structure, and so will not place any code in their place_menus() method.
+
+</P>
+<P>In no case should you delegate to the SUPER class, since Guido::Plugin is your SUPER class, and it simply raises a fatal error if its corresponding method is called.  If you want to be a do-nothing, just leave the method empty.
+
+
+</P><H2><A NAME="init_plugin()%20is%20called%20when%20the%20plugin%20is%20created">init_plugin() is called when the plugin is created
+
+</A></H2>
+
+<P>When Guido first starts, it will check its plugin configuration file to find the list of plugins it must load.  As Guido instantiates each plugin, it either:
+
+</P><DL><DT><A NAME="*%20uses%20its%20Tk%20MainWindow%20to%20instantiate%20the%20plugin%20(for%20Widget-based%20plugins)">* uses its Tk MainWindow to instantiate the plugin (for Widget-based plugins)
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20calls%20the%20plugin's%20new()%20method%20(for%20non-Widget-based%20plugins)">* calls the plugin's <CODE>new()</CODE> method (for non-Widget-based plugins)
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+
+<P>The defining factor that determines which of the above happens is whether the plugin inherits from the Tk::Widget class.  If not, the <CODE>new()</CODE> method is called.  Note that at this point, the plugin has no reference to the Guido::Application object, so this phase should concentrate on simple object instantiation, not interaction with Guido.  Non-Widget-based plugins must be able to be instantiated by calling <CODE>new()</CODE> with no parameters.
+
+</P>
+<P>Once the plugin is instantiated, Guido calls the <CODE>init_plugin()</CODE> method so the plugin can initialize itself.  It passes a reference to the Guido::Application object, and it is recommended that the plugin retain this reference in a lexical variable (such as, <CODE>my $app</CODE>) for later use.
+
+</P><H2><A NAME="place_menus()%20is%20called%20when%20the%20plugin%20can%20add%20menus%20to%20Guido">place_menus() is called when the plugin can add menus to Guido
+
+</A></H2>
+
+<P>Once instantiation and initialization are done, Guido calls <CODE>place_menus()</CODE> for each plugin to allow menu placement, if desired.  The Guido::Application object's <CODE>place_menu()</CODE> method should be used for this purpose.
+
+</P>
+<P>The <CODE>place_menu()</CODE> method accepts three parameters:
+
+</P><DL><DT><A NAME="*%20The%20label%20of%20the%20menu%20to%20which%20the%20plugin's%20menu%20should%20be%20added.%20%20This%20must%20match%20the%20label%20that%20appears%20on%20the%20menu.%20%20For%20example%2c%20the%20plugin%20can%20pass%20in%20%22File%22%20to%20have%20its%20menu%20attached%20to%20the%20%22File%22%20menu.">* The label of the menu to which the plugin's menu should be added.  This must match the label that appears on the menu.  For example, the plugin can pass in &quot;File&quot; to have its menu attached to the &quot;File&quot; menu.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20The%20label%20for%20the%20menu%20itself.%20%20This%20will%20be%20the%20label%20that%20appears%20in%20the%20parent%20menu.">* The label for the menu itself.  This will be the label that appears in the parent menu.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20A%20reference%20to%20a%20pre-created%20Tk%20menu.">* A reference to a pre-created Tk menu.
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+
+<P>The method returns 1 on success, 0 on failure.
+
+</P>
+<P>Here is a sample that adds a functional <CODE>place_menus()</CODE> to our MyPlugin class:
+
+</P>
+<PRE>	sub place_menus {
+		my($self, $app) = @_;
+		
+		#Create our menu
+		my $menu_struct = [
+			[Button =&gt; '~Do something cool', 
+				-command=&gt;\&amp;cool_thing,
+			],
+		];
+		$menu = $app-&gt;{mw}-&gt;Menu(-menuitems=&gt;$menu_struct);
+		
+		#Place the menu
+		$app-&gt;place_menu($self, &quot;MyPlugin&quot;, $menu) or $app-&gt;ERROR(text=&gt;&quot;I couldn't place my menu! Waaah!&quot;);
+	}</PRE>
+<H2><A NAME="refresh()%20is%20called%20when%20application%20or%20project%20state%20changes">refresh() is called when application or project state changes
+
+</A></H2>
+
+<P>When the project being managed by Guido is modified in some way -- perhaps a new source file is added or removed -- the application will call the <CODE>refresh()</CODE> method on each plugin.  Your plugin can simply choose to do nothing here, but your display might get out of sync with the state of the project if you do.  It is sometimes best to do the same things you do when your plugin is initialized, only be sure to clean out any pre-existing data or widgets before you do.  For example, if your plugin maintains a display of files in the project, be sure to remove the existing list elements before adding them all again.  Or you might just scan the project file collections to see which files have been added and then append the new ones to the existing list.
+
+</P><H2><A NAME="The%20%22plugin_data%22%20hashes%20allow%20you%20to%20store%20global%20and%20project-specific%20plugin%20information">The &quot;plugin_data&quot; hashes allow you to store global and project-specific plugin information
+
+</A></H2>
+
+<P>Plugins should not attempt to create their own configuration registries unless it is absolutely necessary.  The Guido application provides two different locations to store plugin-related data: one in the Application object, and one in the Project object.  
+
+</P>
+<P>In both cases, the method of accessing and updating the data is the same.  Simply treat the data store as a hash (because it is one!).  For example, retrieving data from the Application object's plugin_data store, you would use the following code if your plugin was named &quot;MyPlugin.pm&quot; and your reference to the Application object was called $app:
+
+</P>
+<PRE>	my $plugin_data = $app-&gt;{plugin_data}-&gt;{MyPlugin};</PRE>
+
+<P>Using this hash reference stored in <CODE>$plugin_data</CODE>, you can access data you previously stored there.  Perhaps you need to know what image to display in a particular part of your plugin:
+
+</P>
+<PRE>	my $img_path = $plugin_data-&gt;{HeaderImagePath};</PRE>
+
+<P>Any textual value can be stored in the hash.  Whether you store a particular bit of information in the Application object or in the Project object depends on when and how you want to get it back.
+
+</P>
+<P>For those interested in the gory details, Guido uses XML::Simple to store and retrieve the plugin_data hash.  You can check out the documentation on that module (or the source) to see what goes on behind the curtain.
+
+</P><DL><DT><A NAME="*%20The%20Application%20object's%20plugin_data%20store%20contains%20information%20that%20is%20constant%20no%20matter%20what%20project%20you%20are%20working%20on">* The Application object's plugin_data store contains information that is constant no matter what project you are working on
+
+</A></DT>
+<DD>
+
+<P>The data in this hash is written to disk only when the user selects &quot;Tools-&gt;Save Configuration&quot; from the main menu.  It is not updated when projects are loaded or modified, and is only re-read when Guido is restarted.
+
+</P>
+<P>Examples of things you might store here are initialization parameters or other defaults for your plugin that you allow the user to configure.
+
+</P></DD>
+<DT><A NAME="*%20The%20Project%20object's%20plugin_data%20store%20contains%20information%20that%20is%20specific%20to%20each%20project">* The Project object's plugin_data store contains information that is specific to each project
+
+</A></DT>
+<DD>
+
+<P>The data in this hash is written to disk whenever the project is saved.  Because each project has its own plugin_data hash, you must access it using a reference to the Project object which contains the data store you want.  If you only have a reference to the Application object, you'll have to use the <CODE>projects</CODE> collection to get to the hash:
+
+</P>
+<PRE>	my $plugin_data = $app-&gt;projects(&quot;Big Tk App&quot;)-&gt;{plugin_data};</PRE>
+
+<P>In the example above, the project's name is &quot;Big Tk App&quot;, and <CODE>$plugin_data</CODE> now has a reference to the plugin_data hash for that project.  The plugin can not only read, but write to the hash and when the project is saved, the updated information will be saved, as well.
+
+</P>
+<P>WARNING!:  Do not save object references in the plugin_data hash!  Only textual data should be stored there.  If you save an object reference to the hash, the system will not complain, but the next time the plugin_data store is loaded, you will not have the original object reference.  You will only have a string containing the (now useless) hexadecimal memory address of the object you attempted to store.  If you really must store an object in the hash, you'll have to investigate the <I>Storable</I> or <I>Data::Dumper</I> modules.
+
+</P></DD>
+</DL>
+<H2><A NAME="References">References
+
+</A></H2>
+<DL><DT><A NAME="*%20The%20Guido%3a%3aPlugin%20pod">* The <I>Guido::Plugin</I> pod
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20The%20Guido%3a%3aApplication%20pod">* The <I>Guido::Application</I> pod
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20The%20Guido%3a%3aProject%20pod">* The <I>Guido::Project</I> pod
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20The%20perltoot%20pod">* The <I>perltoot</I> pod
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20The%20Tk%20composite%20pod">* The Tk <I>composite</I> pod
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+
+</BODY>
+</HTML>

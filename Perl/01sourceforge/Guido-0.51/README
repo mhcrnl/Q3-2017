@@ -1,0 +1,13 @@
+This is the README file for Guido - A Perl/Tk GUI Builder
+
+For information related to this particular release of Guido and changes in this release, see the RELEASE file.  For previous release notes, see HISTORY.
+
+For the change history, see CHANGELOG.
+
+To install Guido, read the INSTALLATION file.  This will tell you how to install the application.
+
+For end user help, a user guide is available in the ./help subdirectory.
+
+If you want to know more about how Guido works internally, you are welcome to read the DESIGN document, the other documentation in the ./doc subdirectory, run perldoc on the Guido modules, or simply read the source code.
+
+For more information or to report bugs in Guido, please visit our project site at http://www.sourceforge.net/projects/guido/

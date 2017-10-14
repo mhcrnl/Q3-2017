@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>clickTk - version 3.09 Changes</title>
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="marco">
+  <meta name="Keywords" content="clickTk - version 3.09 Changes">
+  <meta name="Description" content="clickTk - version 3.09 Changes">
+</head>
+<body>
+<h1>clickTk - version 3.09 Changes</h1>
+<h2>Bugs fixed</h2>
+<pre>	- Name of advertised widgets now always quoted.<br><br>	- file name prefix of persistent session passed to constructor.<br><br>	- use correct initial directory for image selection.<br><br>	- display images on preview.<br><br>	- display help text for options while editing widget options<br><br>	- popup buttons for -anchor, -expand and -fill show correctly<br>	  the current value.<br><br>	- option 'isolate geometry messages' now saved into project.<br><br>	- subroutines init and test\w* are not generated if option TestCode is OFF.<br><br>	- extracted widget's variables into list of global or local variables<br><br>	- assitent no longer active on POD section's editor.<br><br>	- check of the onDeleteWindow callback now works fine.<br><br>	- default project name get correctly built at session startup even<br>	when the application name is empty.<br><br></pre>
+<h2>Enhancements</h2>
+<pre><br>- New code property 'Toplevel':<br><br>	option 'Toplevel' controls the generation of the toplevel widget for the dialog:<br>	if this property is checked then the (non modal) dialog is embedded into a new Toplevel widget. <br>	Otherwise the dialog's widget are children of the parent widget passed to the generation code.<br>	This may be useful for subroutines just creating a subset of widgets <br>	which are placed into an existing widget, usually a Frame, and which builds a little logical unit like a group of entry fields or checkbuttons or even a page of a notebook.<br><br>- Name of the modal widget class, usually 'DialogBox', is now specified by option opt_dialogClassName.<br>	<br>- Test code sets up arguments list into subroutine call.<br><br>- Test code accepts returned value of modal dialog and print it to STDOUT.<br><br>- Reserved subroutines called test\w* for test code main::testCode specified in properties/callback.<br><br>- Support geometry manager 'form'.<br><br>- New function 'insert frame' : this new function allows to insert <br>	  a single or two frames which split the parent widget <br>	  vertically or horizzontally into two areas.<br>	  Parent may be toplevel or frame.<br>	  This allows to enter first the complex dialog structure very fast and <br>	  then fill up the individual frames with widgets.<br><br>- Compare widgets structures.<br><br>- Support non-visual widgets (i.e. Tk::After).<br><br>- Separate pictures into three different folders :<br>		- images   general, clickTk dialogs,<br>		- toolbar  icons for the toolbar,<br>		- widgets  icons for widget representation.<br><br>- Support user defined widgets which are located outside Tk:<br>		- require / use all supported widget at session startup time,<br>		- validate require/use name.<br><br>- Specifiy libraries (generate 'use lib' commands).<br><br>- System options , see class ctkOptions.<br><br>- New project property 'application' :<br>	  This property allows to group projects of the same application.<br>	  In fact this property have two values:<br>	  - application name  (default 'test')<br>	  - application folder (default './test')<br>	  - Application folder is used to set the default folder for the export<br>	    process.<br>	  - Application name is used to build the default<br>	    project name for the 'save as' function.<br><br>- Modules are now grouped into library subdir lib .<br><br>- New option argList for projects of type subroutine:<br>	This option specifies the arguments to be passed to the generated subroutine:<br>		- arglist may be a variable of type HASH or an anonymous HASH,<br>		- the variable may be local or global ,<br>		- name of the argument list inside the subroutine itself is saved in<br>		  in the option $subroutineArgsName. It is usually '%args' .<br><br>- Class ctkAssistent: <br>		- function list moved to extern file ctkAssistentFuncList.txt<br>		  which is loaded and compiled at constructor time.<br><br>- New utility ctkBuild.pl : build clickTk deliverable instance.<br><br>- New utility ctkUdoc.pl : extract and generate system doc .<br><br>- New command line option -c . This option forces a session cold start.<br><br>- The name of the widget class to set up a modal dialog can be entered<br>  in File/properties/options.<br><br></pre>
+<h1>clickTk - version 3.08 Changes</h1>
+<h2>Bugs fixed</h2>
+None<br>
+<h2>Enhancements</h2>
+- extended widget Hide function: - hide / unhide - automatically unhide
+on widget's options update - warning on save - save hide info on work -
+support all geometry managers - info about geometry manager options now
+possible for all supported manager
+<pre>&nbsp;</pre>
+<h1>clickTk - version 3.07 Changes</h1>
+<h2>Bugs fixed</h2>
+None<br>
+<h2>Enhancements</h2>
+- compute program state
+- update menu using programState<br>
+<br>
+<h1>clickTk - version 3.06 Changes</h1>
+<h2>Bugs fixed</h2>
+<pre>- display of Help documents now OK (new class ctkHelp)<br><br>- correct handling of save on 'file/quit' (using file_save) .<br><br>- templates adapted to software level 3.06.<br><br></pre>
+<h2>Enhancements</h2>
+<pre>- state machine (state of the menu items).<br><br></pre>
+<h1>clickTk - version 3.05 Changes</h1>
+<h2>Bugs fixed</h2>
+<pre>- copy/paste didn't work: read_TkCode regexp at line 5491 \s instaed of \s* (generated code didn't have spaces between operators<br><br>- geometry manager place: enter relative positions : NumEntry upgraded $$ptr = $value didn't work fine, replaced by get / insert<br><br></pre>
+<h2>Enhancements</h2>
+<pre><br>- ctkNumEntry,<br>- session, resp userid,<br>- modify all options, now using Tk::Tiler,<br>- support option -font,<br>- new widget selection dialog on insert.<br><br></pre>
+<h1>clickTk - version 3.04 Changes</h1>
+- tree_view : use Tree and autosetmode.<br>
+<br>
+<h1>clickTk - version 3.03 Changes</h1>
+main::edit_widgetOptions<br>
+- option type 'File' : work variable $wV for initial value<br>
+- option type 'variable' : list := global + local variables into aVars<br>
+- widget browseEdit : option -variable now of type 'variable',<br>
+option -choices added (temporary of type 'variable')<br>
+<br>
+new option type 'list'<br>
+options for place : new sequence, relative data 0-1 (see
+main::numEntry01)
+<pre>&nbsp;</pre>
+<br>
+</body>
+</html>

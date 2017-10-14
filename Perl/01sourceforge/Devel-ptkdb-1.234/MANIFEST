@@ -1,0 +1,7 @@
+README
+Changes
+MANIFEST
+Makefile.PL
+ptkdb.pm
+test.pl
+.ptkdbrc

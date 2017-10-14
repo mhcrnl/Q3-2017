@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<link href="guido_doc.css" rel="stylesheet" type="text/css">
+<title>Guido Help: Starting Guido</title>
+</head>
+<body>
+
+<h1>Starting Guido</h1>
+
+<p>You have several options for starting Guido.  The most convenient method is to ensure that your GUIDO_LIB environment variable has been set (see <a href="../INSTALL">INSTALL</a>) and use your favorite command shell to enter the "app" sub-directory in the location where you installed Guido, and the enter the following at the command prompt:</p>
+
+<pre>perl guido.pl</pre>
+
+<p>If you're interested in seeing debugging output via Guido's tracing features, you can run guido.pl with the following parameters:</p>
+
+<pre>perl guido.pl trace_window 1 trace_level 1</pre>
+
+<p>Note that the trace window can also be turned on and off from the <strong>Utilities</strong> menu.  The trace level cannot currently be set from the GUI, but that should be corrected later.</p>
+
+<p>It is good to keep in mind that the above methods of running Guido are merely the pre-defined ones.  There's nothing stopping you from writing your own Guido execution script that runs guido.pl with custom parameters or even directly instantiates the Guido::Application object from within Perl.  One of Guido's primary directives is to give you options and flex to fit your needs.  See what you can do, and please let us know if you like what happens!</p>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+##
+##	This file defines the funcList used by class ctkAsssistent.
+##	It will be loaded and evaluated at session startup.
+##
+##	Version 14.04.2007/mm
+##
+##	Format (EBNF)
+##
+##		funcList ::= '{' (item) '}'
+##		item ::=  functionName '=>' '{' 'args' '=>' (argumentList), 
+##		                    'help' '=>' text '}'
+##
+##		functionName ::= name of the function. 
+##		argumentList ::= skeleton of the argument list. 
+##		text ::= short description of the funtion.
+##
+##
+##	Note: 
+##		- Syntax may be checked by means of perl -c ctkAssistentFuncList.txt.
+##		- Items are presented in ascending order.
+##
+{
+	'after' => {args => '(<millisec>[,<callback>])',
+			help => "Execute callback once after millisec.\nExample: \$mw->after(1000,sub{print '1 sec is gone'})"
+			},
+	'afterCancel' => {args => '(<id>)',
+			help => "Cancel the existing after or afterIdle callback.\nExample: $id = \$mw->after(1000,sub{print '1 sec is gone'}); ... ;\$mw->afterCancel(\$id);"
+			},
+	'afterIdle' => {args => '(<callback>)',
+			help => "Execute callback when the script is in idle state.\nExample: $id = \$mw->afterIdle(sub{print 'idle'}); ... ;\$mw->afterCancel(\$id);"
+			},
+	'repeat' => {args => '(<millisec>,<callback>)',
+			help => "Execute callback repeatedly every millisec.\nExample: $time = 0; $id = \$mw->repeat(1000,sub{$time ++;print $time;\$mw->afterCancel(\$id) if $time >= 10};"
+			},
+	'clipboardClear' => {args => '()',
+			help => "Clear the clipboard."
+			},
+	'clipboardAppend' => {args => '(<data string>)',
+			help => "Append data to the clipboard."
+			},
+	'getimage' => {args => '(<basename>)',
+			help => "Load and create the image with the given basename and extension qw(xpm gif ppm xbm).See also class Photo!\nExample: \$image=\$mw->Getimage('about'); ## will load about.xpm or about.gif!"
+			},
+	'bind' => {args => '(<event>,<callback>)',
+			help => "Assign a callback to the given event."
+			},
+	'Busy' => {args => '(-cursor => <cursor font name>)',
+			help => "Change cursor font to the given one, get a grab for the parent widget (usually a toplevel)."
+			},
+	'focus' => {args => '()',
+			help => "The issueing widget takes the focus when the script enters the Mainloop.\nSee also focusFollowMouse, focusForce, focusLast, focusnext or focusPrev.\nExample : \$anyWidget->focus();"
+			},
+	'Unbusy' => {args => '()',
+			help => "Release the  grab for the parent widget (usually a toplevel)."
+			},
+	'tagConfigure' => {args => '(<tag>,<options>)',
+			help => "Define tag for widgets of the Text family.\nExample\n \$t = \$mw->text();\$t->tagConfigure('red',-foreground => 'red');"
+			},
+	'configure' => {args => '(-command => sub{})',
+			help => "Get or change the value of the specified options."
+			},
+	'curselection' => {args => '()',
+			help => "Get the actually selected items."
+			},
+	'SelectionClear' => {args => '()',
+			help => "Clear the current selection of the issueing widget."
+			},
+	'messageBox' => {args => "(-default => 'Ok',-icon => 'info', -message => '', -title => '',-type => 'OkCancel')",
+			help => "Set up a message box, show it and wait on user answer.\n Argument -type may be one of ('AbortRetryIgnore', 'Ok', 'OkCancel', 'RetryCancel', 'YesNo' or 'YesNoCancel')"
+			},
+	'selectionSet' => {args => '(<first> , <last>)',
+			help => "Force the widget to set the items at the given index to selected mode."
+			},
+	'selectionClear' => {args => '(<first> , <last>)',
+			help => "Force the widget to clear the items at the given index from the selected mode."
+			},
+	'delete' => {args => '(from[,to])',
+			help => "Delete the items located at <from> up to <to>."
+			},
+	'insert' => {args => '(<index>, <items>[,<tag>])',
+			help => "Insert at the given position the given items.\nIndex my be one of ('end' , <line>.<char>, [+-] , <count> char)."
+			},
+	'invoke' => {args => '()',
+			help => "Execute the callback of the Button defined with -cammand.\nExample: print \"done\" if defined \$anyButton->invoke();"
+			},
+	'Tk::Exists' => {args => '()',
+			help => "Check if the widget has been constructed.\nExample: if (Tk::Exists(\$anyWidget)) { \$anyButton->configure( ... ) }"
+			},
+	'reqheight' => {args => '()',
+			help => "Return the requested height.\nExample: $h = \$anyButton->reqheight;"
+			},
+	'height' => {args => '()',
+			help => "Return the current height.\nExample: $h = \$anyButton->height;"
+			},
+	'x' => {args => '()',
+			help => "Return the current x-position of the widget's upper-left corner.\nExample: \$x = \$anyButton->x; \$y = \$anyButton->y;"
+			},
+	'pointerx' => {args => '()',
+			help => "Return the current screen x-position of the widget's upper-left corner.\nExample: \$x = \$anyButton->pointerxx; \$y = \$anyButton->pointery; (\$x,\$y) = \$anyButton->pointerxy"
+			},
+	'rootx' => {args => '()',
+			help => "Return the current relative x-position of the widget's upper-left corner.\nExample: \$x = \$anyButton->rootx; \$y = \$anyButton->rooty;"
+			},
+	'y' => {args => '()',
+			help => "Return the current y-position of the widget's upper-left corner.\nExample: \$x = \$anyButton->x; \$y = \$anyButton->y;"
+			},
+	'pointery' => {args => '()',
+			help => "Return the current screen y-position of the widget's cursor.\nExample: $x = \$anyButton->pointerxx; $y = \$anyButton->pointery; (\$x,\$y) = \$anyButton->pointerxy"
+			},
+	'rooty' => {args => '()',
+			help => "Return the current relative y-position of the widget's upper-left corner.\nExample: \$x = \$anyButton->rootx; \$y = \$anyButton->rooty;"
+			},
+	'pointerxy' => {args => '()',
+			help => "Return the current screen coordinates of the widget's upper-left corner.\nExample: (\$x,\$y) = \$anyButton->pointerxy;"
+			},
+	'width' => {args => '()',
+			help => "Return the current width.\nExample: $w = \$anyButton->width;"
+			},
+	'reqwidth' => {args => '()',
+			help => "Return the requested width.\nExample: $w = \$anyButton->reqwidth);"
+			},
+	'ismapped' => {args => '()',
+			help => "Check if the widget is mapped to the screen.\nRemember: a widget is mapped when it has been proecssed by a geometry manager.\nExample: if (\$anyButton->ismapped) { ... }"
+			},
+	'packForget' => { args =>'()',
+			help => "Unmap the issueing widget.\nExample \$widget->packForget() if (\$widget->ismapped && \$widget->manager eq 'pack')"
+		},
+	'screenheight' => {args => '()',
+			help => "Return the screen's height.\nExample: $h = \$anyButton->screenheight; "
+			},
+	'screenwidth' => {args => '()',
+			help => "Return the screen's width.\nExample: $w = \$anyButton->screenwidth; "
+			},
+	'viewable' => {args => '()',
+			help => "Return true if the issueing widget and all of its ancestors are mapped.\nExample: if (\$anyButton->viewable) { ... }"
+			},
+	'update' => {args => '()',
+			help => "Advice Tk to update widget's status."
+			},
+	'class' => {args => '()',
+			help => "Return the class name of the issueing widget.\nExample : if (\$anyWidget->class eq 'Listbox') { ... }"
+			},
+	'manager' => {args => '()',
+			help => "Return the geometry manager the widget used.\nReturned value may be one of qw(pack grid place wm).\nExample : if (\$anyWidget->manager eq 'pack') { ... }"
+			},
+	'parent' => {args => '()',
+			help => "Return the parent widget of the calling widget.\nExample : \$par = \$anyWidget->parent();"
+			},
+	'rgb' => {args => '(<color>)',
+			help => "Return the list of the color components.\nExample : (\$red,\$green,\$blue = \$anyWidget->rgb('white');"
+			},
+	'toplevel' => {args => '()',
+			help => "Return the toplevel of the calling widget.\nExample : \$tl = \$anyWidget->toplevel();"
+			},
+	'widthdraw' => {args => '(<widget>)',
+			help => "Advice Tk to delete the given Toplevel from the screen.\nDo not use it to unmap widgets, use Forget instead!"
+			},
+	'deiconify' => {args => '(<widget>)',
+			help => "Advice Tk to redisplay the given Toplevel to the screen.\nThis is the opposite as withdraw."
+			},
+	'raise' => {args => '(<widget>,<widget>)',
+			help => "Advice Tk to put the first widget into the widget stack over the second one."
+			},
+	'waitVariable' => {args => '(<ref to variable>)',
+			help => "Wait until the given variable is changed.\nOnly events routed to the widget having the grab are processed."
+			},
+	'grab' => { args =>'()',
+			help => "This message confines pointer and keyboard events to a window sub-tree.\nSet local grab."
+		},
+	'grabCurrent' => { args =>'()',
+			help => "This message  returns the current grab or an empty string."
+		}, 
+	'grabs' => { args =>'()',
+			help => "This message  returns a list whose elements are all of the windows grabbed \nby this application for all displays,\n or an empty string if the application has no grabs."
+		},
+	'grabRelease' => { args =>'()',
+			help => "This message releases the current grab."
+		},
+	'grabStatus' => { args =>'()',
+			help => "This message returns 'none' if no grab is currently set on \$widget,\n 'local' if a local grab is set on \$widget,\n and 'global' if a global grab is set."
+		}
+}

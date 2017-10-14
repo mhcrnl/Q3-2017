@@ -1,0 +1,26 @@
+Some made up example files are provided for you to modify
+
+The file fomat is very simple for now:
+
+<approx_minutes_it_takes_to_complete>(tab)<item description>
+or:
+<approx_minutes_it_takes_to_complete>(tab)<item description>(tab><time_to_start>
+
+This will be redone in the future, but it works for now.
+
+this is the file/directory structure:
+daily.txt - things that happen every day
+year/month/day.txt - specify something that happens on a specific date
+weekday/dayx.txt - specify something that happens on weekday x, (1 = monday, 7 = sunday)
+todo/ - this dir contains todo items
+todo/dailyrandom.txt - something random from this one gets on the schedule every day
+todo/simpleprojects.txt - right now we pick a random thing from this, but in the future we will
+                          take things from here until we have filled up the gaps in the schedule.
+special/ - this dir contains files with special cases. for now this means eating, so you can add
+           a few meals you like and have it randomly pick one each day, good if you're on of those
+           who are having a hard time figuring out what to eat :)
+
+many more files for specifying things during different times/situations will be in future releases
+
+
+If you don't want one of those to be used just leave the file empty.

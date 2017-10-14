@@ -1,0 +1,25 @@
+Jan. 5, 2010 (v0.4)
+	* Config file support
+	* Database (SQLite) backend
+	* New dependencies (see the README)
+	* Fixed a major performance issue in the content download code
+	* other code changes
+
+Nov. 3, 2009 (v0.3)
+
+	* Integrated autodiscovery
+	* internal feed content is now used whenever linked content is not downloaded
+
+Oct. 29, 2009 (v0.2)
+
+	* Foffl is now beta
+	* All network access is now internal; wget is no longer used
+	* New dependencies (see the README)
+	* Foffl now generates a set of linked HTML pages as an interface to the downloaded content
+	* -i option to control how many items (per feed) are downloaded
+	* -p option to use a proxy
+
+Sep. 15, 2009 (v0.1)
+
+	* Initial (Alpha) Foffl release
+	

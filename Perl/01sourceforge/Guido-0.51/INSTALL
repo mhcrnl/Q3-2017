@@ -1,0 +1,33 @@
+Setting up Guido:
+
+There are currently 2 good ways to install Guido.  In the order of preference, they are:
+
+1. Use the automated installer.  
+	A. The installer requires a working installation of CPAN or the 
+	Perl Package Manager (PPM is preferred for Win32 plaforms,
+	CPAN for others.)  See the appropriate documentation for setting up 
+	those systems.
+
+	B. Go to http://guido.sf.net/guido_now.php and it will automatically 
+	send you to the correct current release of the installer.  Download and 
+	run the script, answering the questions as the install progresses.
+
+2. Get a copy of the latest release distribution package and use it to install.
+	A. Go to http://guido.sf.net/guido_dist.php and it will automatically send 
+	you to the current release of the distribution (tar.gz format).  For the 
+	zip format, go to http://guido.sf.net/guido_zip_dist.php.
+	Expand the distribution into a temporary directory.
+
+	B. Run setup.pl in the distribution directory and let it handle the installation.
+
+You should now be able to enter "perl guido.pl" while in the bin subdirectory and Guido should run. 
+If it doesn't, it's a bug and you can report the errors you get at the Guido project site:
+
+http://www.sf.net/projects/guido/
+
+Thanks for giving Guido a try!
+
+jpt
+--
+James Tillman
+jtillman@bigfoot.com

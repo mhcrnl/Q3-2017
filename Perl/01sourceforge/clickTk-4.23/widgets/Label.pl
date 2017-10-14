@@ -1,0 +1,29 @@
+$rDef = {
+  'icon' => 'Label',
+  'geom' => '1',
+  'file' => 'Label',
+  'attr' => {
+    '-underline' => 'int+',
+    '-foreground' => 'color',
+    '-borderwidth' => 'int+',
+    '-relief' => 'relief',
+    '-textvariable' => 'variable',
+    '-anchor' => 'anchor',
+    '-pady' => 'int+',
+    '-background' => 'color',
+    '-wraplength' => 'int+',
+    '-width' => 'int+',
+    '-justify' => 'justify',
+    '-text' => 'text-',
+    '-image' => 'photo',
+    '-bitmap' => 'photo',
+    '-padx' => 'int+'
+  },
+  'classname' => 'Label',
+  'use' => 'Tk::Label',
+  'nonVisual' => '0',
+  'defaultgeometrymanager' => 'pack',
+  'balloon' => '1',
+  'defaultgeometryoptions' => undef,
+  'defaultwidgetoptions' => undef
+};

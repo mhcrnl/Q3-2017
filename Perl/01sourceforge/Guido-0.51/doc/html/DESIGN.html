@@ -1,0 +1,111 @@
+<HTML>
+<HEAD>
+<TITLE>Primary Design Goals</TITLE>
+</HEAD>
+<BODY BGCOLOR="#fffff8" TEXT="#000000">
+<UL>
+<LI><A HREF="#Guido%20Design">Guido Design
+
+</A></LI>
+<UL>
+<LI><A HREF="#Primary%20Design%20Goals">Primary Design Goals
+
+</A></LI>
+<LI><A HREF="#Design%20Guidelines">Design Guidelines
+
+</A></LI>
+<LI><A HREF="#General%20Design%20Structure">General Design Structure
+
+</A></LI>
+</UL>
+</UL>
+<HR>
+<H1><A NAME="Guido%20Design">Guido Design
+
+</A></H1>
+<H2><A NAME="Primary%20Design%20Goals">Primary Design Goals
+
+</A></H2>
+
+<P>Guido primary goal should be to provide a flexible and easily extensible 
+interface for developing graphical user interfaces using Perl.  This goal takes 
+precendence over all else, and must be a fulfilled goal from the first pre-alpha 
+version right up to its final release.  No design decision can be allowed to 
+negate this goal.  
+
+</P>
+<P>A secondary goal of Guido's design should be to take into account the limited 
+foresight of its developers, and provide the ability to extend the original 
+design without having to rewrite the core.
+
+</P><H2><A NAME="Design%20Guidelines">Design Guidelines
+
+</A></H2>
+
+<P>To achieve these goals, we will use the following directives as our guidelines 
+for Guido's design:
+
+</P><DL><DT><A NAME="*%20Guido's%20primary%20focus%20should%20be%20on%20providing%20an%20easy%20to%20use%20GUI%20design%20%0atool%2c%20and%20generating%20complete%20Perl%20applications%20from%20the%20designs%20a%20user%20creates.">* Guido's primary focus should be on providing an easy to use GUI design 
+tool, and generating complete Perl applications from the designs a user creates.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Guido%20should%20use%20a%20%22document%2fview%22%20strategy%20to%20segregate%20data%20from%20%0apresentation.">* Guido should use a &quot;document/view&quot; strategy to segregate data from 
+presentation.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Guido%20should%20use%20a%20plugin%20architecture%20to%20provide%20extensibility.">* Guido should use a plugin architecture to provide extensibility.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Guido%20should%20take%20advantage%20of%20object%20oriented%20development%20whenever%20%0apossible%20to%20allow%20flexibility%20and%20encapsulate%20functionality.">* Guido should take advantage of object oriented development whenever 
+possible to allow flexibility and encapsulate functionality.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Guido%20should%20expose%20a%20clear%20Application%20Programming%20Interface%20(API)%20for%20%0adevelopers.">* Guido should expose a clear Application Programming Interface (API) for 
+developers.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Guido%20should%20provide%20an%20interface%20that%20is%20easy%20to%20use%20and%20learn%2c%20and%20%0awhich%20is%20immediately%20familiar%20to%20a%20developer%20through%20experience%20gained%20from%20%0aother%20developer%20tools.">* Guido should provide an interface that is easy to use and learn, and 
+which is immediately familiar to a developer through experience gained from 
+other developer tools.
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+<H2><A NAME="General%20Design%20Structure">General Design Structure
+
+</A></H2>
+
+<P>Guido's general design should follow this structure:
+
+</P>
+<P>=over4
+
+</P>
+<P>=item* Core code is centralized in non-GUI-dependent objects (as much as 
+possible)
+
+</P>
+<P>=item* Plug-ins provide visual representation of core data
+
+</P>
+<P>=item* Built-in plugins provide default functionality, but can be overridden or 
+extended by custom-written plugins
+
+</P>
+<P>=item* Data structures and data files (such as project files and GUI spec files) 
+will be initialized from templates that the user can modify based on pre-defined rules.
+
+</P>
+</BODY>
+</HTML>

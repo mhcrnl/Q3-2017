@@ -1,0 +1,59 @@
+=head1 Guido Design
+
+=head2 Primary Design Goals
+
+Guido primary goal should be to provide a flexible and easily extensible 
+interface for developing graphical user interfaces using Perl.  This goal takes 
+precendence over all else, and must be a fulfilled goal from the first pre-alpha 
+version right up to its final release.  No design decision can be allowed to 
+negate this goal.  
+
+A secondary goal of Guido's design should be to take into account the limited 
+foresight of its developers, and provide the ability to extend the original 
+design without having to rewrite the core.
+
+=head2 Design Guidelines
+
+To achieve these goals, we will use the following directives as our guidelines 
+for Guido's design:
+
+=over 4
+
+=item * Guido's primary focus should be on providing an easy to use GUI design 
+tool, and generating complete Perl applications from the designs a user creates.
+
+=item * Guido should use a "document/view" strategy to segregate data from 
+presentation.
+
+=item * Guido should use a plugin architecture to provide extensibility.
+
+=item * Guido should take advantage of object oriented development whenever 
+possible to allow flexibility and encapsulate functionality.
+
+=item * Guido should expose a clear Application Programming Interface (API) for 
+developers.
+
+=item * Guido should provide an interface that is easy to use and learn, and 
+which is immediately familiar to a developer through experience gained from 
+other developer tools.
+
+=back
+
+=head2 General Design Structure
+
+Guido's general design should follow this structure:
+
+=over4
+
+=item* Core code is centralized in non-GUI-dependent objects (as much as 
+possible)
+
+=item* Plug-ins provide visual representation of core data
+
+=item* Built-in plugins provide default functionality, but can be overridden or 
+extended by custom-written plugins
+
+=item* Data structures and data files (such as project files and GUI spec files) 
+will be initialized from templates that the user can modify based on pre-defined rules.
+
+=back

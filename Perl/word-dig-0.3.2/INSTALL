@@ -1,0 +1,24 @@
+Games::WordDig (the main part of this distribution), is a perl module
+and follows the standard methods for installation.  After unpacking
+WordDig.version.tgz into a reasonable location, execute the following
+steps: 
+
+   prompt$  perl Makefile.pl
+   prompt$  make
+   prompt$  make test
+
+and, if there are no errors in the 'make test' step:
+
+   prompt$  make install
+
+This should install the Games::WordDig package in your @INC path.  Now
+you can get on to the fun part ... playing with the front ends, and
+maybe even writing your own. (For now, there is only a command line
+front end distributed with the Games::WordDig module.  Even this is
+not very pretty -- it was written to test the module, but is still
+capable of playing a game.)
+
+These are located in the samples directory, and each has an associated
+README.name file with instructions for installing it.  (The README is in
+samples directory.)
+

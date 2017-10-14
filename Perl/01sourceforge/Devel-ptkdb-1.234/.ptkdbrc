@@ -1,0 +1,43 @@
+##
+##	ptkdb startup script
+##
+	$DB::ptkdb::stop_on_warning = 0;          ## 1: stop on Perl compiler warnings
+	$DB::ptkdb::stop_on_restart = 1;          ## 1: set up warning modal dialog on restart session
+	$DB::no_stop_at_start = 0;                ## don't stop at line 1
+	$DB::no_stop_at_end = 0;                  ## 1: don't stop at end of session
+
+
+##	brkpt($fname, @lines);                 ## set breakpoint
+##	condbrkpt($fname, @($line, $expr) );   ## set conditional breakpoint
+##	brkonsub(@names);                      ## set breakpoint at sub
+##	brkonsub_regex(@regExprs);             ## set breakpoint at sub using regexp   i.e. brkonsub_regex(qr(main::.+));
+
+#	add_exprs('$^O','$$','$_', '@_','$@','$!','$1','$2') ; ## add items to the expression tab
+
+##	This set of definitions doesn't work as expected, then the actual attribute
+##	must be set every time the state of the line changes. 
+##	Unfortunately this detail has been forgotten while programming ptkdb ... 
+##
+
+	textTagConfigure('code',              -foreground => "black") ;
+	textTagConfigure('stoppt',            -foreground => "black", -background => ,'green') ;
+	textTagConfigure('breakableLine',     -foreground => "black") ;
+	textTagConfigure('nonbreakableLine',  -foreground => "#BBBBBB", -overstrike => 0) ;
+	textTagConfigure('breaksetLine',      -background => "red") ;
+	textTagConfigure('breakdisabledLine', -foreground => "black", -background => '#FFB0B0') ; 
+	textTagConfigure('breakdisabledLine', -foreground => "black", -background => '#FFB0B0') ; 
+	textTagConfigure('bookmark',        -foreground => "black", -background => ,'pink') ;
+#	register_user_window_init(sub{warn ' I was there...'},'warn " I was THERE..."');
+#	register_user_DB_entry(sub{warn ' I was there too ...'},'warn " I was THERE too ..."');
+#	register_user_restart_entry(sub{warn ' Restarting  ...'},
+#	                            sub{
+#                                   my $cmdlineArgs = shift;
+#				    @Devel::ptkdb::script_args = 
+#				    map {
+#                                        sprintf('arg %s',$_)
+#                                    } @$cmdlineArgs;
+#                                    });
+#
+##
+##	end of list
+##

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<package>
+    <metadata><dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/">
+
+<dc:Title>Voyages of the Dawn Treader Volume 1</dc:Title>          
+<dc:Language>en</dc:Language>
+<dc:Author>Daniel Edward Graham</dc:Author>
+  </dc-metadata>
+<meta name="cover" content="my-cover-image" />
+</metadata>
+<manifest>
+<item href="logo0.jpg" id="my-cover-image" media-type="image/jpeg" ></item>
+<item id="toc1" media-type="application/x-dtbncx+xml" href="toc.ncx"></item>
+<item id="toc" media-type="text/x-oeb1-document" href="toc.htm"></item>
+<item id="item1" media-type="text/x-oeb1-document" href="mybook1.htm"></item>
+  <item id="SMIL" href="rs.smil" media-type="application/smil" />
+</manifest>
+
+<spine toc="toc1">
+<itemref idref="toc">
+<itemref idref="item1">
+
+</spine>
+
+<tours></tours>
+
+<guide>
+<reference type="toc" title="Table of Contents" href="toc.htm">
+
+<reference type="start" title="Startup Page" href="mybook1.htm#Introduction0";></reference>
+
+</guide>
+
+</package>

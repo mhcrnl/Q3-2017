@@ -1,0 +1,228 @@
+
+## Format
+##
+##	list ::= (descriptions | empty_line | commentline)
+##	commentline ::= '#' .+
+##	empty_line ::= \s*
+##	descrition ::= option "\n" short_description
+##	option ::= name '=>' valuelist
+##	name ::= -\w+
+##	valuelist ::= value ['|' value]
+##	short_description ::= \.+
+##
+## Notes:
+##
+##	- List is not exhaustive
+##	- options names should be unique 
+##
+
+ -side => 'left' | 'right' | 'top' | 'bottom'
+Put the widget against the specified side of the window or frame.
+
+ -fill => 'none' | 'x' | 'y' | 'both'
+causes the widget to fill the allocation rectangle in the specified direction.
+
+ -expand => 1 | 0
+causes the allocation rectangle to fill the remaining space available in the window or frame
+
+ -anchor => 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'center'
+anchors the widget inside the allocation rectangle.
+
+ -ipadx => amount
+increases the size of the widget horizontally by amount * 2.
+
+ -ipady => amount
+increases the size of the widget vertically by amount * 2.
+
+ -padx => amount
+places padding on the left and right of the widget.
+
+ -pady => amount
+places padding on the top and bottom of the widget.
+
+ -background => color
+sets the background color of the widget to color.
+
+ -bitmap => bitmap
+displays the bitmap contained in bitmap instead of text.
+
+ -borderwidth => amount
+changess the width of the edges of the widget.
+
+ -cursor => cursorname
+changess the cursor to cursorname when the mouse is over this widget.
+
+ -font => fontname
+indicates that the text in the widget will be displayed with fontname.
+
+ -foreground => color
+changess the text of the widget (or the bitmap) to be <color> color.
+
+ -height => amount
+sets the height of the widget to amount. <amount> is a valid screen distance.
+
+ -highlightbackground => color
+sets the color of the focus rectangle when the widget is not in focus to color.
+
+ -highlightcolor => color
+sets the color of the focus rectangle when the widget has focus to color.
+
+ -highlightthickness => amount
+sets the width of the focus rectangle. Default is 0 for the label.
+
+ -image => ref to Photo widget
+displays the image instead of text.
+
+ -justify => 'left' | 'right' | 'center'
+sets the side of the widget against which multi-line text will justify.
+
+ -relief => 'flat' | 'groove' | 'raised' | 'ridge' | 'sunken'
+sets the type of borders drawn around the widget.
+
+ -takefocus => 0 | 1 | undef
+changes the ability of the widget to have the focus or not.
+
+ -text => text
+displays in the widget a text string.
+
+ -underline => n
+causes the nth character to be the short-key, default is -1.
+
+ -width => amount
+causes the widget to be width amount.
+
+ -wraplength => amount
+indicates that the text in the widget will wrap when it gets longer than amount.
+
+ -label => labelstring
+Adds a label to the widget with the text <labelstring>.
+
+ -sticky =>  'n' | 's' | 'e' | 'w'
+the widget will stick to those sides.
+
+ -column => n
+sets the column to place widget in (n >= 0).
+
+ -row => m
+sets the row to place widget in (m >= 0).
+
+ -columnspan => n
+sets the number of columns for the widget to span beginning with -column.
+
+ -rowspan => m
+sets the number of rows for the widget to span beginning with -row.
+
+ -relheight => ratio
+indicates that the height of the widget relates to the parent widget's height by ratio.
+
+ -relwidth => ratio
+indicates that the width of the widget relates to the parent widget's width by ratio.
+
+ -relx => xratio
+indicates that the widget will be placed relative to its parent by xratio.
+
+ -rely => yratio
+indicates that the widget will be placed relative to its parent by yratio.
+
+ -x => x
+indicates that the widget will be placed at x. x is any valid screen distance.
+
+ -y => y
+indicates that the widget will be placed at y. y is any valid screen distance.
+
+ -labelside => left | right | top | bottom |acrosstop
+indicates the place of the label.
+
+ -labelPack => [ -side => side, -anchor => anchor ]
+determines where to place Label in LabEntry widget
+
+ -bigincrement => amount
+is the size of the 'lagre' increments. Default is 0, that means 1/10 the top value .
+
+ -digits => amount
+indicates the precision on conversion to string. 
+
+ -from => value
+indicates the low end of the scale values. Default is 0.  
+ 
+ -length => amount
+sets the length of the slider (the long direction, regardless of the value 
+of orient) in a valid screen distance.
+
+ -resolution => value
+sets the increments by which the value in the scale will change. Default is 1.  
+
+ -orient => 'vertical' | 'horizontal'
+sets the direction the scale is drawn. Default is 'vertical'. 
+
+ -sliderlength => value
+sets the size of the slider (inside the widget). Default is 25.  
+
+ -to => value
+sets the top value of the scale. Default is 100.
+
+ -showvalue => 0 | 1
+If set to 0, the value of the slider setting is not shown at all. Default is 1.
+
+ -listwidth => width
+specifies the width of the popup listbox.
+
+ -setgrid => 0 | 1
+Turns gridding off or on for the widget. Default is 0. 
+
+ -accelerator => text
+is the printable form of the accelerator char, i.e <Ctrl+z>
+
+ -show => char
+sets the character that is hides the char actually typed.
+
+ -tearoff => 0 | 1
+determines whether or not the menu will contain the tear-off item as the first item. 
+
+ -aspect => non-negative integer
+indicates the desired aspect ratio for the text. Defaults to 150.
+
+ -variable => ref to scalar
+specifies the name of a variable that saves input received by this widget. 
+
+ -value => text
+specifies the resulting string value of selections (i.e. Radiobuttons).
+
+ -offvalue => text
+specifies value to store in the button's associated variable whenever it is deselected.  Defaults to '0'.
+
+ -onvalue => text
+specifies value to store in the button's associated variable whenever it is selected.  Default is '1'.
+
+ -command => callback
+specifies the callback to be associated with the widget main action.
+
+ -textvariable => ref to scalar
+specifies the name of a variable.
+
+ -state => 'normal' | 'active' | 'disabled'
+determines the state of the widget. Default is 'normal'.  
+
+ -tickinterval => value
+describes the labels drawn by the right (or on the bottom) of the scale.
+
+ -troughcolor => color
+sets the color of the area behind the slider button (same as a scrollbar).
+
+ -indicatoron => 0 | 1
+specifies whether or not the indicator should be drawn.
+
+ -selectcolor => color
+specifies a background color to use when the button is selected. .
+
+ -selectmode => single | browse | multiple | extended
+specifies how many items may be selected at a time.
+
+ -wrap =>  none | char | word
+specifies the wrap mode of the displayed text.
+
+ -createcmd => callback
+specifies a callback to be called the first time a page is shown on the screen. 
+
+ -raisecmd => callback
+specifies a callback to be called whenever a page is raised by the user.

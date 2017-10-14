@@ -1,0 +1,31 @@
+/* XPM */
+static char * command_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"17 21 4 1",
+/* colors */
+"  s None c None",
+". c #6B6B6B"
+"x c #FF0000"
+"b c #993300",
+/* pixels */
+"  xxxxxxxxxxxxx  ",
+"  xx         xx  ",
+"  x     .     x  ",
+"  x    ...    x  ",
+"  x     .     x  ",
+"        x        ",
+"       x        ",
+"      xx         ",
+"      xxbb       ",
+"   bbxx   bbb    ",
+"  bb xx      bb  ",
+" b  xxx        b ",
+" b xxx         b ",
+"b  xxx ..       b",
+"b     ....      b",
+"b      ..       b",
+" b             b ",
+" b             b ",
+"  bb         bb  ",
+"   bbb     bbb   ",
+"      bbbbb      "};

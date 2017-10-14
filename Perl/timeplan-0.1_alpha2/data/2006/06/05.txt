@@ -1,0 +1,2 @@
+60	Go to the library	1200
+20	Call Kicki	1445

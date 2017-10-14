@@ -1,0 +1,147 @@
+#!/usr/bin/perl -w
+
+#
+# word-dig is a command line implementation of the Word Dig game. It
+# relies on Games::WordDig, and serves as a test-bed for that module.
+#
+
+use strict;
+
+use Games::WordDig;
+use Text::Wrap;
+
+
+# note, that this is for testing only ... it ain't a real game
+
+my $dict = Games::Dictionary->new();
+
+my (@player1_words, @player2_words);
+
+my %player1 = (	
+	    _player_name => "Player 1",
+	    _used_words  => \@player1_words,
+	    );
+
+my %player2 = (
+	    _player_name => "Computer",
+	    _used_words  => \@player2_words,
+	    );
+
+my @players = ( \%player1, \%player2 );
+
+my %game = (
+	    dict_obj    => $dict,
+	    num_players => 2,
+	    players     => \@players,
+	    );
+
+my $game = Games::WordDig->new(%game);
+
+
+print <<__EOF__;
+
+This is a test of Games::WordDig.  It is only a test.  Do not
+expect this to look like a real game or act like a real game --
+on the off chance that it does, BONUS!
+
+You can play the game by entering a word at the prompt.  The computer
+will respond with a word of the same length (plus or minus one letter)
+and beginning with the last letter of your word.  You must then enter
+a word of the same length as the computer's (again, plus or minus one
+letter) and beginning with the last letter of the computer's word.
+
+The game will continue in this fashion until you concede (just enter 
+a 'q'), or the computer can no longer play a word.
+
+__EOF__
+
+    while (1) {
+	my $current_try = &get_word;
+	unless(&check_first($current_try)) {
+	    last;
+	}
+    }
+
+while (1) {
+    &computer;
+    &player;
+}
+
+sub player {
+    while (1) {
+	my (@pretty_words, $pretty_words);
+	my $word=&get_word();
+	print "(your choice was $word)\n";
+	my $status = $game->Player_Turn($word);
+	if ( $status eq "good" ) {
+	    return;
+	} elsif ("That word has been used before" eq $status) {
+	    print "\n$status\n";
+	    my $used_words = $game->_get_all_used();
+	    for my $used (@$used_words) {
+		if ( $word eq $used ) {
+		    push(@pretty_words, "\*$used\*");
+		} else {
+		    push(@pretty_words, $used);
+		}
+	    }
+	    $pretty_words = wrap(""," ",@pretty_words);
+	    print "$pretty_words\n\n";
+	} else {
+	    print "$status\n\n";
+	}
+    }
+}
+
+sub computer {
+    my $word = $game->Computer_Turn();
+    if ($word eq "out of words") {
+	print "I'm out of words, you win.\n";
+	exit;
+    } else {
+	print "========\n\tmy word is $word\n========\n";
+	my $used_words = $game->_get_all_used();
+	my $pretty_words = wrap(""," ",@$used_words);
+	print "Words used so far:\n$pretty_words\n";
+    }
+}
+    
+sub check_first {
+    my $current_try = $_[0];
+    my $status = $game->Player_Turn($current_try);
+    if ( $status eq "good") {
+	print <<__EOF__;
+
+$current_try is a good word.
+__EOF__
+
+    return(0);
+    } else {
+	print "$status  Please try again.\n";
+	return(1);
+    }
+}
+
+sub get_word {
+    my $turn = $game->get_turn();
+    unless (0 == $turn) {
+	my $lastword = $game->_last_word();
+	my $wordlength = length($lastword);
+	my $short = $wordlength -1;
+	my $long = $wordlength + 1;
+	print "Your word should be between $short and $long characters.\n";
+	print "(The last word used was:  $lastword)\n";
+    }
+    print "What is your word?  ";
+    my $current_try = <>;
+    chomp $current_try;
+    if ("q" eq $current_try) {
+	print "You want to quit?\nOkay, nice game.\n";
+	exit;
+    }
+
+    return($current_try);
+}
+
+
+

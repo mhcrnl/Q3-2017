@@ -1,0 +1,11 @@
+*Futures:
+** I'd like to build some 'intelligence' into the computer player
+*** think about how to have different kinds of computer players
+    perhaps a very aggressive player, one that tries to find 'elegant'
+    words, one that always tries to grow, weighting ending letters
+    differently
+** it would be nice to allow more than two players
+    this would require some kind of client-server front-end
+    (this is now possible, in theory, with the new object structure)
+
+    

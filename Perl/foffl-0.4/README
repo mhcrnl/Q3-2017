@@ -1,0 +1,174 @@
+Foffl - Feeds OFFLine (v0.4)
+----------------------------
+
+Foffl is free software, released under the terms of the Perl Artistic License,
+contained in the included file 'License'.
+
+Foffl comes with ABSOLUTELY NO WARRANTY
+
+The Foffl homepage is http://foffl.sourceforge.net
+
+Overview
+--------
+
+Foffl is a command line feed (RSS and Atom) aggregator that (optionally)
+attempts to download the content pointed to by feed entries, thereby making it
+available for offline viewing.
+
+[From v0.3, Foffl can also be used as an ordinary feed aggregator, when invoked
+with the '-x' switch.]
+
+Please note that this is beta software, and as such, the interface and
+functionality are likely to undergo drastic changes in future releases.
+
+Installation
+------------
+
+Foffl is a Perl script; it should run on any standard *nix system.  It can be
+placed anywhere in the filesystem from which scripts can be run.
+
+It depends on these Perl modules (in addition to some of those included in the
+standard Perl distribution):
+
+* XML::Parser (a dependency of the next one)
+* XML::RSS
+* XML::Atom
+
+* Log::Dispatch
+
+* LWP::UserAgent (a dependency of XML::Atom)
+* LWP::ConnCache (ditto)
+
+* HTML::Parser (a dependency of XML::Atom)
+* HTML::Tiny
+
+* File::Type
+
+* ConfigReader::Simple
+
+* DBI
+* DBD::SQLite
+
+In Debian, install: libxml-parser-perl, libxml-rss-perl, 
+libxml-atom-perl, liblog-dispatch-perl, libhtml-tiny-perl, libfile-type-perl,
+libconfigreader-simple-perl, libdbd-sqlite3-perl
+
+Configuration
+-------------
+
+Foffl utilizes a base directory (henceforth: BASEDIR), by default $HOME/foffl,
+but a different one can be specified via the command line option
+'-dsome_directory'.  Downloaded feed content is saved under subdirectories of
+BASEDIR/feeds, e.g.  '/home/user/foffl/feeds/somethingA45n' (the exact name
+depends on the design of the feed and will always end with four random
+alphanumeric characters).
+
+Foffl currently accepts these command line options:
+
+-c config_file		specify a configuration file
+
+-D			[boolean, default off] turns on debugging output if set
+
+-d some_directory	sets BASEDIR to some_directory
+
+-f feed_list		set location of feed list (default is 
+			BASEDIR/feed_list
+
+-i number		number of items per feed to display - if omitted,
+			all items will be display
+		
+-l level		sets log level to one of: debug, info, notice, 
+			warning, error, critical, alert, emergency.  Foffl
+			logs to BASEDIR/foffl.log
+					
+-p http://host:port	set a HTTP proxy for all network access
+					
+-x			don't download feed content.  As of v0.3, this option
+			will cause Foffl to use the internal content of the
+			feed, if possible, as ordinary feed aggregators do.
+
+Options can also be set using a config file, which can be specified with the
+'c' option.  $BASEDIR/foffl.conf will be used by default, if it exists.  See
+the included 'foffl.conf' for an example.  Options specified on the command
+line will override those in a config file.
+
+The feed list should be a file containing a list of URLs of RSS / Atom feeds,
+or (as of v0.3) HTML pages containing feed autodiscovery links, one per line.
+Blank lines, and those whose first non-whitespace character is a '#'
+(comments), are ignored.
+
+Proxies
+---------------------
+
+Foffl can be configured to use a HTTP proxy with the -p option.  [If you'll
+generally be using the same one, you may want to put it in the config file with
+something like 'proxy = http://localhost:8118'.]  Note that Foffl does not
+cache individual page elements on its own (although it does, as of v0.4, cache
+entire feed items - see the 'Database' section below); since downloading
+multiple feed items from a given source will probably involve multiple requests
+for some static page elements, using a caching proxy such as squid is highly
+recommended, as this will probably save considerable time and bandwidth as well
+as reduce the load on the server.
+
+Usage
+-----
+
+Just create a feed list and run 'foffl', along with any relevant options.
+Foffl generates a set of linked HTML pages listing the feeds and their entries;
+just point a browser at 'file:///home/user/foffl/feeds/index.html'.
+
+Feed Autodiscovery
+------------------
+
+From v0.3, Foffl has integrated autodiscovery capability.  For each item in
+the feed list, it will try to determine whether it is an HTML page, in which
+case autodiscovery will be attempted.  The first feed found will be displayed.
+
+The stand-alone autodiscovery utility 'foffl-ad' introduced in v0.2 is also
+included.
+
+Usage:	foffl [-a] url1 [url2] [url3] ...
+
+For each url given on the command line, foffl-ad will try to output the title
+and url of the linked feed, if any, in a form suitable for adding to the feed
+list file used by foffl.  Only the first feed will be output, unless the -a
+option is used, in which case all feeds found will be output.
+
+Database
+--------
+
+As of v0.4, Foffl utilizes an SQLite database backend.  Currently, it is used
+to record the locations of downloaded feed items, directories and output pages.
+This allows the downloaded content to be reused, as well as facilitating
+housekeeping (files and directories that are no longer necessary are now
+deleted).  The database may serve additional functions as development
+continues.
+
+Currently, the creation of files and directories and their recording in the
+database is not atomic, so if something goes wrong or the program is terminated
+abnormally, you'll end up with orphaned files / directories, which will not be
+automatically cleaned up by the program.
+
+Beta
+-----
+
+Foffl is now beta software, and while actually fairly functional, 
+still leaves much room for improvement:
+
+*	There is currently no system for keeping track of read content.  This
+	is an architectural limitation, since Foffl is not (yet?) actually a
+	feed reader, but merely constructs HTML pages which are read in a
+	separate HTML viewer
+
+Contact
+-------
+
+You're welcome to contact me at celejar@gmail.com.  Feedback and bug
+reports are always appreciated!
+
+When submitting a bug report, please run Foffl with the '-D' switch, and
+capture its STDOUT and STDERR, by running:
+
+'foffl [options] -D > foffl-err 2>&1'
+
+and include the generated 'foffl-err' file.

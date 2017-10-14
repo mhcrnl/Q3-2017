@@ -1,0 +1,30 @@
+What's new on CPAN - September 2017
+Mock APIs for free using JSON Schemas
+What's new on CPAN - August 2017
+Plotting With Perl 6
+Git bisect and Perl
+What's new on CPAN - July 2017
+Pretty Printing Perl 6
+What's new on CPAN - June 2017
+What's New on CPAN - Annual Edition
+What's new on CPAN - May 2017
+On Sigils
+What's new on CPAN - April 2017
+Getting started with XS
+Thinking about Perl 6
+What's new on CPAN - March 2017
+AWS Cloudfront cache invalidation with Paws
+Track Module Changes While You Sleep
+What's new on CPAN - February 2017
+Deploy a static website with AWS S3 and Paws
+What's new on CPAN - January 2017
+Six more things I like about 6
+Laptop review: Dell XPS 13 2-in-1 (9365)
+What's new on CPAN - December 2016
+Obscure Perl trick: single-quote separators
+Perl module names are filepaths - and that's all
+What's new on CPAN - November 2016
+How to build a base module
+I'm speaking at the London Perl Workshop 2016
+How to upload a script to CPAN
+What's new on CPAN - October 2016

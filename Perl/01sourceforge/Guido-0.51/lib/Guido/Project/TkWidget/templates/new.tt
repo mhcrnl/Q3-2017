@@ -1,0 +1,24 @@
+[% FILTER redirect("${name}.gpj") -%]
+<?xml version="1.0"?>
+<Project name="[% name %]" primary_source_file="[% name %]" type="TkWidget" version="0.05">
+<Files>
+<SourceFiles>
+	<SourceFile type="TkComposite" name="[% name %]" file_path="[% name %].gui" events_file_path="[% name %]_events.pl" />
+</SourceFiles>
+<UsedModules/>
+<RequiredFiles/>
+</Files>
+<Plugins/>
+<PluginData>
+</PluginData>
+</Project>
+[% END -%]
+[% FILTER redirect("${name}.gui") -%]
+<?xml version="1.0"?>
+
+<TkComposite title="[% name %]">
+</TkComposite>
+[% END -%]
+[% FILTER redirect("${name}_events.pl") -%]
+#This is the events handler file for Guido project [% name %]
+[% END -%]

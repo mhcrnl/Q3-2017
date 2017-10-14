@@ -1,0 +1,154 @@
+<properties>
+  <property display_name="ActiveBackground" name="activebackground" datatype="STRING" context="widget" />
+  <property display_name="ActiveBorderWidth" name="activeborderwidth" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$" />
+  </property>
+  <property display_name="ActiveForeground" name="activeforeground" datatype="STRING" context="widget" />
+  <property display_name="Activetile" name="activetile" datatype="STRING" context="widget" />
+  <property display_name="Anchor" name="anchor" datatype="STRING" context="widget" >
+    <validation_enum>
+      <enum_value value="n" />
+      <enum_value value="s" />
+      <enum_value value="e" />
+      <enum_value value="w" />
+      <enum_value value="ne" />
+      <enum_value value="nw" />
+      <enum_value value="se" />
+      <enum_value value="sw" />
+      <enum_value value="center" />
+    </validation_enum>
+  </property>
+  <property display_name="Background" name="background" datatype="STRING" context="widget" />
+  <property display_name="Bitmap" name="bitmap" datatype="STRING" context="widget" />
+  <property display_name="BorderWidth" name="borderwidth" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$" />
+  </property>
+  <property display_name="Command" name="command" datatype="CODE_REF" context="widget" />
+  <property display_name="Cursor" name="cursor" datatype="STRING" context="widget" />
+  <property display_name="Dash" name="dash" datatype="STRING" context="widget" />
+  <property display_name="Dashoffset" name="dashoffset" datatype="STRING" context="widget" />
+  <property display_name="DisabledForeground" name="disabledforeground" datatype="STRING" context="widget" />
+  <property display_name="Disabledtile" name="disabledtile" datatype="STRING" context="widget" />
+  <property display_name="ExportSelection" name="exportselection" datatype="STRING" context="widget">
+    <validation_enum case_sensitive="1">
+      <enum_value value="true" />
+      <enum_value value="false" />
+      <enum_value value="0" />
+      <enum_value value="yes" />
+      <enum_value value="no" />
+    </validation_enum>
+  </property>
+  <property display_name="Font" name="font" datatype="STRING" context="widget" />
+  <property display_name="Foreground" name="foreground" datatype="STRING" context="widget" />
+  <property display_name="HighlightBackground" name="highlightbackground" datatype="STRING" context="widget" />
+  <property display_name="HighlightColor" name="highlightcolor" datatype="STRING" context="widget" />
+  <property display_name="HighlightThickness" name="highlightthickness" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$" />
+  </property>
+  <property display_name="Image" name="image" datatype="IMAGE" context="widget" validation="" />
+  <property display_name="InsertBackground" name="insertbackground" datatype="STRING" context="widget" />
+  <property display_name="InsertBorderWidth" name="insertborderwidth" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$" />
+  </property>
+  <property display_name="InsertOffTime" name="insertofftime" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$" />
+  </property>
+  <property display_name="InsertOnTime" name="insertontime" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$" />
+  </property>
+  <property display_name="InsertWidth" name="insertwidth" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$" />
+  </property>
+  <property display_name="Jump" name="jump" datatype="STRING" context="widget">
+    <validation_enum case_sensitive="1" >
+      <enum_value value="true" />
+      <enum_value value="false" />
+      <enum_value value="0" />
+      <enum_value value="yes" />
+      <enum_value value="no" />
+    </validation_enum>
+  </property>
+  <property display_name="Justify" name="justify" datatype="STRING" context="widget">
+    <validation_enum case_sensitive="0">
+      <enum_value value="left" />
+      <enum_value value="center" />
+      <enum_value value="right" />
+    </validation_enum>
+  </property>
+  <property display_name="Offset" name="offset" datatype="STRING" context="widget" validation_style="OR">
+    <validation_rule type="REGEXP" value="/^\d+,\d+$/" />
+    <validation_enum>
+      <enum_value value="n" />
+      <enum_value value="ne" />
+      <enum_value value="e" />
+      <enum_value value="s" />
+      <enum_value value="sw" />
+      <enum_value value="w" />
+      <enum_value value="nw" />
+      <enum_value value="center" />
+    </validation_enum>
+  </property>
+  <property display_name="Orient" name="orient" datatype="STRING" context="widget">
+    <validation_enum>
+      <enum_value value="horizontal" />
+      <enum_value value="vertical" />
+    </validation_enum>
+  </property>
+  <property display_name="PadX" name="padx" datatype="STRING" context="widget" validation="/^\d+$/" >
+    <validation_rule type="REGEXP" value="/^\d+$/" />
+  </property>
+  <property display_name="PadY" name="pady" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$/" />
+  </property>
+  <property display_name="Relief" name="relief" datatype="STRING" context="widget">
+    <validation_enum>
+      <enum_value value="raised" />
+      <enum_value value="sunken" />
+      <enum_value value="flat" />
+      <enum_value value="ridge" />
+      <enum_value value="solid" />
+      <enum_value value="groove" />
+    </validation_enum>
+  </property>
+  <property display_name="RepeatDelay" name="repeatdelay" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$/" />
+  </property>
+  <property display_name="RepeatInterval" name="repeatinterval" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$/" />
+  </property>
+  <property display_name="SelectBackground" name="selectbackground" datatype="STRING" context="widget" />
+  <property display_name="SelectBorderWidth" name="selectborderwidth" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$/" />
+  </property>
+  <property display_name="SelectForeground" name="selectforeground" datatype="STRING" context="widget"  />
+  <property display_name="SetGrid" name="setgrid" datatype="STRING" context="widget">
+    <validation_enum>
+      <enum_value value="true" />
+      <enum_value value="false" />
+      <enum_value value="0" />
+      <enum_value value="yes" />
+      <enum_value value="no" />
+    </validation_enum>
+  </property>
+  <property display_name="TakeFocus" name="takefocus" datatype="STRING" context="widget">
+    <validation_enum>
+      <enum_value value="true" />
+      <enum_value value="false" />
+      <enum_value value="0" />
+      <enum_value value="yes" />
+      <enum_value value="no" />
+    </validation_enum>
+  </property>
+  <property display_name="Text" name="text" datatype="STRING" context="widget" />
+  <property display_name="TextVariable" name="textvariable" datatype="SCALAR_REF" context="widget"  />
+  <property display_name="TroughColor" name="troughcolor" datatype="STRING" context="widget" />
+  <property display_name="TroughTile" name="troughtile" datatype="STRING" context="widget" />
+  <property display_name="Underline" name="underline" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\d+$/" />
+  </property>
+  <property display_name="WrapLength" name="wraplength" datatype="STRING" context="widget">
+    <validation_rule type="REGEXP" value="/^\-{0,1}\d+$/" />
+  </property>
+  <property display_name="XScrollCommand" name="xscrollcommand" datatype="CODE_REF" context="widget" />
+  <property display_name="YScrollCommand" name="yscrollcommand" datatype="CODE_REF" context="widget" />
+</properties> 

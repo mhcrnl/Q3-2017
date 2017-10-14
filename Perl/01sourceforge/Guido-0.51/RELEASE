@@ -1,0 +1,47 @@
+Guido 0.51
+
+RELEASE NOTES
+
+This minor release is meant to fix a few problems with the installation
+process.
+
+* Instructions related to the setup of a pre-downloaded distribution were
+	incomplete and confusing
+
+* The installer was also incapable of installing a pre-downloaded dist, so
+	that has been worked on, as well.
+
+
+
+CHANGELOG for this release:
+
+2002-03-03  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/setup.pl: updated version
+
+2002-02-28  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/INSTALL:
+	fixed instructions for manual dist download
+
+	* /cvsroot/guido/guido/setup.pl:
+	updated with lost "no_extract" handling
+
+2002-02-21  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/MANIFEST: fixed trailing cr's
+
+2002-02-20  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/setup.pl: updated with version from PI
+
+	* /cvsroot/guido/guido/MANIFEST: added history and release files
+
+	* /cvsroot/guido/guido/RELEASE: release notes
+
+	* /cvsroot/guido/guido/Makefile, /cvsroot/guido/guido/guido.osd, /cvsroot/guido/guido/README:
+	updated for version 0.50
+
+	* /cvsroot/guido/guido/HISTORY: release note history
+
+	* /cvsroot/guido/guido/ChangeLog: no message

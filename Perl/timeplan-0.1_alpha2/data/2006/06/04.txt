@@ -1,0 +1,2 @@
+60	Go to the dentist	1200
+20	Call Maria	1445

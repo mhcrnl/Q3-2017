@@ -1,0 +1,19 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE smil PUBLIC "-//NISO//DTD dtbsmil 2005-1//EN" 
+  "http://www.daisy.org/z3986/2005/dtbsmil-2005-1.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+    <head>
+       <meta name="dtb:uid" content="Voyages of the Dawn Treader Volume 1" />
+       <meta name="dtb:generator" content="smilgen2.4" />
+       <layout>
+          <region id="text" top="0%" left="0%" right="0%" bottom="15%"/>
+       </layout>
+       <customAttributes>
+          <customTest id="pagenum" defaultState="false" override="visible"/>
+       </customAttributes>
+    </head>
+    <body>
+   <seq id="baseseq" >
+ </seq>
+</body>
+</smil> 

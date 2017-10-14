@@ -1,0 +1,11 @@
+   for 0.4 release
+ in Games::WordDig
+
+ Separate Module
+improve the dictionary
+
+ in samples/CLI
+serialize data
+
+   for 0.6 release
+write stronger computer player(s)

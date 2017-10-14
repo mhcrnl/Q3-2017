@@ -1,0 +1,434 @@
+Devel::ptkdb Changelog
+
+1.234
+~~~~~~
+
+- Mark temporary breakpoints (on command 'run to')
+  using color defined on environment variable PTKDB_TEMP_BRKPT_COLOR.
+
+- Synchronize Expression and proximity windows on input of quick expression.
+
+- New environment variable PTKDB_ADD_EXPR_DEPTH to set the number of levels to be open at a <double click> on
+  an item in the expression's list.
+
+- New environment variable PTKDB_CTRLC_DISABLE to enable/disable the binding of callback DB::dbExit(terminate session) to the main window. 
+  Default is 1 (disable).
+
+- Placing the mouse over a variable of type 'CODE' ptkdb automatically executes class ptkdbTools::decode to show the block code.
+
+- Breakpoint filter improved:
+
+	- filter status shown in status bar,
+	- new menu item 'control/Enter breakpoint filter conditions',
+	- new menu item 'Control/Switch breakpoint filter',
+	- run commands deactivate breakpoint filter,
+	- breakpoint filter deactivated on restart.
+
+- Some minor changes
+
+	- prevent warnings on Perl 5.22,
+	- flag no_stop_at_start is ignored when non breakpoint has been set,
+	- ptkdbTools::decode validates incoming argument.
+	- improved Filter dialog, 
+	- refresh breakpoint window after require,
+	- bugfix for RunTo after StepOver.
+
+1.233
+~~~~~~
+
+- find/search process upgraded: 
+	- find direction is now used correctly,
+	- new button 'Exact' on the search window,
+	- persistent drop down list for find Dialog,
+	- TODO: synch search window and 'find'-dialog (idle callback after find),
+	- TODO: synch search window and 'goto line'-dialog (idle callback after find).
+
+- goto line dialog upgrade
+	- persistent drop down list.
+
+- bind <3> colliding with find-function :
+
+	- bind to step-in/over or return to sub has been limited,
+	  to the source window,
+	- popup menu on source window suppressed.
+	- ballons on source window show the name 
+	  of the extracted and evaluated variable
+
+- proximity window
+	- parser has been enhanced in order to recognize 
+	  variables more precisely.
+
+- options file .ptkdbrc
+	- register_user_restart_entry accepts now a string and 
+	  evaluates it correctly.
+
+- restart process
+	- command arglist may be changed at restart time.
+
+- handling of Font options
+	- get options from ENV,
+	- apply options correctly,
+	- enlarge or reduce size of current font on the source window and
+	  pn the expression eval windows
+	    - new menu items /data/Zoom+ and Data/Zoom-,
+	    - new tools on the source windows 'Zoom+' and 'Zoom-'.
+
+- Status of the session
+	- new background color (lightgreen) for 'ready' state,
+	  lightred for all state.
+
+- DB trace
+	- the breakpoint trace get automatically refreshed when it is 
+	  deiconified by means of the menu item <data/Breakpoint trace>.
+          This doesn't (yet) happens when the user deiconify the windows
+	  through the windows-system menu.
+
+- warnings suppressed
+
+- some minor bugs fixed
+	- code has been upgraded in order to avoid Perl and/or Perl/Tk warnings
+
+
+1.232
+~~~~~~
+
+- Upgrade of the 'proximity window'
+- Upgrade of the facility 'restart debugging session'
+
+- Important bugfixes for
+  - proximity window : do not eval auto-incremented variables
+  - restart command: restore breakpoint on required modules
+  - expression balloon : do not execute auto-icncremented variables
+  - eval expression window : no wasting of space on window resize.
+  - force step mode for breakpoint filter
+  - prevent exception in DB::END when debugging scripts with option -w  
+
+1.231
+~~~~~~
+
+- New mode 'autostep'
+- log page on the Notebook pane.
+- log output on STDOUT or STDERR.
+- size of expression's ballon now 256 by default.
+- suppress trace of watched expressions.
+- proximity window, enhanced parser.
+- new options
+  - PTKDB_TRACE_EXPRESSIONS
+  - PTKDB_VERBOSE
+  - PTKDB_USE_LOG_PAGE
+  - PTKDB_LOG_INTO_STDERR
+  - PTKDB_AUTOSTEP_DELAY_TIME
+  - PTKDB_BALLOON_MSG_MAX_LENGTH
+
+- new menu items
+
+  Control - Set autostep delay time
+  Control - Autostep (Checkbutton on the toolbar)
+  Data - Trace expressions
+
+- bugfix	
+  - subroutine 'name' on package 'main' doesn't
+    lead to side-effects anymore.
+
+1.230
+~~~~~~
+
+  - State of the session and of the config file shown main window.
+  - New Dialog at the end of debugging session.
+  - New option 'no_stop_at_end'.
+  - New exception handling and new option PTKDB_SIGDIE_DISABLE.
+  - New option PTKDB_TRACE_SUB_ACTIVE.
+  - New option PTKDB_DECORATE_CODE.
+  - higlighted variables on the code page (decorated code).
+  - Commands of options file .ptkdbrc have been upgraded :
+     - commands brkpt, condbrkpt, brkonsub, brkonsub_expr accept list of values
+       and automatically eliminate double specifications.
+     - new commands register_user_window_end(<callback list>),
+     - registered callbacks are validated (reference to subroutine or expressions string)
+     - registered callbacks are always evaluated,
+     - callbacks for 'DB entry' and 'DB leave' take arglist (package,file name,line number).
+  - New menu 'Set breakpoint filter'.
+  - New menu checkbutton 'Data/DB trace is active'.
+  - New menu checkbutton 'Data/DB trace subroutines'
+  - Menu stack, all items show the file and line number,
+    items of anonymous blocks disabled.
+  - Notebook page 'BrkPt' upgraded: breakpoints are now sorted.
+  - DB trace is now tagged, foreground color depending on item's type.
+  - trace of subroutine calls may be suppressed setting the option PTKDB_TRACE_SUB_ACTIVE or
+    and using the menu item 'Data/DB trace subroutines'.
+  - Strings containing control characters are displayed in hex form .i.e. X'4D00'.
+  - Show the current breakpoint location on the Expression evaluate window.
+
+1.222
+~~~~~~
+
+  - Callbacks Devel::ptkdb::EnterActions and Devel::ptkdb::LeaveActions 
+    accept the same argument list ($package,$filename,$line),
+  - 'Control/Clear All Breakpoints' works now only on the current file
+  - 'Control/Activate all Breakpoint' and 'Control/Deactivate Breakpoint' also work
+    on the current file,
+  - Process of subroutine calls has been improved, in order to speed up the session's
+    start time (many thanks to Tony!),
+  - The 'data page' is automatically selected at each breakpoint.
+
+
+1.221
+~~~~~~
+
+  - Notebook page 'subs', discard ANON items.
+  - Notebook page 'brkPts', on insert brkpt the page is raised.
+    and the page width is adapted.
+  - Balloon now may be activated resp. deactivated., tracked ID 1595970. 
+  - Prevent breakpoint in forked subprocesses.
+  - Modifications of tracked ID 3147861.
+  - Clean DB-trace , show subroutine depth.
+  - Stop on restart and new menu option 'control/stop_on_restart'.
+  - New option dont_stop_on_end (on file .ptkdbrc).
+
+
+1.220
+~~~~~~
+
+  - Proximity window.
+  - Prevent calls/messages on expression list.
+  - Set caller's cwd() on Restart.
+  - Stop on Restart.
+  - Set cwd() on save config.
+  - Don't stop at the END-block on all kind of termination.
+  - Clear all breakpoint on 'File/Close Window & Run'.
+  - New Dialog on termination (asking for session end).
+
+
+1.211
+~~~~~~
+
+  - Many Log-messages turned to Trace-Messages (clean STDOUT).
+  - Enhanced access to the $debug flag.
+  - Dedicated Toplevel for ptkdb eliminated.
+  - $dirtyFlag rest to off after save process during DoQuit processing.
+
+
+1.209
+~~~~~~
+
+  - Expression's balloon: recognize accessed array and HASH items, 
+  i.e. $main::work[$i] or $hash{'xyz'} or even $rA->[$x] or $rH->{'xyz'} .
+
+
+1.207
+~~~~~~
+
+  - File .ptkdbrc : windows-init and user-DB callback list get executed.
+
+  - Devel::ptkdb::do_user_init_files now print errors which occur doing .ptkdbrc  .
+
+  - @Devel::ptkdb::scrollbar_cfg now applied to all scrolled widgets .
+
+  - @Devel::ptkdb::scrollbar_cfg now defaults to 'se' .
+
+  - New ENV variable PTKDB_ENTRY_CLASS : it may assume one value of (Entry, BrowseEntry , <mySpecialEntry>)
+    where <mySpecialEntry> is the name of a composite widget derived from Entry or BrowseEntry.
+
+  - withdraw / deiconify main window during start up time .
+    Option PTKDB_ICONIFY allows to iconify the ptkdb-window during
+    the process between breakpoints or after 'run'.
+
+
+1.206
+~~~~~~
+
+  - New subroutine ShowOptions for menu item 'Tools/Options'.
+  - Changes of version 1.1093b integrated into 1.205.
+  - Method PathThru changed in order o deactivate breakpoints of the current file
+    instead of get rid of them.
+
+
+1.205
+~~~~~~
+
+  - New menu items  'Control/Activate All Breakpoints' and 
+                    'Deactivate All Breakpoints'.
+
+
+1.204
+~~~~~~
+
+  - Set up event mask for the ptkdb main loop.
+  - Set up DB trace dialog .
+  - Some minor changes.
+
+
+1.203
+~~~~~~
+
+  - Expression's balloon: text is now left aligned, 
+    qualified variable names are also recognized, i.e. $main::work.
+  - Set breakpoint: source line compare discards leading/traling blank
+    and traling comments.
+  - Restore breakpoints in required files .
+  - Warnings on discarded breakpoints.
+  - Menu item 'Close and run' clears now all breakpoints in all files.
+  - Closing the ptkdb main window with the system menu forces 'Close and run'.
+  - New flag 'dirty-flag' for config prevents the loss of entered config options.
+  - .ptkdbrc handling: expressions may be added to the expression's list. 
+  - Entering breakpoint conditions : the entered expression get validated by means of eval.
+  - Using breakpoint conditions : when the breakpoint condition cannot be correctly evaluated, 
+    then the corresponding breakpoint is forced.
+  - Bookmarks handling : several minor enhancements .
+  - Suppress events during breakpoint: event mask of ptkdb mainloop may be set
+    by means of menu item 'control/event mask'.
+  - Dialogs on menu items are now modal.
+  - Function DoBugReport : open pipe to browser depending on OS .
+
+
+1.1093
+~~~~~~
+
+* FIX: CTRL+S -> save shortcut (jlishev).
+
+
+
+1.1092
+~~~~~~
+
+New Project Managers are:
+    Svetoslav Marinov <svetoslavm at users.sourceforge.net>
+    Julian Lishev <perlsite at users.sourceforge.net>
+Adding new Menu "Help" which contains useful links.
+Tk 8.00 added in Makefile as prerequisite
+Fixed Last char was deleted on Windows
+Changelog moved from README to Changelog
+README reorganized
+Buttons' title changed from "Okay" -> "OK" and "Dismiss" -> "Cancel"
+
+
+1.109  
+~~~~
+Fixed various lacks of backwards incompatibility in Tk804
+Added a 'bug report' item to the File menu.
+
+
+1.1084
+~~~~~
+Changed the 'bareword' and bareword options for widgets and pack to -bareword
+to support Tk804.024
+
+
+1.1083
+~~~~~
+A perl debugger package is required to define a subroutine name 'sub'. 
+This routine is a 'proxy' for handling subroutine calls and allows the
+debugger pacakage to track subroutine depth so that it can implement
+'step over', 'step in' and 'return' functionality.  It must also handle
+the same context as the proxied routine; it must return a scalar where a
+scalar was being expected, an array where an array is being expected and
+a void where a void was being expected.  Ptkdb was not handling the case
+for void.  99.9% of the time this will have no ill effects although it
+is being handled incorrectly. 
+
+
+1.1075
+~~~~~
+Fix for perl 5.8.0.  Fixes to doc formatting.  $^W saves now done
+with local($^W).  Overdue correction for @_ context save.
+
+
+1.1075
+~~~~~
+beta   Expedient fix for perl 5.8.0
+
+1.1074
+~~~~~
+Fixed deficiency where the 'Exprs' pane would not display or decomposed the 
+members of a blessed array.  
+
+
+1.1073
+~~~~~
+Added key shortcuts.  Added 'white' foreground to the 'stoppt' tag to make text more visible.  
+Experimental feature that checks for and tries to install Tk if it's missing.  
+
+
+1.1072
+~~~~~
+Added feature that delays loading of the subs page until the notebook page is brought forward
+
+
+1.107
+~~~~~
+Release
+
+
+1.1068
+~~~~~
+Fixed a minor warning put out by pod2man during installation that's been grating
+on the terminally pedantic.  
+
+Data::Dumper is now a requirement for running.  This has been included with perl
+since 5.00505.
+
+
+1.1067 
+~~~~~
+Fixed a problem where ptkdb would not evaluate an expression such as 'keys %hash' in
+its expression window.
+
+Fixed some problems with balloons coordinate system and made them respond faster.
+
+
+1.1063
+~~~~~
+Menu initialization has been 'tuned' up a bit.   New handling for closure of window
+and quit.  Beginning to deal with 'reused' addresses.
+
+
+1.1059
+~~~~~
+  Corrected a bug where vars in the dbval subroutine could eclipse
+vars that were in targe code
+
+
+1.1052
+~~~~~
+Added a configuration option that allows users to change
+the packing arrangement of the code and notebook panes.  
+Use xresource ptkdb*codeside: left|right|top|bottom
+Or environmental var PTKDB_CODE_SIDE=left|right|top|bottom
+
+See POD section item:  PTKDB_CODE_SIDE
+
+
+1.105
+~~~~~
+Fixed incorrect evaluation of $@ in expressions.
+Corrected some formatting issues with the POD section.
+
+
+1.104
+~~~~~
+Fixed a conflict with 'qw' and perl 5.004.
+
+Fixed a warning issued with perl 5.004
+
+Corrected a problem with where using ptkdb for 
+debugging other ptk apps would cause 'grab' problems.
+
+
+1.1
+~~~~~
+Mon Dec  7 14:36:17 1998
+	- original version; created by h2xs 1.18
+
+
+1.101
+~~~~~
+Tue Dec 15 16:00 1998
+
+Corrected POD document to change -d:ptkdb1048 to -d:ptkdb
+
+Removed Dead code for font specifications and tag configuration
+that is no longer used
+
+Broke up a chained call to Data::Dumper->Terse->Ident into 
+two separate calls to make it compatible with older versions
+of Data::Dumper

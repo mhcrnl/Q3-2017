@@ -1,0 +1,58 @@
+Guido RELEASE HISTORY
+
+***
+
+Guido 0.51
+
+RELEASE NOTES
+
+This minor release is meant to fix a few problems with the installation
+process.
+
+* Instructions related to the setup of a pre-downloaded distribution were
+	incomplete and confusing
+
+* The installer was also incapable of installing a pre-downloaded dist, so
+	that has been worked on, as well.
+
+***
+
+Guido 0.50
+
+RELEASE NOTES
+
+This release of Guido adds:
+
+* A more realistic version number.  We were not updating the version as we 
+	should	have, so I have opted for 0.5 instead of 0.05.  Guido is still 
+	not ready for a major release yet, but it is certainly beyond the 
+	interesting toy stage.
+
+* An improved setup routine that will update existing Guido installations
+
+* The property manager now shows property values even if they are the default
+	values.  It also has a new "default" checkbox which can be checked off
+	to set the value back to its default
+
+* Some better initial values for the configuration files
+
+* The Toolbox now retains the defaults for each widget, so you can set up 
+	reasonable defaults for your widgets.  (Try right clicking a widget
+	in the Toolbox and choosing "Defaults" from the popup menu)
+
+***
+
+Guido 0.04
+
+RELEASE NOTES
+
+Many changes in this release, primarily drag and drop support and improved support for putting widgets inside widgets.  Bugs fixes in the Property Page have also made that feature more robust, as well.  You're welcome to peruse the changelog for details, of which you will find plenty.
+
+Also, I have improved the POD documentation throughout.
+
+***
+
+Previous releases had no unique release notes
+
+
+

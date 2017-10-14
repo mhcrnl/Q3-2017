@@ -1,0 +1,65 @@
+Row;Date;weekday;From;To;IBP;M&EDoc;Activity;Hours/day;Hours/week
+01;01.01.2006;Sonntag;9;12;=E2 - D2;=F2;Act I; ; 
+02;      ;      ;=E2 + 1;17;=E3 - D3;=F3;Act II;=SUMME(F2:G3);=SUMME(I2:I3)
+03;02.01.2006;Montag;9;12;=E4 - D4;=F4;Act I; ; 
+04;      ;      ;=E4 + 1;17;=E5 - D5;=F5;Act II;=SUMME(F4:G5); 
+05;03.01.2006;Dienstag;9;12;=E6 - D6;=F6;Act I; ; 
+06;      ;      ;=E6 + 1;17;=E7 - D7;=F7;Act II;=SUMME(F6:G7); 
+07;04.01.2006;Mittwoch;9;12;=E8 - D8;=F8;Act I; ; 
+08;      ;      ;=E8 + 1;17;=E9 - D9;=F9;Act II;=SUMME(F8:G9); 
+09;05.01.2006;Donnerstag;9;12;=E10 - D10;=F10;Act I; ; 
+10;      ;      ;=E10 + 1;17;=E11 - D11;=F11;Act II;=SUMME(F10:G11); 
+11;06.01.2006;Freitag;9;12;=E12 - D12;=F12;Act I; ; 
+12;      ;      ;=E12 + 1;17;=E13 - D13;=F13;Act II;=SUMME(F12:G13); 
+13;07.01.2006;Samstag;9;12;=E14 - D14;=F14;Act I; ; 
+14;      ;      ;=E14 + 1;17;=E15 - D15;=F15;Act II;=SUMME(F14:G15); 
+15;08.01.2006;Sonntag;9;12;=E16 - D16;=F16;Act I; ; 
+16;      ;      ;=E16 + 1;17;=E17 - D17;=F17;Act II;=SUMME(F16:G17);=SUMME(I4:I17)
+17;09.01.2006;Montag;9;12;=E18 - D18;=F18;Act I; ; 
+18;      ;      ;=E18 + 1;17;=E19 - D19;=F19;Act II;=SUMME(F18:G19); 
+19;10.01.2006;Dienstag;9;12;=E20 - D20;=F20;Act I; ; 
+20;      ;      ;=E20 + 1;17;=E21 - D21;=F21;Act II;=SUMME(F20:G21); 
+21;11.01.2006;Mittwoch;9;12;=E22 - D22;=F22;Act I; ; 
+22;      ;      ;=E22 + 1;17;=E23 - D23;=F23;Act II;=SUMME(F22:G23); 
+23;12.01.2006;Donnerstag;9;12;=E24 - D24;=F24;Act I; ; 
+24;      ;      ;=E24 + 1;17;=E25 - D25;=F25;Act II;=SUMME(F24:G25); 
+25;13.01.2006;Freitag;9;12;=E26 - D26;=F26;Act I; ; 
+26;      ;      ;=E26 + 1;17;=E27 - D27;=F27;Act II;=SUMME(F26:G27); 
+27;14.01.2006;Samstag;9;12;=E28 - D28;=F28;Act I; ; 
+28;      ;      ;=E28 + 1;17;=E29 - D29;=F29;Act II;=SUMME(F28:G29); 
+29;15.01.2006;Sonntag;9;12;=E30 - D30;=F30;Act I; ; 
+30;      ;      ;=E30 + 1;17;=E31 - D31;=F31;Act II;=SUMME(F30:G31);=SUMME(I18:I31)
+31;16.01.2006;Montag;9;12;=E32 - D32;=F32;Act I; ; 
+32;      ;      ;=E32 + 1;17;=E33 - D33;=F33;Act II;=SUMME(F32:G33); 
+33;17.01.2006;Dienstag;9;12;=E34 - D34;=F34;Act I; ; 
+34;      ;      ;=E34 + 1;17;=E35 - D35;=F35;Act II;=SUMME(F34:G35); 
+35;18.01.2006;Mittwoch;9;12;=E36 - D36;=F36;Act I; ; 
+36;      ;      ;=E36 + 1;17;=E37 - D37;=F37;Act II;=SUMME(F36:G37); 
+37;19.01.2006;Donnerstag;9;12;=E38 - D38;=F38;Act I; ; 
+38;      ;      ;=E38 + 1;17;=E39 - D39;=F39;Act II;=SUMME(F38:G39); 
+39;20.01.2006;Freitag;9;12;=E40 - D40;=F40;Act I; ; 
+40;      ;      ;=E40 + 1;17;=E41 - D41;=F41;Act II;=SUMME(F40:G41); 
+41;21.01.2006;Samstag;9;12;=E42 - D42;=F42;Act I; ; 
+42;      ;      ;=E42 + 1;17;=E43 - D43;=F43;Act II;=SUMME(F42:G43); 
+43;22.01.2006;Sonntag;9;12;=E44 - D44;=F44;Act I; ; 
+44;      ;      ;=E44 + 1;17;=E45 - D45;=F45;Act II;=SUMME(F44:G45);=SUMME(I32:I45)
+45;23.01.2006;Montag;9;12;=E46 - D46;=F46;Act I; ; 
+46;      ;      ;=E46 + 1;17;=E47 - D47;=F47;Act II;=SUMME(F46:G47); 
+47;24.01.2006;Dienstag;9;12;=E48 - D48;=F48;Act I; ; 
+48;      ;      ;=E48 + 1;17;=E49 - D49;=F49;Act II;=SUMME(F48:G49); 
+49;25.01.2006;Mittwoch;9;12;=E50 - D50;=F50;Act I; ; 
+50;      ;      ;=E50 + 1;17;=E51 - D51;=F51;Act II;=SUMME(F50:G51); 
+51;26.01.2006;Donnerstag;9;12;=E52 - D52;=F52;Act I; ; 
+52;      ;      ;=E52 + 1;17;=E53 - D53;=F53;Act II;=SUMME(F52:G53); 
+53;27.01.2006;Freitag;9;12;=E54 - D54;=F54;Act I; ; 
+54;      ;      ;=E54 + 1;17;=E55 - D55;=F55;Act II;=SUMME(F54:G55); 
+55;28.01.2006;Samstag;9;12;=E56 - D56;=F56;Act I; ; 
+56;      ;      ;=E56 + 1;17;=E57 - D57;=F57;Act II;=SUMME(F56:G57); 
+57;29.01.2006;Sonntag;9;12;=E58 - D58;=F58;Act I; ; 
+58;      ;      ;=E58 + 1;17;=E59 - D59;=F59;Act II;=SUMME(F58:G59);=SUMME(I46:I59)
+59;30.01.2006;Montag;9;12;=E60 - D60;=F60;Act I; ; 
+60;      ;      ;=E60 + 1;17;=E61 - D61;=F61;Act II;=SUMME(F60:G61); 
+61;31.01.2006;Dienstag;9;12;=E62 - D62;=F62;Act I; ; 
+62;      ;      ;=E62 + 1;17;=E63 - D63;=F63;Act II;=SUMME(F62:G63); 
+63;      ;      ;    ;    ;    ;    ;            ;            ;=SUMME(I60:I64)
+64;Total;      ;    ;    ;    ;    ;            ;            ;=SUMME(G2:G64)

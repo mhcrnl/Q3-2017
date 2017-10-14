@@ -1,0 +1,33 @@
+/* XPM ScrolledTiler.xpm */
+static char *text[] = {
+/* width height ncolors chars_per_pixel */
+"19 21 5 1",
+/* colors */
+". c #FCFEFC",
+", c #C4C2C4",
+"X c #848284",
+"o c #040204",
+"  s None c None",
+/* pixels */
+"                   ",
+"                   ",
+"  oooooooooooooooo ",
+"  o..............o ",
+"  o..oooo..oooo..o ",
+"  o..oooo..oooo..o ",
+"  o..oooo..oooo..o ",
+"  o..oooo..oooo..o ",
+"  o..oooo..oooo..o ",
+"  o..oooo..oooo..o ",
+"  o..oooo..oooo..o ",
+"  o..oooo..oooo..o ",
+"  o..............o ",
+"  oooooooooooooooo ",
+"  o,,,o.,o,,,o,,,o ",
+"  o,o,o,.o,o,o,o,o ",
+"  o,,,o.,o,,,o,,,o ",
+"  oooooooooooooooo ",
+"                   ",
+"                   ",
+"                   "
+};

@@ -1,0 +1,5 @@
+10	Wake up	0600
+15	Take a shower	0610
+20	Get dressed, brush teeth, etc	0640
+480	Sleep	2200
+50	Take a walk

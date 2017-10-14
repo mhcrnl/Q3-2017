@@ -1,0 +1,4 @@
+The file CLI/word-dig is a standalone front-end to WordDig.pm.  After
+installing WordDig.pm, you can copy CLI/word-dig into any directory in
+your path, and proceed to test Word-Dig.
+

@@ -1,0 +1,29 @@
+$rDef = {
+  'icon' => 'default',
+  'geom' => '1',
+  'file' => 'ProgressBar',
+  'attr' => {
+    '-length' => 'int+',
+    '-background' => 'color',
+    '-bg' => 'color',
+    '-width' => 'int+',
+    '-blocks' => 'int+',
+    '-colors' => 'text+',
+    '-borderwidth' => 'int+',
+    '-height' => 'int+',
+    '-value' => 'int+',
+    '-relief' => 'relief',
+    '-variable' => 'variable',
+    '-to' => 'int+',
+    '-anchor' => 'anchor',
+    '-from' => 'int+'
+  },
+  'classname' => 'ProgressBar',
+  'pathName' => undef,
+  'use' => 'Tk::ProgressBar',
+  'nonVisual' => undef,
+  'defaultgeometrymanager' => 'pack',
+  'balloon' => '0',
+  'defaultwidgetoptions' => undef,
+  'defaultgeometryoptions' => undef
+};

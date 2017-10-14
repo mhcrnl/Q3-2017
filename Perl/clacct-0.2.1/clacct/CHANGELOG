@@ -1,0 +1,18 @@
+CHANGELOG
+---------
+
+version 0.2
+ -added clarule rule processor with pay/receive options
+ -added reconciliation function to clacct
+ -added better distinction between quiet/verbose w/
+     an 'always quiet/verbose' feature
+ -added better reporting with the perl 'format' feature
+
+version 0.11
+ -replaced my own command line option interpreter with Getopt::Long
+ -rewrote all of the option parsing code
+ -added 'mv' option to move money from one account to another
+ -added 'bal' option to retrieve balance
+
+version 0.1
+ -initial release

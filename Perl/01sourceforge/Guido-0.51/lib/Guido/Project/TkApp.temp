@@ -1,0 +1,314 @@
+package Guido::Project::TkApp;
+
+use strict;
+
+use vars qw(@ISA $VERSION);
+
+use Guido::Project;
+use Guido::PropertySource;
+@ISA = qw( Guido::Project Guido::PropertySource );
+
+#use base is broken on linux, or at least ->isa doesn't work with it!
+#use base qw/Guido::Project Guido::PropertySource/;
+
+#use Class::DirtyMethodMaker get_set => [ qw / working_dir name type primary_source_file file_path plugin_data startup_file / ];
+#use Class::DirtyMethodMaker hash => [qw / source_files used_modules required_files /];
+
+require Exporter;
+require AutoLoader;
+
+use XML::DOM;
+use XML::Simple;
+use Text::Template;
+use File::Slurp;
+use File::Spec;
+use File::Spec::Functions;
+use File::Basename;
+use Data::Dumper;
+
+use Guido::SourceFile;
+use Guido::PluginData;
+use Guido::Property;
+
+my $app;
+
+
+$VERSION = '0.05';
+
+##
+#Independent debug/error code
+##
+my $DEBUG;
+sub TRACE {
+	if($app) {
+		$app->TRACE(@_);
+	}
+	else {
+		print $_[0] . "\n" if $DEBUG;
+	}
+}
+
+sub ERROR {
+	if($app) {
+		#print "Sending error to app: $_[0]\n";
+		$app->ERROR(@_);
+	}
+	else {
+		my %attribs = @_;
+		print "Error: " . $attribs{text} . "\n";
+	}
+}
+
+##
+#Constructors
+##
+
+sub new {
+	my($class, %attribs) = @_;
+
+	my $self = {
+		name => $attribs{name},
+		working_dir => $attribs{working_dir},
+		app => $attribs{app},
+		plugin_data => ($attribs{plugin_data} or {}),
+		type => 'TkApp',
+		primary_source_file => $attribs{primary_source_file},
+	};
+
+	my %unblessed = %$self;
+	
+	#Generate main project file name
+	$self->{working_dir} = catfile($attribs{working_dir}, $attribs{name});
+	$self->{file_path} = catfile($self->{working_dir}, $self->{name} . ".gpj");
+
+	$app = $attribs{app};
+#	TRACE("TkApp project class taking control.",1);
+#	TRACE("TkApp project file path is " . $self->{file_path},1);
+	
+	
+	#Bless early for access to methods
+	bless $self, $class;
+	
+	#Auto-generate the project files using the templates
+	# if the files don't already exist
+#	if (!-e $self->{file_path}) {
+#	  my($tpl_path) = $self->_findINC("Guido/Project/TkApp/templates/");
+#	  TRACE("Template path is: " . $tpl_path, 1);
+#	  if (!$tpl_path) {
+#	    ERROR(
+#		  title=>'Missing template',
+#		  text=>"Can't find template for projects of type " . 
+#		  $self->{type}
+#		 );
+#	    return undef;
+#	  }
+#	  else {
+#	    #Make sure working directory is created
+#	    if (!-d $self->{working_dir}) {
+#	      $! = undef;
+#	      mkdir($self->{working_dir});
+#	      if ($!) {
+#		ERROR(
+#		      title=>'Project initialization error',
+#		      text=>"Couldn't create directory " . $self->{working_dir} . 
+#		      ":\n$!"
+#		     );
+##		return undef;
+#	      }
+#	    }
+#	    
+#	    #process each template in the directory and
+#	    # put the results in the working directory
+#	    
+#	    foreach my $file (read_dir($tpl_path)) {
+#	      
+#	      TRACE("Processing file $file",1);
+#	      my $proj_file_text = Text::Template::fill_in_file(
+#								"$tpl_path/$file", 
+#								HASH => \%unblessed, 
+#								DELIMITERS => ['<%', '%>'],
+#							       );
+#	      my $file_path = Text::Template::fill_in_string(
+#							     $file, 
+#							     HASH => \%unblessed, 
+#							    );
+#	      write_file($self->{working_dir} . "/" . $file_path, $proj_file_text);
+#	    }
+##	  }
+#	}
+#
+	$self->_process_templates();
+	bless $self, $class;
+	$self->_load_project_xml(%attribs);
+
+	TRACE("Project created successfully",1);
+	return $self;
+}
+
+sub load {
+	#This is an alternate constructor!
+	# It's for loading pre-existing projects
+	# from a file
+	#Open a project file (xml) and create the project mngmt
+	# objects
+	my($class, %attribs) = @_;
+	my $doc = $attribs{doc};
+
+	$app = $attribs{app};
+	TRACE("TkApp load routine taking control", 1);
+
+
+	#Create the base project object
+	my $self = {
+	  name => $attribs{name},
+	  type => 'TkApp',
+	  working_dir => $attribs{working_dir},
+	  project_name => $attribs{project_name},
+	  startup_file => $attribs{startup_file},
+          primary_source_file => $attribs{primary_source_file},
+	};
+	bless $self, $class;
+	$self->_populate(%attribs);	
+	$doc->dispose();
+
+	$self->dirty(0);	
+	return $self;
+}
+
+##
+#Accessors
+##
+
+##
+#Overrides Guido::PropertySource
+##
+
+sub property_source_properties {
+	my($self) = @_;
+	return [
+		new Guido::Property(
+				    name => 'name', 
+				    value => $self->name,
+				    display_name => 'Name',
+				    listeners => [$self],
+				   ),
+		new Guido::Property(
+				    name => 'working_dir',
+				    value => $self->working_dir,
+				    display_name => 'Working Dir',
+				    listeners => [$self],
+				    ),
+		new Guido::Property(
+				    name => 'type',
+				    value => $self->type,
+				    display_name => 'Type',
+				    listeners => [$self],
+				   ),
+		new Guido::Property(
+				    name => 'primary_source_file',
+				    value => $self->primary_source_file,
+				    display_name => 'Primary Source File',
+				    listeners => [$self],
+				   ),
+		new Guido::Property(
+				    name => 'file_path',
+				    value => $self->file_path,
+				    display_name => 'File Path',
+				    listeners => [$self],
+				   ),
+	];
+}
+
+sub property_source_children {
+	my($self) = @_;
+	return $self->source_files_values;
+}
+
+sub property_source_siblings {
+	my($self) = @_;
+	my @projects = $app->projects_values;
+	my @siblings;
+	foreach my $project (@projects) {
+		push(@siblings, $project) unless $project == $self;
+	}
+	return @siblings;
+}
+
+sub property_change {
+	my($self, $property_obj, $old_value) = @_;
+	#print __PACKAGE__ . " property changed\n";
+	my $property_name = $property_obj->name;
+	$self->{$property_name} = $property_obj->value;
+	return 1;
+}
+
+sub prop_options {
+		
+}
+
+##
+#Methods
+##
+
+sub collate_project {
+	my($self, %params) = @_;
+
+	#Create code for each source file
+	my $source_files;
+	TRACE("Primary source is " . $self->primary_source_file, 1);
+	$source_files .= $self->source_files($self->primary_source_file)->to_code(is_primary=>1);	
+	foreach my $source_file ($self->source_files_values()) {
+		next if $source_file->name eq $self->primary_source_file;
+		TRACE("Source file name is " . $source_file->name, 1);
+		$source_files .= $source_file->to_code(is_primary=>0);
+	}
+	
+	my $final_source .= qq|
+
+use Tk;
+
+$source_files
+
+MainLoop;
+
+	|;
+	TRACE($final_source, 1);
+	if ($params{save_as}) {
+		TRACE("Saving file as $params{save_as}", 1);
+		write_file($params{save_as}, $final_source);
+	}
+	return 1;
+}
+
+
+1;
+__END__
+# Below is the stub of documentation for your module. You better edit it!
+
+=head1 NAME
+
+Guido::Project - Encapsulates Guido project information management and project creation functionality
+
+=head1 SYNOPSIS
+
+  use Guido::Project;
+  #detailed code usage goes here
+
+=head1 DESCRIPTION
+
+Guido::Project provides the functionality necessary to manage meta-data for a Guido project.  It also 
+provides functions to import and save a project to a file.
+
+=head1 KNOWN ISSUES
+
+Known issues should be listed here
+
+=head1 AUTHOR
+
+jtillman@bigfoot.com
+
+=head1 SEE ALSO
+
+perl(1).
+
+=cut

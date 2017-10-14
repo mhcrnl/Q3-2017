@@ -1,0 +1,68 @@
+/-----------------------------------------------------\
+|README NOTES for Command-Line Accountant, version 0.2|
+\-----------------------------------------------------/
+
+The Command-Line Accountant
+=============================================
+website url: http://clacct.sourceforge.net
+author: Joe Kauzlarich
+license: free software (no license)
+=============================================
+NOTES
+
+**The command-line accountant is just one file, written in PERL 5
+
+**It is assumed you have Perl 5 in /usr/bin. If not, alter the first line 
+of the file 'clacct' to read accordingly.
+
+**Data is kept in the user's home directory, under home/username/.clacct/
+
+*******************
+TO INSTALL, simply 'su' to the root login, if you have permission and:
+
+cp clacct /usr/local/bin
+cp clarule /usr/local/bin
+
+or if you don't have root access, just run from your account by typing:
+
+clacct
+
+******************
+FOR GENERAL HELP, type 
+
+clacct --help
+
+*******************
+RENAMING COMMAND-LINE ACCOUNTANT
+clacct was originally named 'cla' so that it could be quickly
+typed. To avoid conflicts with existing software, the name
+was changed to 'clacct'. You may simply change the name of the 
+program by the following steps (replace 'cla' with target name
+in following commands):
+
+1) shell> mv clacct cla
+
+2) open the new file with your favorite editor
+
+3) change the line
+
+my $progname="clacct";
+
+to
+
+my $progname="cla";
+
+4) it is also recommended that you change the line
+
+my $cladir=$ENV{HOME} . "/.clacct";
+
+to
+
+my $cladir=$ENV{HOME} . "/.cla";
+
+5) then copy the old data to the new directory, then remove the old
+
+shell> cp ~/.clacct/* ~/.cla
+shell> rm -rf ~/.clacct
+
+*******************

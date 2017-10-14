@@ -1,0 +1,96 @@
+2000-12-11  Pat Eyler  <pate@gnu.org>
+	cut a 0.3.2 release.   (not on sourceforge due to technical
+	difficulties). 
+	
+2000-12-11  Pat Eyler  <pate@gnu.org>
+
+	* samples/GNOME/gword-dig
+	cleaned up exits from game
+
+	* README
+	cleaned up for release
+
+	* NOTES
+	cleaned up for release.
+	
+	* WordDig.pm
+	rewrote pod documentation.  it mostly makes sense now.
+
+	* Release-notes.0.3.2
+	touched up the release notes to fold in the latest info.
+
+2000-12-07  Pat Eyler  <pate@gnu.org>
+
+	* gword-dig
+	wrote a GNOME front-end for word-dig ... not complete, but it
+	works.
+
+	* TODO
+	touched up the TODO file
+
+2000-11-28  Pat Eyler  <pate@gnu.org>
+
+	* WordDig.pm 
+	finished objectifying, used new framework to allow multiple
+	players, track each user's word list separately, and generally do
+	everything in a cleaner fashion.
+
+	* samples/CLI/word-dig
+	rewrote to use objectified WordDig.pm
+
+	* t/WordDig.pm
+	rewrote to use objectified WordDig.pm
+
+	* t/twodicts.t
+	tests for new support of multiple dictionaries
+
+2000-11-21  Pat Eyler  <pate@gnu.org>
+	
+	* WordDig.pm 
+	started objectifying ... currently fails 50% of	tests, but on the
+	right track.  
+
+2000-08-30  Pat Eyler  <pate@gnu.org>
+
+	* t/WordDig.t 
+	fixed to handle the randomized computer turn (test 3)
+
+2000-08-29    <pate@bigfun.whirlycott.com>
+
+	* WordDig.pm 
+	made the computer player choose a random word from the set of
+	legal words. (BUGID 113038)
+	* samples/CLI/wordig 
+	added newlines between player repeats 
+	* samples/CLI/wordig 
+	fixed the illegal first word bug (BUGID	113048) 
+	* samples/CLI/worddig 
+	added a computer legal word count (BUGID 112744)
+
+2000-08-28    <pate@gnu.org>
+
+	* samples/CLI/worddig 
+	added alphabetical listing of used words (BUGID 112743)  
+
+2000-08-26  Pat Eyler  <pate@gnu.org>
+
+	* fixed recursion bug in samples/CLI/word-dig (BUGID 112736)
+	* added expected word length to player prompt (BUGID 112737)
+	* added last word used to player prompt (BUGID 112739)
+
+2000-08-25    <pate@gnu.org>
+
+	* fixed &get_word in samples/CLI/word-dig (pate)
+	* small cleanup in &right_start in WordDig.pm (pate)
+	* added correct error to &Computer_Turn in WordDig.pm (pate)
+	* made t/WordDig.t into a semi real test platform
+
+2000-04-03  Pat Eyler  <pate@.gnu.org>
+
+	* Start of cleanup for 0.3 release.  Added ChangeLog and TODO
+	files.  Fixed distributed words file to support forthcoming
+	tests. 
+
+
+
+	

@@ -1,0 +1,100 @@
+1. What is clickTk?
+
+clickTk is a graphical editor that helps Perl/Tk programmers to create Perl/Tk 
+applications consisting of several more or less sophisticated dialogs. 
+The main goal is to generate Perl/Tk code in form of scripts, subroutines and 
+classes which can be embedded in the application with or without minor manual 
+interventions. 
+Once the dialog flow is designed and the individual dialogs have been sketched, 
+clickTk can be used to generate the corresponding Perl/Tk source code. 
+Moreover, it can be used on the one hand to easily create some different 
+versions of a dialog flow and on the other hand to refine the chosen version to 
+its ultimate state. 
+The ability to generate additional run code to the dialog definitions itself 
+allows the programmer to already do some unit tests during the development 
+session, with the advantage that the exported code has already been tested, when 
+it will run in the application environment. 
+Therefore, clickTk considerably reduces the extremely tedious and error prone 
+coding of complex widget definitions on the one hand assisting the input of 
+options with preformatted dialogs and on the other hand allowing the use of 
+templates. 
+Further, clickTk allows to separate the code related to the presentation's 
+functionality from the application logic. 
+In consequence, it is easier to develop specialized widgets, a fact that 
+simplifies the application's code and significantly increases the quality of the 
+application's design. 
+
+2. Notes
+
+2.1 Enhancements 
+
+clickTk release 4.23
+
+  - Enhancements:
+    - insert an enclosing Frame on 'insert Frame'.
+    - modal composites may also apply grid geom manager
+	- option 'onDeleteWindow' for composite gets assigned to instance
+
+  - Some bugs fixed:
+    - project's test code: do not pack composite widgets
+	  based on Toplevel.
+    - propagate geom manager to siblings
+
+clickTk release 4.22
+
+
+  - Some bugs fixed:
+    - undo/redo updates project change-status
+    - loss of project options 'callback' and 'methods' after undo/redo fixed.
+  - save work at every change
+  - save options on restart request
+  - reopen callback window after closing it with <alt-F4>.
+  - 'find' enhanced in all code windows 
+  - menu item 'subwidget' renamed to 'Underneath'
+  - Some minor problems fixed.
+
+2.2 Open items:
+
+  - Widget TextList cannot be accessed (Windows/XP, perl 5.8.8)
+  - handling of tearoff popup menu doesn't work fine (tearoff suppressed)
+
+
+3. Installation's procedure
+
+
+3.1 Installing a new version
+  
+  - Download the clickTk intallation's archive 
+    into a dedicated folder i.e. c:\programme\clickTk
+
+  - Unpack the archive into that folder
+
+  - Create a link to the main script ctk_w.pl
+
+  - Now clickTk is ready to work .
+
+  - Start up clickTk session and open any example project.
+
+  - Get familiar with clickTk session control.
+
+
+
+3.2 Installing an upgrade
+
+
+  - Read the installation's notes.
+
+  - Download the clickTk intallation's archive 
+    into a new dedicated folder. 
+
+  - Unpack the archive into that new folder.
+
+  - Merge your projects, works, template, widgets definitions and shells into the
+    new folder.
+
+  - Run the upgrade scripts if any has been provided and mentioned 
+    in the readme installation's notes.
+ 
+  - Start some sessions to check whether the new version works fine. 
+    When it works fine, then make the new version get your current version,
+    otherwise let us know about the unexpected events occurred. 

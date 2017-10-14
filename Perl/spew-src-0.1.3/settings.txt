@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Settings>
+	<move-left>Left</move-left>
+	<move-right>Right</move-right>
+	<pull-down>Down</pull-down>
+	<rotate-clockwise>Up</rotate-clockwise>
+	<rotate-clockwise>a</rotate-clockwise>
+	<rotate-counter-clockwise>d</rotate-counter-clockwise>
+	
+	<level-1-name>Easy!</level-1-name>
+	<level-2-name>Hard!</level-2-name>
+	<level-3-name>Super Hard!</level-3-name>
+	<level-4-name>What the?!</level-4-name>
+	<level-5-name>BARF!</level-5-name>
+	<level-6-name>OH MY GOD!!!</level-6-name>
+	<level-7-name>Kill it! Kill it! Aghajsbc jka ka~......</level-7-name>
+	
+	<piece-adjective>crazy</piece-adjective> 
+	<piece-adjective>cheeky</piece-adjective> 
+	<piece-adjective>swirly</piece-adjective> 
+	<piece-adjective>sketchy</piece-adjective> 
+	<piece-adjective>super</piece-adjective> 
+	<piece-adjective>world</piece-adjective> 
+	<piece-adjective>dismal</piece-adjective> 
+	<piece-adjective>asinine</piece-adjective>
+	<piece-adjective>unruly</piece-adjective>
+	<piece-adjective>methodical</piece-adjective>
+	<piece-adjective>smelly</piece-adjective>
+	<piece-adjective>obsequious</piece-adjective>
+	<piece-adjective>original</piece-adjective>
+	<piece-adjective>annual</piece-adjective>
+	<piece-adjective>horrific</piece-adjective>
+	<piece-adjective>worthwhile</piece-adjective>
+	
+	<color>00AA33</color> 
+	<color>33AA00</color> 
+	<color>EE7733</color> 
+	<color>AA0033</color> 
+	<color>8800AA</color> 
+	<color>0077AA</color> 
+	<color>00AAFF</color> 
+	<color>FFAA00</color> 
+	<color>AAFF00</color> 
+	<color>AA00FF</color> 
+	<color>FF00AA</color> 
+	<color>00FFAA</color> 
+	<color>EEAA33</color> 
+	<color>1144BB</color> 
+	<color>AA2233</color>
+</Settings>

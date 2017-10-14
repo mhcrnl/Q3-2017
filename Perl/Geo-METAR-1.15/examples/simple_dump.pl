@@ -4,9 +4,9 @@
 
 # Example script for METAR.pm.
 
-use Geo::METAR;
+use METAR;
 
-my $m = new Geo::METAR;
+my $m = new METAR;
 $m->metar("KFDY 251450Z 21012G21KT 8SM OVC065 04/M01 A3010 RMK 57014");
 $m->dump;
 exit;

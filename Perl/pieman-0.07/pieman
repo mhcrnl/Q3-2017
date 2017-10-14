@@ -1,0 +1,383 @@
+#!/usr/bin/env perl
+
+#
+# Copyright (C) 2010 Paul Z. Kolano <pkolano@gmail.com>.
+# All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the same terms as Perl itself.
+#
+
+use strict;
+use Date::Parse;
+use File::Temp qw(tempfile);
+use Getopt::Long qw(:config bundling no_ignore_case require_order);
+use Term::ANSIColor;
+use XML::Simple;
+
+our $VERSION = 0.07;
+
+my $title = "pieman";
+
+#TODO: poor man's vi line editor when editor not defined
+#      need special handling for "preput" text
+#      look at Term::ANSIScreen for codes
+#      move 3 left
+#      print "\e[3D";
+#      move 3 right
+#      print "\e[3C";
+#      clear to end of line
+#      print "\e[K";
+
+
+#TODO: better error management
+#TODO: link entries?
+
+my %opts = (
+    db => (getpwuid($<))[7] . "/.$title" . "db",
+    rc => (getpwuid($<))[7] . "/.$title" . "rc",
+);
+die "Invalid options\n" if (!GetOptions(\%opts,
+    "a|add", "aliases", "c|contact", "db=s", "e|event", "f|field",
+    "g|graph", "l|list", "m|modify", "n|note", "p|parent=s", "project=s",
+    "r|remove", "rc=s", "s|search", "stdin", "t|task",
+));
+
+$opts{rc} = defaultrc() if (! -r $opts{rc});
+my $rc = XMLin($opts{rc},
+    ForceArray => [qw(field)],
+    KeyAttr => [],
+    NormalizeSpace => 2,
+);
+#TODO: check that it has full name, etc.
+
+my $db;
+if (-r $opts{db}) {
+    $db = XMLin($opts{db},
+        ForceArray => [qw(contact event note task)],
+        KeyAttr => [],
+        NormalizeSpace => 2,
+    );
+}
+
+my $graph;
+if ($opts{g}) {
+    require Graph::Easy;
+    $graph = Graph::Easy->new;
+}
+
+my ($type, $types);
+$type = "contact" if $opts{c};
+$type = "event" if $opts{e};
+$type = "note" if $opts{n};
+$type = "task" if $opts{t};
+$types = $type . "s";
+
+my $first = lc $rc->{$types}->{fields}->{field}->[0];
+$first =~ s/\s+/_/g;
+
+if ($opts{aliases}) {
+    #################
+    #### aliases ####
+    #################
+    $first = lc $rc->{contacts}->{fields}->{field}->[0];
+    $first =~ s/\s+/_/g;
+    foreach my $contact (@{$db->{contacts}->{contact}}) {
+        while (my ($key, $val) = each %{$contact}) {
+            if ($key =~ /(\w+)_alias$/) {
+                my ($prefix, $name, $email) =
+                    ($1, $contact->{$first}, $contact->{"$1_email"});
+                next if (!defined $name || !defined $email);
+                print "alias $val $name <$email>\n";
+            }
+        }
+    }
+} elsif ($opts{a} && $type) {
+    #############
+    #### add ####
+    #############
+    my $fh;
+    if ($opts{stdin}) {
+        $fh = \*STDIN;
+    } else {
+        ($fh, my $file) = tempfile(UNLINK => 1);
+        my $count = 0;
+        foreach my $field (@{$rc->{$types}->{fields}->{field}}) {
+            print $fh "$field:\t";
+            print $fh join(" ", @ARGV) if (!$count++);
+            print $fh "\n";
+        }
+        close $fh;
+        my $return = system($rc->{editor}, $file);
+        #TODO: error if can't execute editor
+        open($fh, $file) or die;
+    }
+    my %entry;
+    while (<$fh>) {
+        #TODO: need to support multiple lines for notes/files
+        if (/\s*([^:]+)\s*:\s*(.*\S)\s*/) {
+            my ($key, $val) = (lc $1, $2);
+            $key =~ s/\s+/_/g;
+            #TODO: make this based on field type
+            $val = ucwords($val) if ($key !~ /alias|email|path|text/);
+            $entry{$key} = $val;
+        }
+    }
+    close $fh;
+    die "$first is required\n" if (!$entry{$first});
+    #TODO: need some more validity checks related to field type
+    push(@{$db->{$types}->{$type}}, \%entry);
+} elsif (($opts{l} || $opts{g} && !$opts{s}) && $type) {
+    ####################
+    #### list/graph ####
+    ####################
+    my $index = 0;
+    foreach my $entry (sort sort_entry @{$db->{$types}->{$type}}) {
+        #TODO: add coloring?
+        if ($opts{g}) {
+            graph_entry($entry);
+        } else {
+            print_entry($entry, ++$index);
+        }
+    }
+    print $graph->as_ascii if ($opts{g});
+} elsif ($opts{m} && $type) {
+    ################
+    #### modify ####
+    ################
+    my $index = sort_index($ARGV[0]);
+    die "Invalid index\n" if (!defined $index);
+    my $entry = $db->{$types}->{$type}->[$index];
+    my ($fh, $file) = tempfile(UNLINK => 1);
+    my $count = 0;
+    foreach my $field (@{$rc->{$types}->{fields}->{field}}) {
+        my $key = lc $field;
+        $key =~ s/\s+/_/g;
+        print $fh "$field:\t$entry->{$key}\n";
+    }
+    close $fh;
+    my $return = system($rc->{editor}, $file);
+    #TODO: error if can't execute editor
+    open($fh, $file) or die;
+
+    while (<$fh>) {
+        #TODO: need to support multiple lines for notes/files
+        if (/\s*([^:]+)\s*:\s*(.*\S)\s*/) {
+            my ($key, $val) = (lc $1, $2);
+            $key =~ s/\s+/_/g;
+            #TODO: make this based on field type
+            $val = ucwords($val) if ($key !~ /alias|email|path|text/);
+            $entry->{$key} = $val;
+        }
+    }
+    close $fh;
+    die "$first is required\n" if (!$entry->{$first});
+    #TODO: need some more validity checks related to field type
+} elsif ($opts{p} && $type) {
+    ################
+    #### parent ####
+    ################
+    my @pis = map {sort_index($_)} split(/,/, $opts{p});
+    my $pids;
+    foreach my $pi (@pis) {
+        if (!defined $db->{$types}->{$type}->[$pi]->{pid}) {
+            $db->{$types}->{$type}->[$pi]->{pid} =
+                time . "." . $db->{$types}->{$type}->[$pi];
+        }
+        $pids .= $db->{$types}->{$type}->[$pi]->{pid} . ",";
+    }
+    chop $pids;
+    foreach my $index (map {sort_index($_)} @ARGV) {
+        $db->{$types}->{$type}->[$index]->{pids} = $pids;
+    }
+} elsif ($opts{r} && $type) {
+    ################
+    #### remove ####
+    ################
+    my @removes;
+    foreach my $arg (@ARGV) {
+        die "invalid index\n" if ($arg !~ /^\d+$/ || $arg < 1 ||
+            $arg > scalar(@{$db->{$types}->{$type}}));
+        my $remove = sort_index($arg);
+        push(@removes, $remove);
+    }
+    foreach my $index (sort {$b <=> $a} @removes) {
+        splice(@{$db->{$types}->{$type}}, $index, 1);
+    }
+} elsif ($opts{s} && $type) {
+    ######################
+    #### search/graph ####
+    ######################
+    my $index = 0;
+    SEARCH: foreach my $entry (sort sort_entry @{$db->{$types}->{$type}}) {
+        $index++;
+        while (my ($key, $val) = each %{$entry}) {
+            next if ($key =~ /^pids?$/);
+            foreach my $arg (@ARGV) {
+                if ($val =~ /$arg/i) {
+                    if ($opts{g}) {
+                        graph_entry($entry);
+                    } else {
+                        print_entry($entry, $index, $key);
+                    }
+                    next SEARCH;
+                }
+            }
+        }
+    }
+    print $graph->as_ascii if ($opts{g});
+} else {
+    #TODO: usage
+    die "usage here\n";
+}
+if ($opts{a} || $opts{m} || $opts{r} || $opts{p}) {
+    XMLout($db,
+        AttrIndent => 1,
+        KeyAttr => [],
+        NoAttr => 1,
+        OutputFile => $opts{db},
+        RootName => $title,
+    );
+}
+
+###################
+#### defaultrc ####
+###################
+sub defaultrc {
+    return '
+        <pieman>
+            <contacts>
+                <fields>
+                    <field>Full Name</field>
+                    <field>Home Address</field>
+                    <field>Home Phone</field>
+                    <field>Home Email</field>
+                    <field>Home Alias</field>
+                    <field>Work Address</field>
+                    <field>Work Phone</field>
+                    <field>Work Email</field>
+                    <field>Work Alias</field>
+                    <field>Birthday</field>
+                    <field>Anniversary</field>
+                    <field>Spouse Name</field>
+                </fields>
+            </contacts>
+            <events>
+                <fields>
+                    <field>Description</field>
+                    <field>Date</field>
+                    <field>Time</field>
+                </fields>
+            </events>
+            <notes>
+                <fields>
+                    <field>Title</field>
+                    <field>Path</field>
+                    <field>Text</field>
+                </fields>
+            </notes>
+            <tasks>
+                <fields>
+                    <field>Description</field>
+                    <field>Priority</field>
+                    <field>Effort</field>
+                    <field>Due Date</field>
+                    <field>Project</field>
+                </fields>
+            </tasks>
+            <editor>/usr/bin/vim</editor>
+        </pieman>
+    ';
+}
+
+#####################
+#### graph_entry ####
+#####################
+sub graph_entry {
+    my $entry = shift;
+    $graph->add_node($entry->{$first});
+    foreach my $parent (parent_entry($entry)) {
+        $graph->add_edge_once($parent->{$first}, $entry->{$first});
+    }
+}
+
+######################
+#### parent_entry ####
+######################
+sub parent_entry {
+    my $entry = shift;
+    my @parents;
+    foreach my $pid (split(/,/, $entry->{pids})) {
+        foreach my $parent (@{$db->{$types}->{$type}}) {
+            if ($parent->{pid} eq $pid) {
+                push(@parents, $parent);
+                last;
+            }
+        }
+    }
+    return wantarray ? @parents : \@parents;
+}
+
+#####################
+#### print_entry ####
+#####################
+sub print_entry {
+    my $entry = shift;
+    my $index = shift;
+    my $ckey = shift;
+    print "$index. ";
+    my $count = 0;
+    foreach my $field (@{$rc->{$types}->{fields}->{field}}) {
+        my $key = lc $field;
+        $key =~ s/\s+/_/g;
+        next if (!$entry->{$key});
+        my $color = 'reset';
+        $color = 'bold yellow' if ($key eq $ckey);
+        print " " x (length("" . $index) + 2) if ($count++);
+        print colored (ucwords($key, 1) . ": $entry->{$key}\n", $color);
+        #TODO: align output
+    }
+    print "\n";
+}
+
+####################
+#### sort_entry ####
+####################
+sub sort_entry {
+    if ($type eq 'contact') {
+        (split(/\s+/, $a->{$first}))[-1] cmp
+            (split(/\s+/, $b->{$first}))[-1];
+    } elsif ($type eq 'task') {
+        #TODO need to generalize this
+        $a->{priority} <=> $b->{priority};
+    } else {
+        $a cmp $b;
+    }
+}
+
+####################
+#### sort_index ####
+####################
+sub sort_index {
+    my $sindex = shift;
+    my $sort = (sort sort_entry @{$db->{$types}->{$type}})[$sindex - 1];
+    return undef if (!defined $sort);
+    my $index = 0;
+    foreach my $entry (@{$db->{$types}->{$type}}) {
+        return $index if ($entry == $sort);
+        $index++;
+    }
+    return undef;
+}
+
+#################
+#### ucwords ####
+#################
+sub ucwords {
+    my $s = shift;
+    my $tr = shift;
+    $s =~ s/_/ /g if ($tr);
+    $s =~ s/\b(\w+)\b/ucfirst($1)/ge; 
+    return $s;
+}
+

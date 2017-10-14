@@ -1,0 +1,215 @@
+#!/usr/bin/perl
+
+#  tlt, a command-line translator between multiple languages             
+#  Copyright (C) 2001 Javier Vales Alonso  
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be
+#  useful, but WITHOUT ANY WARRANTY; without even the implied
+#  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public
+#  License along with this program; if not, write to the Free
+#  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+use CGI;
+use LWP::UserAgent;
+use HTTP::Request::Common qw(POST GET);
+use IO::Socket;
+
+# Text before translation
+$STAG = "<textarea rows=\"3\" wrap=virtual cols=\"56\" name=\"q\">";
+# Text after translation
+$ETAG = "</textarea>";
+
+sub test_connection()
+{
+ 
+ my $sock = new IO::Socket::INET (PeerAddr => 'www.google.com',
+ 				  PeerPort => 'http(80)',
+				  Proto    => 'tcp');
+ # print STDERR "Checking connection.";
+ if($sock == 0) {
+#	print STDERR "Sorry, couldn't connect to the server.\n";
+	undef $sock;
+	return;
+ }
+# print STDERR ".. ok.\n";
+ undef $sock;
+ 1;
+}
+
+
+
+sub translate 
+{
+	my ($text, $lang) = @_;
+	my $ua = new LWP::UserAgent;
+	$ua->agent("Mozilla/4.75 [en] (X11; U; Linux 3.2.1 itanium; Nav)");
+	
+	my $req = POST 'http://world.altavista.com/tr', 
+	[ doit => "done",
+	  BabelFishFrontPage => "yes",
+	  tt => "urltext",
+	  urltext => $text, 
+	  url => "http://",
+	  lp => $lang,
+	  mBody => $linea ];
+	
+	
+	$req->header(Referer => "http://world.altavista.com/tl"); 
+	$req->header(Host => "world.altavista.com");
+	
+	# Pass request to the user agent and get a response back 
+	my $res = $ua->request($req);
+	
+	@b = split(/$STAG/,$res->content);
+	($result) = split(/$ETAG/,$b[1]);
+	
+	if ($result) {
+	    print $result;
+	} else {
+	    print STDERR "Couldn't translate text\n";
+	}
+	
+	return 0;
+}
+
+$| = 1; ## turn auto-flush on
+
+
+#
+# Set defaults options
+#
+$interactive = 0;
+
+# Is the TLTLANG environment variable set?
+if($ENV{'TLTLANG'}) {
+    $lang = $ENV{'TLTLANG'};
+} else {
+    $lang = "en_es";
+}
+
+#
+# Parse command-line options
+#
+for($I=0;$I<=$#ARGV;$I++) {
+    if($ARGV[$I] eq "-i") {       # Use interactive mode (translate line by line)
+	$interactive = 1;
+	next;
+    }
+    if($ARGV[$I] eq "-l") {       # Choose languages set
+	if($ARGV[++$I]) {
+	    $lang = $ARGV[$I];
+	    next;
+	} else {
+	    print STDERR "Error, you must specify a language set\n";
+	    print STDERR "Type $0 --help for a explanation of tlt\n";
+	    exit -1;
+	}
+    }
+    if ($ARGV[0] eq "--help" || $ARGV[0] eq "-h") {
+	print STDERR  "tlt 0.1.1, Copyright © 2001 Javier Vales Alonso\n";
+	print STDERR  "tlt comes with ABSOLUTELY NO WARRANTY. This is free software,\n";
+	print STDERR  "and you are welcome to redistribute it under certain conditions.\n";
+	print STDERR  "\n";
+	print STDERR  "Usage: tlt [options] file\n";
+	print STDERR  "Options:\n";
+	print STDERR  "-l lang1_lang2     Translates from lang1 to lang2. See below for lang options.\n";
+	print STDERR  "-i                 Interactive mode. Translate each line separately.\n";
+	print STDERR  "                   Useful if tlt input is introduced manually.\n";
+	print STDERR  "\n";
+	print STDERR  "Environment variables:\n";
+        print STDERR  "TLTLANG            Defines default languages to translate from and to.\n";
+	print STDERR  "                   -l option is more prioritary than TLTLANG.\n";
+	print STDERR  "\n";
+		
+	print STDERR  "Languages:\n";
+	print STDERR  "en_es              English to Spanish\n";
+	print STDERR  "en_fr              English to French\n";
+	print STDERR  "en_de              English to German\n";
+	print STDERR  "en_it              English to Italian\n";
+	print STDERR  "en_pt              English to Portuguese\n";
+	print STDERR  "fr_en              French to English\n";
+	print STDERR  "de_en              German to English\n";
+	print STDERR  "it_en              Italian to English\n";
+	print STDERR  "pt_en              Portuguese to English\n";
+	print STDERR  "es_en              Spanish to English\n";
+	print STDERR  "de_fr              German to French\n";
+	print STDERR  "fr_de              French to German\n";
+	print STDERR  "ru_en              Russian to English\n";
+	print STDERR  "en_ja              English to Japanese\n";
+	print STDERR  "en_ko              English to Korean\n";
+	print STDERR  "en_zh              English to Chinese\n";
+	print STDERR  "ja_en              Japanese to English\n";
+	print STDERR  "ko_en              Korean to English\n";
+	print STDERR  "zh_en              Chinese to English\n";
+	print STDERR  "\n";
+	print STDERR  "Examples:\n";
+	print STDERR  " tlt EN_SP foo                   Translates from english to spanish the file \'foo\'.\n"; 
+	print STDERR  " tlt -l EN_FR foo | tlt FR_CH    First translates foo from EN to FR, and then from FR to CH.\n"; 
+	print STDERR  " echo \"Text to translate\" | tlt  Translates the text coming from standard input.\n";
+	print STDERR  "                                 with the default language set.\n";
+	print STDERR  " setenv TLTLANG \"EN_SP\"          Set TLTLANG to EN_SP (translate from english to spanish)\n";
+	print STDERR  "                                 in C shells.\n"; 
+	print STDERR  " export TLTLANG=\"EN_SP\"          Set TLTLANG to EN_SP (translate from english to spanish)\n";
+	print STDERR  "                                 in Bourne shells.\n"; 
+	print STDERR  "\n"; 
+	exit(0);
+    }
+
+    # Option not recognized, should mark up the start of the files in 
+    # non-interactive mode
+    last; 
+}
+
+# Test connection with the server
+# &test_connection || die ("Sorry, couldn't connect to the server.\n");
+
+
+if($interactive) {
+    print STDERR "Interactive mode. Write your text and press RETURN to translate.\n";
+    print STDERR "Type CTRL-C when done.\n\n";
+    while(<STDIN>) {
+	&translate($_, $lang);    
+    }
+} else {
+    for($J=$I;$J<=$#ARGV;$J++) {
+	open(FILE, $ARGV[$J]);
+	while(<FILE>) {
+	    $text.="$_";
+	}
+    }
+
+    if (!$text) { # Umm, there aren't input files... maybe there is something in the standar input
+	while(<STDIN>) {
+	    $text.="$_"; 
+	}
+    }
+    
+    if (!$text) { # To the hell with it!
+	exit(-1);
+    }
+
+    &translate($text, $lang);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

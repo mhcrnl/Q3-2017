@@ -1,0 +1,1222 @@
+clickTk - User's guide
+
+  Content
+
+      1. Introduction
+      1.1 What is clickTk?
+      1.2 Concepts
+      1.2.1 Projects and applications
+      1.2.2 ClickTk session
+      1.2.3 clickTk main functions
+      1.3 Wording
+      2. Getting started
+      2.1 Start a session
+      2.2 Define project's properties
+      2.3 Insert widgets
+      2.4 Modify widget options
+      2.5 Open the project
+      2.6 Save the work done
+      2.7 Save a project
+      2.8 Check a project
+      2.9 Run a project
+      3. Customize clickTk
+      3.1 clickTk resources
+      4. Implementing Perl/Tk applications from scratch
+      4.1 Design the dialog flow
+      4.2 Build composites
+      4.3 Build templates
+      4.4 Build projects
+      4.5 Add callbacks
+      4.6 Test projects
+      4.7 Convert to final form
+      4.8 Export to application
+      5. Upgrading perl/Tk applications
+      5.1 Import projects
+      5.2 Reuse projects
+      6. Implementing Perl/Tk composites
+      7. Register widget classes
+      8. Control the clickTk session flow
+      9. The target code
+      10. Enter the dialog data
+      10.1 Widget definitions
+      10.2 Callbacks (subroutines or methods)
+      10.2.1 Subroutines
+      10.2.2 Methods
+      10.3 Orders
+      10.4 The application
+      10.5 Coding the command options (message to callbacks)
+      10.6 Variables
+      10.7 The argument list
+      10.7.1 Projects of type subroutine
+      10.7.2 Projects of type composite or package
+      11. Prototyping with clickTk
+      11.1 Build several versions of the same project
+      12. Restrictions
+      13. Appendix
+      A1) Menu structures
+      Main Menu
+      PopupMenu
+      A2) Widget class definition
+      A3) Configuration options
+      A3) Saved project (t7.pl)
+      A5) Saved work (t7.pl)
+      A6) Exported project (t7.pl)
+
+1. Introduction
+
+  1.1 What is clickTk?
+      clickTk is a graphical editor that helps Perl/Tk programmers to create Perl/Tk 
+      applications consisting of several more or less sophisticated dialogs. 
+      The main goal is to generate Perl/Tk code in form of scripts, subroutines and 
+      classes which can be embedded in the application with or without minor manual 
+      interventions. 
+      Once the dialog flow is designed and the individual dialogs have been sketched, 
+      clickTk can be used to generate the corresponding Perl/Tk source code. 
+      Moreover, it can be used on the one hand to easily create some different 
+      versions of a dialog flow and on the other hand to refine the chosen version to 
+      its ultimate state. 
+      The ability to generate additional run code to the dialog definitions itself 
+      allows the programmer to already do some unit tests during the development 
+      session, with the advantage that the exported code has already been tested, when 
+      it will run in the application environment. 
+      Therefore, clickTk considerably reduces the extremely tedious and error prone 
+      coding of complex widget definitions on the one hand assisting the input of 
+      options with preformatted dialogs and on the other hand allowing the use of 
+      templates. 
+      Further, clickTk allows to separate the code related to the presentation's 
+      functionality from the application logic. 
+      In consequence, it is easier to develop specialized widgets, a fact that 
+      simplifies the application's code and significantly increases the quality of the 
+      application's design. 
+
+  1.2 Concepts
+   1.2.1 Projects and applications
+      The clickTk world consists mainly of projects, which may be grouped into 
+      applications. 
+
+        * Project The project is the base element or object of the clickTk world, 
+        because it is created and maintained during a clickTk session. In other words 
+        the project is the real unit of work of clickTk. 
+      It consists of many widget definitions that build its visual part and some other 
+      properties which all together build the generated code. This generated code may 
+      be a script, used either as main script or as required script, or a module that 
+      in turn can be a composite or a derived widget. 
+
+        * Application An application consists of a main script which requires and/or 
+        uses several modules. Usually, the main script and each module are projects and 
+        clickTk individually processes them. 
+      Thus, each project of an application contains the definitions of its 
+      application. Of course, projects of an application may be grouped into a subdir 
+      underneath the clickTk project folder. 
+      Nevertheless, projects must not be assigned to an application, especially then 
+      when they are shared among many applications (i.e. composite widgets) or by 
+      contrast they are not related to other scripts. 
+
+   1.2.2 ClickTk session
+      A clickTk session processes one project at a time. Thereby the following means 
+      are used: 
+
+        * Widget tree clickTk maintains a widget tree to hold the widget's hierarchical 
+        structure. This tree is used to do all edit operations of insert, select, 
+        delete, copy and move on widgets. 
+
+        * Preview The preview shows the defined widgets as accurate as possible. The 
+        preview may be embedded in the main window as well as shown in a separate 
+        toplevel widget. 
+
+        * Tools The tools perform various processes using the actual project. So the 
+        target code may be edited, checked and executed. Further, the widget class 
+        definitions can be updated. 
+
+        * View The view display data in various forms about the project or even about 
+        single widgets. So the Perl/Tk code, the widget structure and the clickTk log 
+        file can be inspected. 
+
+        * Options A wide set of run time options influences the work in a session. Most 
+        options can be turned on or off in order to activate or deactivate the 
+        corresponding functionality, .i.e. to use an independent Toplevel for the 
+        preview instead of the integrated frame (see also Appendix A3). 
+
+        * Help The help function provides some technical information about Tk widgets 
+        and their functionalities, like short descriptions of all widget options and 
+        descriptions of widget classes. 
+
+   1.2.3 clickTk main functions
+      The main functions of a clickTk session are:
+
+        * set up a new project, 
+
+        * open an existing project, 
+
+        * edit a project, 
+
+        * save a project state into a persistent instance, 
+
+        * check and run a project, 
+
+        * save a project and generate the target code, 
+
+        * import a project from the application environment, 
+
+        * export a project into the application environment.
+
+  1.3 Wording
+
+      * application 
+      An application consists of one or more main scripts which instantiate several 
+      dialogs to communicate with the user. Actually, the application is an optional 
+      property of a project (name , folder and libraries). 
+
+      * widget 
+      Instance of type widget class. 
+
+      * order 
+      Snipped of Perl code inserted just after its widget constructor code. 
+
+      * widget class 
+      Class based on legal Tk base classes and may be a standard, composite or derived 
+      widget. 
+
+      * non visual 
+      Class that is not Tk-compliant. Usually, these classes implement the 
+      application's objects. 
+
+      * dialog 
+      Assembly of widgets, which may run modal or non modal. 
+
+      * properties 
+      Set of resources which define the nature of the dialog and finally the content 
+      of the target. Dialog properties or code properties are equivalent expressions 
+      to properties. 
+
+      * project 
+      GUI dialog with its related Perl code (callbacks). 
+
+      * work 
+      The persistent version of a project at a specific time of the session. 
+
+      * target 
+      Code that is generated while saving a project. It may be a
+      script, a subroutine, a composite widget, or a derived widget (or package). 
+      It is always a Perl script. 
+
+      * template 
+      'Work' with a basic set of widgets and code which may be used as a starting 
+      structure to implement dialogs with the same basic structure. 
+
+      * export 
+      Process that takes over a project into the application environment according to 
+      its kind. Thereby it gets rid of any test code. 
+
+      * import 
+      Process that does the opposite of the export process. It takes over a script, 
+      possibly exported earlier, into a project with (usually) the same name. 
+
+2. Getting started
+      clickTk applies the application model of single document processing as far as 
+      possible. Therefore, basic functionalities like new, save and undo are not 
+      explained. 
+
+  2.1 Start a session
+      A clickTk session is started entering the command 
+
+      ctk_w.pl [options] [file]
+
+        -c
+      "cold start", do not restore last used project resp work
+        -h
+      show this help
+        -?
+      show this help
+        -d
+      set debug mode on
+        -r
+      restore work from given workfile or noname
+        -u
+      userid
+      file
+      name of the file to be load or name of the work to be restored
+
+      Examples: 
+
+1. Start clickTk session and load last used project
+
+      ctk_w.pl
+
+2. Start clickTk session and load project tx.pl
+
+      ctk_w tx.pl
+
+3. Start clickTk session and restore saved work tx.pl
+
+      ctk_w.pl -r tx.pl
+
+4. Start clickTk session and restore saved work and set debug mode
+
+      ctk_w.pl -d -r tx.pl
+
+5. Start clickTk session and restore last not saved job
+
+      ctk_w.pl -r
+
+  2.2 Define project's properties
+      Properties are defined at creation time of a project, but may also be basically 
+      redefined at any time. 
+
+      Project's properties define 
+
+        * options of the target 
+
+        * variables 
+
+        * callbacks 
+
+        * libraries 
+
+        * methods 
+
+        * general code 
+
+        * POD section
+
+  2.3 Insert widgets
+      Widgets may be inserted before or after the selected widget, whereby either a 
+      subwidget (that means a child) or a sibling widget can be inserted. 
+
+  2.4 Modify widget options
+      Selected widget may be modified: 
+
+        * on <double click> on the tree view or, 
+
+        * on <double click> on the widget itself in the preview. 
+      After that the modal dialog to enter the options appears.
+
+      Entering <right click> on the selected widget in the tree view allows to execute 
+      the following functions: 
+
+      Insert 
+      Before
+      After
+      Subwidget
+      Order
+      Options
+      All options
+      View all options 
+      View default options
+      Context help
+      Cut
+      Copy  
+      Paste
+      Rename
+      Delete
+      Replace
+      hide widget
+      view packInfo
+
+  2.5 Open the project
+      This function loads a previously saved project for further developments. Thereby 
+      the target is parsed to reconstruct the clickTk internal project structure. 
+
+  2.6 Save the work done
+      At any time of the session the state of the project can be saved persistently as 
+      a 'work'. Thereby only the internal state of the project is dumped to the 
+      persistent clickTk work folder. The process 'save' implies the process 'save 
+      work' Several saved works may exist, because a 'work' may have any name. 
+
+  2.7 Save a project
+      Projects are always persistently saved in the form of a target into the clickTk 
+      project folder. 
+
+  2.8 Check a project
+      At any time of the session the target may be checked against possible syntax 
+      error mainly in callback-code. 
+
+  2.9 Run a project
+      At any time of the session the target may be executed. Of course this function 
+      implies that the project has been saved before. 
+
+3. Customize clickTk
+      Some options to customize clickTk may be:
+
+        * Add supported widgets classes.
+
+        * Implement templates (see subfolder templates).
+
+        * Enhance the clickTk assistant (see file ctkAssistentFuncList.txt).
+
+        * Adapt configuration's options (see file ctkConfigOptions.txt)
+
+  3.1 clickTk resources
+        * project folder
+
+        * work folder
+
+        * temp folder
+
+        * image folder
+
+        * widget folder
+
+        * template folder
+
+        * toolbar folder
+
+        * test folder 
+
+        * lib folder
+
+4. Implementing Perl/Tk applications from scratch
+      The implementation of a Perl/Tk application consists of several steps which 
+      seldom happen straight forward. Most times, these steps must be repeated many 
+      times in order to find the final implementation. 
+
+      Nevertheless, usually the development cycle consists of the following steps: 
+
+        * design the dialog flow 
+
+        * build composites 
+
+        * build templates 
+
+        * build the projects 
+
+        * add callback code to the projects 
+
+        * convert the projects into the final form 
+
+        * export the projects 
+
+  4.1 Design the dialog flow
+      Usually, a Perl/Tk application consists of a main script and several dialogs, 
+      which may be implemented either as composite widgets or as required scripts, 
+      where the TK code is embedded in a subroutine. The main script usually hosts the 
+      menu, the main loop and the application code, that means the callbacks. 
+
+      Therefore, the application' s structure may look like this: 
+
+        * main script (menu, Tk mainloop), 
+
+        * application's packages (application's logic), 
+
+        * Tk code consisting of 
+
+          o composite widgets (data views, dialogs), 
+
+          o subroutines (required modules), 
+
+          o derived widgets (package), 
+
+          o control code (non visual widgets, order). 
+      All these components can be developed with clickTk. 
+
+  4.2 Build composites
+      Composite widgets usually implement lot of functionality and are mostly shared 
+      among many applications. 
+
+      After their development with clickTk, they may be exported to the application's 
+      library, or even Perl library, and then registered as widget class to clickTk. 
+
+  4.3 Build templates
+      The use of templates may avoid wasting time entering several time the same 
+      things, may prevent peoples to reinvent the wheel over and over again and 
+      finally may help to give an uniform design and feeling to the different 
+      applications. 
+
+  4.4 Build projects
+      Using clickTk the individual dialogs are set up as projects. Thus, the main 
+      structure of the application is done. Although the application's logic is not 
+      yet implemented, the design and feeling of the application can be presented. 
+      See details in chapter 10. Enter the dialog data.
+
+  4.5 Add callbacks
+      Callback code may be added in order to allow the dialog flow to work. An 
+      important task in this phase is the implementation of non visual widgets and 
+      orders. Non visual widgets provide means to control the application flow (i.e. 
+      timer, events, state machine and much more) while orders allow to send messages 
+      to widget instances after the constructor message. 
+
+  4.6 Test projects
+      Code developed with clickTk always contains a minimum of test code in order to 
+      make it executable. The application logic must be included explicitly by means 
+      of non-visual classes though. Further, the access to the application's libraries 
+      may be done specifying the property 'libraries' which generates a set of 'use 
+      lib' statements. So unit tests done out of clickTk sessions may get very close 
+      to the reality of the application. 
+
+  4.7 Convert to final form
+      Convert the individual dialogs to its final form for the implementation in the 
+      application: 
+
+        * subroutine, 
+
+        * derived class or 
+
+        * composite. 
+      clickTk assists you also in this task, because the project's properties may have 
+      changed before a save. 
+
+  4.8 Export to application
+      Export the projects into the application test environment and implement the 
+      required adaptations. 
+      Although clickTk eliminates its test code, most of the times the callbacks coded 
+      dering the design phase must be adapted to the real application's environment. 
+
+      Sometimes it is more useful to copy and paste the generated Perl/Tk comands from 
+      the project into the application's script. Especially targets of type 
+      'subroutine' are suitable to this way of use. 
+
+5. Upgrading perl/Tk applications
+      Existing Perl/Tk applications may be upgraded using clickTk. This applies both 
+      to applications developed with clickTk as well as to applications implemented by 
+      hand. In the first case, dialogs may be simply imported, in the latter case the 
+      dialog definitions should be first be isolated manually into a file which acts 
+      as an exported project and then imported . 
+
+  5.1 Import projects
+      Dialogs can be imported from the application's location into the clickTk project 
+      folder. Of course, problems may arise when the project has been heavily changed 
+      manually. 
+
+  5.2 Reuse projects
+      Projects remain in the project folder until they are explicitly deleted. Thus, 
+      they may be reused for further developments. 
+
+6. Implementing Perl/Tk composites
+      Composite widgets are developed the same way as dialogs whereby clickTk 
+      automatically generates the required OO-code. The focus of this development is 
+      on the coding of the methods which is done entering menu item 
+      /file/properties/methods. 
+
+      The project automatically contains test code to run unit tests and may also 
+      contains callbacks entered via /file/properties/callback . 
+
+7. Register widget classes
+      clickTk edits the widget options using registered widget class definitions. Any 
+      composite or derived widget may be registered. 
+
+      In order to do that the menu item '/tools/add widget class' definition may be 
+      used. 
+
+8. Control the clickTk session flow
+      Run time options influence the flow of the session. 
+
+        * Use Toplevel for the preview. 
+
+        * Show widget balloons for the defined widgets. 
+
+        * Blink widget on selection. 
+
+        * Show mouse pointer X,Y coordinates. 
+
+        * Isolate geometry messages. 
+
+        * Ask for widget identification. 
+
+        * Gen test code. 
+
+        * Gen modal dialog by default. 
+
+        * Copy/paste parent and children. 
+
+        * Use specialized colour picker. 
+
+        * Switch debug mode.
+
+9. The target code
+      The target code is the most important part of a project. 
+      The generated target code consists of 
+
+        * control information saved in comments statements prefixed by  ## ctk: 
+
+        * Perl/Tk statements which may be on several lines 
+
+        * Perl code which contains 
+
+          o test code 
+
+          o set up code (use lib statements, use statements, variables, constructors) 
+
+          o general code
+
+          o callbacks and/or methods 
+
+          o other code 
+
+          o POD section 
+      The target code is divided into sections delimited by control information. These 
+      lines should not be removed because the clickTk parser uses them to locate the 
+      individual parts of the target code. 
+
+      A wide set of properties control the generation of the target code. 
+      Properties of a project are:
+
+        * options 
+
+          o title and description, 
+
+          o type of target (generated code) 
+
+        * script, 
+
+        * subroutine, 
+
+        * package, 
+
+        * composite, 
+
+          o modal or modeless dialog, 
+
+          o toplevel as parent or for composite widget is a toplevel, 
+
+          o use strict,
+
+          o extract variables from widget definitions, 
+
+          o assign extracted variables to local scope,
+
+          o name of the subroutine,
+
+          o the scope and content of the arguments to be passed to the subroutine, 
+
+          o ondeleteWindow callback,
+
+          o list of the base classes, 
+
+        * libraries (use lib), 
+
+        * variables, 
+
+        * callbacks or 
+
+        * methods, 
+
+        * general code, 
+
+        * POD section.
+
+10. Enter the dialog data
+  10.1 Widget definitions
+      Widget definitions are inserted following the dialog's hierarchical structure: 
+
+        * enter Frames first 
+
+        * fill up Frames with widgets 
+
+        * enter widget options. Widget options values may be 
+
+          o string constant, usually unquoted 
+
+          o variable's name, i.e $labelText 
+
+          o reference to hash or array i.e. \@choices 
+
+          o reference to list [ options ] i.e. [qw/ 1 2 3/] 
+
+          o callbacks. 
+      Note : 
+
+          o use of parenthesis to denote arrays isn't supported. The syntax [qw(1 2 3)] 
+          leads to errors. Use instead the syntax [qw/1 2 3/] 
+
+          o clickTk usually generates quoted strings, unquoted numerical values and array 
+          of values enclosed in a pair of squared parenthesis. The operator qw() is 
+          supported on input but it is not used on generated target code. 
+      For each widget the following steps should be done: 
+
+        * select widget class from the list of the registered widget classes, 
+
+        * enter the name of the widget (identification of the instance), 
+
+        * enter the widget options, 
+
+        * enter geometry options. 
+
+  10.2 Callbacks (subroutines or methods)
+   10.2.1 Subroutines
+      For targets of type script and subroutines the subroutines may be entered during 
+      the clickTk session using the function 'File/Code properties/callbacks'. 
+
+   10.2.2 Methods
+      For targets of type package and composite the methods of the widgets may be 
+      entered while the clickTk session using the function 'File/ Code properties 
+      /methods'. 
+
+  10.3 Orders
+      Orders are snipped of Perl code which usually contains messages to widgets. A 
+      good example is the use of the widget Balloon: the widget gets inserted as a 
+      standard widget at the end of the widget tree. Then an order is added to the 
+      widget definition to define its attach-messages. To do that the following 
+      procedure may be applied: 
+
+        * select the widget by means of <right click>, then select 'insert' and finally 
+        'order' , 
+
+        * enter the order manually or using the clickT k assistant .
+
+  10.4 The application
+        * Enter the folders to be searched for modules,
+
+        * enter the non-visual classes .
+
+  10.5 Coding the command options (message to callbacks)
+      Supported callback option formats are 
+
+        - \&callback_name
+        - [\callback_name, args]
+        - ['callback_name',args]
+        - sub { callback(args) }
+
+      whereby callback_name is any valid subroutine name while args must be a scalar 
+      variable i.e. $self . 
+
+      Reserved callback's names are 
+        - Subroutine _init
+        - Subroutines test_*, i.e. sub test_01 {  }  sub test_xyz { }
+
+  10.6 Variables
+      It is recommended to explicitly define all involved variables using the menu 
+      item 'file/Code properties/variables' 
+
+      Variables may be 
+
+        * local  ('my' variables inside subroutine or package) 
+
+        * global  (use vars ...) 
+      clickTk is able to extract variables from the specified widget options and 
+      assign them to the local variable scope or to the global variable scope 
+      depending on the actual code properties. Of course, these properties may be 
+      changed during a session, even many times, a fact that forces clickTk to 
+      reassign the extracted variables according to the changed property values. 
+      Note: Switching the code property 'extract variable to local' forces clickTk to 
+      refresh the variable assignments regardless the actual assignment, which may or 
+      even may not reflect the old state of the property. This fact may be relevant in 
+      those cases where individual variables get moved from local to global in order 
+      to do specific unit tests while the clickTk session. By contrast, those 
+      variables that are not extracted are also not affected by this refresh process. 
+
+      Of course, programmers can avoid all these problems by switching off the auto 
+      extraction. This could be a good idea working on little projects! 
+
+  10.7 The argument list
+   10.7.1 Projects of type subroutine
+      Projects of type subroutine may select the way to pass arguments to the 
+      subroutine code by means of: 
+
+        * a) a set of freely declared global variables, 
+
+        * b) a specific global hash named by default %args, 
+
+        * c) a local defined hash which gets initialised from @_ or even 
+
+        * d) a mix of a) and b) or c) . 
+      clickTk provides automatically an hash named %args which gets generated when the 
+      field 'argList' in the dialog entered through 'File/code properties/Options' 
+      contains its coding as an hash. 
+
+      The scope assigned to %args depends on the code options about variables, i.e. 
+      option 'extracted variable becomes local' , and may even be changed manually by 
+      means of the variable's dialog entered through 'File/code properties/variables'. 
+
+      This fact may be important when widgets refer items of argument list %args. It 
+      is a good practice to use an argument list and limit the use of global as far as 
+      possible. 
+
+   10.7.2 Projects of type composite or package
+      The argument list %args is passed to the constructor. 
+
+11. Prototyping with clickTk
+  11.1 Build several versions of the same project
+        * change widget properties, 
+
+        * change widget class, 
+
+        * hide/map widgets, 
+
+        * change structure of the widget tree moving around widgets using copy and 
+        paste, 
+
+        * change geometry manager, 
+
+        * change target code properties, 
+
+        * run the versions during the clickTk session with tools/run, 
+
+        * save the version using suffixed work names, 
+
+        * save final version. 
+
+12. Restrictions
+        * The variable name of the widget instance is always the widget ident itself. 
+        This name is global in respect of the project. 
+
+        * Most of the option values are entered as constants, although they are not 
+        quoted. 
+
+        * Options which requires ref to variables may specify variables or ref to 
+        variables. clickTk doesn't check if theses variables exist and/or are really 
+        refs thought. 
+
+        * Modal dialogs are realized using the Tk::Dialog composite. 
+
+        * Entered options (lists) are checked using the eval statement, which fairly 
+        discovers syntax errors but mostly fails on semantics. 
+
+        * Value lists qw() are not supported, please enter qw// instead. 
+
+        * All extracted variables are assigned the same scope local or global depending 
+        on the code options. 
+
+        * Ref to HASH or arrays are not always detected within widget option's lists. 
+        Therefore it is recommended to use scalars to specify ref to hash or array 
+        inside widget option's definitions. 
+
+        * Switching the options 'auto extract' and/or 'extract to local' does not 
+        automatically adapt the actual variable's assignment. 
+
+13. Appendix
+  A1) Menu structures
+      Main Menu
+
+      0 File
+      0 Open (command)
+      1 Open previous (command)
+      2 New (command)
+      3 Save (command)
+      4 Save As (command)
+      5 --- (separator)
+      6 Save work (command)
+      7 Restore work (command)
+      8 --- (separator)
+      9 Save template (command)
+      9 Save template (command)
+      10 --- (separator)
+      11 Set application (command)
+      12 Code Properties (cascade)
+      0 === X (tearoff)
+      1 Options (command)
+      2 Variables (command)
+      3 --- (separator)
+      4 Libraries (command)
+      5 --- (separator)
+      6 Callbacks (command)
+      7 Methods (command)
+      8 General code (command)
+      9 --- (separator)
+      10 Pod section (command)
+      13 --- (separator)
+      14 Import (command)
+      15 Export (command)
+      16 --- (separator)
+      17 Quit (command)
+      1 Edit
+      0 Widget Options (command)
+      1 --- (separator)
+      2 Undo (command)
+      3 Redo (command)
+      4 --- (separator)
+      5 Cut (command)
+      6 Copy (command)
+      7 Paste (command)
+      8 --- (separator)
+      9 Rename (command)
+      10 Delete (command)
+      11 Replace (command)
+      2 Insert
+      0 Before (command)
+      1 After (command)
+      2 Sub-widget (command)
+      3 Order (command)
+      3 View
+      0 Repaint (command)
+      1 Code (command)
+      2 pick color (command)
+      3 Re-color myself (command)
+      4 view widget structure (command)
+      5 list bindings (command)
+      6 view ctk Logfile (command)
+      4 Tools
+      0 Edit code (command)
+      1 --- (separator)
+      2 Check syntax (command)
+      3 Run code (command)
+      4 Gen Font code (command)
+      5 Tk variables (command)
+      6 --- (separator)
+      7 Add widget class definition (command)
+      8 Update widget class definition (command)
+      9 Delete widget class definition (command)
+      5 Options
+      0 Use Toplevel for the preview (checkbutton)
+      1 Show widget balloons (checkbutton)
+      2 Blink widget on selection (checkbutton)
+      3 Show mouse pointer X,Y coordinates (checkbutton)
+      4 Isolate geometry messages (checkbutton)
+      5 Ask for widget ident (checkbutton)
+      6 Gen test code (checkbutton)
+      7 Gen modal dialog by default (checkbutton)
+      8 Copy/paste parent and children (checkbutton)
+      9 Use specialized color picker (checkbutton)
+      10 Debug mode (checkbutton)
+      6 Help
+      0 === X (tearoff)
+      1 ctk help (command)
+      2 Context help (command)
+      3 Perl/Tk manuals (cascade)
+      0 === X (tearoff)
+      1 Overview (command)
+      2 Standard options (command)
+      3 Base class widget (command)
+      4 Option handling (command)
+      5 Tk variables (command)
+      6 Grab manipulation (command)
+      7 Binding (command)
+      8 Bind tags (command)
+      9 Callbacks (command)
+      10 Events (command)
+      11 Composite widgets (command)
+      12 Mega widgets (command)
+      13 ConfigSpecs (command)
+      14 Derived (command)
+      4 About (command)
+
+      PopupMenu 
+      (triggered by <right click> on selected widget definition)
+      0 X (tearoff) 
+      1 Insert (cascade) 
+      0 Before (command) 
+      1 After (command)
+      2 Subwidget (command)
+      3 Order (command) 
+      2 Options (command) 
+      3 All options (command) 
+      4 View all options (command) 
+      5 View default options (command) 
+      6 Context help (command) 
+      7 Cut (command) 
+      8 Copy (command) 
+      9 Paste (command) 
+      10 Rename (command) 
+      11 Delete (command) 
+      12 Replace (command) 
+      13 hide widget (command) 
+      14 view packInfo (command) 
+
+  A2) Widget class definition
+      $rDef = {
+      'icon' => 'default',
+      'geom' => '1',
+      'file' => 'xLabel',
+      'attr' => {
+      '-pady' => 'int+',
+      '-background' => 'color',
+      '-foreground' => 'color',
+      '-bg' => 'color',
+      '-width' => 'int+',
+      '-height' => 'int+',
+      '-borderwidth' => 'int+',
+      '-text' => 'text',
+      '-relief' => 'relief',
+      '-textvariable' => 'variable',
+      '-bitmap' => 'variable',
+      '-padx' => 'int+'
+      },
+      'classname' => 'xLabel',
+      'use' => 'test::xLabel',
+      'nonVisual' => '0',
+      'defaultgeometrymanager' => 'pack',
+      'balloon' => undef,
+      'defaultgeometryoptions' => undef,
+      'defaultwidgetoptions' => undef
+      };
+
+  A3) Configuration options
+      (file ctkConfigOptions.txt) 
+
+      $rOptions = {
+      'isolate_geom' => 0,
+      'opt_copyChildren' => 1,
+      'geomMgr' => [
+      'pack',
+      'grid',
+      'place',
+      'form'
+      ],
+      'popupmenuTearoff' => 1,
+      'initialGeometry' => '=600x500+20+20',
+      'templateFolder' => 'templates',
+      'opt_colorPicker' => 0,
+      'opt_modalDialog' => 0,
+      'HListDefaultHeight' => 30,
+      'HListSelectMode' => 'single',
+      'opt_useToplevel' => 0,
+      'applName' => 'test',
+      'ctkC' => '## ctk:',
+      'cacheLogSize' => 2048,
+      'imageFolder' => 'images',
+      'MSWin32_editor' => 'Notepad',
+      'initialGeometryPreview' => '=400x400+420+10',
+      'HListDefaultWidth' => 32,
+      'opt_fileHistory' => 10,
+      'tempFolder' => 'temp',
+      'noname' => 'noname.pl',
+      'userid' => 'Tkadmin',
+      'subroutineName' => 'thisDialog',
+      'opt_autoSave' => 1,
+      'sessionFileNamePrefix' => 'ctk_session',
+      'opt_dialogClassName' => 'DialogBox',
+      'defaultGeometryManager' => 'pack',
+      'xterm' => 'xterm',
+      'widgetFolder' => 'widgets',
+      'toolbarFolder' => 'toolbar',
+      'projectFolder' => 'project',
+      'MW' => 'mw',
+      'editingCodeProperties' => 0,
+      'workFolder' => 'work',
+      'ctkTitle' => 'clickTk',
+      'identPrefix' => 'wr_',
+      'ctkLogFileName' => 'ctk_w_log.txt',
+      'aix_editor' => 'nedit',
+      'opt_defaultButtons' => '[qw(Ok Cancel)]',
+      'autoEdit' => 1,
+      'opt_autoRestore' => 0,
+      'opt_askIdent' => 1,
+      'opt_TestCode' => 1,
+      'applFolder' => 'test',
+      'UNIX_editor' => 'vi'
+      };
+
+  A3) Saved project (t7.pl)
+      #!C:\Perl\bin\perl.exe
+      ## ctk: description 
+      ## ctk: title 
+      ## ctk: application Test c:\Dokumente
+      ## ctk: strict  0
+      ## ctk: code  0
+      ## ctk: subroutineName thisDialog
+      ## ctk: autoExtractVariables  1
+      ## ctk: autoExtract2Local  1
+      ## ctk: modal 0
+      ## ctk: version 3.095
+      ## ctk: onDeleteWindow  sub{1}
+      ## ctk: Toplevel  1
+      ## ctk: 2006 10 27 - 02:07:35
+
+      ## ctk: uselib start
+
+      ## ctk: uselib end
+
+      use Tk;
+      use Tk::Button;
+      use Tk::Frame;
+      use Tk::LabEntry;
+      $mw=MainWindow->new(-title=>'');
+      ## ctk: Globalvars
+      ## ctk: Globalvars end
+      &main::init();
+      &main::thisDialog($mw,-title => '', -buttons => [qw(Ok Cancel)]);
+      MainLoop;
+
+      sub thisDialog {
+      my $hwnd = shift;
+      my (%args) = @_;
+      my $rv;
+      ##
+      ## ctk: Localvars
+
+      my ($w1,$w2);
+
+      ## ctk: Localvars end
+      ##
+      my $mw = $hwnd->Toplevel();
+      $mw->configure(-title=> (exists $args{-title})? $args{-title}:'');
+      $mw->protocol('WM_DELETE_WINDOW',sub{1});
+
+      ## ctk: code generated by ctk_w version '3.095' 
+      ## ctk: instantiate and display widgets 
+
+      $wr_001 = $mw -> LabEntry ( -background , '#ffffff' , -justify , 'left' , -label 
+      , 'Name' , -relief , 'sunken' , -labelPack , [-side=>left,-anchor=>n] , 
+      -textvariable , \$w1 , -state , 'normal' ) -> pack(-side=>'top', -anchor=>'nw', 
+      -pady=>5, -fill=>'x', -expand=>1, -padx=>5); 
+
+      $wr_003 = $mw -> Frame ( -relief , 'solid' ) -> pack(-side=>'top', 
+      -anchor=>'nw', -pady=>5, -fill=>'x', -expand=>1, -padx=>5); 
+
+      $wr_002 = $wr_003 -> LabEntry ( -background , '#ffffff' , -justify , 'left' , 
+      -label , 'Folder name' , -relief , 'sunken' , -labelPack , 
+      [-side=>left,-anchor=>n] , -textvariable , \$w2 , -state , 'normal' ) -> 
+      pack(-side=>'left', -anchor=>'nw', -pady=>5, -fill=>'x', -expand=>1, -padx=>5); 
+
+      $wr_005 = $wr_003 -> Button ( -anchor , 'nw' , -background , '#ffffff' , -state 
+      , 'normal' , -relief , 'raised' , -text , 'Browse' ) -> pack(-anchor=>'nw', 
+      -side=>'left', -pady=>5, -padx=>5); 
+
+      ## ctk: end of gened Tk-code
+
+      return $rv;
+
+      } ## end of thisDialog 
+
+      ## ctk: end of dialog code
+      ## ctk: callbacks
+      sub init { 1 }
+      ## ctk: other code
+      ## ctk: eof 2006 10 27 - 02:07:35
+      1;    ## make perl compiler happy...
+
+  A5) Saved work (t7.pl)
+      $rDescriptor = {
+      'wr_001' => bless( {
+      'parent' => 'mw',
+      'geom' => 'pack(-fill, x, -expand, 1, -anchor, nw, -pady, 5, -side, top, -padx, 
+      5)', 
+      'order' => undef,
+      'id' => 'wr_001',
+      'type' => 'LabEntry',
+      'opt' => '-background , \'#ffffff\' , -label , \'Name\' , -justify , \'left\' , 
+      -labelPack , [-side=>\'left\',-anchor=>\'n\'] , -relief , \'sunken\' , 
+      -textvariable , \\$w1 , -state , \'normal\' ' 
+      }, 'ctkDescriptor' ),
+      'mw' => bless( {
+      'parent' => undef,
+      'geom' => undef,
+      'order' => undef,
+      'id' => 'mw',
+      'type' => 'Frame',
+      'opt' => undef
+      }, 'ctkDescriptor' ),
+      'wr_005' => bless( {
+      'parent' => 'wr_003',
+      'geom' => 'pack(-anchor=>nw, -side=>left, -pady=>5, -padx=>5)',
+      'order' => undef,
+      'id' => 'wr_005',
+      'type' => 'Button',
+      'opt' => '-anchor , nw , -background , #ffffff , -state , normal , -relief , 
+      raised , -text , Browse' 
+      }, 'ctkDescriptor' ),
+      'wr_002' => bless( {
+      'parent' => 'wr_003',
+      'geom' => 'pack(-side=>left, -anchor=>nw, -pady=>5, -fill=>x, -expand=>1, 
+      -padx=>5)', 
+      'order' => undef,
+      'id' => 'wr_002',
+      'type' => 'LabEntry',
+      'opt' => '-background , #ffffff , -justify , left , -label , \'Folder name\' , 
+      -relief , sunken , -labelPack , [-side=>left,-anchor=>n] , -textvariable , \\$w2 
+      , -state , normal' 
+      }, 'ctkDescriptor' ),
+      'wr_003' => bless( {
+      'parent' => 'mw',
+      'geom' => 'pack(-side=>top, -anchor=>nw, -pady=>5, -fill=>x, -expand=>1, 
+      -padx=>5)', 
+      'order' => undef,
+      'id' => 'wr_003',
+      'type' => 'Frame',
+      'opt' => '-relief , solid'
+      }, 'ctkDescriptor' )
+      };
+      $rTree = [
+      'mw',
+      'mw.wr_001',
+      'mw.wr_003',
+      'mw.wr_003.wr_002',
+      'mw.wr_003.wr_005'
+      ];
+      $rUser_subroutines = [
+      'sub init { 1 }'
+      ];
+      $rUser_methods_code = [];
+      $rUser_gcode = [];
+      $rOther_code = [];
+      $rUser_pod = [];
+      $rUser_auto_vars = [];
+      $rUser_local_vars = [
+      '$w1',
+      '$w2'
+      ];
+      $rFile_opt = {
+      'modal' => '0',
+      'subWidgets' => [],
+      'autoExtractVariables' => '1',
+      'subroutineName' => 'thisDialog',
+      'description' => '',
+      'autoExtract2Local' => '1',
+      'baseClass' => '',
+      'strict' => '0',
+      'Toplevel' => '1',
+      'title' => '',
+      'code' => '0',
+      'onDeleteWindow' => 'sub{1}'
+      };
+      $rLastfile = \'t7.pl';
+      $rIsolate_geom = \'0';
+      $rHiddenWidgets = [];
+      $rLibraries = [];
+
+  A6) Exported project (t7.pl)
+      ## ctk: description 
+      ## ctk: title 
+      ## ctk: application Test c:\Dokumente
+      ## ctk: strict  0
+      ## ctk: code  0
+      ## ctk: subroutineName thisDialog
+      ## ctk: autoExtractVariables  1
+      ## ctk: autoExtract2Local  1
+      ## ctk: modal 0
+      ## ctk: version 3.095
+      ## ctk: onDeleteWindow  sub{1}
+      ## ctk: Toplevel  1
+      ## ctk: 2006 10 27 - 17:44:32
+
+      use Tk;
+      use Tk::Button;
+      use Tk::Frame;
+      use Tk::LabEntry;
+      sub thisDialog {
+      my $hwnd = shift;
+      my (%args) = @_;
+      my $rv;
+      ##
+      ## ctk: Localvars
+
+      my ($w1,$w2);
+
+      ## ctk: Localvars end
+      ##
+      my $mw = $hwnd->Toplevel();
+      $mw->configure(-title=> (exists $args{-title})? $args{-title}:'');
+      $mw->protocol('WM_DELETE_WINDOW',sub{1});
+
+      ## ctk: code generated by ctk_w version '3.095' 
+      ## ctk: instantiate and display widgets 
+
+      $wr_001 = $mw -> LabEntry ( -background , '#ffffff' , -justify , 'left' , -label 
+      , 'Name' , -relief , 'sunken' , -labelPack , [-side=>left,-anchor=>n] , 
+      -textvariable , \$w1 , -state , 'normal' ) -> pack(-anchor=>'nw', -side=>'top', 
+      -pady=>5, -fill=>'x', -expand=>1, -padx=>5); 
+
+      $wr_003 = $mw -> Frame ( -relief , 'solid' ) -> pack(-anchor=>'nw', 
+      -side=>'top', -pady=>5, -fill=>'x', -expand=>1, -padx=>5); 
+
+      $wr_002 = $wr_003 -> LabEntry ( -background , '#ffffff' , -justify , 'left' , 
+      -label , 'Folder name' , -relief , 'sunken' , -labelPack , 
+      [-side=>left,-anchor=>n] , -textvariable , \$w2 , -state , 'normal' ) -> 
+      pack(-anchor=>'nw', -side=>'left', -pady=>5, -fill=>'x', -expand=>1, -padx=>5); 
+
+      $wr_005 = $wr_003 -> Button ( -anchor , 'nw' , -background , '#ffffff' , -state 
+      , 'normal' , -relief , 'raised' , -text , 'Browse' ) -> pack(-side=>'left', 
+      -anchor=>'nw', -pady=>5, -padx=>5); 
+
+      ## ctk: end of gened Tk-code
+
+      return $rv;
+
+      } ## end of thisDialog 
+
+      ## ctk: end of dialog code
+      ## ctk: callbacks
+      sub init { 1 }
+      ## ctk: other code
+      ## ctk: eof 2006 10 27 - 17:44:32
+      1;    ## make perl compiler happy...
+

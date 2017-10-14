@@ -1,0 +1,13 @@
+$main::projectName = 'noname.pl';
+$main::previousFiles = [
+  'DialogBoxX.pl',
+  'daCalculator.pl',
+  'myClicktk.pl',
+  'noteBook1.pl',
+  'project/myClickFile',
+  'project/test/mytk.pl',
+  'test/mytk.pl'
+];
+$ctkApplication::applName = '';
+$ctkApplication::applFolder = '';
+$main::work_save_temp = 1;

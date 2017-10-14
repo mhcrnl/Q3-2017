@@ -1,0 +1,911 @@
+2002-03-03  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/setup.pl: updated version
+
+2002-02-28  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/INSTALL:
+	fixed instructions for manual dist download
+
+	* /cvsroot/guido/guido/setup.pl:
+	updated with lost "no_extract" handling
+
+2002-02-21  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/MANIFEST: fixed trailing cr's
+
+2002-02-20  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/setup.pl: updated with version from PI
+
+	* /cvsroot/guido/guido/MANIFEST: added history and release files
+
+	* /cvsroot/guido/guido/RELEASE: release notes
+
+	* /cvsroot/guido/guido/Makefile, /cvsroot/guido/guido/guido.osd, /cvsroot/guido/guido/README:
+	updated for version 0.50
+
+	* /cvsroot/guido/guido/HISTORY: release note history
+
+	* /cvsroot/guido/guido/ChangeLog: no message
+
+2002-02-19  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	add_widget 1 as place geometry if there is no pre-existing valueultsfixenow
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	fixed to use ConfigSpecs properly.  Also fixed to allow for defaults
+
+2002-02-18  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm:
+	reworked to use ConfigSpecs as it should, also removed old commented code
+
+	* /cvsroot/guido/guido/lib/Guido/Project.pm:
+	added default values for the properties
+
+	* /cvsroot/guido/guido/lib/Guido/properties.xml:
+	fixed incorrect tag structure
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPage.pm, /cvsroot/guido/guido/lib/Guido/Property.pm:
+	added handling for defaults
+
+2002-02-16  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Property.pm:
+	added default management routines
+
+2002-02-09  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Tracer.pm:
+	attempting to fix display failures
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin.pm:
+	added a display method that allows a plugin to decide whether it should be displayed or not
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	now returns 0 for the display method to avoid getting packed into the GUI accidentally
+
+	* /cvsroot/guido/guido/lib/Guido/PluginLoader.pm, /cvsroot/guido/guido/lib/Guido/ConfigDialog.pm:
+	now honors the display setting for plugins (won't try to pack the plugin if the plugin returns 0)
+
+2002-02-08  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/MANIFEST:
+	removed strange entry for old PropertyPage.pm file
+
+	* /cvsroot/guido/guido/EXCLUDE:
+	this file describes to the installer what to leave out when moving in files
+
+	* /cvsroot/guido/guido/post_install.pl:
+	now hchecks for existing configuration files and prompts before overwriting the
+
+2002-02-04  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/bin/guido_config.cfg.ex:
+	added a few good defaults to make sure widgets are visible and usable when added
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	fixed scoping problem that was causing defaults to get lost when saving
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	fixed problem with properties not getting saved when defaults are edited
+
+2002-01-31  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	added check to see if activeform is undefined to avoid -w warnings
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm:
+	fixed uninitialized missing hash elements in menu creation
+
+	* /cvsroot/guido/guido/lib/Guido/Tracer.pm:
+	fixed uninitialized hash key usage that was causing -w warnings
+
+	* /cvsroot/guido/guido/MANIFEST: added setup.pl (whoops!)
+
+	* /cvsroot/guido/guido/support/setversion.pl:
+	added handling of both test and live distributions
+
+	* /cvsroot/guido/guido/MANIFEST: removed makefile
+
+2002-01-29  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Class/DirtyMethodMaker.pm:
+	fixed problems with -w warnings
+
+	* /cvsroot/guido/guido/lib/Tk/XMLMenu.pm: fixed old Win32 CR formatting
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/templates/to_code.tt, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/templates/to_code.tt:
+	finished adding conversion to Template Toolkit
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm:
+	added blurb for ModInfo information
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	added a default location for tool icons (bindir/imag
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm:
+	removed commented out "use" directives
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	fixed focus problem (hopefully)
+
+	* /cvsroot/guido/guido/Makefile: fixed test OSD, live OSD contention
+
+	* /cvsroot/guido/guido/VERSION:
+	too much trouble to keep VERSION in separate file
+
+	* /cvsroot/guido/guido/Makefile:
+	removed dynamic versioning.  not worth the trouble
+
+	* /cvsroot/guido/guido/guido.osd:
+	fixed to look like the true live OSD instead of test OSD
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPage.pm:
+	added default for the value ('')
+
+	* /cvsroot/guido/guido/lib/Guido/properties.xml: fixed some bogus enums
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm:
+	switched over to use Template Toolkit for templating
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	fixed problem that occurred when there were no widgets in the form
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm:
+	fixed problem that occurred when there were no widgets in the composite
+
+2002-01-28  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/guido.osd: updated with new version
+
+	* /cvsroot/guido/guido/post_install.pl:
+	updated to dynamically find perl executible for shebang
+
+	* /cvsroot/guido/guido/INSTALL:
+	updated to emphasize guido_installer and the new localized installation script
+
+	* /cvsroot/guido/guido/MANIFEST: added new template
+
+	* /cvsroot/guido/guido/VERSION:
+	this will contain the version of guido for future releases, to be used in automatic updates
+
+	* /cvsroot/guido/guido/Makefile:
+	added dynamic version retrieval, updating of version using setversion.pl, and started working on automatic release deployment for the live package (not test)
+
+	* /cvsroot/guido/guido/support/pods2html:
+	added ability to exclude files based on regex
+
+	* /cvsroot/guido/guido/support/setversion.pl:
+	setversion updates the version for guido in the OSD file
+
+2002-01-24  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	fixed -w warning and removed old commented codet
+
+	* /cvsroot/guido/guido/lib/Guido/Property.pm:
+	removed value from DirtyMethodMaker get_set list, since it's defined in the module code
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm:
+	fixing == vs. eq mistake
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPage.pm, /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm:
+	fixing picky -w warnings
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPage.pm:
+	removed duplicate update_value method-wfixed dupli
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/DelegateProperty.pm:
+	fixed duplicate "my" usage caught by -w
+
+2002-01-22  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/new.tt:
+	template used when new TkApp project is created
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/collate.tt:
+	template used to collate project into perl code
+
+2002-01-19  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	improved tools cache building and drag and drop
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	no popup now when widget is added to form, just focusForce
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	added drag and drop support for place (need to work in other geo managers)
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm:
+	app now adds current working dir for project to INC
+
+	* /cvsroot/guido/guido/setup.pl:
+	added.  Script for installing pre-downloaded package
+
+2002-01-15  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	Drag and drop onto main form now places widget at location of drag and drop.  Embedding in widget doesn't behave this way yet.
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	Fixed after accidental deletion.  Other bugs could be lurking.
+
+2002-01-14  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	file accidentally deleted.  had to re-add
+
+2002-01-09  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/bin/guido.pl.ex:
+	added config reference to add perl execution line
+
+	* /cvsroot/guido/guido/MANIFEST: fixed incorrectly named gif reference
+
+2002-01-01  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/doc/wishlist.pod:
+	fixed typo, added suggestion request
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm:
+	changed interface for remove_widget to match that of the TkForm and TkWidget::Basic objects
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPage.pm:
+	fixed property sorting problem
+
+	* /cvsroot/guido/guido/lib/Guido/Property.pm: added enum_style property
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm:
+	added missing MODINFO retval
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	added handling of drag and drop for widgets from ToolBox
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm:
+	fixed problem with disappearing menu and also added an override to the clear method
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	added handling of adding children widgets and the use of drag and drop from Toolbox
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	eliminated recursion when acquiring TkWidget nodes from the XML document (to avoid picking up embedded widgets)
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget/templates/to_code.tt:
+	added handling of children widgets
+
+2001-12-17  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/SupportFile.pm:
+	now implements the PropertySource interface
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPageDialog.pm:
+	now advertises the property page widget
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	improved editing of defaults
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	removed print statements
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm:
+	turned off -initialdir parameter in the getOpenFile, since it doesn't work anyway on Linux.  Must find alternative
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	fixing property management problems
+
+2001-12-14  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm:
+	doesn't show siblings or children flyout menu  are noneamically lin
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPageDialog.pm:
+	added properties for property page, but they aren't dynamically linked yet
+
+2001-12-13  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/doc/index.pod: added link to contributor infoe
+
+	* /cvsroot/guido/guido/doc/contribute.pod: fixed bad link to wishlist
+
+	* /cvsroot/guido/guido/doc/index.pod, /cvsroot/guido/guido/doc/contribute.pod:
+	added ref to wishlist
+
+	* /cvsroot/guido/guido/doc/contribute.pod:
+	info on contributing to the project
+
+2001-12-01  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	beginnings of event handler editing support
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkWidget.pm:
+	added missing PluginData use statement
+	u
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm:
+	added support for support files
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm:
+	added trace message for support file additions
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Executor.pm:
+	fixed = vs. eq bug (my God,how junior-programmer can you get?)c
+
+	* /cvsroot/guido/guido/lib/Guido/SupportFile.pm:
+	support for editing of support files via the mime maps in the configuration data
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile.pm:
+	added some debugging routines
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPage.pm:
+	fixed support for drop-downs using Property object's new enumeration support
+
+	* /cvsroot/guido/guido/lib/Guido/Property.pm:
+	added support for enumerations of properties (for creating drop downs, etc)
+
+	* /cvsroot/guido/guido/lib/Guido/Project.pm:
+	added missing PluginData use statement
+
+	* /cvsroot/guido/guido/lib/Guido/PluginLoader.pm:
+	fixed error with line break
+
+	* /cvsroot/guido/guido/lib/Guido/guido_menu.mxl, /cvsroot/guido/guido/lib/Guido/Application.pm:
+	added about dialog
+
+	* /cvsroot/guido/guido/MANIFEST: added PluginData module
+
+	* /cvsroot/guido/guido/Makefile: no message
+
+2001-11-02  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/doc/index.pod, /cvsroot/guido/guido/doc/wishlist.pod:
+	added
+
+	* /cvsroot/guido/guido/Makefile:
+	updated to include interface docs when publishing help online
+
+2001-10-31  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/support/pods2html:
+	customized version of podshtml that allows exclusion of certain files by regular expression
+
+2001-10-26  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm, /cvsroot/guido/guido/lib/Guido/Project/TkWidget.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	added MODINFO documentation comments
+
+2001-10-25  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Executor.pm, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm, /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	added MODINFO documentation comments
+
+2001-10-21  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/MacroLoader.pm, /cvsroot/guido/guido/lib/Guido/PluginLoader.pm, /cvsroot/guido/guido/lib/Guido/Plugin.pm, /cvsroot/guido/guido/lib/Guido/Project.pm, /cvsroot/guido/guido/lib/Guido/PropertyPageDialog.pm, /cvsroot/guido/guido/lib/Guido/PropertyPage.pm, /cvsroot/guido/guido/lib/Guido/Property.pm, /cvsroot/guido/guido/lib/Guido/PropertySource.pm, /cvsroot/guido/guido/lib/Guido/RequiredFile.pm, /cvsroot/guido/guido/lib/Guido/RTData.pm, /cvsroot/guido/guido/lib/Guido/SourceFile.pm, /cvsroot/guido/guido/lib/Guido/SupportFile.pm, /cvsroot/guido/guido/lib/Guido/Tracer.pm, /cvsroot/guido/guido/lib/Guido/UsedModule.pm:
+	added MODINFO documentation comments
+
+2001-10-13  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/PluginData.pm: deprecated
+
+	* /cvsroot/guido/guido/lib/Class/DirtyMethodMaker.pm: added PMODPMO
+
+	* /cvsroot/guido/guido/lib/Class/DirtyMethodMaker.pm: added POD
+
+2001-10-12  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/ConfigDialog.pm, /cvsroot/guido/guido/lib/Guido/Application.pm:
+	added MODINFO documentation comments
+
+2001-10-07  James Tillman  <jtillman@bigfoot.com>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm, /cvsroot/guido/guido/lib/Guido/Property.pm:
+	removed print statement
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	fixed problem with to_code not recognizing that the form was the primary form.  Now it double checks even if the is_primary parameter is missing.   Perhaps is_primary is obsolete now?
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm: changed version string
+
+2001-10-02  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/Makefile:
+	fixed so test_dist doesn't clobber osd file
+
+	* /cvsroot/guido/guido/MANIFEST: removed unused itemsr
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	fixed problem with drag being enabled on non-placed widgets
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm:
+	removed unnecessary use Text::Template
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	removed unnecessary use Text::Templated
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	added debug item for geo-mgr of new widget
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm:
+	fixed problems with running and debugging project by removing the reliance on TkXML.pm
+
+	* /cvsroot/guido/guido/lib/Guido/Project.pm: fixed problem with mkdir
+
+	* /cvsroot/guido/guido/lib/Guido/Property.pm:
+	should now handle blanking of values
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPage.pm:
+	should properly align display of properties now
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/templates/{$name}.gui, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/bootstrap.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}.gui, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$project_name}.gpj:
+	no longer used due to Text::Template being phased out
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm, /cvsroot/guido/guido/lib/Guido/Project/TkWidget.pm:
+	now uses centralized templating routine from Project.pm
+
+2001-09-30  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm:
+	had a reference to no-longer used TraceOption module
+
+	* /cvsroot/guido/guido/lib/Guido/RTData.pm:
+	modified to work with the new config file search paths
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm:
+	now searches in logical places for config files when run from outside the ./bin directory
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox/Editor.pm:
+	fixed to handle problematic hash value for icon_search_path created by XML::Simple
+
+2001-09-29  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm:
+	Added new bin property that contains the ./bin subdirectory path
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	Uses App objects new bin property to look for tool icons.p
+
+	* /cvsroot/guido/guido/lib/Guido/PluginLoader.pm:
+	Now uses the App object's parsed config data instead of
+	parsing the data itself
+
+2001-09-26  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/PluginLoader.pm: fixed CRs
+
+	* /cvsroot/guido/guido/lib/Guido/MacroLoader.pm:
+	was failing if no macros defined. fixed.
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	fixed problem with property names having a "-" when a value had been set
+
+	* /cvsroot/guido/guido/lib/Guido/MacroLoader.pm:
+	fixed problem with loading macros
+
+2001-09-25  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/bin/guido.pl.ex, /cvsroot/guido/guido/post_install.pl:
+	for post installation configuration using guido_installer.pl
+
+	* /cvsroot/guido/guido/MANIFEST: removed old files
+
+	* /cvsroot/guido/guido/Makefile: added new deployment targets
+
+	* /cvsroot/guido/guido/guido.osd:
+	changed CODEBASE format, fixed typo in Tk::NumEntry entry
+
+	* /cvsroot/guido/guido/lib/TkXML.pm: fixed CRsb
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm, /cvsroot/guido/guido/lib/Guido/RTData.pm:
+	fixed problems with pathing when calling XML::Simple
+
+2001-09-16  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/guido.osd: provides installer information
+
+	* /cvsroot/guido/guido/MANIFEST: added  MANIFEST to the MANIFEST!
+
+	* /cvsroot/guido/guido/ChangeLog: used emacs to update
+
+2001-09-16  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/Makefile: removed extraneous line
+
+2001-09-14  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/help/general_ide.html, /cvsroot/guido/guido/help/index.html, /cvsroot/guido/guido/help/projects.html, /cvsroot/guido/guido/help/source_files.html, /cvsroot/guido/guido/doc/plugin_authors_guide.pod, /cvsroot/guido/guido/doc/style.pod:
+	updated
+
+	* /cvsroot/guido/guido/doc/DESIGN.pod, /cvsroot/guido/guido/MANIFEST, /cvsroot/guido/guido/Makefile:
+	added
+
+2001-09-08  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/help/projects.html, /cvsroot/guido/guido/help/source_files.html, /cvsroot/guido/guido/help/index.html, /cvsroot/guido/guido/help/configuring.html:
+	no message
+
+2001-09-04  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/bin/images/BrowseEntry.gif, /cvsroot/guido/guido/bin/images/Button.gif, /cvsroot/guido/guido/bin/images/Checkbutton.gif, /cvsroot/guido/guido/bin/images/DirTree.gif, /cvsroot/guido/guido/bin/images/Entry.gif, /cvsroot/guido/guido/bin/images/Frame.gif, /cvsroot/guido/guido/bin/images/Graph.gif, /cvsroot/guido/guido/bin/images/Label.gif, /cvsroot/guido/guido/bin/images/RadioButton.gif, /cvsroot/guido/guido/bin/images/Scrollbar.gif, /cvsroot/guido/guido/bin/images/Text.gif, /cvsroot/guido/guido/bin/guido_config.cfg.ex, /cvsroot/guido/guido/bin/guido.pl, /cvsroot/guido/guido/bin/guido_rt.cfg.ex:
+	renamed app to bin
+
+2001-09-03  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/help/configuring.html:
+	added more help about the configuration dialog
+
+2001-08-02  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/UsedModule.pm, /cvsroot/guido/guido/lib/Guido/SourceFile.pm, /cvsroot/guido/guido/lib/Guido/RequiredFile.pm:
+	no message
+
+	* /cvsroot/guido/guido/lib/Guido/Project.pm:
+	added missing use Template reference; removed obselete Text::Template
+
+2001-07-31  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/Executor/Editor.pm:
+	no message
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkWidget.pm:
+	modified to inherit extra functionality from Project.pm
+
+2001-07-25  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/ChangeLog: added
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm:
+	fixed problem with accidental subroutine assignment
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm:
+	fixed mkdir() problem
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	removed use Guido::TraceOption statement
+
+	* /cvsroot/guido/guido/INSTALL: no message
+
+2001-07-19  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/tests/support/TkForm.gui, /cvsroot/guido/guido/help/images/configuration-general.jpg, /cvsroot/guido/guido/help/images/configuration-macro_add.jpg, /cvsroot/guido/guido/help/images/configuration-macros.jpg, /cvsroot/guido/guido/help/images/configuration-memory.jpg, /cvsroot/guido/guido/help/images/configuration-plugins.jpg, /cvsroot/guido/guido/help/images/guido-main.jpg, /cvsroot/guido/guido/help/images/plugins-form_builder.jpg, /cvsroot/guido/guido/help/images/plugins-project_manager.jpg, /cvsroot/guido/guido/help/images/plugins-property_manager.jpg, /cvsroot/guido/guido/help/images/plugins-widget_box.jpg, /cvsroot/guido/guido/help/images/projects-new.jpg, /cvsroot/guido/guido/help/images/projects-open.jpg, /cvsroot/guido/guido/help/images/projects-open-menu.jpg, /cvsroot/guido/guido/help/configuring.html, /cvsroot/guido/guido/help/general_ide.html, /cvsroot/guido/guido/help/guido_doc.css, /cvsroot/guido/guido/help/index.html, /cvsroot/guido/guido/help/projects.html, /cvsroot/guido/guido/help/source_files.html, /cvsroot/guido/guido/help/starting.html:
+	added
+
+	* /cvsroot/guido/guido/doc/deps.txt, /cvsroot/guido/guido/doc/Guido, /cvsroot/guido/guido/doc/Directory:
+	moved to ./Old
+
+	* /cvsroot/guido/guido/doc/Old/design.html, /cvsroot/guido/guido/doc/Old/DESIGN.pod, /cvsroot/guido/guido/doc/Old/plugin_authors_guide.html, /cvsroot/guido/guido/doc/Old/plugin_authors_guide.pod, /cvsroot/guido/guido/doc/Old/style.pod, /cvsroot/guido/guido/doc/Old/style.pod.html:
+	moved to ..
+
+	* /cvsroot/guido/guido/doc/uml/GuidoClassHeirarchy.png, /cvsroot/guido/guido/doc/uml/GuidoClassHeirarchy.dia, /cvsroot/guido/guido/doc/uml/TkForm.dia, /cvsroot/guido/guido/doc/uml/TkForm.png:
+	added
+
+	* /cvsroot/guido/guido/README:
+	updated language and provided pointers to more information
+
+	* /cvsroot/guido/guido/INSTALL: formerly doc/INSTALLATION
+
+	* /cvsroot/guido/guido/doc/INSTALLATION:
+	fixed CRLF problem and touched up some language
+
+2001-07-16  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/tests/Guido/SourceFile/TkWidget/BasicTest.pm, /cvsroot/guido/guido/tests/GuidoTestSuite.pm, /cvsroot/guido/guido/tests/TestRunner.pl, /cvsroot/guido/guido/tests/TkTestRunner.pl, /cvsroot/guido/guido/tests/TornDown.pm, /cvsroot/guido/guido/tests/WasRun.pm:
+	guido test suite
+
+2001-07-15  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}.gui:
+	no longer needed with the switch to Template.pm
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/templates/to_code.tt:
+	now used with Template.pm to create source code
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/templates/to_xml.tt:
+	now used with Template.pm to create the xml file
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/templates/{$name}.gui:
+	no longer needed with the switch to Template.pm
+
+2001-07-13  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/dtd/SourceFile/TkForm.dtd, /cvsroot/guido/guido/dtd/SourceFile/TkWidget.dtd:
+	no message
+
+2001-07-10  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SupportFile.pm:
+	handles miscellaneous files that are just partof the project but not to be collated into the project
+
+2001-06-17  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/ConfigDialog.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	no message
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm:
+	added delegation management code
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/Mapper.pm:
+	manages the mapping of delegated properties and methods
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/DelegateProperty.pm:
+	manages delegated properties
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/DelegateMethod.pm:
+	manages delegated methods
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/templates/to_code.tt:
+	completed addition of widgets and delegations
+
+2001-06-08  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/templates/{$name}.gui, /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite/templates/to_code.tt:
+	no message
+
+2001-06-06  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile.pm:
+	temporarily hard-coded the list of available sourcefile types until a better system is worked out
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm:
+	updated to work with the new designs in FormBuilder and properties subsystem
+
+2001-06-04  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget/properties.xml, /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/properties.xml, /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	relocated properties file
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder/Editor.pm: added
+
+	* /cvsroot/guido/guido/lib/Guido/properties.xml, /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm, /cvsroot/guido/guido/lib/Guido/Property.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm:
+	relocated properties file
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/properties.xml, /cvsroot/guido/guido/lib/Guido/SourceFile/TkWidget/Basic.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget/templates/to_code.tt, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget.pm:
+	relocated
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	fixed to use new location of TkWidget code
+
+2001-05-29  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget.pm:
+	both new() and load() now retrieve the set of "configure" properties
+
+2001-05-25  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget/properties.xml:
+	will provide default Tk property definitions to TkWidget
+
+2001-05-23  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm, /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm:
+	fixed problems with mishandling of Property objects
+
+2001-05-22  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget/templates/to_code.tt:
+	updated to use the new property objects
+
+2001-05-20  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/WidgetDrag.pm:
+	removed spurious tementproperty
+
+	* /cvsroot/guido/guido/lib/Guido/Property.pm, /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm:
+	updated to use the new property objects
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget.pm:
+	fixed problems with mishandling of Property objects, and
+	added the retrieval of the full property list when object is created using new
+
+2001-05-19  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm, /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm, /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	updated to use the new property objects
+
+	* /cvsroot/guido/guido/lib/Guido/Property.pm:
+	manages properties for property_sources
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPage.pm:
+	updated to use the new property objects
+
+2001-04-27  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPage.pm, /cvsroot/guido/guido/lib/Guido/Project.pm:
+	Fixed line-endings
+
+2001-04-25  cushard  <cushard@jacob.home>
+
+	* /cvsroot/guido/guido/doc/Guido: Log Message
+
+2001-04-16  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget/templates/to_xml.tt:
+	not usedn
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	Fixed line-endings
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget.pm:
+	Fixed line-endings
+	Modified to use the new WidgetDrag syntax
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm, /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm, /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm:
+	Fixed line-endings
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	Fixed line-endings
+	Modified to use the new WidgetDrag syntax
+
+	* /cvsroot/guido/guido/lib/WidgetDrag.pm:
+	fixed order of parameters for enable_drag,and changed naming convention to indicate that an object was being used.  Now calls update_position directly.  This makes WidgetDrag more or less Guido-specific now.
+
+2001-04-07  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project_events.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project_gui.xml, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project.xml:
+	no longer used
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Executor.pm, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm:
+	fixed win32 CR problem
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget.pm:
+	fixed win32 CR problems
+	fixed problems with bindings for right-click menu being killed
+
+2001-04-06  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget/templates/to_code.tt, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget/templates/to_xml.tt, /cvsroot/guido/guido/doc/Old/deps.txt, /cvsroot/guido/guido/doc/Old/design.html, /cvsroot/guido/guido/doc/Old/DESIGN.pod, /cvsroot/guido/guido/doc/Old/ModuleTemplate.pm, /cvsroot/guido/guido/doc/Old/plugin_authors_guide.html, /cvsroot/guido/guido/doc/Old/plugin_authors_guide.pod, /cvsroot/guido/guido/doc/Old/style.pod, /cvsroot/guido/guido/doc/Old/style.pod.html, /cvsroot/guido/guido/doc/Old/toolset.txt, /cvsroot/guido/guido/doc/deps.txt, /cvsroot/guido/guido/doc/DESIGN.pod, /cvsroot/guido/guido/doc/plugin_authors_guide.pod, /cvsroot/guido/guido/doc/style.pod, /cvsroot/guido/guido/doc/INSTALLATION:
+	no message
+
+2001-04-05  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/t/Class-DirtyMethodMaker.t, /cvsroot/guido/guido/t/GBMenu.t, /cvsroot/guido/guido/t/Guido-Application.t, /cvsroot/guido/guido/t/Guido-ConfigDialog.t, /cvsroot/guido/guido/t/Guido-MacroLoader.t, /cvsroot/guido/guido/t/Guido-PluginData.t, /cvsroot/guido/guido/t/Guido-Plugin-Executor-Editor.t, /cvsroot/guido/guido/t/Guido-Plugin-Executor.t, /cvsroot/guido/guido/t/Guido-Plugin-FormBuilder.t, /cvsroot/guido/guido/t/Guido-PluginLoader.t, /cvsroot/guido/guido/t/Guido-Plugin-ProjectManager.t, /cvsroot/guido/guido/t/Guido-Plugin-PropertyManager.t, /cvsroot/guido/guido/t/Guido-Plugin.t, /cvsroot/guido/guido/t/Guido-Plugin-Toolbox.t, /cvsroot/guido/guido/t/Guido-Project.t, /cvsroot/guido/guido/t/Guido-Project-TkApp.t, /cvsroot/guido/guido/t/Guido-Project-TkWidget.t, /cvsroot/guido/guido/t/Guido-PropertyPageDialog.t, /cvsroot/guido/guido/t/Guido-PropertyPage.t, /cvsroot/guido/guido/t/Guido-PropertySource.t, /cvsroot/guido/guido/t/Guido-RequiredFile.t, /cvsroot/guido/guido/t/Guido-RTData.t, /cvsroot/guido/guido/t/Guido-SourceFile-Module.t, /cvsroot/guido/guido/t/Guido-SourceFile.t, /cvsroot/guido/guido/t/Guido-SourceFile-TkComposite.t, /cvsroot/guido/guido/t/Guido-SourceFile-TkForm.t, /cvsroot/guido/guido/t/Guido-SourceFile-TkForm-TkWidget.t, /cvsroot/guido/guido/t/Guido-Tracer.t, /cvsroot/guido/guido/t/Guido-UsedModule.t, /cvsroot/guido/guido/t/Jeeves-AstDumpParser.t, /cvsroot/guido/guido/t/Jeeves-Ast.t, /cvsroot/guido/guido/t/Jeeves-Jeeves.t, /cvsroot/guido/guido/t/Jeeves-JeevesUtil.t, /cvsroot/guido/guido/t/Jeeves-SchemaParser.t, /cvsroot/guido/guido/t/Jeeves-TemplateParser.t, /cvsroot/guido/guido/t/Tk-DirSelect.t, /cvsroot/guido/guido/t/Tk-FastSplash.t, /cvsroot/guido/guido/t/Tk-FontDialog.t, /cvsroot/guido/guido/t/Tk-Splash.t, /cvsroot/guido/guido/t/Tk-Toolbar.t, /cvsroot/guido/guido/t/Tk-XMLForm.t, /cvsroot/guido/guido/t/Tk-XMLMenu.t, /cvsroot/guido/guido/t/TkXML.t, /cvsroot/guido/guido/t/WidgetDrag.t, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget.pm, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/project.pm, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/project.xml, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/project.pl, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/project.xml, /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/project.pm, /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/project.xml, /cvsroot/guido/guido/lib/Guido/templates/PERL_SCRIPT/project.pl, /cvsroot/guido/guido/lib/Guido/templates/PERL_SCRIPT/project.xml, /cvsroot/guido/guido/lib/Guido/templates/SOURCEFILE/TkForm/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/templates/SOURCEFILE/TkForm/{$name}.gui, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/bootstrap.pl, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/{$name}.gui, /cvsroot/guido/guido/lib/Guido/templates/TK_WID/project_gui.xml, /cvsroot/guido/guido/lib/Guido/templates/TK_WID/project.xml, /cvsroot/guido/guido/lib/Tk/DirSelect.pm, /cvsroot/guido/guido/lib/Tk/FastSplash.pm, /cvsroot/guido/guido/lib/Tk/FontDialog.pm, /cvsroot/guido/guido/lib/Tk/Splash.pm, /cvsroot/guido/guido/lib/Tk/Toolbar.pm, /cvsroot/guido/guido/lib/Tk/XMLForm.pm, /cvsroot/guido/guido/lib/Tk/XMLMenu.pm, /cvsroot/guido/guido/lib/Class/DirtyMethodMaker.pm, /cvsroot/guido/guido/lib/GBMenu.pm, /cvsroot/guido/guido/lib/Guido/Application.pm, /cvsroot/guido/guido/lib/Guido/ConfigDialog.pm, /cvsroot/guido/guido/lib/Guido/guido_menu.mxl, /cvsroot/guido/guido/lib/Guido/MacroLoader.pm, /cvsroot/guido/guido/lib/Guido/PluginData.pm, /cvsroot/guido/guido/lib/Guido/Plugin/Executor/Editor.pm, /cvsroot/guido/guido/lib/Guido/Plugin/Executor.pm, /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm, /cvsroot/guido/guido/lib/Guido/PluginLoader.pm, /cvsroot/guido/guido/lib/Guido/Plugin.pm, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox/Editor.pm, /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm, /cvsroot/guido/guido/lib/Guido/Project.pm, /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/bootstrap.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}.gui, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project_gui.xml, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$project_name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project.xml, /cvsroot/guido/guido/lib/Guido/Project/TkWidget.pm, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}.gui, /cvsroot/guido/guido/lib/Guido/PropertyPageDialog.pm, /cvsroot/guido/guido/lib/Guido/PropertyPage.pm, /cvsroot/guido/guido/lib/Guido/PropertySource.pm, /cvsroot/guido/guido/lib/Guido/RequiredFile.pm, /cvsroot/guido/guido/lib/Guido/RTData.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/Module.pm, /cvsroot/guido/guido/lib/Guido/SourceFile.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm, /cvsroot/guido/guido/lib/Guido/Tracer.pm, /cvsroot/guido/guido/lib/Guido/UsedModule.pm, /cvsroot/guido/guido/lib/test_plugin.pl, /cvsroot/guido/guido/lib/TkXML.pm, /cvsroot/guido/guido/lib/WidgetDrag.pm, /cvsroot/guido/guido/README:
+	*** empty log message ***
+
+2001-02-19  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/README: fixed line wrapping
+
+	* /cvsroot/guido/guido/doc/INSTALLATION:
+	fleshed out installation instructions
+
+	* /cvsroot/guido/guido/README:
+	added to provide pointer to installation instructions, should later fill out as a true README
+
+2001-02-15  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/RTData.pm: took out print statement
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	cleaning out commented code
+
+	* /cvsroot/guido/guido/doc/deps.txt, /cvsroot/guido/guido/doc/DESIGN.pod, /cvsroot/guido/guido/doc/plugin_authors_guide.pod, /cvsroot/guido/guido/doc/style.pod:
+	moving from the "old" section
+
+	* /cvsroot/guido/guido/doc/Old/style.pod: cleaned up
+
+	* /cvsroot/guido/guido/doc/screenshots/config_mswin.jpg, /cvsroot/guido/guido/doc/screenshots/full_with_form_mswin.jpg, /cvsroot/guido/guido/doc/screenshots/main_mswin.jpg:
+	screenshots for mswin
+
+	* /cvsroot/guido/guido/doc/Old/deps.txt: updating and reorganizing
+
+2001-02-13  James Tillman  <jtillman@jacob.home>
+
+	* /cvsroot/guido/guido/lib/Guido/Application.pm:
+	fixed error messages when restarting, but now only supports clearing console in Linux and MSWin
+
+	* /cvsroot/guido/guido/lib/Tk/DirSelect.pm, /cvsroot/guido/guido/lib/Tk/FastSplash.pm, /cvsroot/guido/guido/lib/Tk/FontDialog.pm, /cvsroot/guido/guido/lib/Tk/Splash.pm, /cvsroot/guido/guido/lib/Tk/Toolbar/ARC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/BACK.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/BLD.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/BUTTON.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/CAMERA.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/CNT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/COPY.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/CTR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/CUT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/DBLUNDR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/DELETE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/DISCNET.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/DRAWING.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/ELLIPSE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/FIND.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/FREEFORM.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/FRONT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/GROUP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/HELP2.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/HELP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/ITL.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/JST.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/LFT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/LINE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/LINESTYL.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/MAPNET.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/MCR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/NEW.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/OPEN.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/PASTE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar.pm, /cvsroot/guido/guido/lib/Tk/Toolbar/PRINT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/PROPERTY.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/PROP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/RECTANGL.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/REDO.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/REFRESH.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/RT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SAVE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SMALLCAP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SORTASC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SORTDES.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SPELLING.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/STRIKTHR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SUM.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/TAB-CNTR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/TAB-DEC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/TAB-LEFT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/TAB-RHT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/UNDO.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/UNDRLN.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/UNGROUP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/UP1LVL.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/VW-DTLS.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/VW-LIST.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/VW-LRGIC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/VW-SMLIC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/WORDUNDR.gif, /cvsroot/guido/guido/lib/Tk/XMLForm.pm, /cvsroot/guido/guido/lib/Tk/XMLMenu.pm, /cvsroot/guido/guido/t/Class-DirtyMethodMaker.t, /cvsroot/guido/guido/t/GBMenu.t, /cvsroot/guido/guido/t/Guido-Application.t, /cvsroot/guido/guido/t/Guido-ConfigDialog.t, /cvsroot/guido/guido/t/Guido-MacroLoader.t, /cvsroot/guido/guido/t/Guido-PluginData.t, /cvsroot/guido/guido/t/Guido-Plugin-Executor-Editor.t, /cvsroot/guido/guido/t/Guido-Plugin-Executor.t, /cvsroot/guido/guido/t/Guido-Plugin-FormBuilder.t, /cvsroot/guido/guido/t/Guido-PluginLoader.t, /cvsroot/guido/guido/t/Guido-Plugin-ProjectManager.t, /cvsroot/guido/guido/t/Guido-Plugin-PropertyManager.t, /cvsroot/guido/guido/t/Guido-Plugin.t, /cvsroot/guido/guido/t/Guido-Plugin-Toolbox.t, /cvsroot/guido/guido/t/Guido-Project.t, /cvsroot/guido/guido/t/Guido-Project-TkApp.t, /cvsroot/guido/guido/t/Guido-Project-TkWidget.t, /cvsroot/guido/guido/t/Guido-PropertyPageDialog.t, /cvsroot/guido/guido/t/Guido-PropertyPage.t, /cvsroot/guido/guido/t/Guido-PropertySource.t, /cvsroot/guido/guido/t/Guido-RequiredFile.t, /cvsroot/guido/guido/t/Guido-RTData.t, /cvsroot/guido/guido/t/Guido-SourceFile-Module.t, /cvsroot/guido/guido/t/Guido-SourceFile.t, /cvsroot/guido/guido/t/Guido-SourceFile-TkComposite.t, /cvsroot/guido/guido/t/Guido-SourceFile-TkForm.t, /cvsroot/guido/guido/t/Guido-SourceFile-TkForm-TkWidget.t, /cvsroot/guido/guido/t/Guido-Tracer.t, /cvsroot/guido/guido/t/Guido-UsedModule.t, /cvsroot/guido/guido/t/Jeeves-AstDumpParser.t, /cvsroot/guido/guido/t/Jeeves-Ast.t, /cvsroot/guido/guido/t/Jeeves-Jeeves.t, /cvsroot/guido/guido/t/Jeeves-JeevesUtil.t, /cvsroot/guido/guido/t/Jeeves-SchemaParser.t, /cvsroot/guido/guido/t/Jeeves-TemplateParser.t, /cvsroot/guido/guido/t/Tk-DirSelect.t, /cvsroot/guido/guido/t/Tk-FastSplash.t, /cvsroot/guido/guido/t/Tk-FontDialog.t, /cvsroot/guido/guido/t/Tk-Splash.t, /cvsroot/guido/guido/t/Tk-Toolbar.t, /cvsroot/guido/guido/t/Tk-XMLForm.t, /cvsroot/guido/guido/t/Tk-XMLMenu.t, /cvsroot/guido/guido/t/TkXML.t, /cvsroot/guido/guido/t/WidgetDrag.t:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Tk/DirSelect.pm, /cvsroot/guido/guido/lib/Tk/FastSplash.pm, /cvsroot/guido/guido/lib/Tk/FontDialog.pm, /cvsroot/guido/guido/lib/Tk/Splash.pm, /cvsroot/guido/guido/lib/Tk/Toolbar/ARC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/BACK.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/BLD.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/BUTTON.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/CAMERA.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/CNT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/COPY.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/CTR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/CUT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/DBLUNDR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/DELETE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/DISCNET.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/DRAWING.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/ELLIPSE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/FIND.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/FREEFORM.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/FRONT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/GROUP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/HELP2.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/HELP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/ITL.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/JST.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/LFT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/LINE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/LINESTYL.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/MAPNET.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/MCR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/NEW.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/OPEN.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/PASTE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar.pm, /cvsroot/guido/guido/lib/Tk/Toolbar/PRINT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/PROPERTY.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/PROP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/RECTANGL.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/REDO.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/REFRESH.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/RT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SAVE.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SMALLCAP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SORTASC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SORTDES.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SPELLING.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/STRIKTHR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/SUM.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/TAB-CNTR.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/TAB-DEC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/TAB-LEFT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/TAB-RHT.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/UNDO.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/UNDRLN.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/UNGROUP.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/UP1LVL.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/VW-DTLS.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/VW-LIST.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/VW-LRGIC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/VW-SMLIC.gif, /cvsroot/guido/guido/lib/Tk/Toolbar/WORDUNDR.gif, /cvsroot/guido/guido/lib/Tk/XMLForm.pm, /cvsroot/guido/guido/lib/Tk/XMLMenu.pm, /cvsroot/guido/guido/t/Class-DirtyMethodMaker.t, /cvsroot/guido/guido/t/GBMenu.t, /cvsroot/guido/guido/t/Guido-Application.t, /cvsroot/guido/guido/t/Guido-ConfigDialog.t, /cvsroot/guido/guido/t/Guido-MacroLoader.t, /cvsroot/guido/guido/t/Guido-PluginData.t, /cvsroot/guido/guido/t/Guido-Plugin-Executor-Editor.t, /cvsroot/guido/guido/t/Guido-Plugin-Executor.t, /cvsroot/guido/guido/t/Guido-Plugin-FormBuilder.t, /cvsroot/guido/guido/t/Guido-PluginLoader.t, /cvsroot/guido/guido/t/Guido-Plugin-ProjectManager.t, /cvsroot/guido/guido/t/Guido-Plugin-PropertyManager.t, /cvsroot/guido/guido/t/Guido-Plugin.t, /cvsroot/guido/guido/t/Guido-Plugin-Toolbox.t, /cvsroot/guido/guido/t/Guido-Project.t, /cvsroot/guido/guido/t/Guido-Project-TkApp.t, /cvsroot/guido/guido/t/Guido-Project-TkWidget.t, /cvsroot/guido/guido/t/Guido-PropertyPageDialog.t, /cvsroot/guido/guido/t/Guido-PropertyPage.t, /cvsroot/guido/guido/t/Guido-PropertySource.t, /cvsroot/guido/guido/t/Guido-RequiredFile.t, /cvsroot/guido/guido/t/Guido-RTData.t, /cvsroot/guido/guido/t/Guido-SourceFile-Module.t, /cvsroot/guido/guido/t/Guido-SourceFile.t, /cvsroot/guido/guido/t/Guido-SourceFile-TkComposite.t, /cvsroot/guido/guido/t/Guido-SourceFile-TkForm.t, /cvsroot/guido/guido/t/Guido-SourceFile-TkForm-TkWidget.t, /cvsroot/guido/guido/t/Guido-Tracer.t, /cvsroot/guido/guido/t/Guido-UsedModule.t, /cvsroot/guido/guido/t/Jeeves-AstDumpParser.t, /cvsroot/guido/guido/t/Jeeves-Ast.t, /cvsroot/guido/guido/t/Jeeves-Jeeves.t, /cvsroot/guido/guido/t/Jeeves-JeevesUtil.t, /cvsroot/guido/guido/t/Jeeves-SchemaParser.t, /cvsroot/guido/guido/t/Jeeves-TemplateParser.t, /cvsroot/guido/guido/t/Tk-DirSelect.t, /cvsroot/guido/guido/t/Tk-FastSplash.t, /cvsroot/guido/guido/t/Tk-FontDialog.t, /cvsroot/guido/guido/t/Tk-Splash.t, /cvsroot/guido/guido/t/Tk-Toolbar.t, /cvsroot/guido/guido/t/Tk-XMLForm.t, /cvsroot/guido/guido/t/Tk-XMLMenu.t, /cvsroot/guido/guido/t/TkXML.t, /cvsroot/guido/guido/t/WidgetDrag.t:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/data/label, /cvsroot/guido/guido/lib/Guido/templates/PERL_SCRIPT/data/label, /cvsroot/guido/guido/lib/Guido/templates/PERL_SCRIPT/project.pl, /cvsroot/guido/guido/lib/Guido/templates/PERL_SCRIPT/project.xml, /cvsroot/guido/guido/lib/Guido/templates/SOURCEFILE/TkForm/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/templates/SOURCEFILE/TkForm/{$name}.gui, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/bootstrap.pl, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/data/label, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/{$name}.gui, /cvsroot/guido/guido/lib/Guido/templates/TK_WID/project_events.pl, /cvsroot/guido/guido/lib/Guido/templates/TK_WID/project_gui.xml, /cvsroot/guido/guido/lib/Guido/templates/TK_WID/project.xml:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/data/label, /cvsroot/guido/guido/lib/Guido/templates/PERL_SCRIPT/data/label, /cvsroot/guido/guido/lib/Guido/templates/PERL_SCRIPT/project.pl, /cvsroot/guido/guido/lib/Guido/templates/PERL_SCRIPT/project.xml, /cvsroot/guido/guido/lib/Guido/templates/SOURCEFILE/TkForm/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/templates/SOURCEFILE/TkForm/{$name}.gui, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/bootstrap.pl, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/data/label, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/templates/TK_APP/{$name}.gui, /cvsroot/guido/guido/lib/Guido/templates/TK_WID/project_events.pl, /cvsroot/guido/guido/lib/Guido/templates/TK_WID/project_gui.xml, /cvsroot/guido/guido/lib/Guido/templates/TK_WID/project.xml:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/templates/{$name}.gui, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget.pm, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/data/label, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/project.pm, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/project.xml, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/data/label, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/project.pl, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/project.xml, /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/project.pm, /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/project.xml:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/templates/{$name}.gui, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm/TkWidget.pm, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/data/label, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/project.pm, /cvsroot/guido/guido/lib/Guido/templates/PERL_APACHE/project.xml, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/data/label, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/project.pl, /cvsroot/guido/guido/lib/Guido/templates/PERL_CGI/project.xml, /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/project.pm, /cvsroot/guido/guido/lib/Guido/templates/PERL_MOD/project.xml:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/Module.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/SourceFile/Module.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkComposite.pm, /cvsroot/guido/guido/lib/Guido/SourceFile/TkForm.pm:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/bootstrap.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/data/label, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}.gui, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project_events.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project_gui.xml, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$project_name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project.xml, /cvsroot/guido/guido/lib/Guido/Project/TkWidget.pm, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/data/label, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}.gui:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/Project/TkApp.pm, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/bootstrap.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/data/label, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$name}.gui, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project_events.pl, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project_gui.xml, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/{$project_name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkApp/templates/project.xml, /cvsroot/guido/guido/lib/Guido/Project/TkWidget.pm, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/data/icon.jpg, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/data/label, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}_events.pl, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}.gpj, /cvsroot/guido/guido/lib/Guido/Project/TkWidget/templates/{$name}.gui:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_apache.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_cgi.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_mod.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_tkapp.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_tkwid.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox/Editor.pm:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_apache.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_cgi.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_mod.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_tkapp.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager/perl_tkwid.jpg, /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox/Editor.pm:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Executor/Editor.pm, /cvsroot/guido/guido/lib/Guido/Plugin/images/graph.gif:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Executor/Editor.pm, /cvsroot/guido/guido/lib/Guido/Plugin/images/graph.gif:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/ProjectManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/PropertyManager.pm, /cvsroot/guido/guido/lib/Guido/Plugin/Toolbox.pm:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Executor.pm, /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/Plugin/Executor.pm, /cvsroot/guido/guido/lib/Guido/Plugin/FormBuilder.pm:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPageDialog.pm, /cvsroot/guido/guido/lib/Guido/PropertySource.pm, /cvsroot/guido/guido/lib/Guido/RequiredFile.pm, /cvsroot/guido/guido/lib/Guido/RTData.pm, /cvsroot/guido/guido/lib/Guido/SourceFile.pm, /cvsroot/guido/guido/lib/Guido/Tracer.pm, /cvsroot/guido/guido/lib/Guido/UsedModule.pm:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/PropertyPageDialog.pm, /cvsroot/guido/guido/lib/Guido/PropertySource.pm, /cvsroot/guido/guido/lib/Guido/RequiredFile.pm, /cvsroot/guido/guido/lib/Guido/RTData.pm, /cvsroot/guido/guido/lib/Guido/SourceFile.pm, /cvsroot/guido/guido/lib/Guido/Tracer.pm, /cvsroot/guido/guido/lib/Guido/UsedModule.pm:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/PluginLoader.pm, /cvsroot/guido/guido/lib/Guido/Project.pm, /cvsroot/guido/guido/lib/Guido/PropertyPage.pm:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/PluginLoader.pm, /cvsroot/guido/guido/lib/Guido/Project.pm, /cvsroot/guido/guido/lib/Guido/PropertyPage.pm:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/guido_splash.jpg, /cvsroot/guido/guido/lib/Guido/MacroLoader.pm, /cvsroot/guido/guido/lib/Guido/PluginData.pm, /cvsroot/guido/guido/lib/Guido/Plugin.pm:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/guido_splash.jpg, /cvsroot/guido/guido/lib/Guido/MacroLoader.pm, /cvsroot/guido/guido/lib/Guido/PluginData.pm, /cvsroot/guido/guido/lib/Guido/Plugin.pm:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Guido/ConfigDialog.pm, /cvsroot/guido/guido/lib/Guido/guido_logo.jpg, /cvsroot/guido/guido/lib/Guido/guido_menu.mxl:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Guido/ConfigDialog.pm, /cvsroot/guido/guido/lib/Guido/guido_logo.jpg, /cvsroot/guido/guido/lib/Guido/guido_menu.mxl:
+	New file.
+
+	* /cvsroot/guido/guido/lib/Class/DirtyMethodMaker.pm, /cvsroot/guido/guido/lib/Guido/Application.pm:
+	initial import
+
+	* /cvsroot/guido/guido/lib/Class/DirtyMethodMaker.pm, /cvsroot/guido/guido/lib/Guido/Application.pm:
+	New file.
+
+	* /cvsroot/guido/guido/doc/Old/project_model_diagram.vsd, /cvsroot/guido/guido/doc/Old/style.pod, /cvsroot/guido/guido/doc/Old/style.pod.html, /cvsroot/guido/guido/doc/Old/toolset.txt, /cvsroot/guido/guido/lib/GBMenu.pm, /cvsroot/guido/guido/lib/test_plugin.pl, /cvsroot/guido/guido/lib/TkXML.pm, /cvsroot/guido/guido/lib/WidgetDrag.pm:
+	initial import
+
+	* /cvsroot/guido/guido/doc/Old/project_model_diagram.vsd, /cvsroot/guido/guido/doc/Old/style.pod, /cvsroot/guido/guido/doc/Old/style.pod.html, /cvsroot/guido/guido/doc/Old/toolset.txt, /cvsroot/guido/guido/lib/GBMenu.pm, /cvsroot/guido/guido/lib/test_plugin.pl, /cvsroot/guido/guido/lib/TkXML.pm, /cvsroot/guido/guido/lib/WidgetDrag.pm:
+	New file.
+
+	* /cvsroot/guido/guido/doc/Old/plugin_authors_guide.html, /cvsroot/guido/guido/doc/Old/plugin_authors_guide.pod:
+	initial import
+
+	* /cvsroot/guido/guido/doc/Old/plugin_authors_guide.html, /cvsroot/guido/guido/doc/Old/plugin_authors_guide.pod:
+	New file.
+
+	* /cvsroot/guido/guido/doc/Old/High, /cvsroot/guido/guido/doc/Old/ModuleTemplate.pm:
+	initial import
+
+	* /cvsroot/guido/guido/doc/Old/High, /cvsroot/guido/guido/doc/Old/ModuleTemplate.pm:
+	New file.
+
+	* /cvsroot/guido/guido/doc/Guido, /cvsroot/guido/guido/doc/INSTALLATION, /cvsroot/guido/guido/doc/Old/deps.txt, /cvsroot/guido/guido/doc/Old/design.html, /cvsroot/guido/guido/doc/Old/DESIGN.pod:
+	initial import
+
+	* /cvsroot/guido/guido/doc/Guido, /cvsroot/guido/guido/doc/INSTALLATION, /cvsroot/guido/guido/doc/Old/deps.txt, /cvsroot/guido/guido/doc/Old/design.html, /cvsroot/guido/guido/doc/Old/DESIGN.pod:
+	New file.
+
+	* /cvsroot/guido/guido/doc/Directory: initial import
+
+	* /cvsroot/guido/guido/doc/Directory: New file.
+

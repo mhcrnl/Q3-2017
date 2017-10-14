@@ -1,0 +1,11 @@
+COPYING
+INSTALL
+MANIFEST
+NOTES
+README
+Makefile.PL
+WordDig.pm
+t/WordDig.t
+t/twodicts.t
+words
+words2

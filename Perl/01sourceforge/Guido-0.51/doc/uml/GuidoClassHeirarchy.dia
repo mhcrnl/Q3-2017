@@ -1,0 +1,848 @@
+<?xml version="1.0"?>
+<diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
+  <diagramdata>
+    <attribute name="background">
+      <color val="#ffffff"/>
+    </attribute>
+    <attribute name="paper">
+      <composite type="paper">
+        <attribute name="name">
+          <string>#A4#</string>
+        </attribute>
+        <attribute name="tmargin">
+          <real val="2.82"/>
+        </attribute>
+        <attribute name="bmargin">
+          <real val="2.82"/>
+        </attribute>
+        <attribute name="lmargin">
+          <real val="2.82"/>
+        </attribute>
+        <attribute name="rmargin">
+          <real val="2.82"/>
+        </attribute>
+        <attribute name="is_portrait">
+          <boolean val="true"/>
+        </attribute>
+        <attribute name="scaling">
+          <real val="1"/>
+        </attribute>
+        <attribute name="fitto">
+          <boolean val="false"/>
+        </attribute>
+      </composite>
+    </attribute>
+    <attribute name="grid">
+      <composite type="grid">
+        <attribute name="width_x">
+          <real val="1"/>
+        </attribute>
+        <attribute name="width_y">
+          <real val="1"/>
+        </attribute>
+        <attribute name="visible_x">
+          <int val="1"/>
+        </attribute>
+        <attribute name="visible_y">
+          <int val="1"/>
+        </attribute>
+      </composite>
+    </attribute>
+    <attribute name="guides">
+      <composite type="guides">
+        <attribute name="hguides"/>
+        <attribute name="vguides"/>
+      </composite>
+    </attribute>
+  </diagramdata>
+  <layer name="Background" visible="true">
+    <object type="UML - Note" version="0" id="O0">
+      <attribute name="obj_pos">
+        <point val="1.23161,26.0817"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="1.18161,26.0317;12.0776,29.4317"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="1.23161,26.0817"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="10.796"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="3.3"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#ProjectManager uses 
+FormBuilder to
+display GUI files#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.8"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="1.58161,27.3662"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="UML - Note" version="0" id="O1">
+      <attribute name="obj_pos">
+        <point val="31.5316,30.0817"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="31.4816,30.0317;42.3776,33.4317"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="31.5316,30.0817"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="10.796"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="3.3"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#FormBuilder displays
+TkForm/TkComposite
+objects for editing#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.8"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="31.8816,31.3662"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="UML - Note" version="0" id="O2">
+      <attribute name="obj_pos">
+        <point val="-0.737593,10.9"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="-0.787593,10.85;8.16921,14.25"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="-0.737593,10.9"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="8.8568"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="3.3"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#Project Manager
+provides a view 
+of open projects#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.8"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="-0.387593,12.1845"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="UML - Class" version="0" id="O3">
+      <attribute name="obj_pos">
+        <point val="11.25,7.35"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="11.2,7.3;26.1592,11"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="11.25,7.35"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="14.8592"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="3.6"/>
+      </attribute>
+      <attribute name="name">
+        <string>#Guido::Application#</string>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <attribute name="abstract">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_attributes">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_operations">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="visible_attributes">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="visible_operations">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="attributes">
+        <composite type="umlattribute">
+          <attribute name="name">
+            <string>#projects#</string>
+          </attribute>
+          <attribute name="type">
+            <string>#PerlDataType::Hash#</string>
+          </attribute>
+          <attribute name="value">
+            <string/>
+          </attribute>
+          <attribute name="visibility">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="abstract">
+            <boolean val="false"/>
+          </attribute>
+          <attribute name="class_scope">
+            <boolean val="false"/>
+          </attribute>
+        </composite>
+        <composite type="umlattribute">
+          <attribute name="name">
+            <string>#plugins#</string>
+          </attribute>
+          <attribute name="type">
+            <string>#PerlDataType::Hash#</string>
+          </attribute>
+          <attribute name="value">
+            <string/>
+          </attribute>
+          <attribute name="visibility">
+            <enum val="0"/>
+          </attribute>
+          <attribute name="abstract">
+            <boolean val="false"/>
+          </attribute>
+          <attribute name="class_scope">
+            <boolean val="false"/>
+          </attribute>
+        </composite>
+      </attribute>
+      <attribute name="operations"/>
+      <attribute name="template">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="templates"/>
+    </object>
+    <object type="UML - Class" version="0" id="O4">
+      <attribute name="obj_pos">
+        <point val="9.85,15.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.8,15.2;17.2448,17.5"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="9.85,15.25"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="7.3448"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="2.2"/>
+      </attribute>
+      <attribute name="name">
+        <string>#Guido::Plugin#</string>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <attribute name="abstract">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_attributes">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_operations">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="visible_attributes">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="visible_operations">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="attributes"/>
+      <attribute name="operations"/>
+      <attribute name="template">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="templates"/>
+    </object>
+    <object type="UML - Class" version="0" id="O5">
+      <attribute name="obj_pos">
+        <point val="22.15,20.55"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="22.1,20.5;31.5749,22.8"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="22.15,20.55"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="9.3749"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="2.2"/>
+      </attribute>
+      <attribute name="name">
+        <string>#Guido::SourceFile#</string>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <attribute name="abstract">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_attributes">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_operations">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="visible_attributes">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="visible_operations">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="attributes"/>
+      <attribute name="operations"/>
+      <attribute name="template">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="templates"/>
+    </object>
+    <object type="UML - Class" version="0" id="O6">
+      <attribute name="obj_pos">
+        <point val="19.45,15.15"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="19.4,15.1;27.1781,17.4"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="19.45,15.15"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="7.6781"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="2.2"/>
+      </attribute>
+      <attribute name="name">
+        <string>#Guido::Project#</string>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <attribute name="abstract">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_attributes">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_operations">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="visible_attributes">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="visible_operations">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="attributes"/>
+      <attribute name="operations"/>
+      <attribute name="template">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="templates"/>
+    </object>
+    <object type="UML - Class" version="0" id="O7">
+      <attribute name="obj_pos">
+        <point val="2.6,20.65"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="2.55,20.6;18.0849,22.9"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="2.6,20.65"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="15.4349"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="2.2"/>
+      </attribute>
+      <attribute name="name">
+        <string>#Guido::Plugin::ProjectManager#</string>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <attribute name="abstract">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_attributes">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_operations">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="visible_attributes">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="visible_operations">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="attributes"/>
+      <attribute name="operations"/>
+      <attribute name="template">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="templates"/>
+    </object>
+    <object type="UML - Dependency" version="0" id="O8">
+      <attribute name="obj_pos">
+        <point val="23.2891,15.15"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="18.9816,10.0817;24.1391,16"/>
+      </attribute>
+      <attribute name="orth_points">
+        <point val="23.2891,15.15"/>
+        <point val="23.2891,13.4"/>
+        <point val="19.8316,13.4"/>
+        <point val="19.8316,10.9317"/>
+      </attribute>
+      <attribute name="orth_orient">
+        <enum val="1"/>
+        <enum val="0"/>
+        <enum val="1"/>
+      </attribute>
+      <attribute name="draw_arrow">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="name">
+        <string/>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <connections>
+        <connection handle="0" to="O6" connection="1"/>
+      </connections>
+    </object>
+    <object type="UML - Dependency" version="0" id="O9">
+      <attribute name="obj_pos">
+        <point val="13.5224,15.25"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="12.6724,10.1;19.5296,16.1"/>
+      </attribute>
+      <attribute name="orth_points">
+        <point val="13.5224,15.25"/>
+        <point val="13.5224,13"/>
+        <point val="18.6796,13"/>
+        <point val="18.6796,10.95"/>
+      </attribute>
+      <attribute name="orth_orient">
+        <enum val="1"/>
+        <enum val="0"/>
+        <enum val="1"/>
+      </attribute>
+      <attribute name="draw_arrow">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="name">
+        <string/>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <connections>
+        <connection handle="0" to="O4" connection="1"/>
+        <connection handle="1" to="O3" connection="6"/>
+      </connections>
+    </object>
+    <object type="UML - Realizes" version="0" id="O10">
+      <attribute name="obj_pos">
+        <point val="13.5224,17.45"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="9.46745,16.6;14.3724,21.5"/>
+      </attribute>
+      <attribute name="orth_points">
+        <point val="13.5224,17.45"/>
+        <point val="13.5224,20.15"/>
+        <point val="10.3175,20.15"/>
+        <point val="10.3175,20.65"/>
+      </attribute>
+      <attribute name="orth_orient">
+        <enum val="1"/>
+        <enum val="0"/>
+        <enum val="1"/>
+      </attribute>
+      <attribute name="name">
+        <string/>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <connections>
+        <connection handle="0" to="O4" connection="6"/>
+        <connection handle="1" to="O7" connection="1"/>
+      </connections>
+    </object>
+    <object type="UML - Realizes" version="0" id="O11">
+      <attribute name="obj_pos">
+        <point val="23.2891,17.35"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="22.4391,16.5;27.6875,21.4"/>
+      </attribute>
+      <attribute name="orth_points">
+        <point val="23.2891,17.35"/>
+        <point val="23.2891,19.55"/>
+        <point val="26.8375,19.55"/>
+        <point val="26.8375,20.55"/>
+      </attribute>
+      <attribute name="orth_orient">
+        <enum val="1"/>
+        <enum val="0"/>
+        <enum val="1"/>
+      </attribute>
+      <attribute name="name">
+        <string/>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <connections>
+        <connection handle="0" to="O6" connection="6"/>
+        <connection handle="1" to="O5" connection="1"/>
+      </connections>
+    </object>
+    <object type="UML - Note" version="0" id="O12">
+      <attribute name="obj_pos">
+        <point val="-0.0375935,3.6"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="-0.0875935,3.55;7.89961,7.75"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="-0.0375935,3.6"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="7.8872"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="4.1"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#This diagram 
+does not yet 
+show methods 
+of the classes#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="0.8"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="0.312407,4.88448"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="0"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+    <object type="UML - Dependency" version="0" id="O13">
+      <attribute name="obj_pos">
+        <point val="12.0124,10.9849"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="6.06241,10.1349;12.8624,21.4349"/>
+      </attribute>
+      <attribute name="orth_points">
+        <point val="12.0124,10.9849"/>
+        <point val="12.0124,13.9349"/>
+        <point val="6.91241,13.9349"/>
+        <point val="6.91241,20.5849"/>
+      </attribute>
+      <attribute name="orth_orient">
+        <enum val="1"/>
+        <enum val="0"/>
+        <enum val="1"/>
+      </attribute>
+      <attribute name="draw_arrow">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="name">
+        <string/>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+    </object>
+    <object type="UML - Class" version="0" id="O14">
+      <attribute name="obj_pos">
+        <point val="14.0816,30.0317"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="14.0316,29.9817;24.567,32.2817"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="14.0816,30.0317"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="10.4354"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="2.2"/>
+      </attribute>
+      <attribute name="name">
+        <string>#Plugin::FormBuilder#</string>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <attribute name="abstract">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_attributes">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_operations">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="visible_attributes">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="visible_operations">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="attributes"/>
+      <attribute name="operations"/>
+      <attribute name="template">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="templates"/>
+    </object>
+    <object type="UML - Class" version="0" id="O15">
+      <attribute name="obj_pos">
+        <point val="28.1316,25.9817"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="28.0816,25.9317;41.9197,28.2317"/>
+      </attribute>
+      <attribute name="elem_corner">
+        <point val="28.1316,25.9817"/>
+      </attribute>
+      <attribute name="elem_width">
+        <real val="13.7381"/>
+      </attribute>
+      <attribute name="elem_height">
+        <real val="2.2"/>
+      </attribute>
+      <attribute name="name">
+        <string>#Guido::SourceFile::TkForm#</string>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <attribute name="abstract">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_attributes">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="suppress_operations">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="visible_attributes">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="visible_operations">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="attributes"/>
+      <attribute name="operations"/>
+      <attribute name="template">
+        <boolean val="false"/>
+      </attribute>
+      <attribute name="templates"/>
+    </object>
+    <object type="UML - Dependency" version="0" id="O16">
+      <attribute name="obj_pos">
+        <point val="19.2993,30.0317"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="10.3316,22.0317;20.1493,30.8817"/>
+      </attribute>
+      <attribute name="orth_points">
+        <point val="19.2993,30.0317"/>
+        <point val="19.2993,26.9317"/>
+        <point val="11.1816,26.9317"/>
+        <point val="11.1816,22.8817"/>
+      </attribute>
+      <attribute name="orth_orient">
+        <enum val="1"/>
+        <enum val="0"/>
+        <enum val="1"/>
+      </attribute>
+      <attribute name="draw_arrow">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="name">
+        <string/>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <connections>
+        <connection handle="0" to="O14" connection="1"/>
+      </connections>
+    </object>
+    <object type="UML - Dependency" version="0" id="O17">
+      <attribute name="obj_pos">
+        <point val="35.0007,25.9817"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="25.9875,21.9;35.8507,26.8317"/>
+      </attribute>
+      <attribute name="orth_points">
+        <point val="35.0007,25.9817"/>
+        <point val="35.0007,24.7817"/>
+        <point val="26.8375,24.7817"/>
+        <point val="26.8375,22.75"/>
+      </attribute>
+      <attribute name="orth_orient">
+        <enum val="1"/>
+        <enum val="0"/>
+        <enum val="1"/>
+      </attribute>
+      <attribute name="draw_arrow">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="name">
+        <string/>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <connections>
+        <connection handle="0" to="O15" connection="1"/>
+        <connection handle="1" to="O5" connection="6"/>
+      </connections>
+    </object>
+    <object type="UML - Dependency" version="0" id="O18">
+      <attribute name="obj_pos">
+        <point val="24.517,30.7317"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="23.667,27.3317;35.8507,31.5817"/>
+      </attribute>
+      <attribute name="orth_points">
+        <point val="24.517,30.7317"/>
+        <point val="24.517,30.6817"/>
+        <point val="35.0007,30.6817"/>
+        <point val="35.0007,28.1817"/>
+      </attribute>
+      <attribute name="orth_orient">
+        <enum val="1"/>
+        <enum val="0"/>
+        <enum val="1"/>
+      </attribute>
+      <attribute name="draw_arrow">
+        <boolean val="true"/>
+      </attribute>
+      <attribute name="name">
+        <string/>
+      </attribute>
+      <attribute name="stereotype">
+        <string/>
+      </attribute>
+      <connections>
+        <connection handle="0" to="O14" connection="4"/>
+        <connection handle="1" to="O15" connection="6"/>
+      </connections>
+    </object>
+    <object type="Standard - Text" version="0" id="O19">
+      <attribute name="obj_pos">
+        <point val="15.9316,2.13248"/>
+      </attribute>
+      <attribute name="obj_bb">
+        <rectangle val="3.10561,0.546271;28.7576,2.54627"/>
+      </attribute>
+      <attribute name="text">
+        <composite type="text">
+          <attribute name="string">
+            <string>#Guido Class Heirarchy#</string>
+          </attribute>
+          <attribute name="font">
+            <font name="Courier"/>
+          </attribute>
+          <attribute name="height">
+            <real val="2"/>
+          </attribute>
+          <attribute name="pos">
+            <point val="15.9316,2.13248"/>
+          </attribute>
+          <attribute name="color">
+            <color val="#000000"/>
+          </attribute>
+          <attribute name="alignment">
+            <enum val="1"/>
+          </attribute>
+        </composite>
+      </attribute>
+    </object>
+  </layer>
+</diagram>

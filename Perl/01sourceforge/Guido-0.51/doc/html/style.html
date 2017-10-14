@@ -1,0 +1,476 @@
+<HTML>
+<HEAD>
+<TITLE>This document is a guide to programming for the Guido project.  It should be 
+adhered to as strictly as possible to ensure uniformity of style and readability 
+for new developers.</TITLE>
+</HEAD>
+<BODY BGCOLOR="#fffff8" TEXT="#000000">
+<UL>
+<LI><A HREF="#Guido%20Programmer's%20Style%20Manual">Guido Programmer's Style Manual
+
+</A></LI>
+<UL>
+<LI><A HREF="#Syntax">Syntax
+
+</A></LI>
+<LI><A HREF="#Coding%20Conventions">Coding Conventions
+
+</A></LI>
+<LI><A HREF="#Naming%20Conventions">Naming Conventions
+
+</A></LI>
+</UL>
+</UL>
+<HR>
+<H1><A NAME="Guido%20Programmer's%20Style%20Manual">Guido Programmer's Style Manual
+
+</A></H1>
+
+<P>This document is a guide to programming for the Guido project.  It should be 
+adhered to as strictly as possible to ensure uniformity of style and readability 
+for new developers.
+
+</P><H2><A NAME="Syntax">Syntax
+
+</A></H2>
+<DL><DT><A NAME="*%20Use%20a%20tab%20indent%2c%20not%20spaces.">* Use a tab indent, not spaces.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Place%20opening%20curlies%20on%20the%20same%20line%20as%20the%20keyword%3a">* Place opening curlies on the same line as the keyword:
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	sub myfunc
+	{
+		#Do stuff
+	}</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	sub myfunc {
+		#Do stuff
+	}</PRE>
+</DD>
+<DT><A NAME="*%20Put%20a%20space%20before%20the%20opening%20curly%20of%20a%20multi-line%20BLOCK.">* Put a space before the opening curly of a multi-line BLOCK.
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	sub myfunc{
+		#Do stuff
+	}</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	sub myfunc {
+		#Do stuff
+	}
+</PRE>
+</DD>
+<DT><A NAME="*%20Don't%20put%20spaces%20before%20the%20ending%20semicolon">* Don't put spaces before the ending semicolon
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	print &quot;Hi there&quot; ;</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	print &quot;Hi there&quot;;</PRE>
+</DD>
+<DT><A NAME="*%20Use%20space%20around%20operators%2c%20except%20%3f%3f%3f">* Use space around operators, except ???
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	print 5+5;</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	print 5 + 5;</PRE>
+</DD>
+<DT><A NAME="*%20Use%20blank%20lines%20between%20bits%20of%20code%20that%20do%20different%20things.">* Use blank lines between bits of code that do different things.
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	print &quot;Starting process 1&quot;;
+	#process 1
+	print &quot;Ending process 1&quot;;
+	print &quot;Starting process 2&quot;;
+	#process 2
+	print &quot;Ending process 2&quot;;</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	print &quot;Starting process 1&quot;;
+	#process 1
+	print &quot;Ending process 1&quot;;</PRE>
+
+<PRE>	print &quot;Starting process 2&quot;;
+	#process 2
+	print &quot;Ending process 2&quot;;</PRE>
+</DD>
+<DT><A NAME="*%09Don't%20use%20%22cuddled%22%20elses.">*	Don't use &quot;cuddled&quot; elses.
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	if ($ready) {
+		print &quot;I'm ready&quot;;
+	} else {
+		print &quot;I'm not ready&quot;;
+	}</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	if ($ready) {
+		print &quot;I'm ready&quot;;
+	} 
+	else {
+		print &quot;I'm not ready&quot;;
+	}</PRE>
+</DD>
+<DT><A NAME="*%20Use%20the%20ternary%20operator%20when%20it%20helps%20brevity%20but%20doesn't%20affect%20readability.">* Use the ternary operator when it helps brevity but doesn't affect readability.
+
+</A></DT>
+<DD>
+
+<P>OK:
+
+</P>
+<PRE>	if ($ready) {
+		print &quot;I'm ready&quot;;
+	} 
+	else {
+		print &quot;I'm not ready&quot;;
+	}</PRE>
+
+<P>BETTER:
+
+</P>
+<PRE>	print $ready ? &quot;I'm ready&quot; : &quot;I'm not ready&quot;;</PRE>
+</DD>
+<DT><A NAME="*%09Don't%20use%20space%20between%20the%20function%20name%20and%20its%20opening%20parenthesis.">*	Don't use space between the function name and its opening parenthesis.
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	$name = get_name ($first_name, $last_name);</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	$name = get_name($first_name, $last_name);</PRE>
+</DD>
+<DT><A NAME="*%09Use%20a%20space%20after%20each%20comma%2c%20except%20in%20numeric%20series%20%5b1%2c2%2c3%2c4%5d">*	Use a space after each comma, except in numeric series [1,2,3,4]
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	$name = get_name($first_name,$last_name);</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	$name = get_name($first_name, $last_name);</PRE>
+</DD>
+<DT><A NAME="*%09Break%20long%20lines%20after%20an%20operator%20(except%20%22and%22%20and%20%22or%22).">*	Break long lines after an operator (except &quot;and&quot; and &quot;or&quot;).
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%09Use%20a%20space%20after%20last%20parenthesis%20matching%20on%20current%20line.">*	Use a space after last parenthesis matching on current line. 
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%09Line%20up%20corresponding%20items%20vertically.">*	Line up corresponding items vertically. 
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%09Omit%20redundant%20punctuation%20as%20long%20as%20clarity%20doesn't%20suffer.">*	Omit redundant punctuation as long as clarity doesn't suffer. 
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20If%20you%20have%20a%20really%20hairy%20regular%20expression%2c%20use%20the%20%2fx%20modifier%20and%20put%20%0ain%20some%20whitespace%20to%20make%20it%20look%20a%20little%20less%20like%20line%20noise.%20Don't%20use%20%0aslash%20as%20a%20delimiter%20when%20your%20regexp%20has%20slashes%20or%20backslashes.">* If you have a really hairy regular expression, use the /x modifier and put 
+in some whitespace to make it look a little less like line noise. Don't use 
+slash as a delimiter when your regexp has slashes or backslashes. 
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Only%20leave%20the%20parentheses%20off%20calls%20to%20the%20following%20functions%3a">* Only leave the parentheses off calls to the following functions:
+
+</A></DT>
+<DD>
+<DL><DT><A NAME="*%20print">* print
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20die">* die
+
+</A></DT>
+<DD>
+</DD>
+</DL>
+
+<P>All others should use the function() syntax when called.
+
+</P></DD>
+<DT><A NAME="*%20Line%20up%20your%20transliterations%20when%20it%20makes%20sense%3a">* Line up your transliterations when it makes sense: 
+
+</A></DT>
+<DD>
+
+<PRE>	    tr [abc]
+	       [xyz];</PRE>
+</DD>
+</DL>
+<H2><A NAME="Coding%20Conventions">Coding Conventions
+
+</A></H2>
+<DL><DT><A NAME="*%20Always%20use%20%22use%20strict%22%20and%20don't%20overuse%20%22use%20vars%22.%20%20Keep%20global%20variables%20to%20%0aan%20absolute%20minimum.">* Always use &quot;use strict&quot; and don't overuse &quot;use vars&quot;.  Keep global variables to 
+an absolute minimum.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Object%20constructors%20must%20follow%20this%20format%3a">* Object constructors must follow this format:
+
+</A></DT>
+<DD>
+
+<PRE>	sub new {
+		my($class, %attribs) = @_;
+		my $self = {
+			name = $attribs{name},
+			file_path = $attribs{file_path},
+		};</PRE>
+
+<PRE>		return bless $self, $class;
+	}</PRE>
+</DD>
+<DT><A NAME="*%20Object%20methods%20must%20follow%20this%20format%3a">* Object methods must follow this format:
+
+</A></DT>
+<DD>
+
+<PRE>	sub method {
+		my($self, %params) = @_;
+		
+		#Do stuff here
+	}</PRE>
+</DD>
+<DT><A NAME="*%20Object%20methods%20should%20always%20return%20something%2c%20even%20if%20it%20is%20%22undef%22.%20%20%0aMethods%20that%20return%20data%20should%20return%20%22undef%22%20on%20failure.%20%20Methods%20that%20don't%20%0areturn%20data%20should%20return%201%20on%20success%2c%200%20on%20failure.">* Object methods should always return something, even if it is &quot;undef&quot;.  
+Methods that return data should return &quot;undef&quot; on failure.  Methods that don't 
+return data should return 1 on success, 0 on failure. 
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Use%20the%20%22do%20this%20or%20die%22%20construct%20when%20performing%20operations%20that%20%0arequire%20this%20type%20of%20behavior%3a">* Use the &quot;do this or die&quot; construct when performing operations that 
+require this type of behavior:
+
+</A></DT>
+<DD>
+
+<PRE>	open(FOO,$foo) or die &quot;Can't open $foo: $!&quot;;</PRE>
+</DD>
+<DT><A NAME="*%20Use%20the%20%22do%20this%20if%20this%20is%20true%22%20construct%20if%20it%20reads%20more%20clearly%3a">* Use the &quot;do this if this is true&quot; construct if it reads more clearly:
+
+</A></DT>
+<DD>
+
+<PRE>	print &quot;Starting analysis\n&quot; if $verbose;</PRE>
+</DD>
+<DT><A NAME="*%20If%20you're%20aware%20of%20a%20feature%20your%20program%20needs%20which%20may%20not%20be%20on%20all%20%0aplatforms%2c%20then%20be%20sure%20your%20program%20degrades%20gracefully%2c%20even%20if%20it%20doesn't%20%0afunction%20at%20all.%20%20Use%20eval%20statements%20to%20test%20for%20success%20in%20situations%20where%20%0aprogram%20execution%20might%20be%20halted%20%0aon%20an%20error.">* If you're aware of a feature your program needs which may not be on all 
+platforms, then be sure your program degrades gracefully, even if it doesn't 
+function at all.  Use eval statements to test for success in situations where 
+program execution might be halted 
+on an error.
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Use%20the%20new%20%22and%22%20and%20%22or%22%20operators%20to%20avoid%20having%20to%20parenthesize%20list%20%0aoperators%20so%20much%2c%20and%20to%20reduce%20the%20incidence%20of%20punctuation%20operators%20like%20%26%26%20%0aand%20%7c%7c.">* Use the new &quot;and&quot; and &quot;or&quot; operators to avoid having to parenthesize list 
+operators so much, and to reduce the incidence of punctuation operators like &amp;&amp; 
+and ||. 
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Avoid%20using%20grep()%20(or%20map())%20or%20%60backticks%60%20in%20a%20void%20context%2c%20that%20is%2c%20%0awhen%20you%20just%20throw%20away%20their%20return%20values.%20Those%20functions%20all%20have%20return%20%0avalues%2c%20so%20use%20them.%20Otherwise%20use%20a%20foreach()%20loop%20or%20the%20system()%20function%20%0ainstead.">* Avoid using grep() (or map()) or `backticks` in a void context, that is, 
+when you just throw away their return values. Those functions all have return 
+values, so use them. Otherwise use a foreach() loop or the system() function 
+instead. 
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Use%20here%20documents%20instead%20of%20repeated%20print()%20statements.">* Use here documents instead of repeated print() statements.
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	print &quot;This is line 1\n&quot;;
+	print &quot;This is line 2\n&quot;;
+	print &quot;This is line 3\n&quot;;
+	print &quot;This is line 4\n&quot;;
+	print &quot;This is line 5\n&quot;;
+	print &quot;This is line 6\n&quot;;
+	print &quot;This is line 7\n&quot;;</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	print &lt;&lt;EOF;
+	This is line 1
+	This is line 2
+	This is line 3
+	This is line 4
+	This is line 5
+	This is line 6
+	This is line 7
+	EOF</PRE>
+</DD>
+<DT><A NAME="*%20Line%20up%20corresponding%20things%20vertically%2c%20especially%20if%20it'd%20be%20too%20long%20to%20fit%20on%20one%20line%20anyway.">* Line up corresponding things vertically, especially if it'd be too long to fit on one line anyway. 
+
+</A></DT>
+<DD>
+
+<PRE>	    $IDX = $ST_MTIME;
+	    $IDX = $ST_ATIME       if $opt_u;
+	    $IDX = $ST_CTIME       if $opt_c;
+	    $IDX = $ST_SIZE        if $opt_s;
+	    mkdir $tmpdir, 0700 or die &quot;can't mkdir $tmpdir: $!&quot;;
+	    chdir($tmpdir)      or die &quot;can't chdir $tmpdir: $!&quot;;
+	    mkdir 'tmp',   0777 or die &quot;can't mkdir $tmpdir/tmp: $!&quot;;</PRE>
+</DD>
+<DT><A NAME="*%20Always%20check%20the%20return%20codes%20of%20system%20calls.%20Good%20error%20messages%20%0ashould%20go%20to%20STDERR%2c%20include%20which%20program%20caused%20the%20problem%2c%20what%20the%20failed%20%0asystem%20call%20and%20arguments%20were%2c%20and%20(VERY%20IMPORTANT)%20should%20contain%20the%20standard%20%0asystem%20error%20message%20for%20what%20went%20wrong.%20Here's%20a%20simple%20but%20sufficient%20%0aexample%3a">* Always check the return codes of system calls. Good error messages 
+should go to STDERR, include which program caused the problem, what the failed 
+system call and arguments were, and (VERY IMPORTANT) should contain the standard 
+system error message for what went wrong. Here's a simple but sufficient 
+example: 
+
+</A></DT>
+<DD>
+
+<PRE>    opendir(D, $dir) or die &quot;can't opendir $dir: $!&quot;;</PRE>
+</DD>
+</DL>
+<H2><A NAME="Naming%20Conventions">Naming Conventions
+
+</A></H2>
+<DL><DT><A NAME="*%20Use%20underscores%20to%20separate%20words%20in%20variable%20names.">* Use underscores to separate words in variable names.
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	$MyVariable = 1;
+	$MYVARIABLE = 1;</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	$my_variable = 1;</PRE>
+</DD>
+<DT><A NAME="*%20Use%20letter%20case%20to%20indicate%20the%20scope%20or%20nature%20of%20a%20variable.%20For%20example%3a">* Use letter case to indicate the scope or nature of a variable. For example: 
+
+</A></DT>
+<DD>
+
+<PRE>	    $Some_Caps_Here  package-wide global/static
+	    $no_caps_here    function scope my() or local() variables</PRE>
+</DD>
+<DT><A NAME="*%20Use%20the%20%22constant%22%20pragma%20to%20create%20constants%2c%20rather%20than%20special%20capitalized%20variable%20names%3a">* Use the &quot;constant&quot; pragma to create constants, rather than special capitalized variable names:
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	$BUFFER_SIZE = 40;</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	use constant BUFFER_SIZE = 40;</PRE>
+</DD>
+<DT><A NAME="*%20Package%20names%20should%20be%20in%20title%20case%2c%20with%20no%20underscores.">* Package names should be in title case, with no underscores.
+
+</A></DT>
+<DD>
+
+<P>NO:
+
+</P>
+<PRE>	package my_package_name;</PRE>
+
+<P>YES:
+
+</P>
+<PRE>	package MyPackageName;</PRE>
+</DD>
+<DT><A NAME="*%20Function%20and%20method%20names%20should%20be%20all%20lowercase.%20E.g.%2c%20%24obj-%3eas_string().">* Function and method names should be all lowercase. E.g., $obj-&gt;as_string(). 
+
+</A></DT>
+<DD>
+</DD>
+<DT><A NAME="*%20Use%20a%20leading%20underscore%20to%20indicate%20that%20a%20variable%20or%20function%20should%20%0anot%20be%20used%20outside%20the%20package%20that%20defined%20it%20%20(i.e.%2c%20private%20subroutines).">* Use a leading underscore to indicate that a variable or function should 
+not be used outside the package that defined it  (i.e., private subroutines).
+
+</A></DT>
+<DD>
+
+<PRE>	sub _private_sub {
+		#This sub is called only by its own package
+	}</PRE>
+</DD>
+</DL>
+
+</BODY>
+</HTML>

@@ -1,0 +1,14 @@
+Anagram.pl is a Perl script to find anagrams. It uses 
+word lists from the aspell package.
+
+Installation: download the script, install it anywhere 
+you want, make it executable, and run it. Make sure 
+that you have installed aspell, because anagram.pl uses 
+word lists provided by the aspell package.
+If you want, you can change anagram.pl to use another 
+word list than the default.
+
+The goal is to make an interactive graphical program 
+in C++. This script is mainly for developing and testing
+some techniques. But it's fun anyway ;-) 
+

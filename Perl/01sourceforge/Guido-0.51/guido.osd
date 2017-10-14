@@ -1,0 +1,79 @@
+<SOFTPKG NAME="guido" VERSION="0,51,0,0">
+<!-- 
+	This modified OSD format is used by "paix," a custom perl
+	application installer created specifically for the Guido
+	project.  You can use pi yourself for your own project,
+	however, since it doesn't require anything specific to
+	Guido.  For more information about paix, see the paix
+	project web site at http://www.sf.net/projects/paix
+
+-->
+	<TITLE>Guido</TITLE>
+	<ABSTRACT>A Perl/TK GUI Builder</ABSTRACT>
+	<AUTHOR>James Tillman (jtillman@bigfoot.com)</AUTHOR>
+	<LICENSE HREF="LICENSE" />
+	<IMPLEMENTATION>
+<CODEBASE HREF="http://prdownloads.sourceforge.net/guido/Guido-0.51.tar.gz" />
+<INSTALL EXEC="perl">Guido-0.51/post_install.pl</INSTALL>
+	</IMPLEMENTATION>
+	<DEPENDENCY NAME="Tie::Watch">
+		<CODEBASE TYPE="ppm" PACKAGE="Tie-Watch"/>
+		<CODEBASE TYPE="cpan" PACKAGE="Tie::Watch"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="Class::MethodMaker">
+		<CODEBASE TYPE="ppm" PACKAGE="Class-MethodMaker"/>
+		<CODEBASE TYPE="cpan" PACKAGE="Class::MethodMaker"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="File::Slurp">
+		<CODEBASE TYPE="ppm" PACKAGE="File-Slurp"/>
+		<CODEBASE TYPE="cpan" PACKAGE="File::Slurp"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="HTML::Parser">
+		<CODEBASE TYPE="ppm" PACKAGE="HTML::Parser"/>
+		<CODEBASE TYPE="cpan" PACKAGE="HTML::Parser"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="LWP">
+		<CODEBASE TYPE="ppm" PACKAGE="LWP"/>
+		<CODEBASE TYPE="cpan" PACKAGE="LWP"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="URI">
+		<CODEBASE TYPE="ppm" PACKAGE="URI"/>
+		<CODEBASE TYPE="cpan" PACKAGE="URI"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="Tk">
+		<CODEBASE TYPE="ppm" PACKAGE="Tk"/>
+		<CODEBASE TYPE="cpan" PACKAGE="Tk"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="XML::Parser">
+		<CODEBASE TYPE="ppm" PACKAGE="XML-Parser"/>
+		<CODEBASE TYPE="cpan" PACKAGE="XML::Parser"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="XML::Simple">
+		<CODEBASE TYPE="ppm" PACKAGE="XML-Simple" LOCATION="http://guido.sf.net/downloads/ppm"/>
+		<CODEBASE TYPE="cpan" PACKAGE="XML::Simple"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="XML::DOM">
+		<CODEBASE TYPE="ppm" PACKAGE="XML-DOM"/>
+		<CODEBASE TYPE="cpan" PACKAGE="XML::DOM"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="Tk::JPEG">
+		<CODEBASE TYPE="ppm" PACKAGE="Tk-JPEG"/>
+		<CODEBASE TYPE="cpan" PACKAGE="Tk::JPEG"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="Tk::NumEntry">
+		<CODEBASE TYPE="ppm" PACKAGE="Tk-GBARR"/>
+		<CODEBASE TYPE="cpan" PACKAGE="Tk::NumEntry"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="AppConfig">
+		<CODEBASE TYPE="ppm" LOCATION="http://guido.sf.net/downloads/ppm" PACKAGE="AppConfig"/>
+		<CODEBASE TYPE="cpan" PACKAGE="AppConfig"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="Template">
+		<CODEBASE TYPE="ppm" LOCATION="http://guido.sf.net/downloads/ppm" PACKAGE="Template-Toolkit"/>
+		<CODEBASE TYPE="cpan" PACKAGE="Template"/>
+	</DEPENDENCY>
+	<DEPENDENCY NAME="Tie::IxHash">
+		<CODEBASE TYPE="ppm" PACKAGE="Tie-IxHash"/>
+		<CODEBASE TYPE="cpan" PACKAGE="Tie::IxHash"/>
+	</DEPENDENCY>
+</SOFTPKG>

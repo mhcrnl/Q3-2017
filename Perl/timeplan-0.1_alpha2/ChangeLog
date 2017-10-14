@@ -1,0 +1,64 @@
+2006-06-08 14:43  tpwch-tpc
+
+	* timeplan/trunk/data/README, timeplan/trunk/data/daily.txt,
+	  timeplan/trunk/data/special,
+	  timeplan/trunk/data/special/breakfast.txt,
+	  timeplan/trunk/data/special/dinner.txt,
+	  timeplan/trunk/data/special/eveningmeal.txt,
+	  timeplan/trunk/data/special/middlemeal1.txt,
+	  timeplan/trunk/data/special/middlemeal2.txt,
+	  timeplan/trunk/timeplan: added special cases (meals for now) and
+	  some error checking
+
+2006-06-08 13:08  tpwch-tpc
+
+	* timeplan/trunk/data/todo/threetimesaweekrandom.txt,
+	  timeplan/trunk/timeplan: Added random item three times a week
+
+2006-06-08 09:56  tpwch-tpc
+
+	* timeplan/trunk/timeplan: Prettier output
+
+2006-06-08 07:28  tpwch-tpc
+
+	* timeplan/trunk/TODO, timeplan/trunk/install.sh,
+	  timeplan/trunk/timeplan: major code cleanup/reorganization
+
+2006-06-07 14:00  tpwch-tpc
+
+	* timeplan/trunk/TODO: Added more to the TODO list
+
+2006-06-07 13:56  tpwch-tpc
+
+	* timeplan/trunk/TODO: edited TODO list
+
+2006-06-07 13:54  tpwch-tpc
+
+	* timeplan/trunk/ChangeLog, timeplan/trunk/README,
+	  timeplan/trunk/timeplan: Made it possible to view the schedule
+	  of other dates than the current one
+
+2006-06-05 16:59  tpwch-tpc
+
+	* timeplan, timeplan/trunk, timeplan/trunk/AUTHORS,
+	  timeplan/trunk/ChangeLog, timeplan/trunk/LICENSE,
+	  timeplan/trunk/README, timeplan/trunk/TODO, timeplan/trunk/data,
+	  timeplan/trunk/data/2006, timeplan/trunk/data/2006/06,
+	  timeplan/trunk/data/2006/06/04.txt,
+	  timeplan/trunk/data/2006/06/05.txt,
+	  timeplan/trunk/data/2006/06/06.txt,
+	  timeplan/trunk/data/2006/06/07.txt, timeplan/trunk/data/README,
+	  timeplan/trunk/data/daily.txt, timeplan/trunk/data/todo,
+	  timeplan/trunk/data/todo/dailyrandom.txt,
+	  timeplan/trunk/data/todo/simpleprojects.txt,
+	  timeplan/trunk/data/weekdays,
+	  timeplan/trunk/data/weekdays/day1.txt,
+	  timeplan/trunk/data/weekdays/day2.txt,
+	  timeplan/trunk/data/weekdays/day3.txt,
+	  timeplan/trunk/data/weekdays/day4.txt,
+	  timeplan/trunk/data/weekdays/day5.txt,
+	  timeplan/trunk/data/weekdays/day6.txt,
+	  timeplan/trunk/data/weekdays/day7.txt,
+	  timeplan/trunk/install.sh, timeplan/trunk/timeplan: Initial
+	  import of Time Plan
+

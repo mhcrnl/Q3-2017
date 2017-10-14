@@ -1,0 +1,39 @@
+
+                                  Word Dig
+                                      
+                            a word game in Perl
+                    ___________________________________
+   
+   Word Dig is form of word play my wife and I 
+   discovered/invented/something while we were driving around on a
+   vacation. The rules are simple -
+
+   - one person starts by naming a word (and using it in a sentence)
+   - the next person must then name a word beginning with the last letter
+     of the previous word, and of the same length (plus or minus one
+     letter).
+   - play continues until one person gives up (or both decide to draw).
+   - words may not be repeated
+   
+   Games::WordDig is a perl module implementing the guts of Word Dig,
+   and distributed with various front-ends to play the game. (Er- at
+   least it will be, once it is completed).  Currently two sample
+   games are included in this tarball at samples/CLI/word-dig and
+   samples/GNOME/gword-dig.  Both are playable, but are just demos
+   ... a real game should be much nicer to play.
+   
+   Games::WordDig (or just WordDig) is currently moving toward a 0.4
+   release, which will be a public release version -- and suitible for 
+   playing.
+   
+   Games::WordDig follows the linux release naming convention:  even
+   major releases are stable releases with only bug fixing done, odd
+   numbered major releases are development releases with new
+   functionality being added.  The 0.3.x releases represents a public 
+   pre-beta.  Feature completeness for the 0.4 release will mark the
+   0.3.5 release, and subsequent releases will be bug-fix releases only.
+
+
+
+
+

@@ -1,0 +1,62 @@
+$rDescriptor = {
+  'mw' => bless( {
+    'opt' => undef,
+    'id' => 'mw',
+    'geom' => undef,
+    'parent' => undef,
+    'type' => 'Frame',
+    'order' => undef
+  }, 'ctkDescriptor' )
+};
+$rTree = [
+  'mw'
+];
+$rUser_subroutines = [
+  'sub init { 1 }
+'
+];
+$rUser_methods_code = [
+  'sub arglist {
+',
+  'my $self=shift;
+',
+  'my $args = shift;
+',
+  'return $args
+',
+  '}
+'
+];
+$rUser_gcode = [];
+$rOther_code = [];
+$rUser_pod = [];
+$rUser_auto_vars = [];
+$rUser_local_vars = [];
+$rFile_opt = {
+  'subroutineName' => 'thisDialog',
+  'modal' => 0,
+  'autoExtractVariables' => 1,
+  'subWidgetList' => [],
+  'description' => '',
+  'onDeleteWindow' => 'sub{1}',
+  'buttons' => ' ',
+  'modalDialogClassName' => 'DialogBox',
+  'code' => 0,
+  'baseClass' => '',
+  'subroutineArgsName' => '%args',
+  'subroutineArgs' => '-title , \'???\'',
+  'title' => '',
+  'autoExtract2Local' => 1,
+  'strict' => 0,
+  'treewalk' => 'D',
+  'Toplevel' => '1'
+};
+$rProjectName = \'noname.pl';
+$ropt_isolate_geom = \'0';
+$rHiddenWidgets = [];
+$rLibraries = [];
+$rApplName = \'';
+$rApplFolder = \'';
+$opt_TestCode = \'1';
+$rBaseClass = [];
+$rwork_save_temp = \1;

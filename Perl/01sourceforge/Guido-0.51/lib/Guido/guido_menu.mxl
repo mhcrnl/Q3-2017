@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<menubar name="main">
+  <menu label="File" tearoff="0">
+  	<separator />
+    <menuitem name="quit" label="Quit" type="command" command="exit" />
+  </menu>	
+  <menu label="Edit" tearoff="0">
+    <menuitem name="copy" label="Copy" type="command" command="$self->copy()" />
+    <menuitem name="paste" label="Paste" type="command" command="sub {button_press('Paste')}" state="disabled" />
+  </menu>
+  <menu label="Macros" tearoff="1">
+  </menu>
+  <menu label="Utilities" tearoff="0">
+     <menuitem name="editconfig" label="Edit Configuration" type="command" command="sub {$main::GuidoApp-&gt;edit_config()}" />
+     <menuitem name="saveconfig" label="Save Configuration" type="command" command="sub {$main::GuidoApp-&gt;save_config()}" />
+     <menuitem name="reload" label="Restart Guido" type="command" command="sub {$main::GuidoApp-&gt;reinit_app()}" />
+     <menuitem name="trace" label="Enable Trace Window" type="command" command="sub {$main::GuidoApp-&gt;enable_trace_window()}" />
+     <xmenuitem name="deps" label="Show File Deps" type="command" command="Guido::Plugin::ProjectManager-&gt;show_deps()" />
+  </menu>
+  <menu label="Window">
+     <menuitem name="about" label="About..." type="command"  command="sub {$main::GuidoApp-&gt;_about()}" />
+  </menu>
+</menubar>

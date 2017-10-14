@@ -1,0 +1,23 @@
+
+sub new_[% form.name %] {
+
+[% IF app.projects(form.project_name).primary_source_file == form.name %]
+	my $temp_win = new MainWindow(-title=>'[% form.title %]');
+[% ELSE %]
+	my $temp_win = $mw->Toplevel(-title=>'[% form.title %]');
+	$temp_win->withdraw();
+[% END %]
+
+[% IF geometry %]
+	$temp_win->geometry('[% form.geometry %]');
+[% END %]
+
+	my $[% form.name %] = $temp_win;
+
+[% FOREACH widget = form.children %]
+	[% widget.to_code | indent("	") %]
+[% END %]
+
+}
+
+[% form.events_source %]

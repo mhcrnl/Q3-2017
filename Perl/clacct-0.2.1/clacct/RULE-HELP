@@ -1,0 +1,82 @@
+/-------------------------------------------------------------\
+|HELP for Command-Line Accountant Rule Processor, version 0.2 |
+\-------------------------------------------------------------/
+
+The Command-Line Accountant
+=============================================
+website url: http://clacct.sourceforge.net
+author: Joe Kauzlarich
+license: free software (no license)
+=============================================
+
+Steps to using the rules functions:
+1) create the rules file in ~/.clacct/_rules
+2) type in the rules as directed below
+3) make sure all accounts referred to within your rules
+    file have been created with 'clacct -n account'
+4) at the shell, just type 'clarule'
+5) if you have errors in your _rules file, the program
+    will tell you before it attempts to process them
+----------------------------------------------
+
+Grammer:
+
+Rule "[name]":
+ [pay|receive] [amount|'variable amount']
+    every ['day'|'week'|'month'] [on [mday|wkday]] [and on...]
+    every [n] ['days'|'weeks'|'months'] [on [mday|wkday]]
+    from [accountName]
+    to [accountName]
+    starting [date]
+    ending [date]
+    ending when balance of [accountName] is [amount];
+
+----------------------------------------
+Example #1:
+
+Rule "paycheck":
+	receive $70 to checking
+	every 2 weeks
+	on friday
+	starting 1/1/2004;
+
+NOTES on above example:
+
+-Amounts can be written with or without the '$'
+-Amounts can be written with or without decimal places 
+   (only 2 decimal places are recognized)
+-Note the semi-colon on the end of the rule
+-Note the colon after Rule "rule name":
+-The rule's name must be in double-quotes and may 
+    contain spaces
+
+-----------------------------------------
+Example #2:
+
+Rule "Alimony check":
+	pay $100
+	every month
+	on 1
+	and on 15
+	from checking
+	to alimonyfund
+	ending 1/1/2057;
+
+NOTES on example 2:
+-'starting' or 'ending' dates must be in the form above dd/mm/yyyy
+-The '15' represents the 15th of the month. '15th' is not accepted.
+-multiple 'and on' clauses are accepted
+-------------------------------------------
+Example #3:
+
+Rule "mortgage":
+	pay 543.21
+	from checking
+	to mortgage
+	every month
+	on 1
+	ending when balance of mortgage is 75000;
+
+NOTES on example 3:
+-The rule 'mortgage' may have the same name as an account 'mortgage'
+   as seen here. Don't be confused.

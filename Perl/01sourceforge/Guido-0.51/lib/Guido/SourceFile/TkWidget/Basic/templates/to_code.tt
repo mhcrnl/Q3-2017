@@ -1,0 +1,17 @@
+my $[% name %] = $[% parent.name %]->[% type %](
+[% FOREACH param = params.values %]
+	[% IF param.using_default != 1 && param.value != '' %]
+	-[% param.name %] => [% param.to_code %],
+	[% END %]
+[% END %]
+)->[% geo_mgr.type.value %](
+[% FOREACH geo_param = geo_mgr.values %]
+	[% IF geo_param.name != 'type' and geo_param.value != ''%]
+	-[% geo_param.name %] => '[% geo_param.value %]',
+	[% END %]
+[% END %]
+);
+
+[% FOREACH child = children %]
+[% child.to_code %]
+[% END %]

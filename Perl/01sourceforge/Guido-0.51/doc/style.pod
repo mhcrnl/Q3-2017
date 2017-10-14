@@ -1,0 +1,315 @@
+=head1 Guido Programmer's Style Manual
+
+This document is a guide to programming for the Guido project.  It should be 
+adhered to as strictly as possible to ensure uniformity of style and readability 
+for new developers.
+
+=head2 Syntax
+
+=over 4
+
+=item * Use a tab indent, not spaces.
+
+=item * Place opening curlies on the same line as the keyword:
+
+NO:
+
+	sub myfunc
+	{
+		#Do stuff
+	}
+
+YES:
+
+	sub myfunc {
+		#Do stuff
+	}
+
+=item * Put a space before the opening curly of a multi-line BLOCK.
+
+NO:
+
+	sub myfunc{
+		#Do stuff
+	}
+
+YES:
+
+	sub myfunc {
+		#Do stuff
+	}
+
+
+=item * Don't put spaces before the ending semicolon
+
+NO:
+
+	print "Hi there" ;
+
+YES:
+
+	print "Hi there";
+
+=item * Use space around operators, except ???
+
+NO:
+
+	print 5+5;
+
+YES:
+
+	print 5 + 5;
+
+=item * Use blank lines between bits of code that do different things.
+
+NO:
+
+	print "Starting process 1";
+	#process 1
+	print "Ending process 1";
+	print "Starting process 2";
+	#process 2
+	print "Ending process 2";
+
+YES:
+
+	print "Starting process 1";
+	#process 1
+	print "Ending process 1";
+
+	print "Starting process 2";
+	#process 2
+	print "Ending process 2";
+
+=item *	Don't use "cuddled" elses.
+
+NO:
+
+	if ($ready) {
+		print "I'm ready";
+	} else {
+		print "I'm not ready";
+	}
+
+YES:
+
+	if ($ready) {
+		print "I'm ready";
+	} 
+	else {
+		print "I'm not ready";
+	}
+
+=item * Use the ternary operator when it helps brevity but doesn't affect readability.
+
+OK:
+
+	if ($ready) {
+		print "I'm ready";
+	} 
+	else {
+		print "I'm not ready";
+	}
+
+BETTER:
+
+	print $ready ? "I'm ready" : "I'm not ready";
+
+=item *	Don't use space between the function name and its opening parenthesis.
+
+NO:
+
+	$name = get_name ($first_name, $last_name);
+
+YES:
+
+	$name = get_name($first_name, $last_name);
+
+=item *	Use a space after each comma, except in numeric series [1,2,3,4]
+
+NO:
+
+	$name = get_name($first_name,$last_name);
+
+YES:
+
+	$name = get_name($first_name, $last_name);
+
+=item *	Break long lines after an operator (except "and" and "or").
+
+=item *	Use a space after last parenthesis matching on current line. 
+
+=item *	Line up corresponding items vertically. 
+
+=item *	Omit redundant punctuation as long as clarity doesn't suffer. 
+
+=item * If you have a really hairy regular expression, use the /x modifier and put 
+in some whitespace to make it look a little less like line noise. Don't use 
+slash as a delimiter when your regexp has slashes or backslashes. 
+
+=item * Only leave the parentheses off calls to the following functions:
+
+=over 4
+
+=item * print
+
+=item * die
+
+=back
+
+All others should use the function() syntax when called.
+
+=item * Line up your transliterations when it makes sense: 
+
+	    tr [abc]
+	       [xyz];
+
+=back
+
+=head2 Coding Conventions
+
+=over 4
+
+=item * Always use "use strict" and don't overuse "use vars".  Keep global variables to 
+an absolute minimum.
+
+=item * Object constructors must follow this format:
+
+	sub new {
+		my($class, %attribs) = @_;
+		my $self = {
+			name = $attribs{name},
+			file_path = $attribs{file_path},
+		};
+
+		return bless $self, $class;
+	}
+
+=item * Object methods must follow this format:
+
+	sub method {
+		my($self, %params) = @_;
+		
+		#Do stuff here
+	}
+
+=item * Object methods should always return something, even if it is "undef".  
+Methods that return data should return "undef" on failure.  Methods that don't 
+return data should return 1 on success, 0 on failure. 
+
+=item * Use the "do this or die" construct when performing operations that 
+require this type of behavior:
+
+	open(FOO,$foo) or die "Can't open $foo: $!";
+
+=item * Use the "do this if this is true" construct if it reads more clearly:
+
+	print "Starting analysis\n" if $verbose;
+
+=item * If you're aware of a feature your program needs which may not be on all 
+platforms, then be sure your program degrades gracefully, even if it doesn't 
+function at all.  Use eval statements to test for success in situations where 
+program execution might be halted 
+on an error.
+
+=item * Use the new "and" and "or" operators to avoid having to parenthesize list 
+operators so much, and to reduce the incidence of punctuation operators like && 
+and ||. 
+
+=item * Avoid using grep() (or map()) or `backticks` in a void context, that is, 
+when you just throw away their return values. Those functions all have return 
+values, so use them. Otherwise use a foreach() loop or the system() function 
+instead. 
+
+=item * Use here documents instead of repeated print() statements.
+
+NO:
+
+	print "This is line 1\n";
+	print "This is line 2\n";
+	print "This is line 3\n";
+	print "This is line 4\n";
+	print "This is line 5\n";
+	print "This is line 6\n";
+	print "This is line 7\n";
+
+YES:
+
+	print <<EOF;
+	This is line 1
+	This is line 2
+	This is line 3
+	This is line 4
+	This is line 5
+	This is line 6
+	This is line 7
+	EOF
+
+=item * Line up corresponding things vertically, especially if it'd be too long to fit on one line anyway. 
+
+	    $IDX = $ST_MTIME;
+	    $IDX = $ST_ATIME       if $opt_u;
+	    $IDX = $ST_CTIME       if $opt_c;
+	    $IDX = $ST_SIZE        if $opt_s;
+	    mkdir $tmpdir, 0700 or die "can't mkdir $tmpdir: $!";
+	    chdir($tmpdir)      or die "can't chdir $tmpdir: $!";
+	    mkdir 'tmp',   0777 or die "can't mkdir $tmpdir/tmp: $!";
+
+=item * Always check the return codes of system calls. Good error messages 
+should go to STDERR, include which program caused the problem, what the failed 
+system call and arguments were, and (VERY IMPORTANT) should contain the standard 
+system error message for what went wrong. Here's a simple but sufficient 
+example: 
+
+    opendir(D, $dir) or die "can't opendir $dir: $!";
+
+=back
+
+=head2 Naming Conventions
+
+=over 4
+
+=item * Use underscores to separate words in variable names.
+
+NO:
+
+	$MyVariable = 1;
+	$MYVARIABLE = 1;
+
+YES:
+
+	$my_variable = 1;
+
+=item * Use letter case to indicate the scope or nature of a variable. For example: 
+
+	    $Some_Caps_Here  package-wide global/static
+	    $no_caps_here    function scope my() or local() variables
+
+=item * Use the "constant" pragma to create constants, rather than special capitalized variable names:
+
+NO:
+
+	$BUFFER_SIZE = 40;
+
+YES:
+
+	use constant BUFFER_SIZE = 40;
+
+=item * Package names should be in title case, with no underscores.
+
+NO:
+
+	package my_package_name;
+
+YES:
+
+	package MyPackageName;
+
+=item * Function and method names should be all lowercase. E.g., $obj->as_string(). 
+
+=item * Use a leading underscore to indicate that a variable or function should 
+not be used outside the package that defined it  (i.e., private subroutines).
+
+	sub _private_sub {
+		#This sub is called only by its own package
+	}

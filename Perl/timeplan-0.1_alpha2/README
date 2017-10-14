@@ -1,0 +1,33 @@
+This is Time Plan, a program that will help you organize what you do with your time
+
+USAGE: timeplan [date]
+date - view the schedule of this date, it handles all common formats of writing a date, including
+       including things like '2006-05-21' or 'tomorrow' or 'in 3 days' or 'may 5th' or probably 
+	   whatever else you can come up with
+
+Enter things you do in data files based on four types of things:
+daily - things that happen every day
+date specific - things you do once, on a specific date
+day of week - things you do, say, every friday
+todo list - things you want to do or are going to do
+
+You specify a description of each task, how many minutes you think it'll take, and
+optionally a start time. If you specify a start time it will appear at that time
+in the schedule, and if you leave the start time out time plan will search your schedule
+for gaps large enough to fit the task and put togheter the best schedule it can.
+To find out more just give it a try, the binary is called 'timeplan'.
+
+Note that this release is Alpha Quality, and probably have bugs. Please report them if you find any.
+
+If you need help post to the sourceforge forums at http://sourceforge.net/forum/?group_id=163364
+or contact TPC at andreas@tpwch.com.
+
+The latest release of Time Plan can always be found at http://sourceforge.net/projects/timeplan
+
+Everything in this project is released under the BSD license, as specified in the License file.
+
+Files/dirs created by Time Plan:
+$PREFIX/bin/timeplan - the main program
+$PREFIX/share/timeplan/ - contains default/example data files
+$PREFIX/share/doc/timeplan/ - readme, changelog, etc
+$HOME/.timeplan/ - user specific data files, created on first run by that user

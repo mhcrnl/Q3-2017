@@ -1,0 +1,158 @@
+#!/usr/bin/perl
+# This file is licensed under the BSD License
+# see the file named LICENSE for details
+use warnings;
+use strict;
+use POSIX qw(strftime);
+use autouse 'Date::Manip' => qw(ParseDate UnixDate); # this is a large module, don't load it unless we have to
+
+# set up a few variables
+my $version = "0.1_alpha2";
+my @date;
+my $date = ParseDate($ARGV[0]) if $#ARGV >= 0;
+@date = localtime(UnixDate($date, "%s")) if $date;
+@date = localtime unless @date;
+my $datapath = "$ENV{'HOME'}/.timeplan";
+my $prefix = qx(which timeplan);
+$prefix =~ s!/bin/timeplan!!;
+chomp($prefix);
+
+# seed with todays date, so it will generate the same schedule when run on the same day
+srand(strftime("%Y%m%d", @date));
+
+# read a random item from a data file
+sub get_random_item {
+	my $line;
+	my $filename = "$datapath/$_[0]";
+	return undef unless -e $filename && -r $filename && -s $filename;
+	open(FILE, "<$filename") or die("Unable to open file $filename");
+	rand($.) < 1 && ($line = $_) while (<FILE>);
+	close(FILE);
+	chomp($line);
+	(my $part1, my $part2, my $part3)  = split(/\t/, $line);
+	unless ($part3) { $part3 = ""; }
+	return ($part1, $part2, $part3);
+}
+
+# read all items from a data file
+sub get_items {
+	my $filename = "$datapath/$_[0]";
+	return undef unless -e $filename && -r $filename && -s $filename;
+	my @array;
+	open(FILE, "<$filename") or die("Unable to open file $filename");
+	while (<FILE>) {
+		chomp;
+		($array[@array][0], $array[@array-1][1], $array[@array-1][2]) = split(/\t/, $_);
+		unless ($array[@array-1][2]) { $array[@array-1][2] = ""; }
+	}
+	close(FILE);
+	return @array;
+}
+
+# add minutes to a time, so 0650 + 25 = 0715 instead of 0675
+sub minuteadd {
+	(my $h, my $m) = unpack "a2 a2", $_[0];
+	$m += $_[1];
+	while ($m >= 60) { $h++; $m -= 60 };
+	$h = $h - 24 if $h > 23;
+	$m = "0" . $m if $m =~ /^\d$/;
+	$h = "0" . $h if $h =~ /^\d$/;
+	my $endtime = pack "a2 a2", $h, $m;
+	return $endtime
+}
+
+# sort schedule and decide where to put activities with no specified time
+sub sort_schedule {
+	my @schedule = @_;
+	@schedule = grep (( defined $_ ), @schedule);
+	@schedule = sort {$a->[2] cmp $b->[2]} @schedule;
+	while (!$schedule[0][2]) {
+		# find the first free spot that has enough time
+		for (my $i = 0; $i < @schedule; $i++) {
+			next unless $schedule[$i][2];
+			if ($i == @schedule-1 || minuteadd($schedule[$i][2], ($schedule[$i][0] + $schedule[0][0])) <= $schedule[$i+1][2]) {
+				$schedule[0][2] = minuteadd($schedule[$i][2], $schedule[$i][0]);
+				last;
+			}
+		}
+		# sort the item into its new place
+		@schedule = sort {$a->[2] cmp $b->[2]} @schedule;
+	}
+	return @schedule;
+}
+
+# generate a schedule and put it somewhere, most likely stdout or a file on the filesystem
+sub generate_schedule {
+	(my $type, my $target, my @schedule) = @_;
+	my $i;
+	if ($type eq "text") {
+		open(TARGET, ">$target") or die("Unable to write schedule to $target: $!");
+		print TARGET "Schedule for " . strftime("%Y-%m-%d", @date) . ":\n";
+		for ($i = 0; $i < @schedule; $i++) {
+			my $endtime = minuteadd($schedule[$i][2], $schedule[$i][0]);
+			print TARGET "$schedule[$i][2] - $endtime:\t$schedule[$i][1]\n";
+		}
+		close(TARGET);
+	}
+	elsif ($type eq "prettytext") {
+		open(TARGET, ">$target") or die("Unable to write schedule to $target: $!");
+		my $len = 0;
+		for (@schedule) { $len = length($_->[1]) if length($_->[1]) > $len;}
+		$len += 18;
+		print TARGET "-" x $len . "\n";
+		print TARGET "| Schedule for " . strftime("%Y-%m-%d", @date) . " " x ($len-26) . "|\n";
+		print TARGET "-" x $len . "\n";
+		for ($i = 0; $i < @schedule; $i++) {
+			my $endtime = minuteadd($schedule[$i][2], $schedule[$i][0]);
+			print TARGET "| $schedule[$i][2] - $endtime | $schedule[$i][1]" . " " x ($len-length($schedule[$i][1])-17) . "|\n"; ;
+		}
+		print "-" x $len . "\n";
+		close(TARGET);
+	}
+}
+
+# show some info and copy over example schedule files for new users
+unless (-e $datapath) {
+	qx(cp -r ${prefix}/share/timeplan/data/ $datapath);
+	print "This is the first time you are running Time Plan on this system.\n";
+	print "A few example data files has been installed to $datapath\n";
+	print "You should edit them to fit your needs, but first you should run timeplan one\n";
+	print "more time to see the output that the example files produce.\n";
+	print "See the README file for info if you need any help or want to report bugs.\n";
+	print "There is also a README file in $datapath, read that before you edit the files in there.\n";
+	exit;
+}
+
+# set up some variables
+my $weekday = strftime("%u", @date); # day of the week, 1 = monday, 7 = sunday
+my $year = strftime("%Y", @date);
+my $month = strftime("%m", @date);
+my $day = strftime("%d", @date);
+
+# read items from things specific to this day
+my @schedule;
+@schedule = (@schedule, get_items("$year/$month/$day.txt"));
+# read items from the regular lists
+@schedule = (@schedule, get_items("daily.txt"));
+@schedule = (@schedule, get_items("weekdays/day${weekday}.txt"));
+# read items from the todo-style lists
+push @schedule, [ get_random_item("todo/dailyrandom.txt") ];
+push @schedule, [ get_random_item("todo/simpleprojects.txt") ];
+# read items that has special cases
+# the only one I can think of for now is showing what to eat for dinner, and have it pick the food randomly
+# no one is going to eat more than 5 meals a day, so thats what I'm putting, skip the ones you don't eat
+push @schedule, [ get_random_item("special/breakfast.txt") ];
+push @schedule, [ get_random_item("special/middlemeal1.txt") ];
+push @schedule, [ get_random_item("special/dinner.txt") ];
+push @schedule, [ get_random_item("special/middlemeal2.txt") ];
+push @schedule, [ get_random_item("special/eveningmeal.txt") ];
+# read items that happens on a weekly basis (change the random number generator to reflect this)
+srand(strftime("%Y%W", @date));
+push @schedule, [ get_random_item("todo/threetimesaweekrandom.txt") ] if ($weekday == 2 || $weekday == 4 || $weekday == 6);
+$schedule[@schedule-1][1] .= " (part " . ($weekday/2) . " of 3)" if ($weekday == 2 || $weekday == 4 || $weekday == 6);
+
+# sort the schedule
+@schedule = sort_schedule(@schedule);
+
+# generate a nice looking schedule from the data, and write it to the appropiate location
+generate_schedule("prettytext", "&STDOUT", @schedule);

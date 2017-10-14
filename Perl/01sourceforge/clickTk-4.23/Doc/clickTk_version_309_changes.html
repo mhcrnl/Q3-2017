@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> clickTk - version 3.09 Changes </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="marco">
+<META NAME="Keywords" CONTENT="clickTk - version 3.09 Changes">
+<META NAME="Description" CONTENT="clickTk - version 3.09 Changes">
+</HEAD>
+
+<BODY>
+<H1>clickTk - version 3.09 Changes</H1>
+<H2>Bugs fixed</H2>
+
+<PRE>
+	- Name of advertised widgets now always quoted.
+
+	- file name prefix of persistent session passed to constructor.
+
+	- use correct initial directory for image selection.
+
+	- display images on preview.
+
+	- display help text for options while editing widget options
+
+	- popup buttons for -anchor, -expand and -fill show correctly
+	  the current value.
+
+	- option 'isolate geometry messages' now saved into project.
+
+	- subroutines init and test\w* are not generated if option TestCode is OFF.
+
+	- extracted widget's variables into list of global or local variables
+
+	- assitent no longer active on POD section's editor.
+
+	- check of the onDeleteWindow callback now works fine.
+
+	- default project name get correctly built at session startup even
+	when the application name is empty.
+
+</PRE>
+
+<H2>Enhancements</H2>
+<PRE>
+
+- New code property 'Toplevel':
+
+	option 'Toplevel' controls the generation of the toplevel widget for the dialog:
+	if this property is checked then the (non modal) dialog is embedded into a new Toplevel widget. 
+	Otherwise the dialog's widget are children of the parent widget passed to the generation code.
+	This may be useful for subroutines just creating a subset of widgets 
+	which are placed into an existing widget, usually a Frame, and which builds a little logical unit like a group of entry fields or checkbuttons or even a page of a notebook.
+
+- Name of the modal widget class, usually 'DialogBox', is now specified by option opt_dialogClassName.
+	
+- Test code sets up arguments list into subroutine call.
+
+- Test code accepts returned value of modal dialog and print it to STDOUT.
+
+- Reserved subroutines called test\w* for test code main::testCode specified in properties/callback.
+
+- Support geometry manager 'form'.
+
+- New function 'insert frame' : this new function allows to insert 
+	  a single or two frames which split the parent widget 
+	  vertically or horizzontally into two areas.
+	  Parent may be toplevel or frame.
+	  This allows to enter first the complex dialog structure very fast and 
+	  then fill up the individual frames with widgets.
+
+- Compare widgets structures.
+
+- Support non-visual widgets (i.e. Tk::After).
+
+- Separate pictures into three different folders :
+		- images   general, clickTk dialogs,
+		- toolbar  icons for the toolbar,
+		- widgets  icons for widget representation.
+
+- Support user defined widgets which are located outside Tk:
+		- require / use all supported widget at session startup time,
+		- validate require/use name.
+
+- Specifiy libraries (generate 'use lib' commands).
+
+- System options , see class ctkOptions.
+
+- New project property 'application' :
+	  This property allows to group projects of the same application.
+	  In fact this property have two values:
+	  - application name  (default 'test')
+	  - application folder (default './test')
+	  - Application folder is used to set the default folder for the export
+	    process.
+	  - Application name is used to build the default
+	    project name for the 'save as' function.
+
+- Modules are now grouped into library subdir lib .
+
+- New option argList for projects of type subroutine:
+	This option specifies the arguments to be passed to the generated subroutine:
+		- arglist may be a variable of type HASH or an anonymous HASH,
+		- the variable may be local or global ,
+		- name of the argument list inside the subroutine itself is saved in
+		  in the option $subroutineArgsName. It is usually '%args' .
+
+- Class ctkAssistent: 
+		- function list moved to extern file ctkAssistentFuncList.txt
+		  which is loaded and compiled at constructor time.
+
+- New utility ctkBuild.pl : build clickTk deliverable instance.
+
+- New utility ctkUdoc.pl : extract and generate system doc .
+
+- New command line option -c . This option forces a session cold start.
+
+- The name of the widget class to set up a modal dialog can be entered
+  in File/properties/options.
+
+</PRE>
+
+</BODY>
+</HTML>

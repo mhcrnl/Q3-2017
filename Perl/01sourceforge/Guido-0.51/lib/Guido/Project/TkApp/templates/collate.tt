@@ -1,0 +1,10 @@
+# MODINFO dependency module Tk
+use Tk;
+
+my $mw = new_[% project.primary_source_file %]();
+
+[% FOREACH source_file = project.source_files_values %]
+[% source_file.to_code %]
+[% END %]
+
+MainLoop;

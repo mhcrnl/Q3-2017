@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="guido_doc.css">
+<title>Guido Help:  Configuring/Customizing</title>
+</head>
+<body>
+
+<h1>Configuring/Customizing</h1>
+
+<p>Guido can be configured and customized in many ways, some of which are not currently accessible from the IDE.
+This section will concentrate on the ways that its behavior can be modified through the GUI.  Future releases will either
+document the manual configuration options, or provide the ability to make changes directly from the IDE.</p>
+
+<p>To make configuration changes through the Guido IDE, choose the Utilities->Edit Configuration menu option.  A dialog
+box will be displayed with tabs grouping settings into various categories.</p>
+
+<p>The following tabs allow you to modify the configuration:</p>
+
+<h2>General</h2>
+
+<img src="images/configuration-general.jpg" width=508 height=426 border=0>
+
+<ul>
+<li>Startup Geometry: Allows you to define the default size and position of the main Guido window on startup.</li>
+</ul>
+
+<h2>Memory</h2>
+
+<img src="images/configuration-memory.jpg" width=508 height=426 border=0>
+
+<ul>
+<li>Max Recent Files:  Set the maximum number of files to display in the File->Recent Files list</li>
+<li>Remember Last Geometry: When set, will cause Guido to remember the last size and position of the main Guido
+window the next time it is run.</li>
+<li>Remember Last Project(s): When set, will cause Guido to automatically load the projects that were open when it
+was last shut down.</li>
+</ul>
+
+<h2>Plugins</h2>
+
+<img src="images/configuration-plugins.jpg" width=508 height=426 border=0>
+
+<p>The Plugins configuration tab allows you to modify the way the Guido plugins are presented (or not presented).  At this time, modifying
+the plugin display configurations might be considered a bit risky, since the layout is based on the Perl/Tk "pack" geometry manager and the
+parameters used to create the default display might be a little confusing to the beginning Perl/Tk programmer.  If you think you know what
+you're doing, however, feel free to play around with the configuration.  Just keep a backup of your guido_config.cfg and you should be fine!</p>
+
+<ul>
+<li>Hide/Pack Settings:  Checking the "hide" button will cause a plugin to be loaded at startup, but not packed into the display.  Note that the
+FormBuilder plugin is not meant to be displayed, so it is automatically hidden in the default configuration.  The Pack Settings should look
+familiar to Perl/Tk programmers, although the format may be odd.  They are the parameters that will be passed to the pack command when
+the plugin is packed into the display.  The format is "param=value;param=value", which will be familiar to anyone who has used ODBC
+connection strings before...</li>
+
+<li>Add/Remove Selected:  The Add and Remove Selected buttons allow you to register new plugins and remove registered ones.  Adding a
+plugin requires you to specify the Perl package name, which should leave off the "Guido::Plugin" portion (all plugins must inherit from
+Guido::Plugin, but don't necessary have to be in that namespace).  The "Display Name" is also specified, and can be anything you want.
+  Currently, Guido might have some serious errors if you remove the default plugins from the system, but we hope to soon define some
+  functionality specifications that allow Guido to degrade gracefully if you remove vital plugins.  This would also allow you to drop in
+  replacements for the default plugins if you create or find better ones.  Removing plugins is as easy as selecting the one you want to remove
+  from the list of available ones, and then clicking "Remove Selected".</li>
+</ul>
+
+<h2>Macros</h2>
+
+<img src="images/configuration-macros.jpg" width=508 height=426 border=0>
+
+<p>Macros are simply Perl packages of functions that are meant to perform operations in the running Guido application.  For information on
+programming macros, see the Programmer's Documentation and look in the Macro Writing section.</p>
+
+<h2>ToolBox</h2>
+
+<p>If the Toolbox Plugin has been defined in the Plugins area of the Configuration Dialog, then this tab should appear.  It allows you to specify
+the path that the Toolbox will look for icons.  The default is usually the best to use, and you can simply add new icons to the directory.</p>
+
+<h2>FormBuilder</h2>
+
+<p>If the FormBuilder Plugin has been defined in the Plugins area of the Configuration Dialog, then this tab should appear.  It allows you to specify
+the default widget type that will be used when adding widgets to the current form.  At this stage in Guido's development, this option really shouldn't
+be changed unless you are a developer doing some testing.</p>
+
+
+<h2>Executor</h2>
+
+<p>If the FormBuilder Plugin has been defined in the Plugins area of the Configuration Dialog, then this tab should appear.  It allows you to specify
+mime-types for files that you expect Guido to be handling, and the mapping of file extensions to those mime-types.  This is where you can set
+up your favorite text editor as the handler for perl source files so that Guido will start it up when those files need to be edited.  In future releases,
+the Executor plugin will likely try your operating system's own mime-type mapping system (if it has one) when a mime-type is not specified in
+the configuration.</p>
+
+</body>
+</html>

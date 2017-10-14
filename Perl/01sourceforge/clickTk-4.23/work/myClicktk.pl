@@ -1,0 +1,157 @@
+$rDescriptor = {
+  'wr_015' => bless( {
+    'type' => 'ScrolledROText',
+    'geom' => 'pack(-side=>left, -anchor=>nw, -fill=>both, -expand=>1)',
+    'order' => undef,
+    'parent' => 'wr_017',
+    'opt' => 'ROText , -state , normal , -relief , sunken , -scrollbars , se , -wrap , none',
+    'id' => 'wr_015'
+  }, 'ctkDescriptor' ),
+  'w_command_012' => bless( {
+    'geom' => undef,
+    'type' => 'command',
+    'opt' => '-label , w_command_012',
+    'id' => 'w_command_012',
+    'order' => undef,
+    'parent' => 'w_Menu_011'
+  }, 'ctkDescriptor' ),
+  'wr_024' => bless( {
+    'opt' => '\'Listbox\' , -background , \'#ffffff\' , -selectmode , \'single\' , -relief , \'flat\' , -scrollbars , \'se\' ',
+    'id' => 'wr_024',
+    'order' => '$wr_024 -> configure(); $wr_016 = $wr_024 -> packAdjust ( -side , \'left\'  );',
+    'parent' => 'wr_017',
+    'geom' => 'pack(-fill, both, -expand, 1, -anchor, nw, -side, left)',
+    'type' => 'ScrolledListbox'
+  }, 'ctkDescriptor' ),
+  'w_Menu_014' => bless( {
+    'parent' => 'w_Menubutton_013',
+    'order' => undef,
+    'opt' => '',
+    'id' => 'w_Menu_014',
+    'type' => 'Menu',
+    'geom' => undef
+  }, 'ctkDescriptor' ),
+  'w_Frame_007' => bless( {
+    'opt' => '-relief , raised , -label , w_Frame_007',
+    'id' => 'w_Frame_007',
+    'parent' => 'mw',
+    'order' => undef,
+    'geom' => 'pack(-side=>bottom, -anchor=>sw, -fill=>x, -expand=>1)',
+    'type' => 'Frame'
+  }, 'ctkDescriptor' ),
+  'mw' => bless( {
+    'opt' => undef,
+    'id' => 'mw',
+    'parent' => undef,
+    'order' => undef,
+    'geom' => undef,
+    'type' => 'Frame'
+  }, 'ctkDescriptor' ),
+  'w_Frame_001' => bless( {
+    'id' => 'w_Frame_001',
+    'opt' => '-relief , flat , -background , #ffffff , -label , w_Frame_001',
+    'parent' => 'mw',
+    'order' => undef,
+    'geom' => 'pack(-anchor=>nw, -side=>top, -fill=>x, -expand=>1)',
+    'type' => 'Frame'
+  }, 'ctkDescriptor' ),
+  'w_Menubutton_013' => bless( {
+    'opt' => '-relief , flat , -text , w_Menubutton_013 , -justify , left , -state , normal',
+    'id' => 'w_Menubutton_013',
+    'parent' => 'w_Frame_001',
+    'order' => undef,
+    'geom' => 'pack(-side=>right, -anchor=>ne)',
+    'type' => 'Menubutton'
+  }, 'ctkDescriptor' ),
+  'w_Menubutton_010' => bless( {
+    'order' => undef,
+    'parent' => 'w_Frame_001',
+    'opt' => '-relief , flat , -text , w_Menubutton_010 , -justify , left , -state , normal',
+    'id' => 'w_Menubutton_010',
+    'type' => 'Menubutton',
+    'geom' => 'pack(-side=>left, -anchor=>nw)'
+  }, 'ctkDescriptor' ),
+  'w_Menu_011' => bless( {
+    'type' => 'Menu',
+    'geom' => undef,
+    'order' => undef,
+    'parent' => 'w_Menubutton_010',
+    'id' => 'w_Menu_011',
+    'opt' => ''
+  }, 'ctkDescriptor' ),
+  'wr_017' => bless( {
+    'type' => 'Frame',
+    'geom' => 'pack(-side=>top, -anchor=>nw, -fill=>x, -expand=>1)',
+    'parent' => 'mw',
+    'order' => undef,
+    'id' => 'wr_017',
+    'opt' => '-borderwidth , 2 , -relief , solid'
+  }, 'ctkDescriptor' ),
+  'w_Label_016' => bless( {
+    'opt' => '-relief , ridge , -background , #ffffff , -text , \'Statusbar 1\' , -justify , left',
+    'id' => 'w_Label_016',
+    'order' => undef,
+    'parent' => 'w_Frame_007',
+    'geom' => 'pack(-side=>left, -anchor=>nw, -fill=>x, -expand=>1)',
+    'type' => 'Label'
+  }, 'ctkDescriptor' ),
+  'w_command_015' => bless( {
+    'order' => undef,
+    'parent' => 'w_Menu_014',
+    'opt' => '-label , w_command_015',
+    'id' => 'w_command_015',
+    'type' => 'command',
+    'geom' => undef
+  }, 'ctkDescriptor' )
+};
+$rTree = [
+  'mw',
+  'mw.w_Frame_001',
+  'mw.wr_017',
+  'mw.w_Frame_007',
+  'mw.w_Frame_001.w_Menubutton_010',
+  'mw.w_Frame_001.w_Menubutton_013',
+  'mw.w_Frame_007.w_Label_016',
+  'mw.wr_017.wr_024',
+  'mw.wr_017.wr_015',
+  'mw.w_Frame_001.w_Menubutton_013.w_Menu_014',
+  'mw.w_Frame_001.w_Menubutton_010.w_Menu_011',
+  'mw.w_Frame_001.w_Menubutton_013.w_Menu_014.w_command_015',
+  'mw.w_Frame_001.w_Menubutton_010.w_Menu_011.w_command_012'
+];
+$rUser_subroutines = [
+  'sub init { 1 }'
+];
+$rUser_methods_code = [];
+$rUser_gcode = [];
+$rOther_code = [];
+$rUser_pod = [];
+$rUser_auto_vars = [];
+$rUser_local_vars = [];
+$rFile_opt = {
+  'autoExtract2Local' => '1',
+  'code' => 0,
+  'treewalk' => 'D',
+  'title' => 'File Explorer',
+  'Toplevel' => '1',
+  'baseClass' => '',
+  'subroutineArgsName' => '%args',
+  'strict' => '0',
+  'subWidgetList' => [],
+  'subroutineArgs' => '',
+  'modal' => '0',
+  'description' => 'Set up a dialog to explore structures.',
+  'modalDialogClassName' => 'DialogBox',
+  'subroutineName' => 'thisDialog',
+  'onDeleteWindow' => 'sub{exit}',
+  'autoExtractVariables' => '1'
+};
+$rProjectName = \'myClicktk.pl';
+$ropt_isolate_geom = \'0';
+$rHiddenWidgets = [];
+$rLibraries = [];
+$rApplName = \'';
+$rApplFolder = \'';
+$opt_TestCode = \'1';
+$rBaseClass = [];
+$rwork_save_temp = \1;

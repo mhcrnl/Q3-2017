@@ -1,0 +1,30 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" 
+  "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+<ncx version="2005-1" xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/ncx/">
+  <head>
+    <smilCustomTest id="pagenum" defaultState="false" 
+    override="visible" bookStruct="PAGE_NUMBER"/>
+    <smilCustomTest id="note" defaultState="true" 
+    override="visible" bookStruct="NOTE"/>
+    <meta name="dtb:uid" content="Voyages of the Dawn Treader Volume 1"/>
+    <meta name="dtb:generator" content="NLSv001"/>
+  </head>
+  <docTitle>
+     <text>Voyages of the Dawn Treader Volume 1</text> 
+     <img src="logo0.jpg" />
+  </docTitle>
+  <docAuthor>
+       <text>Daniel Edward Graham</text> 
+  </docAuthor>
+<navMap><navPoint class="section" id="Introduction0">
+          <navLabel>
+            <text>Introduction</text>
+          </navLabel>
+          <content src="mybook1.htm#Introduction0" />
+</navPoint><navPoint class="section" id="PICTURES0">
+          <navLabel>
+            <text>PICTURES</text>
+          </navLabel>
+          <content src="mybook1.htm#PICTURES0" />
+</navPoint></navMap></ncx>

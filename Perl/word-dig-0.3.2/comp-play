@@ -1,0 +1,57 @@
+#!/usr/bin/perl -w
+
+use strict;
+use lib ".";
+use WordDig;
+use Text::Wrap;
+
+my $dict = Games::Dictionary->new();
+
+my @player1_words;
+my @player2_words;
+
+my %player1 = (	
+	    _player_name => "Player 1",
+	    _used_words  => \@player1_words,
+	    );
+
+my %player2 = (
+	    _player_name => "Player 2",
+	    _used_words  => \@player2_words,
+	    );
+
+my @players = ( \%player1, \%player2 );
+
+my %game = (
+	 dict_obj        => $dict,
+	 num_players => 2,
+	 players     => \@players,
+	 );
+
+my $game = Games::WordDig->new(%game);
+
+
+$game->Player_Turn("task");
+
+while (1) {
+    my $quit = $game->Computer_Turn();
+    if ("out of words" eq $quit) {
+	print "$quit\n";
+	exit;
+    }
+    my $words = $game->_get_all_used();
+    my $last = $game->_last_word();
+    my @pretty_words;
+
+    for my $used (@$words) {
+	if ( $last eq $used ) {
+	    push(@pretty_words, "\*$last\*");
+	} else {
+	    push(@pretty_words, $used);
+	}
+    }
+
+    my $pretty_words = wrap(""," ",@pretty_words);
+
+    print "$pretty_words\n\n";
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<TkForm name="[% name %]" geometry="[% geometry %]" title="[% title %]">
+	<TkWidgets>
+	[% FOREACH widget = children.values %]
+[%+ widget.to_xml %]
+	[% END %]
+	</TkWidgets>
+</TkForm>

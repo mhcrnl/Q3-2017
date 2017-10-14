@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+	<HighScores>
+		<Score>
+			<title>The Spew Master</title>
+			<player-name>BDG</player-name>
+			<score>1000</score>
+			<starting-level>6</starting-level>
+			<end-level>7</end-level>
+			<finish>1</finish>
+			<lines>35</lines>
+			<quads>5</quads>
+			<triples>4</triples>
+			<doubles>3</doubles>
+			<long-quad-streak>3</long-quad-streak>
+			<position>1</position>
+		</Score>
+		<Score>
+			<title>Mein Spewhrer</title>
+			<player-name>JMI</player-name>
+			<score>900</score>
+			<starting-level>5</starting-level>
+			<end-level>7</end-level>
+			<finish>1</finish>
+			<lines>35</lines>
+			<quads>4</quads>
+			<triples>3</triples>
+			<doubles>5</doubles>
+			<long-quad-streak>2</long-quad-streak>
+			<position>2</position>
+		</Score>
+		<Score>
+			<title>Mountain Spew</title>
+			<player-name>JMG</player-name>
+			<score>800</score>
+			<starting-level>5</starting-level>
+			<end-level>7</end-level>
+			<finish>1</finish>
+			<lines>35</lines>
+			<quads>3</quads>
+			<triples>3</triples>
+			<doubles>5</doubles>
+			<long-quad-streak>2</long-quad-streak>
+			<position>3</position>
+		</Score>
+		<Score>
+			<title>Spew Man Chu</title>
+			<player-name>SCG</player-name>
+			<score>700</score>
+			<starting-level>5</starting-level>
+			<end-level>7</end-level>
+			<finish>1</finish>
+			<lines>35</lines>
+			<quads>2</quads>
+			<triples>3</triples>
+			<doubles>5</doubles>
+			<long-quad-streak>1</long-quad-streak>
+			<position>4</position>
+		</Score>
+		<Score>
+			<title>My God, It's Full of Spew</title>
+			<player-name>MCG</player-name>
+			<score>600</score>
+			<starting-level>4</starting-level>
+			<end-level>6</end-level>
+			<finish>0</finish>
+			<lines>30</lines>
+			<quads>1</quads>
+			<triples>1</triples>
+			<doubles>6</doubles>
+			<long-quad-streak>1</long-quad-streak>
+			<position>5</position>
+		</Score>
+		<Score>
+			<title>Sir Spew</title>
+			<player-name>RCG</player-name>
+			<score>500</score>
+			<starting-level>3</starting-level>
+			<end-level>6</end-level>
+			<finish>0</finish>
+			<lines>25</lines>
+			<quads>0</quads>
+			<triples>0</triples>
+			<doubles>7</doubles>
+			<long-quad-streak>0</long-quad-streak>
+			<position>6</position>
+		</Score>
+		<Score>
+			<title>Spew Monkey</title>
+			<player-name>MLI</player-name>
+			<score>400</score>
+			<starting-level>2</starting-level>
+			<end-level>6</end-level>
+			<finish>0</finish>
+			<lines>22</lines>
+			<quads>0</quads>
+			<triples>4</triples>
+			<doubles>3</doubles>
+			<long-quad-streak>0</long-quad-streak>
+			<position>7</position>
+		</Score>
+		<Score>
+			<title>Ferris Spewler</title>
+			<player-name>MCI</player-name>
+			<score>300</score>
+			<starting-level>1</starting-level>
+			<end-level>5</end-level>
+			<finish>0</finish>
+			<lines>20</lines>
+			<quads>0</quads>
+			<triples></triples>
+			<doubles></doubles>
+			<long-quad-streak>0</long-quad-streak>
+			<position>8</position>
+		</Score>
+		<Score>
+			<title>Pepe Le Spew</title>
+			<player-name>GOO</player-name>
+			<score>150</score>
+			<starting-level>1</starting-level>
+			<end-level>4</end-level>
+			<finish>0</finish>
+			<lines>18</lines>
+			<quads>0</quads>
+			<triples>1</triples>
+			<doubles>3</doubles>
+			<long-quad-streak>0</long-quad-streak>
+			<position>9</position>
+		</Score>
+		<Score>
+			<title>Winnie the Spew</title>
+			<player-name>POO</player-name>
+			<score>100</score>
+			<starting-level>1</starting-level>
+			<end-level>4</end-level>
+			<finish>0</finish>
+			<lines>15</lines>
+			<quads>0</quads>
+			<triples>0</triples>
+			<doubles>5</doubles>
+			<long-quad-streak>0</long-quad-streak>
+			<position>10</position>
+		</Score>
+		<title-1>The Spew Master</title-1>
+		<title-2>Mein Spewhrur</title-2>
+		<title-3>Mountain Spew</title-3>
+		<title-4>Spew Man Chu</title-4>
+		<title-5>My God, It's Full of Spew</title-5>
+		<title-6>Sir Spew</title-6>
+		<title-7>Spew Monkey</title-7>
+		<title-8>Ferris Spewler</title-8>
+		<title-9>Pepe Le Spew</title-9>
+		<title-10>Winnie the Spew</title-10>
+	</HighScores>

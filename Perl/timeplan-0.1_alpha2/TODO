@@ -1,0 +1,20 @@
+Todo list for Time Plan. If you want to help out pick one and code it
+
+Planned features:
+man page
+more data files for different purposes
+conflict handling
+handle items that can't be fit into the schedule
+more error checking
+better file format for the data files (probably xml)
+generate the schedule in different formats for viewing/printing: png, jpg, postscript, pdf, html, ascii art, plain text
+category system
+try to give the user variety by choosing things from different categories after each other
+priority system
+a way to specify that some tasks belong to each other, and use that info when generating the schedule
+a way to specify that something should be completed before something else (for example if you're reading a series of books and there is a chronological order)
+a cli tool to edit the data files
+
+Features that may or may not get done:
+a graphical frontend (probably gtk) that shows the schedule in real time
+including the ability to edit the data files in the gui tool

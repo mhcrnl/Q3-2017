@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+ <HEAD>
+  <TITLE> click/Tk - Revision's Cycle </TITLE>
+  <META NAME="Generator" CONTENT="EditPlus">
+  <META NAME="Author" CONTENT="marco">
+  <META NAME="Keywords" CONTENT="clickTk revision cycle">
+  <META NAME="Description" CONTENT="">
+ </HEAD>
+
+ <BODY>
+<H1>The Revision Cycle </H1>
+<PRE>
+Collect items
+	number items 
+	open an item for each bug
+		- description of the bug (symptoms)
+		- collect documents (screenshots, logfile, projects, ...) into folder ./doc/problemlist/&lt;problemNr&gt;
+	open an item for each upgrade suggestion
+		- description
+
+<B>Specify the changes to be implemented
+</B>
+	- inspect the problem list fro open items
+	- select problems to be solved depending on severity
+	- select upgrades depending on compatibility and Time/costs
+	- set up new release identification 
+	- specify the changes
+	- set up the implementation plan
+	- set up compatibility 
+		set up conversion rules for projects, templates
+		set up installations rules
+
+<B>Update the system
+</B>
+	- implement the modifications
+	- test the modifications
+	- set up a list of the modified items
+		module ./lib/*.pl ./lib/*.pm
+		scripts ./*.pl
+		executable ./*.exe
+		control files 
+		./widgets/*.* ./templates/*.pl ./projects/*.pl
+		./toolbar
+		./ctkAssistentFuncList.txt
+		./ctkConfigOptions.txt
+		./ctk_session_Tkadmin.txt
+	- adapt doc/clickTk_problemList.html
+
+
+<B>Update examples
+</B>	
+Update the documentation
+
+	- adapt clicktk_readme.txt
+	- adapt file README
+	- adapt doc/clickTk_Maintenance.html
+	- adapt clickTk_version_&lt;version&gt;_changes.html
+	- adapt screen shots 
+	- adapt user guide  ./doc/userd/user_doc.html (winword)
+	- adapt diagrams	./doc/diagrams
+	- adapt clicktk_readme.txt
+	- adapt ./doc/programmers_guide.html
+
+<B>Set up deliverable
+</B>
+	-run script ctkBuild.pl
+	-check deliveable with winzip (test)
+
+<B>Save the revision
+</B>
+	- create revision definition file
+	  ./clickTk-&lt;version&gt;.txt
+	- run script ctkSaveRevision.pl 
+
+<B>Move revision to prod environment
+</B>
+	- merge folders with beyondcompare2
+
+<B>Update homepage ./homepage/*.*
+</B>
+	- adapt date in hp_corner.html
+	- adapt items in hp_downloads.html
+	- check local homepage
+
+<B>Upload homepage files ( WS_FTP95 LE )
+</B>
+	- upload documents
+	- upload pages 
+	- access page www.clickTk.eu and check changes
+
+
+</PRE>
+ </BODY>
+</HTML>

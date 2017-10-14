@@ -1,0 +1,32 @@
+$rDef = {
+  'icon' => 'Button',
+  'geom' => '1',
+  'file' => 'Button',
+  'attr' => {
+    '-takefocus' => 'menu(0|1)',
+    '-font' => 'text+',
+    '-background' => 'color',
+    '-width' => 'int+',
+    '-padx' => 'int+',
+    '-underline' => 'int+',
+    '-foreground' => 'color',
+    '-borderwidth' => 'int+',
+    '-height' => 'int+',
+    '-relief' => 'relief',
+    '-textvariable' => 'variable',
+    '-anchor' => 'anchor',
+    '-pady' => 'int+',
+    '-command' => 'callback',
+    '-state' => 'menu(normal|disabled)',
+    '-text' => 'text',
+    '-image' => 'widget'
+  },
+  'classname' => 'Button',
+  'pathName' => undef,
+  'use' => 'Tk::Button',
+  'nonVisual' => '0',
+  'defaultgeometrymanager' => undef,
+  'balloon' => '1',
+  'defaultwidgetoptions' => undef,
+  'defaultgeometryoptions' => undef
+};

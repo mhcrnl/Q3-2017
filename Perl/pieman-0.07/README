@@ -1,0 +1,232 @@
+Personal Information, etc. Management (Pieman)
+==============================================
+
+1. Introduction
+
+    Pieman is a command-line tool for managing personal information
+    such as appointments, contacts, and tasks as well as other data such
+    as notes and rc files. It is a portable pure-perl tool inspired by
+    abook, devtodo, mutt, and pal, among others.
+
+    Note that this version is an early alpha release so contains only a
+    subset of its planned functionality.  Currently, contacts are mostly
+    supported (and are used by the author daily), events, notes, and
+    tasks are slightly supported, and files are not yet supported.
+
+
+2. Installation
+
+    Pieman requires Perl >= 5.6 and the non-standard modules
+    Date::Parse and XML::Simple.  Graph::Easy is optional for graph
+    support (i.e. graphing relationships between contacts and/or
+    graphing dependencies between tasks).
+
+    To install, simply place the "pieman" executable somewhere
+    accessible by your $PATH.
+    
+    Pieman stores information in the file ~/.piemandb.  This location
+    can be changed using the --db=/db/file option.  While the author has
+    not encountered any corruption of this file during daily use,
+    periodic backups are recommended.  Note that the format of this
+    file may change in future versions.
+
+
+3. Usage
+
+    The basic usage model is to specify a type of information together
+    with an action to perform and optional arguments related to that
+    action.
+    
+    The information types are:
+
+        o Contacts (-c, --contact)
+        o Events (-e, --event)
+        o Notes (-n, --note)
+        o Tasks (-t, --task)
+
+    Actions on individual entries of a given type are specified
+    in relation to entry identifiers similar to that of devtodo's index
+    model.  An identifier is a number assigned to each entry based on
+    its position in the list of entries of each type.  Identifiers may
+    be determined using the "list" or "search" actions.
+    
+    The actions are:
+
+        o Add (-a, --add)
+
+            Add an entry for the given information type.  Any additional
+            arguments on the command line will be put into the
+            identifying field associated with that type (i.e. full name
+            for contacts, description for events/tasks, and title for
+            notes).  Then an external editor will be invoked with all
+            relevant fields (a la mutt's editor/edit_headers
+            functionality).  A save in the editor will save the
+            information into Pieman's database.  For example:
+
+                pieman -c -a bad example
+
+            would invoke the editor with the fields of a contact entry
+            with the full name filled in with "bad example".  Note that
+            the current version has the limitation that only a single
+            line of text (i.e. no newlines) is parsed for each field.
+            This will be rectified in the future.
+            
+            Also note that all fields besides contact email addresses
+            and aliases, and note text will be capitalized automatically
+            with all redundant whitespace eliminated.  For example,
+            the full name entered into the database for the command
+            above would be "Bad Example".
+
+            The --stdin option can be used with "add" to define entries
+            via standard in.  For example:
+
+                pieman -c -a --stdin < new_entry.txt
+
+            would add a new contact entry based on the information in
+            new_entry.txt.  Note that the contents of this file must be
+            in the same form brought up in the editor during an
+            interactive "add", but only those entries with values need
+            exist.
+
+        o Graph (-g, --graph)
+
+            Graph all entries for the given information type.  Graphs
+            will only be of interest when the "parent" action has been
+            used to define relationships between entries.  For example:
+
+                pieman -c -g
+
+            would graph all contacts.
+
+            Graph output may be limited to only those entries with
+            fields matching a given regular expression using the
+            "search" action.  Note that in this case, entries will
+            also be shown if they are related to entries in the search
+            results.  For example:
+
+                pieman -c -g -s smith
+
+            can be used to create an impromptu family tree for all
+            entries containing smith or related to such an entry.
+
+        o List (-l, --list)
+
+            List all entries for the given information type.  For
+            example:
+
+                pieman -c -l
+
+            would list all contacts.
+
+        o Modify (-m, --modify)
+
+            Modify the entry associated with the identifier given as
+            an argument.  An external editor will be invoked with all
+            relevant fields.  A save in the editor will update the
+            information in Pieman's database.  For example:
+
+                pieman -c -m 6
+
+            would bring up an editor to modify contact entry 6.
+
+        o Parent (-p PIDS, --parent=PIDS)
+
+            Specify a set of parents for a given entry.  PIDS is a
+            comma-separated list of entry identifiers.  The argument
+            list to a "parent" action is a space-separated list of entry
+            identifiers to which the parents apply.  For example:
+
+                pieman -c -p 1,2 3 4 5
+
+            would indicate that contact entries 1 and 2 are the
+            parents of contact entries 3, 4, and 5.
+
+            This information is currently only used in the "graph" action,
+            but will be used more in the future.
+
+        o Remove (-r, --remove)
+
+            Remove the entries associated with the identifier given as
+            arguments.  For example:
+
+                pieman -c -r 15 21
+
+            would remove contact entries 15 and 21.
+
+            Note that identifiers are shifted after a removal such that
+            no numerical gaps exist in identifier assignments.  For
+            example, for the command above, entry 16 would become
+            entry 15 and entry 22 would become entry 20.  This does
+            not affect the "remove" action itself, however, so the list
+            of identifier arguments will always be processed based on
+            the original assignments that were in place when the command
+            was first executed.
+
+            Also note that removals do not affect parent relationships
+            unless, of course, a parent is removed.
+
+        o Search (-s, --search)
+
+            Search for entries with fields matching a given regular
+            expression.  One of the fields that matched will be shown
+            in color for each entry in the output.  Note that searches
+            are not case sensitive.  For example:
+
+                pieman -c -s '@(yahoo|gmail)'
+
+            would search all contact entries for fields containing
+            @yahoo or @gmail.
+
+    A contact-specific action is:
+
+        o Aliases (--aliases)
+
+            Output a list of mail aliases based on the alias names and
+            email addresses defined for contacts.  For example:
+
+                pieman --aliases
+
+            would produce a list of aliases of the form:
+
+                alias badE Bad Example <bad@example.com>
+
+            This list can then be used in your favorite mail client.
+            For example, in mutt, the following settings can be used to
+            auto-update mutt aliases based on Pieman contacts whenever
+            messages are viewed or created:
+
+                message-hook . "source ~/.malias"
+                reply-hook . "source ~/.malias"
+                send-hook . "source ~/.malias"
+                set editor = "pieman --aliases >~/.malias; vim '+:2'"
+
+
+4. Customization
+
+    Certain aspects of Pieman may be customized using the file
+    ~/.piemanrc.  This location can be changed using the --rc=/rc/file
+    option.  One customization is defining the editor to use during
+    "add" and "modify" actions.  For example, to change the default
+    editor from vim to emacs, use:
+
+        <pieman>
+            <editor>/usr/bin/emacs</editor>
+        </pieman>
+
+    The ~/.piemanrc file may also be used for customizing the fields
+    associated with each information type.  More details will be
+    provided in later versions.  If you wish to do this, look at the
+    function "defaultrc" in the Pieman code and copy the contents into
+    your ~/.piemanrc, then edit as you wish.  Note that the first field
+    for each type has special meaning (i.e. it is the identifying field
+    for each type) so if you want to add things, add them later in the
+    list.
+
+    Note that Pieman is still a work in progress so the ~/.piemanrc
+    format may be subject to change.
+
+
+Questions, comments, fixes, and/or enhancements welcome.
+
+--Paul Kolano <pkolano@gmail.com>
+

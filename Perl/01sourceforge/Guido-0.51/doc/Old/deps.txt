@@ -1,0 +1,109 @@
+Core Modules (in Perl 5.00503)
+(These should already be on your system)
+
+AutoLoader             5.57
+Carp
+Carp::Heavy
+Config
+Cwd                    2.02
+Data::Dumper          2.101
+DynaLoader             1.04
+Exporter              5.562
+Exporter::Heavy
+Fcntl                  1.03
+File::Basename          2.6
+File::Spec             0.82
+File::Spec::Functions    1.1
+File::Spec::Unix        1.2
+File::Spec::Win32       1.2
+FileHandle             2.00
+IO                     1.20
+IO::File               1.08
+IO::Handle             1.21
+IO::Seekable           1.08
+SelectSaver
+Symbol                 1.02
+Time::Local
+Win32                  0.16
+XSLoader               0.01
+base                   1.01
+constant               1.02
+lib                  0.5564
+overload
+re                     0.02
+strict                 1.01
+vars
+warnings
+warnings::register
+
+--
+
+CPAN Modules
+(These may need to be installed)
+
+Class::MethodMaker     0.96
+File::Slurp          96.042202
+
+HTML-Parser
+	HTML::Entities         1.15
+	HTML::HeadParser       2.14
+	HTML::Parser           3.10
+
+libwww-perl-5.50
+	HTTP::Date             1.40
+	HTTP::Headers          1.37
+	HTTP::Message          1.23
+	HTTP::Request          1.27
+	HTTP::Response         1.33
+	HTTP::Status           1.26
+	LWP                    5.48
+	LWP::Debug
+	LWP::MemberMixin
+	LWP::Protocol          1.36
+	LWP::UserAgent         1.73
+
+URI-1.10
+	URI                    1.04
+	URI::Escape            3.13
+	URI::URL               5.02
+	URI::WithBase
+
+libxml-enno-1.02
+	XML::DOM               1.27
+	XML::DOM::DOMException
+	XML::DOM::NamedNodeMap
+	XML::DOM::NodeList
+	XML::RegExp
+
+Tk                   800.022
+	Tk::Adjuster          3.025
+	Tk::After             3.015
+	Tk::CmdLine           3.028
+	Tk::Configure         3.008
+	Tk::Derived           3.046
+	Tk::Event             3.023
+	Tk::Event::IO         3.036
+	Tk::Frame             3.030
+	Tk::Image             3.014
+	Tk::Label             3.011
+	Tk::MainWindow        3.047
+	Tk::Menu              3.045
+	Tk::Menu::Item        3.027
+	Tk::Photo             3.014
+	Tk::Pretty            3.013
+	Tk::Splash             0.03
+	Tk::Submethods        3.014
+	Tk::Toplevel          3.028
+	Tk::Widget            3.078
+	Tk::Wm                3.023
+
+
+XML-Parser
+	XML::Parser            2.27
+	XML::Parser::Expat     2.27
+
+XML::Simple            1.04
+Win32::Process         0.07
+Tk::JPEG              2.013
+Text::Template         1.23
+

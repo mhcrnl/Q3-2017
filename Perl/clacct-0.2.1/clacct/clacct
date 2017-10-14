@@ -1,0 +1,455 @@
+#!/usr/bin/perl
+
+#********************************
+#The Command-Line Accountant
+#Written by Joe Kauzlarich
+#(No licensing on this software)
+#********************************
+use Getopt::Long;
+
+my $version="0.20";
+my $cladir=$ENV{HOME} . "/.clacct";
+my $progname="clacct";
+my $long_progname="Command Line Accountant";
+my $verbose=0;
+my $defaultAccountLines=20;
+my $rightNow=time;
+my $tty=0; #no tty formatting at this time
+
+#for date parsing
+my $sec; 
+my $min;
+my $hour;
+my $mday,
+my $mon;
+my $year;
+my $wday;
+my $yday, 
+my $isdst;
+
+my @monthnames=("", "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+
+sub printHelp {
+    print "Usage: $progname [options...]\n";
+    print "General Options:\n";
+    print "--help\t\t\t\tThis help information\n";
+    print "--version\t\t\tShow version information\n";
+    print "-v | --verbose\t\t\tVerbose display\n";
+    print "-q | --quiet\t\t\tQuiet display\n";
+    print "-av [on|off]\t\t\tAlways verbose\n";
+    print "-aq [on|off]\t\t\tAlways quiet\n";
+    print "\nAccounting Options: \n";
+    print "-n account_name\t\t\tCreate a new account\n";
+    print "-l\t\t\t\tList accounts\n";
+    print "-bal account_name\t\tGet an account's balance\n";
+    print "-rec account_name\t\tReconcile account\n";
+    print "\t-amount [+-]X.XX\n";
+    print "-l -acc account_name\t\tList the contents of an account\n" .
+	  "\t[-lines n]\t\t  (opt.) only showing last n lines\n";
+    print "-r account_name\t\t\tRemove an account\n";
+    print "-a account_name\t\t\tApply a specified money\n" .
+          "\t-amount [+-]X.XX\t  amount to an account with\n " .
+          "\t-note 'description'\t  a description attached\n";
+    print "-mv X.XX\t\t\tMove money from one\n" .
+	  "\t-from account_name\t  account to another\n" .
+	  "\t-to account_name\n" .
+	  "\t-note 'description'\n";
+    print "-iou X.XX\t\t\tAdd an IOU with a name\n" .
+	  "\t-note 'description'\t  in the note field\n";
+    print "-liou\t\t\t\tList IOUs\n";
+    print "-pay n\t\t\t\tPay the IOU indicated by index n\n";
+    print "\nAccount names must be alphabetic ";
+    print " (i.e. [A-Za-z]+)\n";
+}
+
+sub parseEpochTime {
+    ($sec, $min, $hour, $mday, $mon,
+     $year, $wday, $yday, $isdst)=localtime(shift);
+    $year+=1900;
+    $mon++;
+}
+
+sub printVersion {
+    print "$long_progname v$version\n";
+}
+
+sub newAccount {
+    my $accountName=shift;
+    my $accountFilename=$cladir . "/" . $accountName;
+    if(-e $accountFilename) {
+	print "$accountFilename already exists\n";
+    }
+    else {
+	open(ACCOUNT, ">$accountFilename")
+	    || die "Could not create account $accountName";
+	close ACCOUNT;
+	if($verbose) { print "New account $accountName created.\n"; }
+    }
+}
+
+sub addTransaction {
+    my $accountName=shift;
+    my $checkNumber=shift;
+    my $trAmount=shift;
+    my $trDesc=shift;
+    my $accountFilename=$cladir . "/" . $accountName;
+
+    $trDesc =~ s/\#/\\\#/;
+    $checkNumber="" if($checkNumber < 1);
+    $trAmount=int(100*$trAmount)/100;
+    if(! -e $accountFilename) {
+	print "Account $accountName does not exist\n";
+    }
+    else {
+	open(ACCOUNT, ">>$accountFilename")
+	    || die "Could not open account $accountName";
+	print ACCOUNT "$rightNow#$trAmount#$trDesc#$checkNumber\n";
+	close ACCOUNT;
+    }
+    
+}
+
+sub printTransactions {
+    my $accountName=shift;
+    my $linesToPrint=shift;
+    my $accountFilename=$cladir . "/" . $accountName;
+    my $balance=0;
+    if(! -e $accountFilename) {
+	print "Account $accountName does not exist\n";
+    }
+    else {
+	open(ACCOUNT, "<$accountFilename")
+	    || die "Could not open account $accountName";
+	@lines=<ACCOUNT>;
+	my $numTransactions=@lines;
+	my $count=0;
+	my $amount=0;
+	my $description="";
+	my $tempdate="";
+	my $temptime="";
+	my $checkNumber=0;
+	$accountName = uc $accountName;
+format STDOUT_TOP = 
+@|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+$accountName
+CN      Date         Time     Amount    Balance   Description
+----------------------------------------------------------------------------------------
+.
+format STDOUT = 
+@<<<<   @<<<<<<<<<<< @<<<< @#####.##  @#####.##   @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+$checkNumber, $tempdate, $temptime, $amount, $balance, $description
+.
+	while($line=shift @lines) {
+	    $count++;
+	    chomp($line);
+	    $line =~ s/\\\#/\t/;
+	    @info=split /\#/, $line;	    
+	    parseEpochTime($info[0]);
+	    $amount=$info[1];
+	    $description=$info[2];
+	    $description =~ s/\t/\#/;
+	    if(exists $info[3]) {
+		$checkNumber=$info[3];
+	    }
+	    else {
+		$checkNumber='';
+	    }
+	    $balance+=$amount;
+	    $tempdate="$mday/$monthnames[$mon]/$year";
+	    $temptime="$hour:$min";
+	    if($count > $numTransactions-$linesToPrint) {
+		write;
+	    }
+	}
+	close ACCOUNT;
+    }
+
+}
+
+sub getBalance {
+    my $accountName=shift;
+    my $balance=0;
+    my $accountFilename=$cladir . "/" . $accountName;
+    if(! -e $accountFilename) {
+	print "Account $accountName does not exist\n";
+    }
+    else {
+	open(ACCOUNT, "<$accountFilename")
+	    || die "Could not open account $accountName";
+	while($line=<ACCOUNT>) {
+	    $line =~ s/\\\#/\t/;    
+	    @info=split /\#/, $line;
+	    $balance+=$info[1];
+	}
+	close ACCOUNT;	
+    }
+    return $balance;
+}
+
+sub listAccounts {
+    chdir $cladir;
+    my @files=<*>;
+    my $balance=0;
+    while($file=shift @files) {
+	if(! ($file =~ /^_/)) {
+	    $balance=getBalance($file);	    
+	    if($verbose) { print "$file\t(\$$balance)\n"; }
+	    else { print "$file\n"; }
+	}
+    }
+}
+
+sub removeAccount {
+    my $accountName=shift;
+    my $accountFilename=$cladir . "/" . $accountName;
+    if(! -e $accountFilename) {
+	print "Account $accountName does not exist\n";
+    }
+    else {
+	unlink $accountFilename
+	    || die "Could not delete $accountFilename\n";
+	print "Account $accountName has been removed.\n" 
+	    if($verbose);
+    }
+}
+
+sub setDefaultAccount {
+    my $accountName=shift;
+    my $accountFilename=$cladir . "/" . $accountName;
+    if(! -e $accountFilename) {
+	print "Account $accountName does not exist\n";
+    }
+    else {
+	if(-e "$cladir/_default") {
+	    unlink "$cladir/_default";
+	}
+	chdir $cladir;
+	symlink $accountFilename, "_default";
+	print "You have set $accountName to be your default account.\n"
+	    if($verbose);
+    }
+}
+
+
+sub addIOU {
+    my $amount=shift;
+    my $name=shift;
+    open(IOU, ">>$cladir/_iou");
+    print IOU "$amount#$name#unpaid#---\n";
+    close IOU;
+}
+
+sub listIOUs {
+    open(IOU, "<$cladir/_iou");
+    my @ious=<IOU>;
+    close IOU;
+  
+    my @info;
+    my $line;
+    my $count=0;
+    my $balance=0;
+
+    while($line=shift @ious) {
+	$count++;
+	chomp($line);
+	@info=split('#', $line);
+	$balance+=$info[0] unless $info[2] =~ /^paid$/;
+	print "$count. $info[0]\t\t$info[1]\t\t" unless $info[2] eq paid and not $verbose;
+	if($info[2] eq "paid" and $verbose) {
+	    parseEpochTime($info[3]);
+	    print "(paid on $monthnames[$mon] $mday, $year)";
+	}
+	print "\n" unless $info[2] eq paid and not $verbose;
+    }
+    print "Total owed: $balance\n" if($verbose);
+}
+
+sub payIOU {
+    my $iouLine=shift;
+    $iouLine--; #account for difference between array representation & display
+    
+    open(IOU, "<$cladir/_iou");
+    my @ious=<IOU>;
+    close IOU;
+
+    my @info=split('#', $ious[$iouLine]);
+    $ious[$iouLine]=$info[0] . 
+	"#" . $info[1] . "#paid#" . 
+	$rightNow . "\n";
+    
+    unlink "$cladir/_iou";
+
+    open(IOU, ">$cladir/_iou");
+    my $line;
+    foreach $line (@ious) {
+	print IOU $line;
+    }
+    close IOU;
+}
+
+#Make sure rc directory exists
+unless(-e $cladir && -d $cladir) {
+    mkdir $cladir;
+    open(IOU, ">$cladir/_iou")
+	|| die "Could not create I.O.U file\n";
+    close IOU;
+}
+
+if(-e "$cladir/_verbose") {
+    $verbose=1;
+}
+
+if(-e "$cladir/_quiet") {
+    $verbose=0;
+}
+
+
+my $accountOptions=0;
+my $argnum=0;
+
+my $helpOption=0;
+my $versionOption=0;
+my $newAccountOption=0;
+my $listAccountsOption=0;
+my $removeAccountOption=0;
+my $applyTransactionOption=0;
+my $amountOption=0;
+my $noteOption=0;
+my $moveOption=0;
+my $fromOption=0;
+my $toOption=0;
+my $iouOption=0;
+my $listIOUsOption=0;
+my $payIOUOption=0;
+my $accountOption=0;
+my $linesOption=0;
+my $balanceOption=0;
+my $alwaysVerboseOption=0;
+my $alwaysQuietOption=0;
+my $checkNumberOption=0;
+my $reconcileOption=0;
+
+GetOptions('v|verbose' => \$verbose,
+	   'q|quiet' => sub {$verbose=0},
+	   'av=s' => \$alwaysVerboseOption,
+	   'aq=s' => \$alwaysQuietOption,
+           'help' => \$helpOption,
+           'version' => \$versionOption,
+           'n=s' => \$newAccountOption,
+           'l' => \$listAccountsOption,
+	   'r=s' => \$removeAccountOption,
+           'a=s' => \$applyTransactionOption,
+	   'amount=f' => \$amountOption,
+	   'note=s' => \$noteOption,
+	   'mv=f' => \$moveOption,
+	   'from=s' => \$fromOption,
+	   'to=s' => \$toOption,
+	   'iou:f' => \$iouOption,
+	   'liou' => \$listIOUsOption,
+	   'pay=i' => \$payIOUOption,
+	   'acc=s' => \$accountOption,
+	   'lines=i' => \$linesOption,
+	   'bal=s' => \$balanceOption,
+	   'cn=i' => \$checkNumberOption,
+	   'rec=s' => \$reconcileOption);
+
+if($helpOption) {
+    printHelp();
+}
+elsif($versionOption) {
+    printVersion();
+}
+elsif($newAccountOption) {
+    newAccount($newAccountOption);
+}
+elsif($listAccountsOption) {
+    my $accountLines=$defaultAccountLines;
+    if($linesOption) {
+	$accountLines=$linesOption;
+    }
+    if($accountOption) {
+	printTransactions($accountOption, 
+			  $accountLines);
+    }
+    else {
+	listAccounts();
+    }
+}
+elsif($removeAccountOption) {
+    removeAccount($removeAccountOption);
+}
+elsif($applyTransactionOption) {
+    addTransaction($applyTransactionOption,
+		   $checkNumberOption,
+		   $amountOption, 
+		   $noteOption);
+}
+elsif($moveOption) {
+    addTransaction($fromOption,
+		   $checkNumberOption,
+		   $moveOption * -1,
+		   $noteOption);
+    addTransaction($toOption,
+		   $checkNumberOption,
+		   $moveOption,
+		   $noteOption);
+}
+elsif($iouOption) {
+    addIOU($iouOption, $noteOption);
+}
+elsif($listIOUsOption) {
+    listIOUs();
+}
+elsif($payIOUOption) {
+    payIOU($payIOUOption);
+}
+elsif($balanceOption) {
+    my $accountBalance=getBalance($balanceOption);
+    if($verbose) {
+      $accountBalance= "\$$accountBalance\n";
+    }
+    print $accountBalance;
+}
+elsif($reconcileOption) {
+    my $accountBalance=getBalance($reconcileOption);
+    my $changeAmount=$amountOption-$accountBalance;
+    addTransaction($reconcileOption,
+		   0, $changeAmount,
+		   "Account Reconciliation");
+}
+elsif($alwaysVerboseOption eq 'on') {
+    if(-e "$cladir/_quiet") {
+	unlink "$cladir/_quiet"
+	    || die "Could not unlink $cladir/_quiet\n";
+    }
+    unless(-e "$cladir/_verbose") {
+	open VERBOSE, ">$cladir/_verbose"
+	    || die "Could not create file $cladir/_verbose\n";
+	close VERBOSE;
+    }
+}
+elsif($alwaysQuietOption eq 'on') {
+    if(-e "$cladir/_verbose") {
+	unlink "$cladir/_verbose" 
+	    || die "Could not unlink $cladir/_verbose\n";
+    }
+    unless(-e "$cladir/_quiet") {
+	open QUIET, ">$cladir/_quiet"
+	    || die "Could not create file $cladir/_quiet\n";
+	close QUIET;
+    }
+}
+elsif($alwaysVerboseOption eq 'off') {
+    if(-e "$cladir/_verbose") {
+	unlink "$cladir/_verbose" 
+	    || die "Could not unlink $cladir/_verbose\n";
+    }
+}
+elsif($alwaysQuietOption eq 'off') {
+    if(-e "$cladir/_quiet") {
+	unlink "$cladir/_quiet"
+	    || die "Could not unlink $cladir/_quiet\n";
+    }
+}
+exit;

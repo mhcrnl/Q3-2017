@@ -1,0 +1,235 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Games::WordDig;
+
+
+
+
+
+#
+# this part sets up the game for playing
+#
+
+my $dict = Games::Dictionary->new();
+
+my (@player1_words, @player2_words);
+
+my %player1 = (	
+	    _player_name => "Player 1",
+	    _used_words  => \@player1_words,
+	    );
+
+my %player2 = (
+	    _player_name => "Computer",
+	    _used_words  => \@player2_words,
+	    );
+
+my @players = ( \%player1, \%player2 );
+
+my %game = (
+	    dict_obj    => $dict,
+	    num_players => 2,
+	    players     => \@players,
+	    );
+
+my $game = Games::WordDig->new(%game);
+
+
+#
+# here's the UI set up
+#
+
+use Gnome;
+
+my $NAME    = "gword-dig";
+my $VERSION = "0.1";
+my ($true, $false) = (1, 0);
+
+
+init Gnome $NAME;
+
+my ($app, $vbox, $user_box, $bar, 
+    $label, $word_entry, $accept, 
+    $list, $status_bar);
+
+$app = new Gnome::App $NAME, $NAME;
+
+signal_connect $app 'delete_event',
+    sub { Gtk->main_quit; return 0 };
+
+$app->create_menus(
+    {
+	type    => 'subtree',
+	label   => '_File',
+	subtree => [
+		    {
+			type   => 'item',
+			label => 'E_xit',
+			pixmap_type => 'stock',
+			pixmap_info => 'Menu_Quit',
+			callback => sub { Gtk->main_quit; return 0 }
+		    }
+		   ]
+    },
+    {
+	type   => 'subtree',
+	label  => '_Help',
+	subtree => [
+		    {type => 'item', 
+		     label => '_About...',
+		     pixmap_type => 'stock',
+		     pixmap_info => 'Menu_About',
+		     callback => \&about_box
+		     }
+		    ]
+		    }
+    );
+
+$app->create_toolbar(
+		     { 
+			 type     => 'item',
+			 label    => 'Exit',
+			 pixmap_type => 'stock',
+			 pixmap_info => 'Quit',
+			 hint     => "Leave $NAME",
+			 callback  => sub { Gtk->main_quit;}
+		     }
+		     );
+
+$app->set_default_size(600,400);
+
+
+$bar = new Gnome::AppBar 0,1,"user" ;
+$bar->set_status("");
+$app->set_statusbar( $bar );
+
+
+$vbox = new Gtk::VBox(0,0);
+$app->set_contents($vbox);
+
+$user_box = new Gtk::HBox(0, 0 );
+$vbox->add($user_box);
+
+$label = new Gtk::Label(' Enter your word ');
+$label->set_justify('center' );
+$label->set_line_wrap(0 );
+$user_box->add($label);
+$label->show;
+$label->set_alignment(0.5, 0.5 );
+$user_box->set_child_packing($label,
+			     0, 
+			     0, 
+			     0, 
+			     'start' );
+
+$word_entry = new Gtk::Entry;
+$user_box->add($word_entry);
+$word_entry->show;
+$word_entry->can_focus(1 );
+$word_entry->set_text('');
+$word_entry->set_max_length(0 );
+$word_entry->set_visibility(1 );
+$word_entry->set_editable(1 );
+$user_box->set_child_packing($word_entry,
+			     1, 
+			     1, 
+			     0, 
+			     'start' );
+
+$accept = new Gtk::Button('accept');
+$user_box->add($accept);
+$accept->show;
+$accept->can_focus(1 );
+
+
+$user_box->set_child_packing($accept,
+			     0, 
+			     0, 
+			     0, 
+			     'start' );
+$vbox->set_child_packing($user_box,
+			 1, 
+			 1, 
+			 0, 
+			 'start' );
+ 
+$list = new Gtk::Text( undef, undef );
+$list->set_word_wrap( $true );
+
+$vbox->add($list);
+$list->show;
+$vbox->set_child_packing($list,
+			 1,
+			 1,
+			 0,
+			 'start' );
+
+$app->set_contents($vbox);
+
+$status_bar = new Gtk::Statusbar(); 
+$status_bar->show;
+my $context_id = $status_bar->get_context_id( "Statusbar" );
+$vbox->pack_start( $status_bar, $true, $true, 0 );
+
+show_all $app;
+
+$accept->signal_connect(
+			"clicked",
+			\&add_word );
+
+main Gtk;
+
+sub about_box {
+    my $about = new Gnome::About $NAME, $VERSION,
+    "(C) Pat Eyler, 2000", ["Pat Eyler"], 
+    "This program is released under the GPL";
+    show $about;
+}
+
+#
+# this is where everything really happens
+#
+
+sub add_word {
+    my $word = $word_entry->get_text();
+    if ($word eq "q") {
+	$list->insert('','','',"\nokay, that was a good game.\n");
+	sleep(5);
+	exit(0);
+    }
+    my $status = $game->Player_Turn($word);
+    if ( $status eq "good") {
+	#
+        # the player has entered a valid word,
+	# we can list the word, then play the computer's
+	# turn
+        #
+	$list->insert('','','',"$word ");
+	$word_entry->set_text('');
+	$status_bar->push( $context_id, "Good Word!" );
+	&computer;
+    } else {
+	#
+	# the player entered a bogus word,
+	# we need to throw an error message and try again
+	#
+	$status_bar->push( $context_id, $status );
+    }
+
+}
+
+sub computer {
+    my $word = $game->Computer_Turn();
+    if ($word eq "out of words") {
+	#
+	# The computer needs to resign
+	#
+	$list->insert('','','',"\n\nI resign.  Good job!\n");
+	sleep(5);
+	exit(0);
+        # now it should ask about restarting the game
+    } else {
+	$list->insert('','','',"$word ");
+    }
+}

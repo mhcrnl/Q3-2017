@@ -1,0 +1,2 @@
+60	Go to the computer store	1200
+20	Call Dad	1445

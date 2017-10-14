@@ -1,0 +1,33 @@
+package [% form.name %];
+use strict;
+use vars qw( @ISA );
+use [% form.super_class %];
+@ISA = ('[% form.super_class %]');
+Construct Tk::Widget '[% form.name %]';
+
+sub Populate {
+	my ($cw, $args) = @_;
+
+#Internally used variable name
+my $[% form.name %] = $cw;
+
+#Child widgets
+
+[% FOREACH child = form.children %]
+	[% child.to_code %]
+[% END %]
+
+#Delegations
+
+[% FOREACH property = form.delegate_properties %]
+	[% property.to_code %]
+[% END %]
+
+[% FOREACH method = form.delegate_methods %]
+	[% method.to_code %]
+[% END %]
+
+	$cw->SUPER::Populate($args);
+}
+
+package main;
