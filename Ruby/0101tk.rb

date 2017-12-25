@@ -1,0 +1,12 @@
+#!/usr/bin/ruby -w 
+# FILE: 0101tk.rb
+# DATA: 2017-12-23 16:56:02 +0200
+
+require 'tk'
+
+root = TkRoot.new { title "Hello, World!" }
+TkLabel.new(root) do
+   text 'Hello, World!'
+   pack { padx 15 ; pady 15; side 'left' }
+end
+Tk.mainloop

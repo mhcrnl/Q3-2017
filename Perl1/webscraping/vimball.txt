@@ -1,0 +1,161 @@
+This site: ftp://ftp.vim.org/pub/vim/doc/book/vimbook-OPL.pdf
+
+Supertab (https://github.com/ervandew/supertab) is a vim plugin which allows you to use <tab> for all your insert complation needs(:help ins-completion).
+
+vim awesome_plugin.vba
+:so %
+
+h,k,j,l     -> move left, up, down, right;
+:zz         -> writes the file an exits;
+:q!         -> quit and throw things away!!!
+dd          -> delete the line on which the cursor is;  
+o           -> new line below the cursor; 
+O           -> new line above the cursor;
+:help       -> to get help;
+CTRL+]      -> jump to hyperlink in help;
+:help index -> index available;
+9k          -> visual mod 9 lines up;
+w,4w        -> move forward word by word;
+b,4b        -> move backward word by word;
+$           -> move to end of line;
+<END>       -> -||- -||-;
+fx          -> forward search for x;
+tx          -> search one character before the indicated character;
+3G          -> puts you on line 3;
+:set number -> number option in file;
+:set nonumber -> number option off in file;
+ctrl-g      -> display a  status line;
+ctrl-u      -> command scrolls up half a screen of text;
+ctrl-d      -> scrolls you down half a screen;
+d3w / 3dw   -> deletes three words
+d$          -> deletes from cursor to end of line;
+cw          -> change a word, delete a word and i.m.;
+cc          -> delets the line;
+.           -> repeats the last delete or change command;
+j           -> joins the current line with the next;
+rx          -> replace the character under the coursor cu x;
+~           -> change a character's case;
+:digraphs   -> digraphs available;
+:/string    -> search for word string;
+:/^include  -> search include in start of a line;
+:/was$      -> was at the end of line;
+:/^the$     -> the is on single line;
+:/.         -> match a single character;
+
+    CHAPTER 4. Text Blocks and Multiple Files
+
+:ma         -> marks the place under the cursor;
+:mark       -> go to the mark;
+y           -> copy;
+!!ls        -> list a files
+        01scrap.pl
+        02scrap.pl
+        03scrap.pl
+        04scrap.pl
+        05scrap.pl
+        06scrap.pl
+        07scrap.pl
+        08mojoDomTest.pl
+        fedora.pl
+        imobiliare.pl
+        mojo-crawler.pl
+        perldoc.txt
+        vimball.txt
+!!date      -> inset date;
+        Sat Nov 11 19:30:31 EET 2017
+:vi file    -> close the current file and opens the new one;
+:write      -> write file;
+:vi! file.txt   ->discard changes and edit the new file;
+:view file  -> open file in read-only mode;
+:write!     -> force write of the file;
+:next       -> open next file in vim;
+:wnext      -> write current file and open next file;
+:set autowrite -> write file automate;
+:args       -> file where you are;
+:previous   -> go back a file;
+:Next       -> --------------;
+:wprevious  -> save and go back;
+:wNext      -> -----------------;
+
+    CHAPTER 5. Windows
+
+:split      -> open a new window;
+ctrl-w ctrl-w   -> move the cursor in windows;
+:q          -> close a window;
+:split file -> open another file and editing;
+:3split file-> new window with three lines;
+:new        -> splits the current window;
+:sview      -> look at a file, but not edit;
+ctrl-w+     -> size of a window increas;
+ctrl-w-     -> decrease a window;
+ctrl-w=     -> window =;
+
+##Buffers
+
+:buffer number  -> numarul buferului;
+:buffer file    -> 
+
+    #CHAPTER 6. Basic Visual Mode
+
+v           -> start visual mode;
+V           -> v.m. line by line;
+:help v_d   -> help for d command;
+ctrl-v      -> highlight on the screen a rectangle;
+
+    #CHAPTER 7. Commands for Programmers     
+
+:sintax on  -> syntax coloring;
+:set background?    -> 
+:set filetype=c -> c file type seting;
+:set shiftwidth=4   -> 
+:=          -> indents selected text;
+K(mare)     -> word under cursor and search man;
+:grep       -> run grep program;
+:grep -w ground_poit *c -> -w word only
+
+    #CHAPTER 8. Basic Abbreviations
+
+:abbreviate     -> list all abbreviations
+:map            -> list all maps;
+
+    #CHAPTER 9. Basic Commands Mode
+
+Q       -> ex editor open;
+:visual -> return in v.m.;
+
+    #CHAPTER 10. Basic GUI Usage
+
+    #CHAPTER 11. Dealing with Text File
+
+    #CHAPTER 12. Automatic Completion
+
+    #CHAPTER 13. Autocommands
+
+:function DateInsert()
+:   $read !date
+:endfunction
+
+    #CHAPTER 14. File Recovery
+
+    #CHAPTER 15. Miscellaneous Commands
+
+    #CHAPTER 16. Cookbook
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

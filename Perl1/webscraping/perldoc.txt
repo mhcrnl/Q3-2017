@@ -1,0 +1,955 @@
+<!-- X-URL: http://mojolicious.org/perldoc -->
+<!-- Date: Fri, 10 Nov 2017 13:37:07 GMT -->
+<BASE HREF="http://mojolicious.org/perldoc">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mojolicious::Guides - The Mojolicious Guide to the Galaxy</title>
+    <script src="/mojo/prettify/run_prettify.js"></script>
+    <link href="/mojo/prettify/prettify-mojo-light.css" rel="stylesheet">
+    <style>
+      a { color: inherit }
+      a:hover { color: #2a2a2a }
+      a img { border: 0 }
+      body {
+        background: url(/mojo/pinstripe-light.png);
+        color: #445555;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+      }
+      dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      :not(pre) > code {
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, Courier, monospace;
+        padding: 0.3em;
+      }
+      h1 { font-size: 1.5em }
+      h2 { font-size: 1.3em }
+      h3 { font-size: 1.1em }
+      h4 { font-size: 0.9em }
+      h1, h2, h3, h4 {
+        color: #2a2a2a;
+        margin: 0;
+        position: relative;
+      }
+      h1 a, h2 a, h3 a, h4 a { text-decoration: none }
+      li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      pre {
+        background: url(/mojo/stripes.png);
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, Courier, monospace;
+        padding: 1em;
+      }
+      pre > code {
+        color: #4d4d4c;
+        font: 0.9em Consolas, Menlo, Monaco, Courier, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        text-shadow: #eee 0 1px 0;
+        white-space: pre-wrap;
+      }
+      ul { list-style-type: square }
+      #footer {
+        padding-top: 1em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldoc {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: 5em;
+        margin-right: 5em;
+        padding: 3em;
+        padding-top: 70px;
+      }
+      #perldoc > ul:first-of-type a { text-decoration: none }
+      #links { padding-bottom: 1em }
+      #wrapperlicious {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+      }
+      h1:hover .permalink, h2:hover .permalink, h3:hover .permalink,
+      h4:hover .permalink {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="/mojo/jquery/jquery.js"></script>
+<div id="mojobar">
+  <style scoped="scoped">
+    #mojobar {
+      background-color: #1a1a1a;
+      background: -webkit-linear-gradient(top, #2a2a2a 0%, #000 100%);
+      background: -moz-linear-gradient(top, #2a2a2a 0%, #000 100%);
+      background: linear-gradient(top, #2a2a2a 0%, #000 100%);
+      box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5);
+      height: 46px;
+      overflow: hidden;
+      position: absolute;
+      text-align: right;
+      vertical-align: middle;
+      width: 100%;
+      z-index: 1000;
+    }
+    #mojobar-content {
+      margin: 0 auto;
+      max-width: 1000px;
+    }
+    #mojobar-logo {
+      float: left;
+      margin-left: 5em;
+      padding-top: 4px;
+    }
+    #mojobar-links {
+      display:table-cell;
+      float: right;
+      height: 60px;
+      margin-right: 5em;
+      margin-top: 0.8em;
+    }
+    #mojobar-links a {
+      color: #bbb;
+      font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+      margin-left: 0.5em;
+      text-decoration: none;
+      transition: all 200ms ease-in-out;
+    }
+    #mojobar-links a:hover { color: #fff }
+    #mojobar-links input {
+      background-color: #3a3a3a;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 3px;
+      color: #eee;
+      display: inline;
+      margin-left: 1em;
+      padding: 4px;
+      transition: all 0.15s;
+    }
+    #mojobar-links input:focus {
+      background-color: #fff;
+      color: #111;
+      outline: 0;
+    }
+    #mojobar-links form { display: inline }
+    .animated { transition: all 0.25s ease }
+  </style>
+  <div id="mojobar-content">
+    <div id="mojobar-logo">
+      <a href="http://mojolicious.org">
+        <img alt="Mojolicious logo" src="/mojo/logo-white.png">
+</a>    </div>
+    <div id="mojobar-links">
+      <a href="http://mojolicious.org/perldoc">Documentation</a>
+      <a href="https://chat.mibbit.com/?channel=%23mojo&amp;server=irc.perl.org">Chat</a>
+      <a href="https://github.com/kraih/mojo/wiki">Wiki</a>
+      <a href="https://github.com/kraih/mojo">GitHub</a>
+      <a href="https://metacpan.org/release/Mojolicious/">CPAN</a>
+      <a href="https://groups.google.com/group/mojolicious">MailingList</a>
+      <a href="http://blog.mojolicious.org">Blog</a>
+      <a href="https://twitter.com/kraih">Twitter</a>
+      <form action="https://www.google.com/cse" target="_blank">
+        <input name="cx" type="hidden" value="014527573091551588235:pwfplkjpgbi">
+        <input name="ie" type="hidden" value="UTF-8">
+        <input name="q" placeholder="Search" type="search">
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  var mojobar = $('#mojobar');
+  var mojobarHeight = mojobar.outerHeight();
+  function getElementByHash(hash) {
+    return $(hash.replace(/(:|\.|\[|\]|,)/g, '\\$1'));
+  }
+  function fixOffset() {
+    var offset = getElementByHash(window.location.hash).offset();
+    if (offset) {
+      $('html, body').animate({scrollTop: offset.top - mojobarHeight}, 1);
+    }
+  }
+  $(window).on('load', function () {
+    if (window.location.hash) {
+      fixOffset();
+    }
+    var start = mojobar.offset().top;
+    var fixed;
+    var lastScrollTop = $(window).scrollTop();
+    var hidden = mojobarHeight + 1;
+    $(window).on('scroll', function () {
+      var st = $(window).scrollTop();
+      if (fixed) {
+        if (st <= start) {
+          fixed = false;
+          mojobar.removeClass('animated');
+          mojobar.css({'position': 'absolute', 'top': start + 'px'});
+        }
+        else if (Math.abs(lastScrollTop - st) > 100) {
+          if (!mojobar.hasClass('animated')) {
+            mojobar.addClass('animated');
+          }
+          if (st > lastScrollTop && st > (mojobarHeight + start + 250)) {
+            mojobar.css('transform', 'translateY(-' + hidden + 'px)');
+          }
+          else if (st < lastScrollTop) {
+            mojobar.css('transform', 'translateY(0px)');
+          }
+          lastScrollTop = st;
+        }
+      }
+      else if (st > start) {
+        fixed = true;
+        mojobar.css({'position': 'fixed', 'top': 0});
+        lastScrollTop = $(window).scrollTop();
+      }
+    });
+  });
+  $(function () {
+    $('a[href^="#"]').addClass('​mojoscroll').on('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var hash   = '#' + this.href.split('#')[1];
+      var target = getElementByHash(hash);
+      var old    = target.attr('id');
+      target.attr('id', '');
+      location.hash = hash;
+      target.attr('id', old);
+      fixOffset();
+    });
+  });
+</script>
+
+    <div id="wrapperlicious">
+      <div id="perldoc">
+        <div id="links">
+            
+            <a href="/perldoc/Mojolicious">Mojolicious</a>
+            ::
+            <a href="/perldoc/Mojolicious/Guides">Guides</a>
+          <div id="more">
+            (<a href="/perldoc/Mojolicious/Guides.txt">source</a>,
+            <a href="https://metacpan.org/pod/Mojolicious::Guides">CPAN</a>)
+          </div>
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+        <ul>
+            <li>
+              <a href="#NAME">NAME</a>
+            </li>
+            <li>
+              <a href="#DONT-PANIC">DON&#39;T PANIC!</a>
+            </li>
+            <li>
+              <a href="#BASICS">BASICS</a>
+            </li>
+            <li>
+              <a href="#CONVENTIONS">CONVENTIONS</a>
+            </li>
+            <li>
+              <a href="#TUTORIAL">TUTORIAL</a>
+            </li>
+            <li>
+              <a href="#GUIDES">GUIDES</a>
+            </li>
+            <li>
+              <a href="#HIGHLIGHTS">HIGHLIGHTS</a>
+            </li>
+            <li>
+              <a href="#SPIN-OFFS">SPIN-OFFS</a>
+            </li>
+            <li>
+              <a href="#REFERENCE">REFERENCE</a>
+            </li>
+            <li>
+              <a href="#MORE">MORE</a>
+            </li>
+            <li>
+              <a href="#SUPPORT">SUPPORT</a>
+            </li>
+        </ul>
+        <script>//<![CDATA[
+
+var gaJsHost =
+  (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape(
+  "%3Cscript src='"
+  + gaJsHost
+  + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"
+));
+
+//]]></script><script>//<![CDATA[
+
+try {
+  var pageTracker = _gat._getTracker("UA-7866593-1");
+  pageTracker._trackPageview();
+} catch(err) {}
+
+//]]></script><h1 id="NAME"><a class="permalink" href="#NAME">#</a><a href="#toc">NAME</a></h1>
+
+<p>Mojolicious::Guides - The Mojolicious Guide to the Galaxy</p>
+
+<h1 id="DONT-PANIC"><a class="permalink" href="#DONT-PANIC">#</a><a href="#toc">DON&#39;T PANIC!</a></h1>
+
+<p>We are constantly working on new documentation. Follow us on <a href="http://github.com/kraih/mojo">GitHub</a> or join the official IRC channel <code>#mojo</code> on <code>irc.perl.org</code> to get all the latest updates.</p>
+
+<h1 id="BASICS"><a class="permalink" href="#BASICS">#</a><a href="#toc">BASICS</a></h1>
+
+<dl>
+
+<dt>Learning Perl</dt>
+<dd>
+
+<p>If you are new to Perl, we recommend <a href="http://qntm.org/files/perl/perl.html">Learn Perl in 2 hours 30 minutes</a> for a quick introduction, or the <a href="https://pragprog.com/book/swperl/modern-perl-fourth-edition">Modern Perl book</a>, freely available in many formats. Both are excellent introductions to the language. For more books and documentation, check out <a href="http://learn.perl.org/">learn.perl.org</a>.</p>
+
+</dd>
+<dt>Learning Web Technologies</dt>
+<dd>
+
+<p>All web development starts with HTML, CSS and JavaScript, to learn the basics we recommend the <a href="https://developer.mozilla.org/en-US/docs/Web">Mozilla Developer Network</a>. And if you want to know more about how browsers and web servers actually communicate, there&#39;s also a very nice introduction to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP">HTTP</a>.</p>
+
+</dd>
+</dl>
+
+<h1 id="CONVENTIONS"><a class="permalink" href="#CONVENTIONS">#</a><a href="#toc">CONVENTIONS</a></h1>
+
+<dl>
+
+<dt>Modern Perl</dt>
+<dd>
+
+<p><a href="/perldoc/Mojolicious">Mojolicious</a> uses a modern subset of Perl exclusively, and therefore all documentation assumes that <a href="/perldoc/strict">strict</a>, <a href="/perldoc/warnings">warnings</a>, <a href="/perldoc/utf8">utf8</a> and Perl 5.10 <a href="/perldoc/feature">features</a> are enabled, even if examples don&#39;t specifically mention it.</p>
+
+<pre><code>use strict;
+use warnings;
+use utf8;
+use feature &#39;:5.10&#39;;</code></pre>
+
+<p>Some modules, like <a href="/perldoc/Mojo/Base">Mojo::Base</a> and <a href="/perldoc/Mojolicious/Lite">Mojolicious::Lite</a>, will enable them for you automatically, whenever they are used.</p>
+
+</dd>
+</dl>
+
+<h1 id="TUTORIAL"><a class="permalink" href="#TUTORIAL">#</a><a href="#toc">TUTORIAL</a></h1>
+
+<dl>
+
+<dt><a href="/perldoc/Mojolicious/Guides/Tutorial">Mojolicious::Guides::Tutorial</a></dt>
+<dd>
+
+<p>A fast and fun way to get started developing web applications with <a href="/perldoc/Mojolicious">Mojolicious</a>. The tutorial introduces the <a href="/perldoc/Mojolicious/Lite">Mojolicious::Lite</a> micro web framework, which is only a thin wrapper around the full web framework. The simplified notation introduced in the tutorial is commonly used throughout the guides and is therefore considered a prerequisite, you should definitely take a look!</p>
+
+</dd>
+</dl>
+
+<h1 id="GUIDES"><a class="permalink" href="#GUIDES">#</a><a href="#toc">GUIDES</a></h1>
+
+<dl>
+
+<dt><a href="/perldoc/Mojolicious/Guides/Growing">Mojolicious::Guides::Growing</a></dt>
+<dd>
+
+<p>Starting a <a href="/perldoc/Mojolicious/Lite">Mojolicious::Lite</a> prototype from scratch and growing it into a well-structured <a href="/perldoc/Mojolicious">Mojolicious</a> application.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojolicious/Guides/Routing">Mojolicious::Guides::Routing</a></dt>
+<dd>
+
+<p>Simple and fun introduction to the <a href="/perldoc/Mojolicious">Mojolicious</a> router.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojolicious/Guides/Rendering">Mojolicious::Guides::Rendering</a></dt>
+<dd>
+
+<p>Generating content with the <a href="/perldoc/Mojolicious">Mojolicious</a> renderer.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojolicious/Guides/Testing">Mojolicious::Guides::Testing</a></dt>
+<dd>
+
+<p>Powerful yet elegant testing techniques and tools for <a href="/perldoc/Mojolicious">Mojolicious</a> and other web applications.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojolicious/Guides/Cookbook">Mojolicious::Guides::Cookbook</a></dt>
+<dd>
+
+<p>Cooking with <a href="/perldoc/Mojolicious">Mojolicious</a>, recipes for every taste.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojolicious/Guides/Contributing">Mojolicious::Guides::Contributing</a></dt>
+<dd>
+
+<p>Become a part of the ongoing <a href="/perldoc/Mojolicious">Mojolicious</a> development.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojolicious/Guides/FAQ">Mojolicious::Guides::FAQ</a></dt>
+<dd>
+
+<p>Answers to the most frequently asked questions.</p>
+
+</dd>
+</dl>
+
+<h1 id="HIGHLIGHTS"><a class="permalink" href="#HIGHLIGHTS">#</a><a href="#toc">HIGHLIGHTS</a></h1>
+
+<p><a href="/perldoc/Mojolicious">Mojolicious</a> and <a href="/perldoc/Mojolicious/Lite">Mojolicious::Lite</a> are the sum of many parts, built on top of the <a href="/perldoc/Mojo">Mojo</a> web development toolkit. Small building blocks that can be used independently for all kinds of applications, these are the most prominent ones.</p>
+
+<dl>
+
+<dt><a href="/perldoc/Mojo/UserAgent">Mojo::UserAgent</a></dt>
+<dd>
+
+<p>Full featured non-blocking I/O HTTP and WebSocket user agent.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojo/DOM">Mojo::DOM</a></dt>
+<dd>
+
+<p>Very fun and minimalistic HTML/XML DOM parser with CSS selector support.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojo/JSON">Mojo::JSON</a></dt>
+<dd>
+
+<p>Minimalistic JSON implementation that just works.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojo/Server/Daemon">Mojo::Server::Daemon</a></dt>
+<dd>
+
+<p>Full featured, highly portable non-blocking I/O HTTP and WebSocket server, with self-restart support through <a href="/perldoc/Mojo/Server/Morbo">Mojo::Server::Morbo</a>, perfect for development and testing.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojo/Server/Prefork">Mojo::Server::Prefork</a></dt>
+<dd>
+
+<p>Full featured, UNIX optimized, preforking non-blocking I/O HTTP and WebSocket server with support for zero downtime software upgrades (hot deployment) through <a href="/perldoc/Mojo/Server/Hypnotoad">Mojo::Server::Hypnotoad</a>.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojo/Server/CGI">Mojo::Server::CGI</a>, <a href="/perldoc/Mojo/Server/PSGI">Mojo::Server::PSGI</a></dt>
+<dd>
+
+<p>Transparent CGI and <a href="/perldoc/PSGI">PSGI</a> support out of the box.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojo/IOLoop">Mojo::IOLoop</a></dt>
+<dd>
+
+<p>A minimalistic event loop with support for multiple reactor backends.</p>
+
+</dd>
+<dt><a href="/perldoc/Mojo/Template">Mojo::Template</a></dt>
+<dd>
+
+<p>Very Perl-ish and minimalistic template system.</p>
+
+</dd>
+<dt><a href="/perldoc/Test/Mojo">Test::Mojo</a></dt>
+<dd>
+
+<p>Testing toolkit for web applications.</p>
+
+</dd>
+<dt><a href="/perldoc/ojo">ojo</a></dt>
+<dd>
+
+<p>Fun one-liners using everything above.</p>
+
+</dd>
+</dl>
+
+<h1 id="SPIN-OFFS"><a class="permalink" href="#SPIN-OFFS">#</a><a href="#toc">SPIN-OFFS</a></h1>
+
+<p>These modules are not part of the <a href="/perldoc/Mojolicious">Mojolicious</a> distribution, but have been designed to be used with it and are being developed under the same umbrella.</p>
+
+<dl>
+
+<dt><a href="/perldoc/Mojo/Pg">Mojo::Pg</a></dt>
+<dd>
+
+<p>A tiny wrapper around <a href="/perldoc/DBD/Pg">DBD::Pg</a> that makes <a href="http://www.postgresql.org">PostgreSQL</a> a lot of fun to use with <a href="/perldoc/Mojolicious">Mojolicious</a>. Perform queries blocking and non-blocking, use all <a href="https://www.postgresql.org/docs/current/static/sql.html">SQL features</a> PostgreSQL has to offer, generate CRUD queries from data structures, manage your database schema with migrations and build scalable real-time web applications with the publish/subscribe pattern.</p>
+
+<p>And it comes with two great <a href="https://github.com/kraih/mojo-pg/tree/master/examples/">example applications</a> you can use for inspiration. The minimal <a href="https://github.com/kraih/mojo-pg/tree/master/examples/chat.pl">chat</a> application will show you how to scale WebSockets to multiple servers, and the well-structured <a href="https://github.com/kraih/mojo-pg/tree/master/examples/blog">blog</a> application how to apply the MVC design pattern in practice.</p>
+
+</dd>
+<dt><a href="/perldoc/Minion">Minion</a></dt>
+<dd>
+
+<p>A full featured job queue for <a href="/perldoc/Mojolicious">Mojolicious</a> with support for multiple backends (such as <a href="http://www.postgresql.org">PostgreSQL</a>). Job queues allow you to process time and/or computationally intensive tasks in background processes, outside of the request/response lifecycle. Among those tasks you&#39;ll commonly find image resizing, spam filtering, HTTP downloads, building tarballs, warming caches and basically everything else you can imagine that&#39;s not super fast.</p>
+
+<p>And it comes with a great example application you can use for inspiration. The <a href="https://github.com/kraih/minion/tree/master/examples/linkcheck">link checker</a> will show you how to integrate background jobs into well-structured <a href="/perldoc/Mojolicious">Mojolicious</a> applications.</p>
+
+</dd>
+</dl>
+
+<h1 id="REFERENCE"><a class="permalink" href="#REFERENCE">#</a><a href="#toc">REFERENCE</a></h1>
+
+<p>This is the class hierarchy of the <a href="/perldoc/Mojolicious">Mojolicious</a> distribution.</p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Base">Mojo::Base</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo">Mojo</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojolicious">Mojolicious</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/HelloWorld">Mojo::HelloWorld</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Lite">Mojolicious::Lite</a></p>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Cache">Mojo::Cache</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Cookie">Mojo::Cookie</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Cookie/Request">Mojo::Cookie::Request</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Cookie/Response">Mojo::Cookie::Response</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/DOM/CSS">Mojo::DOM::CSS</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/DOM/HTML">Mojo::DOM::HTML</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Date">Mojo::Date</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/EventEmitter">Mojo::EventEmitter</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Asset">Mojo::Asset</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Asset/File">Mojo::Asset::File</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Asset/Memory">Mojo::Asset::Memory</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Content">Mojo::Content</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Content/MultiPart">Mojo::Content::MultiPart</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Content/Single">Mojo::Content::Single</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/IOLoop">Mojo::IOLoop</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/IOLoop/Client">Mojo::IOLoop::Client</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/IOLoop/Server">Mojo::IOLoop::Server</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/IOLoop/Stream">Mojo::IOLoop::Stream</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/IOLoop/TLS">Mojo::IOLoop::TLS</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Log">Mojo::Log</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Message">Mojo::Message</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Message/Request">Mojo::Message::Request</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Message/Response">Mojo::Message::Response</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Reactor">Mojo::Reactor</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Reactor/Poll">Mojo::Reactor::Poll</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Reactor/EV">Mojo::Reactor::EV</a></p>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Server">Mojo::Server</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Server/CGI">Mojo::Server::CGI</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Server/Daemon">Mojo::Server::Daemon</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Server/Prefork">Mojo::Server::Prefork</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Server/PSGI">Mojo::Server::PSGI</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Transaction">Mojo::Transaction</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Transaction/HTTP">Mojo::Transaction::HTTP</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Transaction/WebSocket">Mojo::Transaction::WebSocket</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/UserAgent">Mojo::UserAgent</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Plugins">Mojolicious::Plugins</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Exception">Mojo::Exception</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Headers">Mojo::Headers</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/IOLoop/Subprocess">Mojo::IOLoop::Subprocess</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/JSON/Pointer">Mojo::JSON::Pointer</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Parameters">Mojo::Parameters</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Path">Mojo::Path</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Promise">Mojo::Promise</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/IOLoop/Delay">Mojo::IOLoop::Delay</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Server/Hypnotoad">Mojo::Server::Hypnotoad</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Server/Morbo">Mojo::Server::Morbo</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Server/Morbo/Backend">Mojo::Server::Morbo::Backend</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Server/Morbo/Backend/Poll">Mojo::Server::Morbo::Backend::Poll</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Template">Mojo::Template</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/URL">Mojo::URL</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Upload">Mojo::Upload</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/UserAgent/CookieJar">Mojo::UserAgent::CookieJar</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/UserAgent/Proxy">Mojo::UserAgent::Proxy</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/UserAgent/Server">Mojo::UserAgent::Server</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/UserAgent/Transactor">Mojo::UserAgent::Transactor</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command">Mojolicious::Command</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojolicious/Command/cgi">Mojolicious::Command::cgi</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/cpanify">Mojolicious::Command::cpanify</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/daemon">Mojolicious::Command::daemon</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/eval">Mojolicious::Command::eval</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/generate/app">Mojolicious::Command::generate::app</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/generate/lite_app">Mojolicious::Command::generate::lite_app</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/generate/makefile">Mojolicious::Command::generate::makefile</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/generate/plugin">Mojolicious::Command::generate::plugin</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/get">Mojolicious::Command::get</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/inflate">Mojolicious::Command::inflate</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/prefork">Mojolicious::Command::prefork</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/psgi">Mojolicious::Command::psgi</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/routes">Mojolicious::Command::routes</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/test">Mojolicious::Command::test</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Command/version">Mojolicious::Command::version</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Commands">Mojolicious::Commands</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojolicious/Command/generate">Mojolicious::Command::generate</a></p>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Controller">Mojolicious::Controller</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Plugin">Mojolicious::Plugin</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojolicious/Plugin/Config">Mojolicious::Plugin::Config</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojolicious/Plugin/JSONConfig">Mojolicious::Plugin::JSONConfig</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Plugin/DefaultHelpers">Mojolicious::Plugin::DefaultHelpers</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Plugin/EPLRenderer">Mojolicious::Plugin::EPLRenderer</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojolicious/Plugin/EPRenderer">Mojolicious::Plugin::EPRenderer</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Plugin/HeaderCondition">Mojolicious::Plugin::HeaderCondition</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Plugin/Mount">Mojolicious::Plugin::Mount</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Plugin/PODRenderer">Mojolicious::Plugin::PODRenderer</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Plugin/TagHelpers">Mojolicious::Plugin::TagHelpers</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Renderer">Mojolicious::Renderer</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Routes/Match">Mojolicious::Routes::Match</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Routes/Pattern">Mojolicious::Routes::Pattern</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Routes/Route">Mojolicious::Routes::Route</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojolicious/Routes">Mojolicious::Routes</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Sessions">Mojolicious::Sessions</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Static">Mojolicious::Static</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Types">Mojolicious::Types</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Validator">Mojolicious::Validator</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojolicious/Validator/Validation">Mojolicious::Validator::Validation</a></p>
+
+</li>
+<li><p><a href="/perldoc/Test/Mojo">Test::Mojo</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/ByteStream">Mojo::ByteStream</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Collection">Mojo::Collection</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/DOM">Mojo::DOM</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/File">Mojo::File</a></p>
+
+<ul>
+
+<li><p><a href="/perldoc/Mojo/Home">Mojo::Home</a></p>
+
+</li>
+</ul>
+
+</li>
+<li><p><a href="/perldoc/Mojo/JSON">Mojo::JSON</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Loader">Mojo::Loader</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/Util">Mojo::Util</a></p>
+
+</li>
+<li><p><a href="/perldoc/Mojo/WebSocket">Mojo::WebSocket</a></p>
+
+</li>
+<li><p><a href="/perldoc/ojo">ojo</a></p>
+
+</li>
+</ul>
+
+<h1 id="MORE"><a class="permalink" href="#MORE">#</a><a href="#toc">MORE</a></h1>
+
+<p>A lot more documentation and examples by many different authors can be found in the <a href="http://github.com/kraih/mojo/wiki">Mojolicious wiki</a>.</p>
+
+<h1 id="SUPPORT"><a class="permalink" href="#SUPPORT">#</a><a href="#toc">SUPPORT</a></h1>
+
+<p>If you have any questions the documentation might not yet answer, don&#39;t hesitate to ask on the <a href="http://groups.google.com/group/mojolicious">mailing list</a> or the official IRC channel <code>#mojo</code> on <code>irc.perl.org</code> (<a href="https://chat.mibbit.com/?channel=%23mojo&amp;server=irc.perl.org">chat now!</a>).</p>
+
+
+      </div>
+    </div>
+    <div id="footer">
+      <a href="http://mojolicious.org">
+        <img alt="Mojolicious logo" src="/mojo/logo-black.png">
+</a>    </div>
+  </body>
+</html>
